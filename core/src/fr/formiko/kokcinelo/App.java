@@ -10,16 +10,15 @@ public class App extends Game {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		this.setScreen(new GameScreen(this));
+		GameScreen gs = new GameScreen(this);
+		this.setScreen(gs);
 		// this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
 	public void render() {
 		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
 		super.render();
-		batch.end();
 	}
 
 	@Override

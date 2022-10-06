@@ -6,7 +6,9 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,13 +21,16 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private Set<Rectangle> aphidSet;
 
-    private OrthographicCamera camera;
+    OrthographicCamera camera;
     private Texture ladybugImage;
     private Texture aphidImage;
     private Rectangle ladybug;
+    private float rotationSpeed;
+    private float maxZoom;
 
     public GameScreen(final App game) {
         this.game = game;
+        Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (h / w));
@@ -56,8 +61,11 @@ public class GameScreen implements Screen {
         }
         // System.out.println(aphidSet);
         // System.out.println(ladybug);
-
+        rotationSpeed = 0.5f;
+        maxZoom = 0.2f;
     }
+
+    public Camera getCamera(){ return camera;}
 
     @Override
     public void show() {
@@ -67,6 +75,28 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        // clear the screen with a green color.
+        ScreenUtils.clear(0.1f, 1f, 0f, 1);
+        viewport.apply();
+		handleInput();
+        camera.update();
+        game.batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
+        // draw images
+        for (Rectangle aphid : aphidSet) {
+            game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
+        }
+        game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
+		game.batch.end();
+    }
+
+    private void handleInput() {
+        // DOING
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
+		Gdx.input.setInputProcessor(inputProcessor);
+
+
+
         // while debuging game close on escape
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
@@ -85,24 +115,24 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveX += Gdx.graphics.getDeltaTime();
         }
-        // clear the screen with a green color.
-        ScreenUtils.clear(0.1f, 1f, 0f, 1);
-        viewport.apply();
+        if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+			camera.rotate(-rotationSpeed, 0, 0, 1);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+			camera.rotate(rotationSpeed, 0, 0, 1);
+		}
+        if(camera.zoom<maxZoom){
+            camera.zoom=maxZoom;
+        }
 
         moveY *=200;
         moveX *=200;
-        if(moveX!=0)
-            System.out.println(camera.position);
+        // if(moveX!=0)
+        //     System.out.println(camera.position);
         // tell the camera to update its matrices.
         camera.translate((int)moveX, (int)moveY, 0);
-        ladybug.x += moveX;
-        ladybug.y += moveY;
-        camera.update();    
-        // draw images
-        for (Rectangle aphid : aphidSet) {
-            game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
-        }
-        game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
+        ladybug.x = camera.position.x-ladybug.width/2;
+        ladybug.y = camera.position.y-ladybug.height/2;
     }
 
     @Override
