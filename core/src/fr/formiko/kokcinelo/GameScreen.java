@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.setProjectionMatrix(camera.combined);
         // draw images
-        for (Rectangle aphid : aphidSet) {
+        for (final Rectangle aphid : aphidSet) {
             game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
         }
         game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);

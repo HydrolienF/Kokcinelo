@@ -2,6 +2,9 @@ package fr.formiko.kokcinelo;
 
 import com.badlogic.gdx.InputProcessor;
 
+/**
+ * {@summary React to user inputs.}
+ */
 public class InputCore implements InputProcessor {
 
    GameScreen screen;
@@ -13,6 +16,11 @@ public class InputCore implements InputProcessor {
    public InputCore() {
    }
 
+   /**
+    * {@summary Zoom in or out for the camera.}
+    * 
+    * @see com.badlogic.gdx.InputProcessor#scrolled(float, float)
+    */
    @Override
    public boolean scrolled(float amountX, float amountY) {
       // System.out.println("mouse scrolled of "+amountX+" "+amountY);
