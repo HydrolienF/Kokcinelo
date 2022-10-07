@@ -93,6 +93,7 @@ public class GameScreen implements Screen {
 
     /**
      * {@summary Draw all thing that need to be draw during a game.}
+     * 
      * @see com.badlogic.gdx.Screen#render(float)
      */
     @Override
@@ -161,6 +162,7 @@ public class GameScreen implements Screen {
 
     /**
      * {@summary Resize ViewPort when Screen is resize.}
+     * 
      * @see com.badlogic.gdx.Screen#resize(int, int)
      */
     @Override
