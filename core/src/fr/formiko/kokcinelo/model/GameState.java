@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,11 +13,22 @@ public class GameState {
     private List<Aphid> aphids;
     private List<Ant> ants;
     private List<Ladybug> ladybugs;
+    private List<Player> players;
 
     private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
         ladybugs = new ArrayList<Ladybug>();
+        players = new ArrayList<Player>();
+    }
+
+    public Player getPlayer(int playerId) {
+        for (Player player : players) {
+            if (player.getId() == playerId) {
+                return player;
+            }
+        }
+        return null;
     }
 
     public void addCreature(Creature c) {
@@ -33,7 +45,7 @@ public class GameState {
         for (Ladybug ladybug : ladybugs) {
             Set<Aphid> eated = new HashSet<Aphid>();
             for (Aphid aphid : aphids) {
-                if (ladybug.hitBixConnected(aphid)) {
+                if (ladybug.hitBoxConnected(aphid)) {
                     eated.add(aphid);
                     ladybug.addScorePoints(aphid.getGivenPoints());
                 }
@@ -42,6 +54,32 @@ public class GameState {
         }
     }
 
+    public Set<Creature> getCreatureToPrint(int playerId) {
+        Set<Creature> toPrint = new HashSet<Creature>();
+        Player p = getPlayer(playerId);
+        Creature playedCreature = p.getPlayedCreature();
+        if (p != null) {
+            for (Creature creature : allCreatures()) {
+                if (playedCreature.see(creature)) {
+                    toPrint.add(creature);
+                }
+            }
+        }
+        return toPrint;
+    }
+
+    /**
+     * @return All creatures: aphids + ants + ladybugs
+     */
+    public Iterable<Creature> allCreatures() {
+        List<Creature> l = new LinkedList<Creature>();
+        l.addAll(aphids);
+        l.addAll(ants);
+        l.addAll(ladybugs);
+        return l;
+    }
+
+    //static
     public static GameStateBuilder builder() {
         return new GameStateBuilder();
     }

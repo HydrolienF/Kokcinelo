@@ -1,5 +1,8 @@
 package fr.formiko.kokcinelo;
 
+import java.util.Set;
+
+import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 
 public class Controller {
@@ -21,5 +24,7 @@ public class Controller {
                 .build();
     }
 
-    // public Set<
+    public Set<Creature> getCreatureToPrint(int playerId) {
+        return gs.getCreatureToPrint(playerId);
+    }
 }

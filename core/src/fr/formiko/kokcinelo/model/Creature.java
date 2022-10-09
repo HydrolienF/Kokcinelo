@@ -20,4 +20,8 @@ public abstract class Creature extends MapItem {
     public void addScorePoints(int score) {
         scorePoints += score;
     }
+
+    public boolean see(MapItem mi) {
+        return isInRadius(mi, visionRadius);
+    }
 }

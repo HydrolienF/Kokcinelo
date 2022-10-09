@@ -4,6 +4,7 @@ public abstract class MapItem {
     /** Unique id for every MapItem */
     private final int id;
     private static int idCpt = 0;
+    // private Point location;
     // private Vector3 location;
     // size
     // direction
@@ -38,8 +39,13 @@ public abstract class MapItem {
         return true;
     }
 
-    public boolean hitBixConnected(MapItem it) {
+    public boolean hitBoxConnected(MapItem it) {
         // TODO
         return false;
+    }
+
+    public boolean isInRadius(MapItem mi2, double radius) {
+        // TODO
+        return true;
     }
 }
