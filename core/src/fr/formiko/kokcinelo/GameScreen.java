@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import fr.formiko.kokcinelo.model.Creature;
+
 /**
  * {*@summary The action game screen.}
  * 
@@ -32,6 +34,7 @@ public class GameScreen implements Screen {
     private Rectangle ladybug;
     private float rotationSpeed;
     private float maxZoom;
+    private Controller controller;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set Creatures locations.}
@@ -41,6 +44,9 @@ public class GameScreen implements Screen {
     public GameScreen(final App game) {
         // TODO move to GameState.java the state of current game
         this.game = game;
+        controller = new Controller();
+        controller.createNewGame();
+
         // Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -108,10 +114,15 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.setProjectionMatrix(camera.combined);
         // draw images
-        for (final Rectangle aphid : aphidSet) {
-            game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
-        }
+        // for (final Rectangle aphid : aphidSet) {
+        //     game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
+        // }
         game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
+        for (Creature c : controller.getCreatureToPrint(0)) {
+            // game.batch.draw(c.getActor());
+            // System.out.println(c.getId() + " " + c.getActor());
+            c.getActor().draw(game.batch, delta);
+        }
         game.batch.end();
     }
 

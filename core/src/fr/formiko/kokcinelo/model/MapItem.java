@@ -1,16 +1,26 @@
 package fr.formiko.kokcinelo.model;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import fr.formiko.kokcinelo.view.MapItemActor;
+
 public abstract class MapItem {
     /** Unique id for every MapItem */
     private final int id;
     private static int idCpt = 0;
-    // private Point location;
-    // private Vector3 location;
-    // size
-    // direction
+    private Actor actor;
+
+    // public void setActor(Actor actor) {
+    //     this.actor = actor;
+    // }
+
+    public Actor getActor() {
+        return actor;
+    }
 
     public MapItem() {
         id = idCpt++;
+        actor = new MapItemActor();
     }
 
     public int getId() {

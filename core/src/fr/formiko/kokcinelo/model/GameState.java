@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameState {
     private Rectangle mapCoordinate;
@@ -57,8 +60,8 @@ public class GameState {
     public Set<Creature> getCreatureToPrint(int playerId) {
         Set<Creature> toPrint = new HashSet<Creature>();
         Player p = getPlayer(playerId);
-        Creature playedCreature = p.getPlayedCreature();
         if (p != null) {
+            Creature playedCreature = p.getPlayedCreature();
             for (Creature creature : allCreatures()) {
                 if (playedCreature.see(creature)) {
                     toPrint.add(creature);
@@ -87,13 +90,24 @@ public class GameState {
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
+        private GameState gs;
 
         private GameStateBuilder() {
         }
 
         public GameState build() {
-            GameState gs = new GameState();
+            gs = new GameState();
             gs.mapCoordinate = new Rectangle(0, 0, Math.max(1, mapWidth), Math.max(1, mapHeight));
+
+            //initialize default game
+            //TODO change to the builder parameter
+            addAphids(20);
+            Ladybug lb = new Ladybug();
+            lb.getActor().setWidth(Gdx.graphics.getWidth() / 10);
+            lb.getActor().setHeight((lb.getActor().getWidth() * lb.getActor().getHeight()) / lb.getActor().getWidth());
+            gs.ladybugs.add(lb);
+            gs.players.add(new Player(lb));
+
             return gs;
         }
 
@@ -105,6 +119,22 @@ public class GameState {
         public GameStateBuilder setMapHeight(int mapHeight) {
             this.mapHeight = mapHeight;
             return this;
+        }
+
+        private void addAphids(int numberToAdd) {
+            Random ran = new Random();
+            for (int i = 0; i < numberToAdd; i++) {
+                Aphid a = new Aphid();
+                Rectangle aphid = new Rectangle();
+                aphid.width = Gdx.graphics.getWidth() / 50;
+                // keep racio
+                aphid.height = (aphid.width * a.getActor().getHeight()) / a.getActor().getWidth();
+                // random location
+                aphid.x = ran.nextInt((int) (Gdx.graphics.getWidth() - aphid.width));
+                aphid.y = ran.nextInt((int) (Gdx.graphics.getHeight() - aphid.width));
+                a.getActor().setBounds(aphid.getX(), aphid.getY(), aphid.getWidth(), aphid.getHeight());
+                gs.aphids.add(a);
+            }
         }
     }
 }
