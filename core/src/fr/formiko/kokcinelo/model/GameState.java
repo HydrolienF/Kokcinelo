@@ -10,6 +10,7 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 
 public class GameState {
     private Rectangle mapCoordinate;
@@ -146,7 +147,11 @@ public class GameState {
                 aphid.y = ran.nextInt((int) (Gdx.graphics.getHeight() - aphid.width));
                 a.getActor().setBounds(aphid.getX(), aphid.getY(), aphid.getWidth(), aphid.getHeight());
                 gs.aphids.add(a);
-                a.getActor().setRotation(ran.nextFloat());
+                System.out.println(ran.nextFloat());
+                a.getActor().setOrigin(Align.center);
+                // a.getActor().setRotation(ran.nextFloat());
+                a.getActor().setRotation(ran.nextFloat(360f));
+                System.out.println(a.getActor());
             }
         }
     }

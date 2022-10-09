@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
@@ -39,7 +40,8 @@ public class MapItemActor extends Actor {
 
     @Override
     public String toString() {
-        return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "]";
+        return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
+                + getRotation() + "]";
     }
 
     //personaliseds functions -------------------------------------------------
