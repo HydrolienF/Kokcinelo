@@ -1,5 +1,8 @@
 package fr.formiko.kokcinelo.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,25 +11,47 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MapItemActor extends Actor {
-    private TextureRegion region;
+    private static Map<String, TextureRegion> textureRegionMap;
+    private String textureName;
+    private float zoom;
 
-    public MapItemActor() {
-        region = new TextureRegion(new Texture(Gdx.files.internal("images/aphid.png")));
-        setBounds(region.getRegionX(), region.getRegionY(), region.getRegionWidth(), region.getRegionHeight());
+    public MapItemActor(String textureName) {
+        this.textureName = textureName;
+        if (textureRegionMap == null) {
+            textureRegionMap = new HashMap<String, TextureRegion>();
+        }
+        if (!textureRegionMap.containsKey(textureName)) {
+            textureRegionMap.put(textureName,
+                    new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
+        }
+        setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
+                getTextureRegion().getRegionHeight());
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        System.out.println("end drawing " + this);
+        // System.out.println("end drawing " + this);
     }
 
     @Override
     public String toString() {
-        return "MapItemActor [region=" + region + "]"
-                + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "]";
+        return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "]";
+    }
+
+    //personaliseds functions -------------------------------------------------
+
+    public void setZoom(float zoom) {
+        //TODO setBounds if zoom have been update.
+        this.zoom = zoom;
+    }
+
+    //private -----------------------------------------------------------------
+
+    private TextureRegion getTextureRegion() {
+        return textureRegionMap.get(textureName);
     }
 }

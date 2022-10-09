@@ -8,19 +8,19 @@ public abstract class MapItem {
     /** Unique id for every MapItem */
     private final int id;
     private static int idCpt = 0;
-    private Actor actor;
+    private MapItemActor actor;
 
     // public void setActor(Actor actor) {
     //     this.actor = actor;
     // }
 
-    public Actor getActor() {
+    public MapItemActor getActor() {
         return actor;
     }
 
-    public MapItem() {
+    public MapItem(String textureName) {
         id = idCpt++;
-        actor = new MapItemActor();
+        actor = new MapItemActor(textureName);
     }
 
     public int getId() {

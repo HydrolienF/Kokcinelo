@@ -9,9 +9,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,15 +28,13 @@ import fr.formiko.kokcinelo.model.Creature;
 public class GameScreen implements Screen {
     private final App game;
     private Viewport viewport;
-    private Set<Rectangle> aphidSet;
+    private Stage stage;
 
     OrthographicCamera camera;
-    private Texture ladybugImage;
-    private Texture aphidImage;
-    private Rectangle ladybug;
     private float rotationSpeed;
     private float maxZoom;
     private Controller controller;
+    private int playerId;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set Creatures locations.}
@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
         this.game = game;
         controller = new Controller();
         controller.createNewGame();
+        playerId = 0;
 
         // Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
@@ -54,32 +55,12 @@ public class GameScreen implements Screen {
         camera.position.set(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f, 0);
         // camera.setToOrtho(false, 800, 480);
         viewport = new ScreenViewport(camera);
-        ladybugImage = new Texture(Gdx.files.internal("images/ladybug.png"));
-        ladybugImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        ladybug = new Rectangle();
-        ladybug.width = Gdx.graphics.getWidth() / 10;
-        // keep racio
-        ladybug.height = (ladybug.width * ladybugImage.getHeight()) / ladybugImage.getWidth();
-        // center
-        ladybug.x = (Gdx.graphics.getWidth() - ladybug.width) / 2;
-        ladybug.y = (Gdx.graphics.getHeight() - ladybug.width) / 2;
 
-        aphidSet = new HashSet<Rectangle>();
-        aphidImage = new Texture(Gdx.files.internal("images/aphid.png"));
-        aphidImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        Random ran = new Random();
-        for (int i = 0; i < 10; i++) {
-            Rectangle aphid = new Rectangle();
-            aphid.width = Gdx.graphics.getWidth() / 50;
-            // keep racio
-            aphid.height = (aphid.width * aphidImage.getHeight()) / aphidImage.getWidth();
-            // random location
-            aphid.x = ran.nextInt((int) (Gdx.graphics.getWidth() - aphid.width));
-            aphid.y = ran.nextInt((int) (Gdx.graphics.getHeight() - aphid.width));
-            aphidSet.add(aphid);
+        stage = new Stage(viewport);
+        for (Creature c : controller.allCreatures()) {
+            stage.addActor(c.getActor());
         }
-        // System.out.println(aphidSet);
-        // System.out.println(ladybug);
+
         rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
@@ -94,6 +75,10 @@ public class GameScreen implements Screen {
         return camera;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
     @Override
     public void show() {
         // TODO Auto-generated method stub
@@ -106,24 +91,28 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // clear the screen with a green color.
         ScreenUtils.clear(0.1f, 1f, 0f, 1);
-        viewport.apply();
+
+        controller.updateActorVisibility(playerId);
+        stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        stage.draw();
+        // // clear the screen with a green color.
+        // viewport.apply();
         handleInput();
-        camera.update();
-        game.batch.begin();
-        game.batch.setProjectionMatrix(camera.combined);
-        // draw images
-        // for (final Rectangle aphid : aphidSet) {
-        //     game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
+        // camera.update();
+        // game.batch.begin();
+        // game.batch.setProjectionMatrix(camera.combined);
+        // // draw images
+        // // for (final Rectangle aphid : aphidSet) {
+        // //     game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
+        // // }
+        // // game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
+        // for (Creature c : controller.getCreatureToPrint(0)) {
+        //     // game.batch.draw(c.getActor());
+        //     // System.out.println(c.getId() + " " + c.getActor());
+        //     // c.getActor().draw(game.batch, delta);
         // }
-        game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
-        for (Creature c : controller.getCreatureToPrint(0)) {
-            // game.batch.draw(c.getActor());
-            // System.out.println(c.getId() + " " + c.getActor());
-            c.getActor().draw(game.batch, delta);
-        }
-        game.batch.end();
+        // game.batch.end();
     }
 
     /**
@@ -166,8 +155,7 @@ public class GameScreen implements Screen {
         // System.out.println(camera.position);
         // tell the camera to update its matrices.
         camera.translate((int) moveX, (int) moveY, 0);
-        ladybug.x = camera.position.x - ladybug.width / 2;
-        ladybug.y = camera.position.y - ladybug.height / 2;
+        controller.synchonisePlayerCreatureWithCamera(camera, playerId);
     }
 
     /**

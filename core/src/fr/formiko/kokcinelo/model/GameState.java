@@ -34,6 +34,14 @@ public class GameState {
         return null;
     }
 
+    public Creature getPlayerCreature(int playerId) {
+        Player p = getPlayer(playerId);
+        if (p != null) {
+            return p.getPlayedCreature();
+        }
+        return null;
+    }
+
     public void addCreature(Creature c) {
         if (c instanceof Aphid) {
             aphids.add((Aphid) c);
@@ -57,20 +65,6 @@ public class GameState {
         }
     }
 
-    public Set<Creature> getCreatureToPrint(int playerId) {
-        Set<Creature> toPrint = new HashSet<Creature>();
-        Player p = getPlayer(playerId);
-        if (p != null) {
-            Creature playedCreature = p.getPlayedCreature();
-            for (Creature creature : allCreatures()) {
-                if (playedCreature.see(creature)) {
-                    toPrint.add(creature);
-                }
-            }
-        }
-        return toPrint;
-    }
-
     /**
      * @return All creatures: aphids + ants + ladybugs
      */
@@ -80,6 +74,15 @@ public class GameState {
         l.addAll(ants);
         l.addAll(ladybugs);
         return l;
+    }
+
+    public void updateActorVisibility(int playerId) {
+        Creature playedCreature = getPlayerCreature(playerId);
+        if (playedCreature != null) {
+            for (Creature creature : allCreatures()) {
+                creature.getActor().setVisible(playedCreature.see(creature));
+            }
+        }
     }
 
     //static
@@ -95,16 +98,25 @@ public class GameState {
         private GameStateBuilder() {
         }
 
+        /**
+         * {@summary Build a new GameState.}
+         * It have some check &#38; fix to avoid futur error, as map coordinate that can't be less than 1.
+         * 
+         * @return a new GameState
+         */
         public GameState build() {
             gs = new GameState();
             gs.mapCoordinate = new Rectangle(0, 0, Math.max(1, mapWidth), Math.max(1, mapHeight));
 
             //initialize default game
-            //TODO change to the builder parameter
+            //TODO move to the builder parameter
             addAphids(20);
             Ladybug lb = new Ladybug();
-            lb.getActor().setWidth(Gdx.graphics.getWidth() / 10);
-            lb.getActor().setHeight((lb.getActor().getWidth() * lb.getActor().getHeight()) / lb.getActor().getWidth());
+            lb.getActor().setZoom(0.1f);
+            // lb.getActor().setScale(0.5f);
+            // lb.getActor().setWidth(Gdx.graphics.getWidth() / 10);
+            // lb.synchonizeHeigthFromWidth();
+            // lb.getActor().setHeight((lb.getActor().getWidth() * lb.getActor().getHeight()) / lb.getActor().getWidth());
             gs.ladybugs.add(lb);
             gs.players.add(new Player(lb));
 
@@ -134,6 +146,7 @@ public class GameState {
                 aphid.y = ran.nextInt((int) (Gdx.graphics.getHeight() - aphid.width));
                 a.getActor().setBounds(aphid.getX(), aphid.getY(), aphid.getWidth(), aphid.getHeight());
                 gs.aphids.add(a);
+                a.getActor().setRotation(ran.nextFloat());
             }
         }
     }

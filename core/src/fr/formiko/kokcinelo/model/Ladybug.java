@@ -2,7 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 public class Ladybug extends Creature {
     public Ladybug() {
-        super();
+        super("ladybug");
     }
 
     @Override

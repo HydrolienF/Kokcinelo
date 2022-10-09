@@ -9,8 +9,8 @@ public abstract class Creature extends MapItem {
     protected int color;
     protected int scorePoints;
 
-    public Creature() {
-        super();
+    public Creature(String textureName) {
+        super(textureName);
     }
 
     public int getGivenPoints() {

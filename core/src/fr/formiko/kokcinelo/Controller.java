@@ -2,6 +2,8 @@ package fr.formiko.kokcinelo;
 
 import java.util.Set;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 
@@ -24,7 +26,17 @@ public class Controller {
                 .build();
     }
 
-    public Set<Creature> getCreatureToPrint(int playerId) {
-        return gs.getCreatureToPrint(playerId);
+    public void updateActorVisibility(int playerId) {
+        gs.updateActorVisibility(playerId);
+    }
+
+    public Iterable<Creature> allCreatures() {
+        return gs.allCreatures();
+    }
+
+    public void synchonisePlayerCreatureWithCamera(OrthographicCamera camera, int playerId) {
+        Creature c = gs.getPlayerCreature(playerId);
+        c.getActor().setX(camera.position.x - c.getActor().getWidth() / 2);
+        c.getActor().setY(camera.position.y - c.getActor().getHeight() / 2);
     }
 }
