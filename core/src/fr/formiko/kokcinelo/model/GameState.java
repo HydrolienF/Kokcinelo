@@ -1,4 +1,4 @@
-package fr.formiko.kokcinelo.gamedata;
+package fr.formiko.kokcinelo.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class GameState {
     private List<Ant> ants;
     private List<Ladybug> ladybugs;
 
-    public GameState() {
+    private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
         ladybugs = new ArrayList<Ladybug>();
@@ -39,6 +39,34 @@ public class GameState {
                 }
             }
             aphids.removeAll(eated);
+        }
+    }
+
+    public static GameStateBuilder builder() {
+        return new GameStateBuilder();
+    }
+
+    public static class GameStateBuilder {
+        private int mapWidth;
+        private int mapHeight;
+
+        private GameStateBuilder() {
+        }
+
+        public GameState build() {
+            GameState gs = new GameState();
+            gs.mapCoordinate = new Rectangle(0, 0, Math.max(1, mapWidth), Math.max(1, mapHeight));
+            return gs;
+        }
+
+        public GameStateBuilder setMapWidth(int mapWidth) {
+            this.mapWidth = mapWidth;
+            return this;
+        }
+
+        public GameStateBuilder setMapHeight(int mapHeight) {
+            this.mapHeight = mapHeight;
+            return this;
         }
     }
 }

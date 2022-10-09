@@ -1,4 +1,4 @@
-package fr.formiko.kokcinelo.gamedata;
+package fr.formiko.kokcinelo.model;
 
 public class Ladybug extends Creature {
     public Ladybug() {

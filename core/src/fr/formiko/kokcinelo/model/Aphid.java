@@ -1,4 +1,4 @@
-package fr.formiko.kokcinelo.gamedata;
+package fr.formiko.kokcinelo.model;
 
 public class Aphid extends Creature {
     public Aphid() {

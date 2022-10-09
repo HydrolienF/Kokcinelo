@@ -34,8 +34,7 @@ public class GameScreen implements Screen {
     private float maxZoom;
 
     /**
-     * {*@summary The action game screen constructor that load images &#39; set
-     * Creatures locations.}
+     * {*@summary The action game screen constructor that load images &#39; set Creatures locations.}
      * 
      * @param game the App where the Screen is display
      */
@@ -77,6 +76,9 @@ public class GameScreen implements Screen {
         // System.out.println(ladybug);
         rotationSpeed = 0.5f;
         maxZoom = 0.2f;
+
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
+        Gdx.input.setInputProcessor(inputProcessor);
     }
 
     /**
@@ -118,14 +120,11 @@ public class GameScreen implements Screen {
      * Some input are handle on InputCore that allow more input handling.
      */
     private void handleInput() {
-        // DOING
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
-        Gdx.input.setInputProcessor(inputProcessor);
-
         // while debuging game close on escape
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
+        // TODO get a vector from mouse position & send it to controler to move the player
         double moveY = 0;
         double moveX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
