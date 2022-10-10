@@ -37,7 +37,8 @@ public class GameScreen implements Screen {
     private int playerId;
 
     /**
-     * {*@summary The action game screen constructor that load images &#39; set Creatures locations.}
+     * {*@summary The action game screen constructor that load images &#39; set
+     * Creatures locations.}
      * 
      * @param game the App where the Screen is display
      */
@@ -91,28 +92,11 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        handleInput(); // Done before draw to avoid some GUI glitch
         ScreenUtils.clear(0.1f, 1f, 0f, 1);
-
         controller.updateActorVisibility(playerId);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
-        // // clear the screen with a green color.
-        // viewport.apply();
-        handleInput();
-        // camera.update();
-        // game.batch.begin();
-        // game.batch.setProjectionMatrix(camera.combined);
-        // // draw images
-        // // for (final Rectangle aphid : aphidSet) {
-        // //     game.batch.draw(aphidImage, aphid.x, aphid.y, aphid.width, aphid.height);
-        // // }
-        // // game.batch.draw(ladybugImage, ladybug.x, ladybug.y, ladybug.width, ladybug.height);
-        // for (Creature c : controller.getCreatureToPrint(0)) {
-        //     // game.batch.draw(c.getActor());
-        //     // System.out.println(c.getId() + " " + c.getActor());
-        //     // c.getActor().draw(game.batch, delta);
-        // }
-        // game.batch.end();
     }
 
     /**
@@ -124,7 +108,8 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
-        // TODO get a vector from mouse position & send it to controler to move the player
+        // TODO get a vector from mouse position & send it to controler to move the
+        // player
         double moveY = 0;
         double moveX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -149,6 +134,7 @@ public class GameScreen implements Screen {
             camera.zoom = maxZoom;
         }
 
+        // TODO synchonise camera on creature insted of creature on camera.
         moveY *= 200;
         moveX *= 200;
         // if(moveX!=0)

@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
+
+import fr.formiko.kokcinelo.Controller;
 
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
-    private float zoom = 1.0f;
 
     public MapItemActor(String textureName) {
         this.textureName = textureName;
@@ -26,17 +28,15 @@ public class MapItemActor extends Actor {
         }
         setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
                 getTextureRegion().getRegionHeight());
+        setOrigin(Align.center);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        //TODO draw centered even with * zoom
-        //+ getScaleX() * (1.0f / zoom)
         batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX() * zoom, getScaleY() * zoom, getRotation());
-        // System.out.println("end drawing " + this);
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     @Override
@@ -45,14 +45,18 @@ public class MapItemActor extends Actor {
                 + getRotation() + "]";
     }
 
-    //personaliseds functions -------------------------------------------------
+    // personaliseds functions -------------------------------------------------
 
     public void setZoom(float zoom) {
-        //TODO setBounds if zoom have been update.
-        this.zoom = zoom;
+        setScale(zoom, zoom);
     }
 
-    //private -----------------------------------------------------------------
+    public void setRandomLoaction(float maxX, float maxY) {
+        setX(Controller.getRandom().nextFloat(maxX));
+        setY(Controller.getRandom().nextFloat(maxY));
+    }
+
+    // private -----------------------------------------------------------------
 
     private TextureRegion getTextureRegion() {
         return textureRegionMap.get(textureName);

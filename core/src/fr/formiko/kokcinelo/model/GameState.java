@@ -1,16 +1,16 @@
 package fr.formiko.kokcinelo.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+
+import fr.formiko.kokcinelo.Controller;
 
 public class GameState {
     private Rectangle mapCoordinate;
@@ -41,6 +41,14 @@ public class GameState {
             return p.getPlayedCreature();
         }
         return null;
+    }
+
+    public float getMapWidth() {
+        return mapCoordinate.getWidth();
+    }
+
+    public float getMapHeight() {
+        return mapCoordinate.getHeight();
     }
 
     public void addCreature(Creature c) {
@@ -86,7 +94,13 @@ public class GameState {
         }
     }
 
-    //static
+    @Override
+    public String toString() {
+        return "GameState [mapCoordinate=" + mapCoordinate + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs="
+                + ladybugs + ", players=" + players + "]";
+    }
+
+    // static
     public static GameStateBuilder builder() {
         return new GameStateBuilder();
     }
@@ -101,7 +115,8 @@ public class GameState {
 
         /**
          * {@summary Build a new GameState.}
-         * It have some check &#38; fix to avoid futur error, as map coordinate that can't be less than 1.
+         * It have some check &#38; fix to avoid futur error, as map coordinate that
+         * can't be less than 1.
          * 
          * @return a new GameState
          */
@@ -109,18 +124,12 @@ public class GameState {
             gs = new GameState();
             gs.mapCoordinate = new Rectangle(0, 0, Math.max(1, mapWidth), Math.max(1, mapHeight));
 
-            //initialize default game
-            //TODO move to the builder parameter
-            addAphids(20);
-            Ladybug lb = new Ladybug();
-            lb.getActor().setZoom(0.1f);
-            // lb.getActor().setScale(0.5f);
-            // lb.getActor().setWidth(Gdx.graphics.getWidth() / 10);
-            // lb.synchonizeHeigthFromWidth();
-            // lb.getActor().setHeight((lb.getActor().getWidth() * lb.getActor().getHeight()) / lb.getActor().getWidth());
-            gs.ladybugs.add(lb);
-            gs.players.add(new Player(lb));
+            // initialize default game
+            // TODO move to the builder parameter
+            addCreatures(20, 1, 0);
+            gs.players.add(new Player(gs.ladybugs.get(0)));
 
+            System.out.println(gs);
             return gs;
         }
 
@@ -134,24 +143,37 @@ public class GameState {
             return this;
         }
 
-        private void addAphids(int numberToAdd) {
-            Random ran = new Random();
+        private void addCreatures(int aphidsNumber, int ladybugNumber, int antNumber) {
+            addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
+            addC(ladybugNumber, 0.4f, 0.4f, false, false, Ladybug.class);
+            addC(antNumber, 0.3f, 0.35f, true, true, Ant.class);
+        }
+
+        private void addC(final int numberToAdd, final float zoomMin, final float zoomMax,
+                final boolean randomLocaction, final boolean randomRotation,
+                final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
-                Aphid a = new Aphid();
-                Rectangle aphid = new Rectangle();
-                aphid.width = Gdx.graphics.getWidth() / 50;
-                // keep racio
-                aphid.height = (aphid.width * a.getActor().getHeight()) / a.getActor().getWidth();
-                // random location
-                aphid.x = ran.nextInt((int) (Gdx.graphics.getWidth() - aphid.width));
-                aphid.y = ran.nextInt((int) (Gdx.graphics.getHeight() - aphid.width));
-                a.getActor().setBounds(aphid.getX(), aphid.getY(), aphid.getWidth(), aphid.getHeight());
-                gs.aphids.add(a);
-                System.out.println(ran.nextFloat());
-                a.getActor().setOrigin(Align.center);
-                // a.getActor().setRotation(ran.nextFloat());
-                a.getActor().setRotation(ran.nextFloat(360f));
-                System.out.println(a.getActor());
+                try {
+                    Creature c = creatureClass.getDeclaredConstructor().newInstance();
+                    if (randomLocaction) {
+                        c.getActor().setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
+                    }
+                    if (randomRotation) {
+                        c.getActor().setRotation(Controller.getRandom().nextFloat(360f));
+                    }
+                    if (zoomMin > 0) {
+                        if (zoomMax > zoomMin) {
+                            c.getActor().setZoom(zoomMin + Controller.getRandom().nextFloat(zoomMax - zoomMin));
+                        } else {
+                            c.getActor().setZoom(zoomMin);
+                        }
+                    }
+                    gs.addCreature(c);
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                    System.out.println("Fail to add a new Creature");
+                    e.printStackTrace();
+                }
             }
         }
     }
