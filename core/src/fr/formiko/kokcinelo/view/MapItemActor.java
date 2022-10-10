@@ -9,12 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Align;
 
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
-    private float zoom;
+    private float zoom = 1.0f;
 
     public MapItemActor(String textureName) {
         this.textureName = textureName;
@@ -33,8 +32,10 @@ public class MapItemActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        //TODO draw centered even with * zoom
+        //+ getScaleX() * (1.0f / zoom)
         batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                getWidth(), getHeight(), getScaleX() * zoom, getScaleY() * zoom, getRotation());
         // System.out.println("end drawing " + this);
     }
 
