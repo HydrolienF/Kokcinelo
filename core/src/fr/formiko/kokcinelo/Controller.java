@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo;
 
 import java.util.Random;
-import java.util.Set;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 

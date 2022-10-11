@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Align;
 
 import fr.formiko.kokcinelo.Controller;
 
