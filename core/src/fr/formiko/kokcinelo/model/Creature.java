@@ -6,6 +6,11 @@ public abstract class Creature extends MapItem {
     protected double hitPoints;
     protected double shootPoints;
     protected double visionRadius;
+
+    public double getVisionRadius() {
+        return visionRadius;
+    }
+
     protected int color;
     protected int scorePoints;
 

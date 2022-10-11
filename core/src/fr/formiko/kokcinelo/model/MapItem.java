@@ -1,7 +1,5 @@
 package fr.formiko.kokcinelo.model;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-
 import fr.formiko.kokcinelo.view.MapItemActor;
 
 public abstract class MapItem {
@@ -20,7 +18,7 @@ public abstract class MapItem {
 
     public MapItem(String textureName) {
         id = idCpt++;
-        actor = new MapItemActor(textureName);
+        actor = new MapItemActor(textureName, this);
     }
 
     public int getId() {
@@ -55,7 +53,13 @@ public abstract class MapItem {
     }
 
     public boolean isInRadius(MapItem mi2, double radius) {
-        // TODO
-        return true;
+        float dist = distanceTo(mi2);
+        return dist < radius;
+    }
+
+    public float distanceTo(MapItem mi2) {
+        return (float) Math.sqrt(
+                Math.pow(getActor().getCenterX() - mi2.getActor().getCenterX(), 2) +
+                        Math.pow(getActor().getCenterY() - mi2.getActor().getCenterY(), 2));
     }
 }

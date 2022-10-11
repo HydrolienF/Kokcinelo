@@ -1,18 +1,11 @@
 package fr.formiko.kokcinelo;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -30,7 +23,7 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private Stage stage;
 
-    OrthographicCamera camera;
+    static OrthographicCamera camera;
     private float rotationSpeed;
     private float maxZoom;
     private Controller controller;
@@ -72,7 +65,7 @@ public class GameScreen implements Screen {
     /**
      * @return the camera
      */
-    public Camera getCamera() {
+    public static Camera getCamera() {
         return camera;
     }
 

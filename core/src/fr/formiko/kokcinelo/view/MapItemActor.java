@@ -5,20 +5,30 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.GameScreen;
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.MapItem;
 
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
+    private MapItem mapItem;
+    private static boolean showZone = true;
 
-    public MapItemActor(String textureName) {
+    public MapItemActor(String textureName, MapItem mapItem) {
         this.textureName = textureName;
+        this.mapItem = mapItem;
         if (textureRegionMap == null) {
             textureRegionMap = new HashMap<String, TextureRegion>();
         }
@@ -35,14 +45,33 @@ public class MapItemActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
+                getScaleY(), getRotation());
+        if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
+            batch.end();
+            Creature c = (Creature) mapItem;
+            Gdx.gl.glEnable(GL30.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
+            shapeRenderer.setColor(new Color(0f, 0f, 0f, parentAlpha * 0.2f));
+            shapeRenderer.begin(ShapeType.Filled);
+            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
+            // shapeRenderer.identity();
+            // shapeRenderer.translate(200, 12, 2);
+            // shapeRenderer.updateMatrices();
+            // shapeRenderer.setProjectionMatrix(new Matrix4(Matrix4.M01).inv());
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL30.GL_BLEND);
+            batch.begin();
+        }
     }
 
     @Override
     public String toString() {
         return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
-                + getRotation() + "]";
+                + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY()
+                + "]";
     }
 
     // personaliseds functions -------------------------------------------------
@@ -54,6 +83,14 @@ public class MapItemActor extends Actor {
     public void setRandomLoaction(float maxX, float maxY) {
         setX(Controller.getRandom().nextFloat(maxX));
         setY(Controller.getRandom().nextFloat(maxY));
+    }
+
+    public float getCenterX() {
+        return getX() + getWidth() / 2;
+    }
+
+    public float getCenterY() {
+        return getY() + getHeight() / 2;
     }
 
     // private -----------------------------------------------------------------
