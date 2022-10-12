@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
@@ -25,6 +24,7 @@ public class MapItemActor extends Actor {
     private String textureName;
     private MapItem mapItem;
     private static boolean showZone = true;
+    private ShapeRenderer shapeRenderer;
 
     public MapItemActor(String textureName, MapItem mapItem) {
         this.textureName = textureName;
@@ -52,9 +52,11 @@ public class MapItemActor extends Actor {
             Creature c = (Creature) mapItem;
             Gdx.gl.glEnable(GL30.GL_BLEND);
             Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            if (shapeRenderer == null) {
+                shapeRenderer = new ShapeRenderer();
+                shapeRenderer.setColor(new Color(0f, 0f, 0f, parentAlpha * 0.2f));
+            }
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
-            shapeRenderer.setColor(new Color(0f, 0f, 0f, parentAlpha * 0.2f));
             shapeRenderer.begin(ShapeType.Filled);
             shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
             // shapeRenderer.identity();
