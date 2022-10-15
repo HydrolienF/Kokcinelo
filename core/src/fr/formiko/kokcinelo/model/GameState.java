@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.Controller;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,16 +9,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.gdx.math.Rectangle;
-
-import fr.formiko.kokcinelo.Controller;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 
 public class GameState {
-    private Rectangle mapCoordinate;
     private List<Aphid> aphids;
     private List<Ant> ants;
     private List<Ladybug> ladybugs;
     private List<Player> players;
+    private MapActor mapActorBg;
+    private MapActor mapActorFg;
+
+    public MapActor getMapActor() {
+        return mapActorBg;
+    }
 
     private GameState() {
         aphids = new ArrayList<Aphid>();
@@ -43,11 +53,11 @@ public class GameState {
     }
 
     public float getMapWidth() {
-        return mapCoordinate.getWidth();
+        return getMapActor().getWidth();
     }
 
     public float getMapHeight() {
-        return mapCoordinate.getHeight();
+        return getMapActor().getHeight();
     }
 
     public void addCreature(Creature c) {
@@ -83,6 +93,16 @@ public class GameState {
         l.addAll(ladybugs);
         return l;
     }
+    public Iterable<Actor> allActors() {
+        List<Actor> l = new LinkedList<Actor>();
+        l.add(mapActorBg);
+        for (Creature creature : allCreatures()) {
+            l.add(creature.getActor());
+        }
+        // TODO Add back
+        // l.add(mapActorFg);
+        return l;
+    }
 
     public void updateActorVisibility(int playerId) {
         Creature playedCreature = getPlayerCreature(playerId);
@@ -95,8 +115,9 @@ public class GameState {
 
     @Override
     public String toString() {
-        return "GameState [mapCoordinate=" + mapCoordinate + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs="
-                + ladybugs + ", players=" + players + "]";
+        return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs="
+                + ladybugs + ", players=" + players + "]"
+                + " " + mapActorBg + " " + mapActorFg;
     }
 
     // static
@@ -121,12 +142,13 @@ public class GameState {
          */
         public GameState build() {
             gs = new GameState();
-            gs.mapCoordinate = new Rectangle(0, 0, Math.max(1, mapWidth), Math.max(1, mapHeight));
 
             // initialize default game
+            addMapBackground();
             // TODO move to the builder parameter
-            addCreatures(20, 1, 0);
+            addCreatures(200, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
+            addMapForeground();
 
             System.out.println(gs);
             return gs;
@@ -175,5 +197,49 @@ public class GameState {
                 }
             }
         }
+
+        private void addMapBackground() {
+            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), new com.badlogic.gdx.graphics.Color(8/255f, 194/255f, 0/255f, 1f));
+            // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), Color.OLIVE);
+        }
+
+        private void addMapForeground() {
+            gs.mapActorFg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), Color.BLACK);
+        }
+    }
+}
+
+class MapActor extends Actor {
+    private Texture texture;
+
+    public MapActor(float width, float height, Color color) {
+        setWidth(width);
+        setHeight(height);
+        createTexture((int) width, (int) height, color);
+        setOrigin(Align.center);
+        setVisible(true);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public String toString() {
+        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
+                + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY()
+                + "]";
+    }
+
+    private void createTexture(int width, int height, Color color) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+        // pixmap.setColor(color.r/255f, color.g/255f, color.b/255f, color.a/255f);
+        pixmap.fillRectangle(0, 0, width, height);
+        texture = new Texture(pixmap);
+        pixmap.dispose();
     }
 }

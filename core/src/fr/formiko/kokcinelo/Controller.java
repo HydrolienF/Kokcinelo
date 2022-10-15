@@ -1,11 +1,12 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.GameState;
+
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import fr.formiko.kokcinelo.model.Creature;
-import fr.formiko.kokcinelo.model.GameState;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Controller {
     private GameState gs;
@@ -33,6 +34,9 @@ public class Controller {
 
     public Iterable<Creature> allCreatures() {
         return gs.allCreatures();
+    }
+    public Iterable<Actor> allActors(){
+        return gs.allActors();
     }
 
     public void synchonisePlayerCreatureWithCamera(OrthographicCamera camera, int playerId) {

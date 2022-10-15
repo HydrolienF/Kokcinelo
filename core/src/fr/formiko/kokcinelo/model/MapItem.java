@@ -8,10 +8,6 @@ public abstract class MapItem {
     private static int idCpt = 0;
     private MapItemActor actor;
 
-    // public void setActor(Actor actor) {
-    //     this.actor = actor;
-    // }
-
     public MapItemActor getActor() {
         return actor;
     }

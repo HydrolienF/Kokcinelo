@@ -1,5 +1,10 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.GameScreen;
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.MapItem;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +18,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-
-import fr.formiko.kokcinelo.Controller;
-import fr.formiko.kokcinelo.GameScreen;
-import fr.formiko.kokcinelo.model.Creature;
-import fr.formiko.kokcinelo.model.MapItem;
 
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
@@ -59,10 +59,6 @@ public class MapItemActor extends Actor {
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
             shapeRenderer.begin(ShapeType.Filled);
             shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
-            // shapeRenderer.identity();
-            // shapeRenderer.translate(200, 12, 2);
-            // shapeRenderer.updateMatrices();
-            // shapeRenderer.setProjectionMatrix(new Matrix4(Matrix4.M01).inv());
             shapeRenderer.end();
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();

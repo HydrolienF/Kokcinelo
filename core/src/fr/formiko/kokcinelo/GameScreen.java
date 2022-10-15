@@ -5,18 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import fr.formiko.kokcinelo.model.Creature;
 
 /**
  * {*@summary The action game screen.}
@@ -56,8 +53,8 @@ public class GameScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
-        for (Creature c : controller.allCreatures()) {
-            stage.addActor(c.getActor());
+        for (Actor a : controller.allActors()) {
+            stage.addActor(a);
         }
 
         rotationSpeed = 0.5f;
@@ -93,12 +90,14 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(); // Done before draw to avoid some GUI glitch
-        ScreenUtils.clear(0.1f, 1f, 0f, 1);
+        // ScreenUtils.clear(0.1f, 1f, 0f, 1);
+        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 
-        //TODO see https://github.com/raeleus/masks-example-project/blob/main/core/src/main/java/com/ray3k/liftoff/TestDepthBuffer.java
-        //TODO try to hide insect out of the circle.
+        // TODO see
+        // https://github.com/raeleus/masks-example-project/blob/main/core/src/main/java/com/ray3k/liftoff/TestDepthBuffer.java
+        // TODO try to hide insect out of the circle.
         controller.updateActorVisibility(playerId);
-        // drawMasks();
+        drawMasks();
         drawMasked();
     }
 
@@ -118,25 +117,25 @@ public class GameScreen implements Screen {
     }
 
     private void drawMasks() {
-        /* Disable RGB color writing, enable alpha writing to the frame buffer. */
-        Gdx.gl.glColorMask(false, false, false, true);
-        spriteBatch.begin();
-        /* Change the blending function for our alpha map. */
-        spriteBatch.setBlendFunction(GL30.GL_ONE, GL30.GL_ZERO);
+        // /* Disable RGB color writing, enable alpha writing to the frame buffer. */
+        // Gdx.gl.glColorMask(false, false, false, true);
+        // spriteBatch.begin();
+        // /* Change the blending function for our alpha map. */
+        // spriteBatch.setBlendFunction(GL30.GL_ONE, GL30.GL_ZERO);
 
-        /* Draw alpha masks. */
-        mask.draw(spriteBatch);
+        // /* Draw alpha masks. */
+        // mask.draw(spriteBatch);
 
-        /* This blending function makes it so we subtract instead of adding to the alpha map. */
-        spriteBatch.setBlendFunction(GL30.GL_ZERO, GL30.GL_SRC_ALPHA);
+        // /* This blending function makes it so we subtract instead of adding to the
+        // alpha map. */
+        // spriteBatch.setBlendFunction(GL30.GL_ZERO, GL30.GL_SRC_ALPHA);
 
-        /* Remove the masked sprite's inverse alpha from the map. */
-        // maskedSprite.draw(spriteBatch);
+        // /* Remove the masked sprite's inverse alpha from the map. */
+        // // maskedSprite.draw(spriteBatch);
 
-        /* Flush the batch to the GPU. */
-        spriteBatch.flush();
-        spriteBatch.end();
-
+        // /* Flush the batch to the GPU. */
+        // spriteBatch.flush();
+        // spriteBatch.end();
     }
 
     private void drawMasked() {
