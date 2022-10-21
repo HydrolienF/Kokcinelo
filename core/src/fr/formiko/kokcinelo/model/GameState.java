@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.view.MapActor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,11 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Align;
 
 public class GameState {
     private List<Aphid> aphids;
@@ -23,6 +20,10 @@ public class GameState {
     private List<Player> players;
     private MapActor mapActorBg;
     private MapActor mapActorFg;
+
+    public MapActor getMapActorFg() {
+        return mapActorFg;
+    }
 
     public MapActor getMapActor() {
         return mapActorBg;
@@ -95,12 +96,17 @@ public class GameState {
     }
     public Iterable<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
-        l.add(mapActorBg);
-        for (Creature creature : allCreatures()) {
-            l.add(creature.getActor());
+        if(mapActorBg!=null){
+            l.add(mapActorBg);
         }
-        // TODO Add back
-        // l.add(mapActorFg);
+        for (Creature creature : allCreatures()) {
+            if(creature.getActor()!=null){
+                l.add(creature.getActor());
+            }
+        }
+        if(mapActorFg!=null){
+            l.add(mapActorFg);
+        }
         return l;
     }
 
@@ -130,8 +136,7 @@ public class GameState {
         private int mapHeight;
         private GameState gs;
 
-        private GameStateBuilder() {
-        }
+        private GameStateBuilder() {}
 
         /**
          * {@summary Build a new GameState.}
@@ -150,7 +155,7 @@ public class GameState {
             gs.players.add(new Player(gs.ladybugs.get(0)));
             addMapForeground();
 
-            System.out.println(gs);
+            // System.out.println(gs);
             return gs;
         }
 
@@ -206,40 +211,5 @@ public class GameState {
         private void addMapForeground() {
             gs.mapActorFg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), Color.BLACK);
         }
-    }
-}
-
-class MapActor extends Actor {
-    private Texture texture;
-
-    public MapActor(float width, float height, Color color) {
-        setWidth(width);
-        setHeight(height);
-        createTexture((int) width, (int) height, color);
-        setOrigin(Align.center);
-        setVisible(true);
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        Color color = getColor();
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
-    }
-
-    @Override
-    public String toString() {
-        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
-                + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY()
-                + "]";
-    }
-
-    private void createTexture(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        // pixmap.setColor(color.r/255f, color.g/255f, color.b/255f, color.a/255f);
-        pixmap.fillRectangle(0, 0, width, height);
-        texture = new Texture(pixmap);
-        pixmap.dispose();
     }
 }

@@ -24,7 +24,7 @@ public class Controller {
     public void createNewGame() {
         gs = GameState.builder()
                 .setMapHeight(1000)
-                .setMapWidth(1000)
+                .setMapWidth(2000)
                 .build();
     }
 
@@ -43,6 +43,9 @@ public class Controller {
         Creature c = gs.getPlayerCreature(playerId);
         c.getActor().setX(camera.position.x - c.getActor().getWidth() / 2);
         c.getActor().setY(camera.position.y - c.getActor().getHeight() / 2);
+
+        gs.getMapActorFg().clearToExclude();
+        gs.getMapActorFg().addToExclude(c.getActor().getX(), c.getActor().getY(), c.getVisionRadius());
     }
 
     public static Random getRandom() {

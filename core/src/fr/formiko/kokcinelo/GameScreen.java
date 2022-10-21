@@ -1,14 +1,19 @@
 package fr.formiko.kokcinelo;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -30,6 +35,9 @@ public class GameScreen implements Screen {
     private float maxZoom;
     private Controller controller;
     private int playerId;
+    private Set<Circle> areaVisible;
+    private SpriteBatch spriteBatch;
+    private Texture masked;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -93,55 +101,66 @@ public class GameScreen implements Screen {
         // ScreenUtils.clear(0.1f, 1f, 0f, 1);
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 
-        // TODO see
-        // https://github.com/raeleus/masks-example-project/blob/main/core/src/main/java/com/ray3k/liftoff/TestDepthBuffer.java
-        // TODO try to hide insect out of the circle.
         controller.updateActorVisibility(playerId);
-        drawMasks();
         drawMasked();
+        // drawMasks();
     }
 
-    /* Some attributes we're gonna need. */
-    private SpriteBatch spriteBatch;
-    private Sprite mask, maskedSprite;
-
     private void createMasks() {
+        areaVisible = new HashSet<Circle>();
+        areaVisible.add(new Circle(camera.position.x,camera.position.y,300));
+        // shapeRenderer = new ShapeRenderer();
+        // shapeRenderer.setAutoShapeType(true);
         spriteBatch = new SpriteBatch();
 
-        /* Load the mask containing the alpha information. */
-        mask = new Sprite(new Texture("images/mask1.png"));
-
-        /* Load the sprite which will be masked. */
-        // maskedSprite = new Sprite(new Texture("sprite.png"));
-        // maskedSprite.setColor(Color.RED);
+        /* Apply the mask to our Pixmap. */
+        Pixmap pixmap = applyMask();
+        /* Load the pixel information of the Pixmap into a Texture for drawing. */
+        masked = new Texture(pixmap);
     }
 
     private void drawMasks() {
-        // /* Disable RGB color writing, enable alpha writing to the frame buffer. */
-        // Gdx.gl.glColorMask(false, false, false, true);
-        // spriteBatch.begin();
-        // /* Change the blending function for our alpha map. */
-        // spriteBatch.setBlendFunction(GL30.GL_ONE, GL30.GL_ZERO);
-
-        // /* Draw alpha masks. */
-        // mask.draw(spriteBatch);
-
-        // /* This blending function makes it so we subtract instead of adding to the
-        // alpha map. */
-        // spriteBatch.setBlendFunction(GL30.GL_ZERO, GL30.GL_SRC_ALPHA);
-
-        // /* Remove the masked sprite's inverse alpha from the map. */
-        // // maskedSprite.draw(spriteBatch);
-
-        // /* Flush the batch to the GPU. */
-        // spriteBatch.flush();
-        // spriteBatch.end();
+        spriteBatch.begin();
+        spriteBatch.draw(masked, 0, 0);
+        spriteBatch.end();
     }
 
     private void drawMasked() {
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
+        
     }
+
+    private Pixmap applyMask() {
+        Pixmap darkedArea = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
+        Pixmap toRemove = new Pixmap(darkedArea.getWidth(), darkedArea.getHeight(), Pixmap.Format.RGBA8888);
+    
+        /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
+        toRemove.setBlending(null);
+    
+        /* Ignore RGB values unless you want funky toRemoves, alpha is for the mask. */
+        toRemove.setColor(new Color(1f, 1f, 1f, 1f));
+    
+        toRemove.fillCircle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 300);
+    
+        /* We can also define the mask by loading an image:
+         * toRemove = new Pixmap(new FileHandle("image.png")); */
+        int blackPixel = new Color(0.9f, 0f, 0f, 0f).toIntBits();
+    
+        /* Decide the color of each pixel. */
+        for (int x = 0; x < toRemove.getWidth(); x++) {
+            for (int y = 0; y < toRemove.getHeight(); y++) {
+                if(toRemove.getPixel(x, y) == 0.0){
+                    darkedArea.drawPixel(x, y, blackPixel);
+                }
+            }
+        }
+    
+        return darkedArea;
+    }
+
+
+
 
     /**
      * {@summary Handle user input &#38; mostly move camera.}<br>

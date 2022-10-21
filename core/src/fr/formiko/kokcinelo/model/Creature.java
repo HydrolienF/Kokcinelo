@@ -2,12 +2,12 @@ package fr.formiko.kokcinelo.model;
 
 public abstract class Creature extends MapItem {
     protected boolean fliing;
-    protected double lifePoints;
-    protected double hitPoints;
-    protected double shootPoints;
-    protected double visionRadius;
+    protected float lifePoints;
+    protected float hitPoints;
+    protected float shootPoints;
+    protected float visionRadius;
 
-    public double getVisionRadius() {
+    public float getVisionRadius() {
         return visionRadius;
     }
 
