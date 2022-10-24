@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import fr.formiko.tools.Math;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
@@ -44,25 +45,26 @@ public class MapActor extends Actor {
         Gdx.gl.glDepthFunc(GL30.GL_LESS);
         batch.draw(getMaskedTexture(), getX(), getY(), getWidth(), getHeight());
     }
-    
+
     @Override
     public String toString() {
         return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
                 + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY()
                 + "]";
     }
-    private Texture getMaskedTexture(){
-        if(toExcude.size()==0){
+
+    private Texture getMaskedTexture() {
+        if (toExcude.size() == 0) {
             return texture;
-        }else{
+        } else {
             Circle c = null;
             for (Circle circle : toExcude) {
-                c=circle;
+                c = circle;
                 break;
             }
-            if(textureWithDark==null){
+            if (textureWithDark == null) {
                 System.out.println("new textureWithDark");
-                textureWithDark = new Texture(getMaskPixmap((int)c.radius));
+                textureWithDark = new Texture(getMaskPixmap((int) c.radius));
             }
             return textureWithDark;
         }
@@ -74,45 +76,41 @@ public class MapActor extends Actor {
         pixmap.dispose();
     }
 
-    private Pixmap createPixmap(int width, int height, Color color){
+    private Pixmap createPixmap(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
         pixmap.fillRectangle(0, 0, width, height);
         return pixmap;
     }
 
-    public void clearToExclude(){
+    public void clearToExclude() {
         toExcude.clear();
     }
-    public void addToExclude(float x, float y, float radius){
-        toExcude.add(new Circle(x,y,radius));
-    }
 
+    public void addToExclude(float x, float y, float radius) {
+        toExcude.add(new Circle(x, y, radius));
+    }
 
     private Pixmap getMaskPixmap(int radius) {
         final int blackLevel = 150; // [0; 255]
         final float egdeSize = 0.2f;
 
-        Pixmap darkedArea = new Pixmap((int)getWidth(), (int)getHeight(), Pixmap.Format.RGBA8888);
-        int xCenter = (int)(darkedArea.getWidth()/2);
-        int yCenter = (int)(darkedArea.getHeight()/2);
-        float edgeLength = radius*egdeSize;
+        Pixmap darkedArea = new Pixmap((int) getWidth(), (int) getHeight(), Pixmap.Format.RGBA8888);
+        int xCenter = (int) (darkedArea.getWidth() / 2);
+        int yCenter = (int) (darkedArea.getHeight() / 2);
+        float edgeLength = radius * egdeSize;
 
         for (int x = 0; x < darkedArea.getWidth(); x++) {
             for (int y = 0; y < darkedArea.getHeight(); y++) {
-                int distToCenter = getDist(x,y,xCenter,yCenter);
-                if(distToCenter>radius){
+                int distToCenter = (int) Math.getDistanceBetweenPoints(x, y, xCenter, yCenter);
+                if (distToCenter > radius) {
                     darkedArea.drawPixel(x, y, blackLevel);
-                }else if(distToCenter>radius-edgeLength){
-                    float nextToTheEdgess = 1f-(radius-distToCenter)/edgeLength;
-                    darkedArea.drawPixel(x, y, (int)(blackLevel*nextToTheEdgess));
+                } else if (distToCenter > radius - edgeLength) {
+                    float nextToTheEdgess = 1f - (radius - distToCenter) / edgeLength;
+                    darkedArea.drawPixel(x, y, (int) (blackLevel * nextToTheEdgess));
                 }
             }
         }
         return darkedArea;
     }
-
-    private int getDist(int x1, int y1, int x2, int y2){
-        return (int) Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
-    } 
 }

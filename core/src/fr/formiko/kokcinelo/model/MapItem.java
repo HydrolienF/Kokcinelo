@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.view.MapItemActor;
+import fr.formiko.tools.Math;
 
 public abstract class MapItem {
     /** Unique id for every MapItem */
@@ -54,8 +55,7 @@ public abstract class MapItem {
     }
 
     public float distanceTo(MapItem mi2) {
-        return (float) Math.sqrt(
-                Math.pow(getActor().getCenterX() - mi2.getActor().getCenterX(), 2) +
-                        Math.pow(getActor().getCenterY() - mi2.getActor().getCenterY(), 2));
+        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(),
+                mi2.getActor().getCenterX(), mi2.getActor().getCenterY());
     }
 }
