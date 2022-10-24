@@ -23,18 +23,18 @@ public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = true;
+    private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
+    int i = 0;
 
-    public MapItemActor(String textureName, MapItem mapItem) {
+    public MapItemActor(String textureName, MapItem mapItem){
         this.textureName = textureName;
         this.mapItem = mapItem;
         if (textureRegionMap == null) {
             textureRegionMap = new HashMap<String, TextureRegion>();
         }
         if (!textureRegionMap.containsKey(textureName)) {
-            textureRegionMap.put(textureName,
-                    new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
+            textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
         }
         setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
                 getTextureRegion().getRegionHeight());

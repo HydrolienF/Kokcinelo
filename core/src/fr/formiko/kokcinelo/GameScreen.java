@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class GameScreen implements Screen {
     public GameScreen(final App game) {
         // TODO move to GameState.java the state of current game
         this.game = game;
-        controller = new Controller();
+        controller = new Controller(game, this);
         controller.createNewGame();
         playerId = 0;
 
@@ -112,21 +113,28 @@ public class GameScreen implements Screen {
 
     private void createMasks() {
         areaVisible = new HashSet<Circle>();
-        areaVisible.add(new Circle(camera.position.x,camera.position.y,300));
-        // shapeRenderer = new ShapeRenderer();
-        // shapeRenderer.setAutoShapeType(true);
+        // areaVisible.add(new Circle(camera.position.x,camera.position.y,300));
         spriteBatch = new SpriteBatch();
+    }
 
+    public void replaceMaskBy(Circle circle){
+        areaVisible.clear();
+        areaVisible.add(circle);
+        updateMask((int)circle.radius);
+    }
+    private void updateMask(int radius){
         /* Apply the mask to our Pixmap. */
-        Pixmap pixmap = applyMask(300);
+        Pixmap pixmap = applyMask(radius);
         /* Load the pixel information of the Pixmap into a Texture for drawing. */
         masked = new Texture(pixmap);
     }
 
     private void drawMasks() {
-        spriteBatch.begin();
-        spriteBatch.draw(masked, 0, 0);
-        spriteBatch.end();
+        if(masked!=null){
+            spriteBatch.begin();
+            spriteBatch.draw(masked, 0, 0);
+            spriteBatch.end();
+        }
     }
 
     private void drawMasked() {
@@ -146,9 +154,6 @@ public class GameScreen implements Screen {
         toRemove.setColor(new Color(1f, 1f, 1f, 1f));
     
         toRemove.fillCircle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, radius);
-    
-        /* We can also define the mask by loading an image:
-         * toRemove = new Pixmap(new FileHandle("image.png")); */
         int blackPixel = new Color(0.9f, 0f, 0f, 0f).toIntBits();
     
         /* Decide the color of each pixel. */

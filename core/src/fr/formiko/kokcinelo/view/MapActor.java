@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class MapActor extends Actor {
     private Texture texture;
+    private Texture textureWithDark;
     private Set<Circle> toExcude;
     private ShapeRenderer shapeRenderer;
     private Color color;
@@ -50,10 +51,20 @@ public class MapActor extends Actor {
                 + "]";
     }
     private Texture getMaskedTexture(){
-        return texture;
-        // if(toExcude.size()==0){
-        //     return texture;
-        // }else{
+        if(toExcude.size()==0){
+            return texture;
+        }else{
+            Circle c = null;
+            for (Circle circle : toExcude) {
+                c=circle;
+                break;
+            }
+            if(textureWithDark==null){
+                System.out.println("new textureWithDark");
+                textureWithDark = new Texture(getMaskPixmap((int)c.radius));
+            }
+            return textureWithDark;
+        }
         //     Pixmap darkedArea = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
         //     // Pixmap pixmap = createPixmap(texture.getWidth(), texture.getHeight(), color);
         //     Pixmap toRemove = getPixmapToRemove();
@@ -71,16 +82,16 @@ public class MapActor extends Actor {
         //     return textureTemp;
         // }
     }
-    private Pixmap getPixmapToRemove(){
-        Pixmap toRemove = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
-        /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
-        toRemove.setBlending(null);
-        toRemove.setColor(new Color(1f, 1f, 1f, 1f));
-        for (Circle circle : toExcude) {
-            toRemove.fillCircle((int)circle.x, (int)circle.y, (int)circle.radius);
-        }
-        return toRemove;
-    }
+    // private Pixmap getPixmapToRemove(){
+    //     Pixmap toRemove = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
+    //     /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
+    //     toRemove.setBlending(null);
+    //     toRemove.setColor(new Color(1f, 1f, 1f, 1f));
+    //     for (Circle circle : toExcude) {
+    //         toRemove.fillCircle((int)circle.x, (int)circle.y, (int)circle.radius);
+    //     }
+    //     return toRemove;
+    // }
 
     private void createTexture(int width, int height, Color color) {
         Pixmap pixmap = createPixmap(width, height, color);
@@ -100,5 +111,31 @@ public class MapActor extends Actor {
     }
     public void addToExclude(float x, float y, float radius){
         toExcude.add(new Circle(x,y,radius));
+    }
+
+
+    private Pixmap getMaskPixmap(int radius) {
+        Pixmap darkedArea = new Pixmap((int)getWidth(), (int)getHeight(), Pixmap.Format.RGBA8888);
+        Pixmap toRemove = new Pixmap(darkedArea.getWidth(), darkedArea.getHeight(), Pixmap.Format.RGBA8888);
+    
+        /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
+        toRemove.setBlending(null);
+    
+        /* Ignore RGB values unless you want funky toRemoves, alpha is for the mask. */
+        toRemove.setColor(new Color(1f, 1f, 1f, 1f));
+    
+        toRemove.fillCircle(darkedArea.getWidth() / 2, darkedArea.getHeight() / 2, radius);
+        int blackPixel = new Color(0.9f, 0f, 0f, 0f).toIntBits();
+    
+        /* Decide the color of each pixel. */
+        for (int x = 0; x < toRemove.getWidth(); x++) {
+            for (int y = 0; y < toRemove.getHeight(); y++) {
+                if(toRemove.getPixel(x, y) == 0.0){
+                    darkedArea.drawPixel(x, y, blackPixel);
+                }
+            }
+        }
+    
+        return darkedArea;
     }
 }

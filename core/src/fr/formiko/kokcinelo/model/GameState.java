@@ -153,7 +153,8 @@ public class GameState {
             // TODO move to the builder parameter
             addCreatures(200, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
-            // addMapForeground();
+            // gs.players.get(0).getPlayedCreature().getActor().addToExclude();
+            addMapForeground();
 
             // System.out.println(gs);
             return gs;
@@ -209,7 +210,8 @@ public class GameState {
         }
 
         private void addMapForeground() {
-            gs.mapActorFg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), Color.BLACK);
+            gs.mapActorFg = new MapActor(Math.max(1, mapWidth*2), Math.max(1, mapHeight*2), Color.BLACK);
+            gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(0).getVisionRadius());
         }
     }
 }
