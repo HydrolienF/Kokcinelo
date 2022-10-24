@@ -90,7 +90,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         handleInput(); // Done before draw to avoid some GUI glitch
         // ScreenUtils.clear(0.1f, 1f, 0f, 1);
-        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
+        ScreenUtils.clear(0f, 0f, 0f, 1);
+        // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 
         controller.updateActorVisibility(playerId);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
@@ -133,10 +134,9 @@ public class GameScreen implements Screen {
         }
 
         // TODO synchonise camera on creature insted of creature on camera.
+        // controller.movePlayer(playerId);
         moveY *= 200;
         moveX *= 200;
-        // if(moveX!=0)
-        // System.out.println(camera.position);
         // tell the camera to update its matrices.
         camera.translate((int) moveX, (int) moveY, 0);
         controller.synchonisePlayerCreatureWithCamera(camera, playerId);

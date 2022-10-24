@@ -14,17 +14,18 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
+/**
+ * {@summary Represent the map & overlay actor}
+ */
 public class MapActor extends Actor {
     private Texture texture;
     private Texture textureWithDark;
     private Set<Circle> toExcude;
     private ShapeRenderer shapeRenderer;
-    private Color color;
-    private static final int blackPixel = new Color(1f, 0f, 0f, 0f).toIntBits();
 
     public MapActor(float width, float height, Color color) {
         toExcude = new HashSet<Circle>();
-        this.color=color;
+        setColor(color);
         setWidth(width);
         setHeight(height);
         createTexture((int) width, (int) height, color);
@@ -65,33 +66,7 @@ public class MapActor extends Actor {
             }
             return textureWithDark;
         }
-        //     Pixmap darkedArea = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
-        //     // Pixmap pixmap = createPixmap(texture.getWidth(), texture.getHeight(), color);
-        //     Pixmap toRemove = getPixmapToRemove();
-        //     /* Decide the color of each pixel. */
-        //     for (int x = 0; x < toRemove.getWidth(); x++) {
-        //         for (int y = 0; y < toRemove.getHeight(); y++) {
-        //             if(toRemove.getPixel(x, y) == 0.0){
-        //                 darkedArea.drawPixel(x, y, blackPixel);
-        //             }
-        //         }
-        //     }
-        //     Texture textureTemp = new Texture(darkedArea);
-        //     darkedArea.dispose();
-        //     toRemove.dispose();
-        //     return textureTemp;
-        // }
     }
-    // private Pixmap getPixmapToRemove(){
-    //     Pixmap toRemove = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
-    //     /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
-    //     toRemove.setBlending(null);
-    //     toRemove.setColor(new Color(1f, 1f, 1f, 1f));
-    //     for (Circle circle : toExcude) {
-    //         toRemove.fillCircle((int)circle.x, (int)circle.y, (int)circle.radius);
-    //     }
-    //     return toRemove;
-    // }
 
     private void createTexture(int width, int height, Color color) {
         Pixmap pixmap = createPixmap(width, height, color);
@@ -115,27 +90,29 @@ public class MapActor extends Actor {
 
 
     private Pixmap getMaskPixmap(int radius) {
+        final int blackLevel = 150; // [0; 255]
+        final float egdeSize = 0.2f;
+
         Pixmap darkedArea = new Pixmap((int)getWidth(), (int)getHeight(), Pixmap.Format.RGBA8888);
-        Pixmap toRemove = new Pixmap(darkedArea.getWidth(), darkedArea.getHeight(), Pixmap.Format.RGBA8888);
-    
-        /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
-        toRemove.setBlending(null);
-    
-        /* Ignore RGB values unless you want funky toRemoves, alpha is for the mask. */
-        toRemove.setColor(new Color(1f, 1f, 1f, 1f));
-    
-        toRemove.fillCircle(darkedArea.getWidth() / 2, darkedArea.getHeight() / 2, radius);
-        int blackPixel = new Color(0.9f, 0f, 0f, 0f).toIntBits();
-    
-        /* Decide the color of each pixel. */
-        for (int x = 0; x < toRemove.getWidth(); x++) {
-            for (int y = 0; y < toRemove.getHeight(); y++) {
-                if(toRemove.getPixel(x, y) == 0.0){
-                    darkedArea.drawPixel(x, y, blackPixel);
+        int xCenter = (int)(darkedArea.getWidth()/2);
+        int yCenter = (int)(darkedArea.getHeight()/2);
+        float edgeLength = radius*egdeSize;
+
+        for (int x = 0; x < darkedArea.getWidth(); x++) {
+            for (int y = 0; y < darkedArea.getHeight(); y++) {
+                int distToCenter = getDist(x,y,xCenter,yCenter);
+                if(distToCenter>radius){
+                    darkedArea.drawPixel(x, y, blackLevel);
+                }else if(distToCenter>radius-edgeLength){
+                    float nextToTheEdgess = 1f-(radius-distToCenter)/edgeLength;
+                    darkedArea.drawPixel(x, y, (int)(blackLevel*nextToTheEdgess));
                 }
             }
         }
-    
         return darkedArea;
     }
+
+    private int getDist(int x1, int y1, int x2, int y2){
+        return (int) Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+    } 
 }

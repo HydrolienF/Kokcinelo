@@ -31,7 +31,7 @@ public class Controller {
 
     public void createNewGame() {
         gs = GameState.builder()
-                .setMapHeight(1000)
+                .setMapHeight(2000)
                 .setMapWidth(2000)
                 .build();
     }
