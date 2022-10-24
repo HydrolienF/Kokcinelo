@@ -78,9 +78,14 @@ public class GameState {
                 if (ladybug.hitBoxConnected(aphid)) {
                     eated.add(aphid);
                     ladybug.addScorePoints(aphid.getGivenPoints());
+                    System.out.println("Eating " + aphid);
                 }
             }
             aphids.removeAll(eated);
+            // TODO remove from printed list of actor to.
+            for (Aphid aphid : eated) {
+                // aphid.getActor().set
+            }
         }
     }
 
@@ -94,17 +99,18 @@ public class GameState {
         l.addAll(ladybugs);
         return l;
     }
+
     public Iterable<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
-        if(mapActorBg!=null){
+        if (mapActorBg != null) {
             l.add(mapActorBg);
         }
         for (Creature creature : allCreatures()) {
-            if(creature.getActor()!=null){
+            if (creature.getActor() != null) {
                 l.add(creature.getActor());
             }
         }
-        if(mapActorFg!=null){
+        if (mapActorFg != null) {
             l.add(mapActorFg);
         }
         return l;
@@ -136,7 +142,8 @@ public class GameState {
         private int mapHeight;
         private GameState gs;
 
-        private GameStateBuilder() {}
+        private GameStateBuilder() {
+        }
 
         /**
          * {@summary Build a new GameState.}
@@ -205,12 +212,14 @@ public class GameState {
         }
 
         private void addMapBackground() {
-            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), new com.badlogic.gdx.graphics.Color(8/255f, 194/255f, 0/255f, 1f));
-            // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), Color.OLIVE);
+            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
+                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
+            // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
+            // Color.OLIVE);
         }
 
         private void addMapForeground() {
-            gs.mapActorFg = new MapActor(Math.max(1, mapWidth*2), Math.max(1, mapHeight*2), Color.BLACK);
+            gs.mapActorFg = new MapActor(Math.max(1, mapWidth * 2), Math.max(1, mapHeight * 2), Color.BLACK);
             gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(0).getVisionRadius());
         }
     }

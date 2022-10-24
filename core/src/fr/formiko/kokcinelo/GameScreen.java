@@ -61,7 +61,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputProcessor);
     }
 
-    public Controller getController(){
+    public Controller getController() {
         return controller;
     }
 
@@ -98,7 +98,6 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
-
     /**
      * {@summary Handle user input &#38; mostly move camera.}<br>
      * Some input are handle on InputCore that allow more input handling.
@@ -108,7 +107,8 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
-        // TODO get a vector from mouse position & send it to controler to move the player
+        // TODO get a vector from mouse position & send it to controler to move the
+        // player
         double moveY = 0;
         double moveX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -134,6 +134,7 @@ public class GameScreen implements Screen {
         }
 
         controller.movePlayer(playerId, moveX, moveY);
+        controller.interact();
     }
 
     /**

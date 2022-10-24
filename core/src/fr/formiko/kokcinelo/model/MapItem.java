@@ -8,6 +8,7 @@ public abstract class MapItem {
     private final int id;
     private static int idCpt = 0;
     private MapItemActor actor;
+    protected int hitRadius;
 
     public MapItemActor getActor() {
         return actor;
@@ -16,6 +17,10 @@ public abstract class MapItem {
     public MapItem(String textureName) {
         id = idCpt++;
         actor = new MapItemActor(textureName, this);
+    }
+
+    public String toString() {
+        return "" + id;
     }
 
     public int getId() {
@@ -45,8 +50,7 @@ public abstract class MapItem {
     }
 
     public boolean hitBoxConnected(MapItem it) {
-        // TODO
-        return false;
+        return isInRadius(it, hitRadius + it.hitRadius);
     }
 
     public boolean isInRadius(MapItem mi2, double radius) {

@@ -6,6 +6,7 @@ public class Aphid extends Creature {
         lifePoints = 1;
         hitPoints = 0;
         shootPoints = 0;
+        hitRadius = 5;
     }
 
     @Override
