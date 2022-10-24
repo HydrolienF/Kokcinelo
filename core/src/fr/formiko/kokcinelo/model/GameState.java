@@ -153,7 +153,7 @@ public class GameState {
             // TODO move to the builder parameter
             addCreatures(200, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
-            addMapForeground();
+            // addMapForeground();
 
             // System.out.println(gs);
             return gs;

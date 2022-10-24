@@ -16,6 +16,11 @@ public class Controller {
 
     }
 
+    public void addZoom(float amountY){
+        //TODO view update zoom
+        // screen.camera.zoom += amountY * 0.05f;
+    }
+
     // TODO move the player camera & Creature
     public void movePlayer(int playerId) {
 
@@ -43,9 +48,10 @@ public class Controller {
         Creature c = gs.getPlayerCreature(playerId);
         c.getActor().setX(camera.position.x - c.getActor().getWidth() / 2);
         c.getActor().setY(camera.position.y - c.getActor().getHeight() / 2);
-
-        gs.getMapActorFg().clearToExclude();
-        gs.getMapActorFg().addToExclude(c.getActor().getX(), c.getActor().getY(), c.getVisionRadius());
+        if(gs.getMapActorFg()!=null){
+            gs.getMapActorFg().clearToExclude();
+            gs.getMapActorFg().addToExclude(c.getActor().getX(), c.getActor().getY(), c.getVisionRadius());
+        }
     }
 
     public static Random getRandom() {

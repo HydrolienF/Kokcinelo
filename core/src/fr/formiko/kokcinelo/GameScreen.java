@@ -74,6 +74,10 @@ public class GameScreen implements Screen {
         createMasks();
     }
 
+    public Controller getController(){
+        return controller;
+    }
+
     /**
      * @return the camera
      */
@@ -103,7 +107,7 @@ public class GameScreen implements Screen {
 
         controller.updateActorVisibility(playerId);
         drawMasked();
-        // drawMasks();
+        drawMasks();
     }
 
     private void createMasks() {
@@ -114,7 +118,7 @@ public class GameScreen implements Screen {
         spriteBatch = new SpriteBatch();
 
         /* Apply the mask to our Pixmap. */
-        Pixmap pixmap = applyMask();
+        Pixmap pixmap = applyMask(300);
         /* Load the pixel information of the Pixmap into a Texture for drawing. */
         masked = new Texture(pixmap);
     }
@@ -131,7 +135,7 @@ public class GameScreen implements Screen {
         
     }
 
-    private Pixmap applyMask() {
+    private Pixmap applyMask(int radius) {
         Pixmap darkedArea = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
         Pixmap toRemove = new Pixmap(darkedArea.getWidth(), darkedArea.getHeight(), Pixmap.Format.RGBA8888);
     
@@ -141,7 +145,7 @@ public class GameScreen implements Screen {
         /* Ignore RGB values unless you want funky toRemoves, alpha is for the mask. */
         toRemove.setColor(new Color(1f, 1f, 1f, 1f));
     
-        toRemove.fillCircle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 300);
+        toRemove.fillCircle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, radius);
     
         /* We can also define the mask by loading an image:
          * toRemove = new Pixmap(new FileHandle("image.png")); */

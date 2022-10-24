@@ -24,6 +24,8 @@ public class InputCore implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // System.out.println("mouse scrolled of "+amountX+" "+amountY);
+        screen.getController().addZoom(amountY);
+        //TODO move to controller only
         screen.camera.zoom += amountY * 0.05f;
         return true;
     }

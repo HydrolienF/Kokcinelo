@@ -50,25 +50,26 @@ public class MapActor extends Actor {
                 + "]";
     }
     private Texture getMaskedTexture(){
-        if(toExcude.size()==0){
-            return texture;
-        }else{
-            Pixmap darkedArea = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
-            // Pixmap pixmap = createPixmap(texture.getWidth(), texture.getHeight(), color);
-            Pixmap toRemove = getPixmapToRemove();
-            /* Decide the color of each pixel. */
-            for (int x = 0; x < toRemove.getWidth(); x++) {
-                for (int y = 0; y < toRemove.getHeight(); y++) {
-                    if(toRemove.getPixel(x, y) == 0.0){
-                        darkedArea.drawPixel(x, y, blackPixel);
-                    }
-                }
-            }
-            Texture textureTemp = new Texture(darkedArea);
-            darkedArea.dispose();
-            toRemove.dispose();
-            return textureTemp;
-        }
+        return texture;
+        // if(toExcude.size()==0){
+        //     return texture;
+        // }else{
+        //     Pixmap darkedArea = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
+        //     // Pixmap pixmap = createPixmap(texture.getWidth(), texture.getHeight(), color);
+        //     Pixmap toRemove = getPixmapToRemove();
+        //     /* Decide the color of each pixel. */
+        //     for (int x = 0; x < toRemove.getWidth(); x++) {
+        //         for (int y = 0; y < toRemove.getHeight(); y++) {
+        //             if(toRemove.getPixel(x, y) == 0.0){
+        //                 darkedArea.drawPixel(x, y, blackPixel);
+        //             }
+        //         }
+        //     }
+        //     Texture textureTemp = new Texture(darkedArea);
+        //     darkedArea.dispose();
+        //     toRemove.dispose();
+        //     return textureTemp;
+        // }
     }
     private Pixmap getPixmapToRemove(){
         Pixmap toRemove = new Pixmap(texture.getWidth(), texture.getHeight(), Pixmap.Format.RGBA8888);
