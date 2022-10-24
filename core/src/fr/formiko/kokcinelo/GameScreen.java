@@ -1,20 +1,11 @@
 package fr.formiko.kokcinelo;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -36,9 +27,6 @@ public class GameScreen implements Screen {
     private float maxZoom;
     private Controller controller;
     private int playerId;
-    private Set<Circle> areaVisible;
-    private SpriteBatch spriteBatch;
-    private Texture masked;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -71,8 +59,6 @@ public class GameScreen implements Screen {
 
         InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
         Gdx.input.setInputProcessor(inputProcessor);
-
-        createMasks();
     }
 
     public Controller getController(){
@@ -107,68 +93,9 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 
         controller.updateActorVisibility(playerId);
-        drawMasked();
-        drawMasks();
-    }
-
-    private void createMasks() {
-        areaVisible = new HashSet<Circle>();
-        // areaVisible.add(new Circle(camera.position.x,camera.position.y,300));
-        spriteBatch = new SpriteBatch();
-    }
-
-    public void replaceMaskBy(Circle circle){
-        areaVisible.clear();
-        areaVisible.add(circle);
-        updateMask((int)circle.radius);
-    }
-    private void updateMask(int radius){
-        /* Apply the mask to our Pixmap. */
-        Pixmap pixmap = applyMask(radius);
-        /* Load the pixel information of the Pixmap into a Texture for drawing. */
-        masked = new Texture(pixmap);
-    }
-
-    private void drawMasks() {
-        if(masked!=null){
-            spriteBatch.begin();
-            spriteBatch.draw(masked, 0, 0);
-            spriteBatch.end();
-        }
-    }
-
-    private void drawMasked() {
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
-        
     }
-
-    private Pixmap applyMask(int radius) {
-        Pixmap darkedArea = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
-        Pixmap toRemove = new Pixmap(darkedArea.getWidth(), darkedArea.getHeight(), Pixmap.Format.RGBA8888);
-    
-        /* This setting lets us overwrite the pixels' transparency. */ //it seem's to be useless.
-        toRemove.setBlending(null);
-    
-        /* Ignore RGB values unless you want funky toRemoves, alpha is for the mask. */
-        toRemove.setColor(new Color(1f, 1f, 1f, 1f));
-    
-        toRemove.fillCircle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, radius);
-        int blackPixel = new Color(0.9f, 0f, 0f, 0f).toIntBits();
-    
-        /* Decide the color of each pixel. */
-        for (int x = 0; x < toRemove.getWidth(); x++) {
-            for (int y = 0; y < toRemove.getHeight(); y++) {
-                if(toRemove.getPixel(x, y) == 0.0){
-                    darkedArea.drawPixel(x, y, blackPixel);
-                }
-            }
-        }
-    
-        return darkedArea;
-    }
-
-
 
 
     /**
@@ -180,8 +107,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
-        // TODO get a vector from mouse position & send it to controler to move the
-        // player
+        // TODO get a vector from mouse position & send it to controler to move the player
         double moveY = 0;
         double moveX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
