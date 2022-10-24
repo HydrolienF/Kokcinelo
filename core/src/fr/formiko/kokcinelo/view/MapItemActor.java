@@ -91,6 +91,11 @@ public class MapItemActor extends Actor {
         return getY() + getHeight() / 2;
     }
 
+    public void translate(float x, float y) {
+        setX(getX()+x);
+        setY(getY()+y);
+    }
+
     // private -----------------------------------------------------------------
 
     private TextureRegion getTextureRegion() {

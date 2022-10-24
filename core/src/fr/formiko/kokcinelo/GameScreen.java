@@ -133,13 +133,7 @@ public class GameScreen implements Screen {
             camera.zoom = maxZoom;
         }
 
-        // TODO synchonise camera on creature insted of creature on camera.
-        // controller.movePlayer(playerId);
-        moveY *= 200;
-        moveX *= 200;
-        // tell the camera to update its matrices.
-        camera.translate((int) moveX, (int) moveY, 0);
-        controller.synchonisePlayerCreatureWithCamera(camera, playerId);
+        controller.movePlayer(playerId, moveX, moveY);
     }
 
     /**

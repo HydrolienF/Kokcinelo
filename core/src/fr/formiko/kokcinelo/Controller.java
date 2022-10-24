@@ -24,9 +24,30 @@ public class Controller {
         // gScreen.replaceMaskBy(new Circle(getCamera().position.x,getCamera().position.y,300*getCamera().zoom));
     }
 
-    // TODO move the player camera & Creature
-    public void movePlayer(int playerId) {
+    public void movePlayer(int playerId, double moveX, double moveY) {
+        double moveAviable=300;
+        if(moveX!=0 && moveY!=0){
+            double multDiagonal=Math.sqrt(2)/2.0;
+            moveX*=moveAviable*multDiagonal;
+            moveY*=moveAviable*multDiagonal;
+        }else if(moveX!=0){
+            moveX *= moveAviable;
 
+        }else if(moveY!=0){
+            moveY *= moveAviable;
+        }
+
+        Creature c = gs.getPlayerCreature(playerId);
+        c.getActor().translate((float)moveX, (float)moveY);
+        synchronizeCamera(c);
+        if(gs.getMapActorFg()!=null){
+            gs.getMapActorFg().setX(c.getActor().getCenterX()-gs.getMapActorFg().getWidth()/2);
+            gs.getMapActorFg().setY(c.getActor().getCenterY()-gs.getMapActorFg().getHeight()/2);
+        }
+    }
+    public void synchronizeCamera(Creature c){
+        getCamera().position.x = c.getActor().getCenterX();
+        getCamera().position.y = c.getActor().getCenterY();
     }
 
     public void createNewGame() {
@@ -45,16 +66,6 @@ public class Controller {
     }
     public Iterable<Actor> allActors(){
         return gs.allActors();
-    }
-
-    public void synchonisePlayerCreatureWithCamera(OrthographicCamera camera, int playerId) {
-        Creature c = gs.getPlayerCreature(playerId);
-        c.getActor().setX(camera.position.x - c.getActor().getWidth() / 2);
-        c.getActor().setY(camera.position.y - c.getActor().getHeight() / 2);
-        if(gs.getMapActorFg()!=null){
-            gs.getMapActorFg().setX(c.getActor().getCenterX()-gs.getMapActorFg().getWidth()/2);
-            gs.getMapActorFg().setY(c.getActor().getCenterY()-gs.getMapActorFg().getHeight()/2);
-        }
     }
 
     public static Random getRandom() {
