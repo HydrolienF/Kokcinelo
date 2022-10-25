@@ -76,7 +76,9 @@ public class Controller {
     // }
 
     public void interact() {
-        gs.interact();
+        if(gs.interact()){
+            gScreen.setPlayerScore(gs.getPlayer(0).getScore());
+        }
     }
 
     public static Random getRandom() {

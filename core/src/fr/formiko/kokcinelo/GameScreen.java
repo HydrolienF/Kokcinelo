@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +30,7 @@ public class GameScreen implements Screen {
     private float maxZoom;
     private Controller controller;
     private int playerId;
+    private Label playerScore;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -59,6 +63,7 @@ public class GameScreen implements Screen {
 
         InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
         Gdx.input.setInputProcessor(inputProcessor);
+        createTextUI();
     }
 
     public Controller getController() {
@@ -169,5 +174,19 @@ public class GameScreen implements Screen {
     public void dispose() {
         // TODO Auto-generated method stub
 
+    }
+
+    private void createTextUI(){
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+        labelStyle.fontColor = Color.RED;
+        playerScore = new Label("", labelStyle);
+        playerScore.setSize(Gdx.graphics.getWidth(), 30);
+        playerScore.setPosition(0, 0);
+        // label.setAlignment(Align.center);
+        stage.addActor(playerScore);
+    }
+    public void setPlayerScore(int score){
+        playerScore.setText(""+score);
     }
 }

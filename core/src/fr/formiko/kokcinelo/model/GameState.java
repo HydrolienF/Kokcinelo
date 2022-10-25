@@ -71,13 +71,16 @@ public class GameState {
         }
     }
 
-    public void interact() {
+    public boolean interact() {
+        boolean haveInteract=false;
         for (Ladybug ladybug : ladybugs) {
             Set<Aphid> eated = new HashSet<Aphid>();
             for (Aphid aphid : aphids) {
                 if (ladybug.hitBoxConnected(aphid)) {
+                    haveInteract=true;
                     eated.add(aphid);
-                    ladybug.addScorePoints(aphid.getGivenPoints());
+                    // ladybug.addScorePoints(aphid.getGivenPoints());
+                    getPlayer(0).addScore(aphid.getGivenPoints());
                     // System.out.println("Eating " + aphid);
                 }
             }
@@ -86,6 +89,7 @@ public class GameState {
                 aphid.getActor().remove();
             }
         }
+        return haveInteract;
     }
 
     /**

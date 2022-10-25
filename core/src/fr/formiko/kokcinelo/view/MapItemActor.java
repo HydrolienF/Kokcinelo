@@ -54,11 +54,12 @@ public class MapItemActor extends Actor {
             Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
             if (shapeRenderer == null) {
                 shapeRenderer = new ShapeRenderer();
-                shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
             }
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
             shapeRenderer.begin(ShapeType.Line);
+            shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
             shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
+            shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
             shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getHitRadius());
             shapeRenderer.end();
             Gdx.gl.glDisable(GL30.GL_BLEND);
