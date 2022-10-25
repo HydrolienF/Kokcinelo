@@ -10,10 +10,6 @@ public abstract class MapItem {
     private MapItemActor actor;
     protected int hitRadius;
 
-    public MapItemActor getActor() {
-        return actor;
-    }
-
     public MapItem(String textureName) {
         id = idCpt++;
         actor = new MapItemActor(textureName, this);
@@ -22,10 +18,16 @@ public abstract class MapItem {
     public String toString() {
         return "" + id;
     }
-
     public int getId() {
         return id;
     }
+    public int getHitRadius() {
+        return hitRadius;
+    }
+    public MapItemActor getActor() {
+        return actor;
+    }
+    
 
     @Override
     public int hashCode() {

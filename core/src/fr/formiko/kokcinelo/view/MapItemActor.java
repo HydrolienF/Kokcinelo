@@ -23,7 +23,7 @@ public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = false;
+    private static boolean showZone = true;
     private ShapeRenderer shapeRenderer;
     int i = 0;
 
@@ -54,11 +54,12 @@ public class MapItemActor extends Actor {
             Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
             if (shapeRenderer == null) {
                 shapeRenderer = new ShapeRenderer();
-                shapeRenderer.setColor(new Color(0f, 0f, 0f, parentAlpha * 0.2f));
+                shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
             }
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
-            shapeRenderer.begin(ShapeType.Filled);
+            shapeRenderer.begin(ShapeType.Line);
             shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
+            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getHitRadius());
             shapeRenderer.end();
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();

@@ -71,6 +71,10 @@ public class Controller {
         return gs.allActors();
     }
 
+    // public void removeActorFromStage(Actor actor){
+    //     actor.remove();
+    // }
+
     public void interact() {
         gs.interact();
     }

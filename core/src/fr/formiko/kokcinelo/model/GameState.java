@@ -78,13 +78,12 @@ public class GameState {
                 if (ladybug.hitBoxConnected(aphid)) {
                     eated.add(aphid);
                     ladybug.addScorePoints(aphid.getGivenPoints());
-                    System.out.println("Eating " + aphid);
+                    // System.out.println("Eating " + aphid);
                 }
             }
             aphids.removeAll(eated);
-            // TODO remove from printed list of actor to.
             for (Aphid aphid : eated) {
-                // aphid.getActor().set
+                aphid.getActor().remove();
             }
         }
     }
