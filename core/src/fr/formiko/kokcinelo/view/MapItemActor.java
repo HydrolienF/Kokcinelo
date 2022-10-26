@@ -99,6 +99,11 @@ public class MapItemActor extends Actor {
         setY(getY() + y);
     }
 
+    /**
+    * {@summary move Creature location between the rectangle 0,0,maxX,maxY if needed.}
+    * @param maxX the max x for the creature
+    * @param maxY the max y for the creature
+    */
     public void moveIn(float maxX, float maxY) {
         if (getCenterX() > maxX) {
             setCenterX(maxX);
