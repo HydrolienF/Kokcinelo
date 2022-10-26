@@ -4,10 +4,8 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.GameScreen;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -27,7 +25,7 @@ public class MapItemActor extends Actor {
     private ShapeRenderer shapeRenderer;
     int i = 0;
 
-    public MapItemActor(String textureName, MapItem mapItem){
+    public MapItemActor(String textureName, MapItem mapItem) {
         this.textureName = textureName;
         this.mapItem = mapItem;
         if (textureRegionMap == null) {
@@ -79,23 +77,39 @@ public class MapItemActor extends Actor {
     public void setZoom(float zoom) {
         setScale(zoom, zoom);
     }
-
     public void setRandomLoaction(float maxX, float maxY) {
-        setX(Controller.getRandom().nextFloat(maxX));
-        setY(Controller.getRandom().nextFloat(maxY));
+        setCenterX(Controller.getRandom().nextFloat(maxX));
+        setCenterY(Controller.getRandom().nextFloat(maxY));
     }
-
     public float getCenterX() {
         return getX() + getWidth() / 2;
     }
-
     public float getCenterY() {
         return getY() + getHeight() / 2;
     }
+    public void setCenterX(float x) {
+        setX(x - getWidth() / 2);
+    }
+    public void setCenterY(float y) {
+        setY(y - getHeight() / 2);
+    }
 
     public void translate(float x, float y) {
-        setX(getX()+x);
-        setY(getY()+y);
+        setX(getX() + x);
+        setY(getY() + y);
+    }
+
+    public void moveIn(float maxX, float maxY) {
+        if (getCenterX() > maxX) {
+            setCenterX(maxX);
+        } else if (getCenterX() < 0) {
+            setCenterX(0f);
+        }
+        if (getCenterY() > maxY) {
+            setCenterY(maxY);
+        } else if (getCenterY() < 0) {
+            setCenterY(0f);
+        }
     }
 
     // private -----------------------------------------------------------------

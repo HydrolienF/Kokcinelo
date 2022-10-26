@@ -2,9 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
-
 import java.util.Random;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -40,6 +38,7 @@ public class Controller {
 
         Creature c = gs.getPlayerCreature(playerId);
         c.getActor().translate((float) moveX, (float) moveY);
+        c.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
         synchronizeCamera(c);
         if (gs.getMapActorFg() != null) {
             gs.getMapActorFg().setX(c.getActor().getCenterX() - gs.getMapActorFg().getWidth() / 2);
@@ -72,11 +71,11 @@ public class Controller {
     }
 
     // public void removeActorFromStage(Actor actor){
-    //     actor.remove();
+    // actor.remove();
     // }
 
     public void interact() {
-        if(gs.interact()){
+        if (gs.interact()) {
             gScreen.setPlayerScore(gs.getPlayer(0).getScore());
         }
     }

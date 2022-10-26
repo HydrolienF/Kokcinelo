@@ -196,7 +196,7 @@ public class GameScreen implements Screen {
 
     private void createTextUI() {
         // create our game HUD for scores/timers/level info
-        hud = new Hud(game.batch, 6);
+        hud = new Hud(game.batch, 60);
         // Label.LabelStyle labelStyle = new Label.LabelStyle();
         // labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
         // labelStyle.fontColor = Color.RED;
