@@ -1,13 +1,13 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.view.Hud;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,13 +24,14 @@ public class GameScreen implements Screen {
     private final App game;
     private Viewport viewport;
     private Stage stage;
-
+    private Hud hud;
     static OrthographicCamera camera;
     private float rotationSpeed;
     private float maxZoom;
     private Controller controller;
     private int playerId;
     private Label playerScore;
+    private boolean isPause;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -94,13 +95,24 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(); // Done before draw to avoid some GUI glitch
+        if(!isPause){
+            update(delta);
+        }
         // ScreenUtils.clear(0.1f, 1f, 0f, 1);
         ScreenUtils.clear(0f, 0f, 0f, 1);
         // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
-
+        game.batch.setProjectionMatrix(camera.combined);
         controller.updateActorVisibility(playerId);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+        if(!isPause){
+            if(isTimeUp()){
+                pause();
+                // TODO show end screen menu.
+            }
+        }
     }
 
     /**
@@ -112,6 +124,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
+        if(isPause){return;}
         // TODO get a vector from mouse position & send it to controler to move the
         // player
         double moveY = 0;
@@ -142,6 +155,9 @@ public class GameScreen implements Screen {
         controller.interact();
     }
 
+    private void update(float delta){
+        hud.update(delta);
+    }
     /**
      * {@summary Resize ViewPort when Screen is resize.}
      * 
@@ -154,13 +170,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
+        isPause=true;
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
+        isPause=false;
 
     }
 
@@ -177,16 +193,22 @@ public class GameScreen implements Screen {
     }
 
     private void createTextUI(){
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-        labelStyle.fontColor = Color.RED;
-        playerScore = new Label("", labelStyle);
-        playerScore.setSize(Gdx.graphics.getWidth(), 30);
-        playerScore.setPosition(0, 0);
-        // label.setAlignment(Align.center);
-        stage.addActor(playerScore);
+        //create our game HUD for scores/timers/level info
+        hud = new Hud(game.batch, 6);
+        // Label.LabelStyle labelStyle = new Label.LabelStyle();
+        // labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+        // labelStyle.fontColor = Color.RED;
+        // playerScore = new Label("", labelStyle);
+        // playerScore.setSize(Gdx.graphics.getWidth(), 30);
+        // playerScore.setPosition(0, 0);
+        // // label.setAlignment(Align.center);
+        // stage.addActor(playerScore);
     }
     public void setPlayerScore(int score){
-        playerScore.setText(""+score);
+        // playerScore.setText(""+score);
+        hud.setPlayerScore(score);
+    }
+    public boolean isTimeUp(){
+        return hud.isTimeUp();
     }
 }
