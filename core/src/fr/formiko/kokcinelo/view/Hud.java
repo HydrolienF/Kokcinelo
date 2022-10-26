@@ -12,37 +12,37 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-// TODO implement Hud as https://github.com/BrentAureli/SuperMario/blob/dc48dcb6d5b25e8b3c22908df23a5328f13868f9/core/src/com/brentaureli/mariobros/Scenes/Hud.java
-// & then add label that we need from GameState here
-
+/**
+ * {@summary Game Hud that display player/game stats.}
+ */
 public class Hud implements Disposable {
 
-    //Scene2D.ui Stage and its own Viewport for HUD
+    // Scene2D.ui Stage and its own Viewport for HUD
     public Stage stage;
     private Viewport viewport;
     private Label scoreLabel;
-    private Label timeLabel;
     private float timeCount;
     private Integer worldTimer;
-    private boolean timeUp; // true when the world timer reaches 0
+    /** true when the world timer reaches 0 */
+    private boolean timeUp;
     private Label countdownLabel;
 
-    public Hud(SpriteBatch sb, int worldTimer){
+    public Hud(SpriteBatch sb, int worldTimer) {
         this.worldTimer = worldTimer;
         timeCount = 0;
-        //setup the HUD viewport using a new camera seperate from our gamecam
-        //define our stage using that viewport and our games spritebatch
+        // setup the HUD viewport using a new camera seperate from our gamecam
+        // define our stage using that viewport and our games spritebatch
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
-        countdownLabel = new Label(String.format("", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel =new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        // timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
+        countdownLabel = new Label(String.format("", worldTimer), style);
+        scoreLabel = new Label("", style);
 
-        //define a table used to organize our hud's labels
+        // define a table used to organize our hud's labels
         Table table = new Table();
-        //Top-Align table
+        // Top-Align table
         table.top();
-        //make the table fill the entire stage
+        // make the table fill the entire stage
         table.setFillParent(true);
 
         // table.add(timeLabel).expandX();//.padTop(10);
@@ -53,9 +53,9 @@ public class Hud implements Disposable {
         stage.addActor(table);
     }
 
-    public void update(float dt){
+    public void update(float dt) {
         timeCount += dt;
-        if(timeCount >= 1){
+        if (timeCount >= 1) {
             if (worldTimer > 0) {
                 worldTimer--;
             } else {
@@ -66,15 +66,17 @@ public class Hud implements Disposable {
         }
     }
 
-    public void setPlayerScore(int value){
+    public void setPlayerScore(int value) {
         scoreLabel.setText(String.format("%d", value));
     }
 
-    public boolean isTimeUp() { return timeUp; }
+    public boolean isTimeUp() {
+        return timeUp;
+    }
 
     @Override
     public void dispose() {
         stage.dispose();
     }
-    
+
 }

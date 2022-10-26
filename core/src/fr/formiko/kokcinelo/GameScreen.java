@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.view.Hud;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,14 +28,15 @@ public class GameScreen implements Screen {
     private float maxZoom;
     private Controller controller;
     private int playerId;
-    private Label playerScore;
+    // private Label playerScore;
     private boolean isPause;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
      * 
-     * @param game the App where the Screen is display
+     * @param game
+     *            the App where the Screen is display
      */
     public GameScreen(final App game) {
         // TODO move to GameState.java the state of current game
