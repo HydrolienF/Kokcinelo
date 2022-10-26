@@ -10,17 +10,17 @@ public class Player {
     public Player(Creature c) {
         id = idCpt++;
         playedCreature = c;
-        score=0;
+        score = 0;
     }
-    
+
     public int getScore() {
         return score;
     }
     public void setScore(int score) {
         this.score = score;
     }
-    public void addScore(int score){
-        setScore(getScore()+score);
+    public void addScore(int score) {
+        setScore(getScore() + score);
     }
     public Creature getPlayedCreature() {
         return playedCreature;

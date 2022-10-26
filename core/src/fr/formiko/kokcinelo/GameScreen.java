@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(); // Done before draw to avoid some GUI glitch
-        if(!isPause){
+        if (!isPause) {
             update(delta);
         }
         // ScreenUtils.clear(0.1f, 1f, 0f, 1);
@@ -107,8 +107,8 @@ public class GameScreen implements Screen {
         stage.draw();
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        if(!isPause){
-            if(isTimeUp()){
+        if (!isPause) {
+            if (isTimeUp()) {
                 pause();
                 // TODO show end screen menu.
             }
@@ -124,7 +124,9 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             game.dispose();
 
-        if(isPause){return;}
+        if (isPause) {
+            return;
+        }
         // TODO get a vector from mouse position & send it to controler to move the
         // player
         double moveY = 0;
@@ -155,9 +157,10 @@ public class GameScreen implements Screen {
         controller.interact();
     }
 
-    private void update(float delta){
+    private void update(float delta) {
         hud.update(delta);
     }
+
     /**
      * {@summary Resize ViewPort when Screen is resize.}
      * 
@@ -170,13 +173,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        isPause=true;
+        isPause = true;
 
     }
 
     @Override
     public void resume() {
-        isPause=false;
+        isPause = false;
 
     }
 
@@ -192,8 +195,8 @@ public class GameScreen implements Screen {
 
     }
 
-    private void createTextUI(){
-        //create our game HUD for scores/timers/level info
+    private void createTextUI() {
+        // create our game HUD for scores/timers/level info
         hud = new Hud(game.batch, 6);
         // Label.LabelStyle labelStyle = new Label.LabelStyle();
         // labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
@@ -204,11 +207,13 @@ public class GameScreen implements Screen {
         // // label.setAlignment(Align.center);
         // stage.addActor(playerScore);
     }
-    public void setPlayerScore(int score){
+
+    public void setPlayerScore(int score) {
         // playerScore.setText(""+score);
         hud.setPlayerScore(score);
     }
-    public boolean isTimeUp(){
+
+    public boolean isTimeUp() {
         return hud.isTimeUp();
     }
 }

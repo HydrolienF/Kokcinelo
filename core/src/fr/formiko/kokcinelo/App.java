@@ -46,12 +46,13 @@ public class App extends Game {
      */
     @Override
     public void dispose() {
-        batch.dispose();
+        // batch.dispose();
         // try {
         // batch.end();
         // batch.dispose();
         // } catch (Exception e) {
         // System.out.println(e);
         // }
+        System.exit(0);
     }
 }

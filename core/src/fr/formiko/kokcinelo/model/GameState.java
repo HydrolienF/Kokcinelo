@@ -2,14 +2,12 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -24,11 +22,9 @@ public class GameState {
     public MapActor getMapActorFg() {
         return mapActorFg;
     }
-
     public MapActor getMapActor() {
         return mapActorBg;
     }
-
     private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
@@ -56,7 +52,6 @@ public class GameState {
     public float getMapWidth() {
         return getMapActor().getWidth();
     }
-
     public float getMapHeight() {
         return getMapActor().getHeight();
     }
@@ -72,12 +67,12 @@ public class GameState {
     }
 
     public boolean interact() {
-        boolean haveInteract=false;
+        boolean haveInteract = false;
         for (Ladybug ladybug : ladybugs) {
             Set<Aphid> eated = new HashSet<Aphid>();
             for (Aphid aphid : aphids) {
                 if (ladybug.hitBoxConnected(aphid)) {
-                    haveInteract=true;
+                    haveInteract = true;
                     eated.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
                     getPlayer(0).addScore(aphid.getGivenPoints());
