@@ -86,6 +86,10 @@ public class Controller {
         }
     }
 
+    public void gameOver(){
+        gScreen.createEndGameMenu(gs.getPlayer(0).getScore());
+    }
+
     public static Random getRandom() {
         if (ran == null) {
             ran = new Random();

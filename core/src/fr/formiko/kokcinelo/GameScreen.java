@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.view.EndGameMenu;
 import fr.formiko.kokcinelo.view.Hud;
 
 import com.badlogic.gdx.Gdx;
@@ -24,6 +25,7 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private Stage stage;
     private Hud hud;
+    private EndGameMenu egm;
     static OrthographicCamera camera;
     private float rotationSpeed;
     private float maxZoom;
@@ -103,16 +105,20 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0f, 0f, 0f, 1);
         // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
         game.batch.setProjectionMatrix(camera.combined);
-        controller.updateActorVisibility(playerId);
+        getController().updateActorVisibility(playerId);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
+        game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.getStage().draw();
         if (!isPause) {
             if (isTimeUp()) {
                 pause();
-                // TODO show end screen menu.
+                controller.gameOver();
             }
+        }
+        if(egm!=null){
+            game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
+            egm.getStage().draw();
         }
     }
 
@@ -196,17 +202,12 @@ public class GameScreen implements Screen {
 
     }
 
+    // create our game HUD for scores/timers/level info
     private void createTextUI() {
-        // create our game HUD for scores/timers/level info
-        hud = new Hud(game.batch, 60);
-        // Label.LabelStyle labelStyle = new Label.LabelStyle();
-        // labelStyle.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-        // labelStyle.fontColor = Color.RED;
-        // playerScore = new Label("", labelStyle);
-        // playerScore.setSize(Gdx.graphics.getWidth(), 30);
-        // playerScore.setPosition(0, 0);
-        // // label.setAlignment(Align.center);
-        // stage.addActor(playerScore);
+        hud = new Hud(game.batch, 6);
+    }
+    public void createEndGameMenu(int score){
+        egm = new EndGameMenu(game.batch, score);
     }
 
     public void setPlayerScore(int score) {

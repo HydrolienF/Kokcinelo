@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Hud implements Disposable {
 
     // Scene2D.ui Stage and its own Viewport for HUD
-    public Stage stage;
+    private Stage stage;
     private Viewport viewport;
     private Label scoreLabel;
     private float timeCount;
@@ -51,6 +51,10 @@ public class Hud implements Disposable {
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public void update(float dt) {
