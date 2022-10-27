@@ -2,7 +2,9 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
+
 import java.util.Random;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -75,8 +77,9 @@ public class Controller {
     // }
 
     public void interact() {
-        if (gs.interact()) {
+        if (gs.ladybugEat()) {
             gScreen.setPlayerScore(gs.getPlayer(0).getScore());
+            app.playEatingSound();
         }
     }
 

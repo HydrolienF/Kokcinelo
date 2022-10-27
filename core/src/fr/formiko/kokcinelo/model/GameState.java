@@ -2,12 +2,14 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -66,7 +68,7 @@ public class GameState {
         }
     }
 
-    public boolean interact() {
+    public boolean ladybugEat() {
         boolean haveInteract = false;
         for (Ladybug ladybug : ladybugs) {
             Set<Aphid> eated = new HashSet<Aphid>();

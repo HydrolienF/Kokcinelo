@@ -1,7 +1,10 @@
 package fr.formiko.kokcinelo;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -13,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     SpriteBatch batch;
     Screen currentScreen;
+    private Sound eatingSound;
+    private Music mainMusic;
 
     /**
      * {@summary Main function call when App is created}
@@ -26,6 +31,7 @@ public class App extends Game {
         batch = new SpriteBatch();
         currentScreen = new GameScreen(this);
         this.setScreen(currentScreen);
+        playMusic();
     }
 
     /**
@@ -54,5 +60,17 @@ public class App extends Game {
         // System.out.println(e);
         // }
         System.exit(0);
+    }
+
+    private void playMusic(){
+        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
+        mainMusic.setLooping(true);
+        mainMusic.play();
+    }
+    public void playEatingSound(){
+        if(eatingSound==null){
+            eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
+        }
+        eatingSound.play();
     }
 }
