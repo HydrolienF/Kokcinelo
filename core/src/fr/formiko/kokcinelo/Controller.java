@@ -88,7 +88,9 @@ public class Controller {
     }
 
     public void gameOver(){
-        gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore());
+        boolean haveWin = gs.getPlayer(0).getScore()==gs.getMaxScore();
+        app.playEndGameSound(haveWin);
+        gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore(), haveWin);
     }
 
     public boolean isAllAphidGone(){

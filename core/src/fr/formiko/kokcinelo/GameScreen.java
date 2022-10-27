@@ -206,12 +206,11 @@ public class GameScreen implements Screen {
     private void createTextUI() {
         hud = new Hud(game.batch, 60);
     }
-    public void createEndGameMenu(int score, int maxScore){
-        egm = new EndGameMenu(game.batch, score, maxScore);
+    public void createEndGameMenu(int score, int maxScore, boolean haveWin){
+        egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
     }
 
     public void setPlayerScore(int score) {
-        // playerScore.setText(""+score);
         hud.setPlayerScore(score);
     }
 

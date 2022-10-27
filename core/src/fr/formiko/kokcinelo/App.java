@@ -52,19 +52,12 @@ public class App extends Game {
      */
     @Override
     public void dispose() {
-        // batch.dispose();
-        // try {
-        // batch.end();
-        // batch.dispose();
-        // } catch (Exception e) {
-        // System.out.println(e);
-        // }
         System.exit(0);
     }
 
+    // music --------------------------------------------------------------------------------------
     public void playGameMusic(){
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
-        // mainMusic.setLooping(true);
         mainMusic.play();
     }
     public void playEatingSound(){
@@ -72,5 +65,16 @@ public class App extends Game {
             eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         }
         eatingSound.play();
+    }
+    public void playEndGameSound(boolean haveWin){
+        String fileName;
+        if(haveWin){
+            fileName="win";
+        }else{
+            fileName="lose";
+        }
+        Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/"+fileName+".mp3"));
+        mainMusic.stop();
+        s.play();
     }
 }
