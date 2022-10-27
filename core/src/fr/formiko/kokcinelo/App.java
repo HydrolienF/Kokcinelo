@@ -31,7 +31,7 @@ public class App extends Game {
         batch = new SpriteBatch();
         currentScreen = new GameScreen(this);
         this.setScreen(currentScreen);
-        playMusic();
+        // playMusic();
     }
 
     /**
@@ -62,9 +62,9 @@ public class App extends Game {
         System.exit(0);
     }
 
-    private void playMusic(){
-        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
-        mainMusic.setLooping(true);
+    public void playGameMusic(){
+        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
+        // mainMusic.setLooping(true);
         mainMusic.play();
     }
     public void playEatingSound(){

@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.view.Hud;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
         InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
         Gdx.input.setInputProcessor(inputProcessor);
         createTextUI();
+        game.playGameMusic();
     }
 
     public Controller getController() {

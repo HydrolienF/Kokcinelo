@@ -158,7 +158,7 @@ public class GameState {
             // initialize default game
             addMapBackground();
             // TODO move to the builder parameter
-            addCreatures(200, 1, 0);
+            addCreatures(100, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
             // gs.players.get(0).getPlayedCreature().getActor().addToExclude();
             addMapForeground();

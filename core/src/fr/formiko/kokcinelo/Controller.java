@@ -7,7 +7,10 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
+/**
+ * {@summary Controller is the link between View &#38; model.}
+ * Because of Seen2D Actor, there is some view item in the model.
+ */
 public class Controller {
     private GameState gs;
     private static Random ran;

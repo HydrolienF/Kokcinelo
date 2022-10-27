@@ -4,8 +4,10 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.GameScreen;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -38,7 +40,12 @@ public class MapItemActor extends Actor {
                 getTextureRegion().getRegionHeight());
         setOrigin(Align.center);
     }
-
+    /**
+     * {@summary Draw this actor texture and if showZone draw all debug info.}
+     * Debug info are represent as circle for visionRadius &#38; hitRadius.
+     * @param batch batch were to draw
+     * @param parentAlpha alpha of the parent to draw at same alpha
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
