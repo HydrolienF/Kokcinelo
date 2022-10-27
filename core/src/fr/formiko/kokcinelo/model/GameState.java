@@ -20,18 +20,26 @@ public class GameState {
     private List<Player> players;
     private MapActor mapActorBg;
     private MapActor mapActorFg;
-
-    public MapActor getMapActorFg() {
-        return mapActorFg;
-    }
-    public MapActor getMapActor() {
-        return mapActorBg;
-    }
+    private int maxScore;
+    
     private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
         ladybugs = new ArrayList<Ladybug>();
         players = new ArrayList<Player>();
+    }
+
+    public int getMaxScore() {
+        return maxScore;
+    }
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
+    }
+    public MapActor getMapActorFg() {
+        return mapActorFg;
+    }
+    public MapActor getMapActor() {
+        return mapActorBg;
     }
 
     public Player getPlayer(int playerId) {
@@ -132,18 +140,24 @@ public class GameState {
                 + " " + mapActorBg + " " + mapActorFg;
     }
 
+    public boolean isAllAphidGone(){
+        return aphids.size()==0;
+    }
+
     // static
     public static GameStateBuilder builder() {
         return new GameStateBuilder();
     }
 
+
+    // Builder ------------------------------------------------------------------------------------------------------------
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
+        private int maxScore;
         private GameState gs;
 
-        private GameStateBuilder() {
-        }
+        private GameStateBuilder() {}
 
         /**
          * {@summary Build a new GameState.}
@@ -155,10 +169,15 @@ public class GameState {
         public GameState build() {
             gs = new GameState();
 
+            if(maxScore<1){
+                maxScore=1;
+            }
+            gs.setMaxScore(maxScore);
+
             // initialize default game
             addMapBackground();
             // TODO move to the builder parameter
-            addCreatures(100, 1, 0);
+            addCreatures(maxScore, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
             // gs.players.get(0).getPlayedCreature().getActor().addToExclude();
             addMapForeground();
@@ -177,9 +196,14 @@ public class GameState {
             return this;
         }
 
+        public GameStateBuilder setMaxScore(int maxScore) {
+            this.maxScore = maxScore;
+            return this;
+        }
+
         private void addCreatures(int aphidsNumber, int ladybugNumber, int antNumber) {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
-            addC(ladybugNumber, 0.4f, 0.4f, false, false, Ladybug.class);
+            addC(ladybugNumber, 0.4f, 0.4f, true, false, Ladybug.class);
             addC(antNumber, 0.3f, 0.35f, true, true, Ant.class);
         }
 

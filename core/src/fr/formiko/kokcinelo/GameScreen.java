@@ -111,7 +111,7 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
         if (!isPause) {
-            if (isTimeUp()) {
+            if (isTimeUp() || getController().isAllAphidGone()) {
                 pause();
                 controller.gameOver();
             }
@@ -204,10 +204,10 @@ public class GameScreen implements Screen {
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() {
-        hud = new Hud(game.batch, 6);
+        hud = new Hud(game.batch, 60);
     }
-    public void createEndGameMenu(int score){
-        egm = new EndGameMenu(game.batch, score);
+    public void createEndGameMenu(int score, int maxScore){
+        egm = new EndGameMenu(game.batch, score, maxScore);
     }
 
     public void setPlayerScore(int score) {

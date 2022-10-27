@@ -58,6 +58,7 @@ public class Controller {
 
     public void createNewGame() {
         gs = GameState.builder()
+                .setMaxScore(100)
                 .setMapHeight(2000)
                 .setMapWidth(2000)
                 .build();
@@ -87,7 +88,11 @@ public class Controller {
     }
 
     public void gameOver(){
-        gScreen.createEndGameMenu(gs.getPlayer(0).getScore());
+        gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore());
+    }
+
+    public boolean isAllAphidGone(){
+        return gs.isAllAphidGone();
     }
 
     public static Random getRandom() {
@@ -98,6 +103,7 @@ public class Controller {
     }
 
     private OrthographicCamera getCamera() {
-        return gScreen.camera;
+        // return gScreen.camera;
+        return GameScreen.camera;
     }
 }

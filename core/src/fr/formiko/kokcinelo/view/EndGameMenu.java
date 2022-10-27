@@ -18,19 +18,28 @@ public class EndGameMenu implements Disposable {
     private Viewport viewport;
     private Label scoreLabel;
 
-    public EndGameMenu(SpriteBatch sb, int score){
+    public EndGameMenu(SpriteBatch sb, int score, int maxScore){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         // viewport = new FitViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, new OrthographicCamera());
         // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
         BitmapFont bmf = new BitmapFont();
         bmf.getData().setScale(3,3);
-        Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
-        scoreLabel = new Label(""+score, style);
+        Color col;
+        if(score==maxScore){
+            col = Color.GREEN;
+        }else if(score>maxScore/2){
+            col = Color.YELLOW;
+        }else{
+            col = Color.RED;
+        }
+        Label.LabelStyle style = new Label.LabelStyle(bmf, col);
+        scoreLabel = new Label(score+"%", style);
 
         Table table = new Table();
         table.center();
-        table.setFillParent(true);
+        table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+        // table.setFillParent(true);
         table.add(scoreLabel).expandX();
         // TODO add a replay button.
 
