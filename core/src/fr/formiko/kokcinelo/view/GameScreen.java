@@ -70,12 +70,8 @@ public class GameScreen implements Screen {
     }
 
     public Controller getController() { return controller; }
-
-    /**
-     * @return the camera
-     */
+    public boolean isPause() { return isPause; }
     public static OrthographicCamera getCamera() { return camera; }
-
     public Stage getStage() { return stage; }
 
     @Override
@@ -127,8 +123,6 @@ public class GameScreen implements Screen {
         if (isPause) {
             return;
         }
-        // TODO get a vector from mouse position & send it to controler to move the
-        // player
         // double moveY = 0;
         // double moveX = 0;
         // if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -152,7 +146,6 @@ public class GameScreen implements Screen {
         if (camera.zoom < maxZoom) {
             camera.zoom = maxZoom;
         }
-
         controller.movePlayer(playerId);
         // controller.movePlayer(playerId, moveX, moveY);
         controller.interact();
@@ -175,21 +168,15 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void resume() {
-        isPause = false;
-
-    }
-
+    public void resume() { isPause = false; }
     @Override
     public void hide() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
-
     }
 
     // create our game HUD for scores/timers/level info

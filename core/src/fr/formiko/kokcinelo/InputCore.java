@@ -11,7 +11,6 @@ public class InputCore implements InputProcessor {
     GameScreen screen;
 
     public InputCore(GameScreen screen) { this.screen = screen; }
-
     public InputCore() {}
 
     /**
@@ -27,27 +26,23 @@ public class InputCore implements InputProcessor {
     }
 
     @Override
-    public boolean keyDown(int keycode) { return false; }
-
-    @Override
-    public boolean keyUp(int keycode) { return false; }
-
-    @Override
-    public boolean keyTyped(char character) { return false; }
-
-    @Override
-    public boolean touchDown(int x, int y, int pointer, int button) { return false; }
-
-    @Override
-    public boolean touchUp(int x, int y, int pointer, int button) { return false; }
-
-    @Override
-    public boolean touchDragged(int x, int y, int pointer) { return false; }
-
-    @Override
     public boolean mouseMoved(int x, int y) {
-        screen.getController().mouseMoved(x, y);
-        return true;
+        // screen.getController().mouseMoved(x, y);
+        // return true;
+        return false;
     }
 
+    // Not usefull yet.
+    @Override
+    public boolean keyDown(int keycode) { return false; }
+    @Override
+    public boolean keyUp(int keycode) { return false; }
+    @Override
+    public boolean keyTyped(char character) { return false; }
+    @Override
+    public boolean touchDown(int x, int y, int pointer, int button) { return false; }
+    @Override
+    public boolean touchUp(int x, int y, int pointer, int button) { return false; }
+    @Override
+    public boolean touchDragged(int x, int y, int pointer) { return false; }
 }

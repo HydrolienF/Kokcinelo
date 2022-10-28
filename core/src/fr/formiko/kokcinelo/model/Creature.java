@@ -9,15 +9,12 @@ public abstract class Creature extends MapItem {
     protected int color;
     // protected int scorePoints;
 
-    public float getVisionRadius() { return visionRadius; }
-
     public Creature(String textureName) { super(textureName); }
 
     public int getGivenPoints() { return 0; }
-
-    // public void addScorePoints(int score) {
-    // scorePoints += score;
-    // }
+    public float getVisionRadius() { return visionRadius; }
+    public float getMaxRotationPerSecond() { return 90f; }
+    // public void addScorePoints(int score) { scorePoints += score; }
 
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
 }

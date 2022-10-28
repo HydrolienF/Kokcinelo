@@ -9,4 +9,7 @@ public class Ladybug extends Creature {
 
     @Override
     public int getGivenPoints() { return 10; }
+
+    @Override
+    public float getMaxRotationPerSecond() { return 140f; }
 }

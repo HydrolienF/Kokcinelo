@@ -91,9 +91,14 @@ public class MapItemActor extends Actor {
         setX(getX() + x);
         setY(getY() + y);
     }
+    /**
+     * {@summary Move in the facing direction.}
+     * 
+     * @param distance distance to move
+     */
     public void moveFront(float distance) {
-        float angle = getRotation() + 90;
-        translate((float) (distance * Math.cos(Math.toRadians(angle))), (float) (distance * Math.sin(Math.toRadians(angle))));
+        float facingAngle = getRotation() + 90;
+        translate((float) (distance * Math.cos(Math.toRadians(facingAngle))), (float) (distance * Math.sin(Math.toRadians(facingAngle))));
     }
 
     /**
@@ -116,6 +121,5 @@ public class MapItemActor extends Actor {
     }
 
     // private -----------------------------------------------------------------
-
     private TextureRegion getTextureRegion() { return textureRegionMap.get(textureName); }
 }

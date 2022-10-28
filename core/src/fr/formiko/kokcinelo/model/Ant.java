@@ -5,4 +5,8 @@ public class Ant extends Creature {
         super("ant");
         hitRadius = 50;
     }
+
+    @Override
+    public float getMaxRotationPerSecond() { return 200f; }
+
 }

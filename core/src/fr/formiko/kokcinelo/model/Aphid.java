@@ -12,5 +12,7 @@ public class Aphid extends Creature {
 
     @Override
     public int getGivenPoints() { return 1; }
+    @Override
+    public float getMaxRotationPerSecond() { return 500f; }
 
 }

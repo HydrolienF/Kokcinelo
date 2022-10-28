@@ -37,7 +37,7 @@ public class App extends Game {
         this.setScreen(currentScreen);
     }
 
-    /**
+    /***
      * {@summary call render function of sub screens}
      * 
      * @see com.badlogic.gdx.Game#render()
@@ -45,7 +45,7 @@ public class App extends Game {
     @Override
     public void render() { super.render(); }
 
-    /**
+    /***
      * {@summary call dispose function of item that need to be dispose so that App close itself.}
      * 
      * @see com.badlogic.gdx.Game#dispose()
