@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.view.GameScreen;
 import java.util.Random;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -16,6 +17,7 @@ public class Controller {
     private static Random ran;
     private App app;
     private GameScreen gScreen;
+    private static int playerId = 0;
 
     public Controller(App app, GameScreen gScreen) {
         this.app = app;
@@ -76,12 +78,19 @@ public class Controller {
     }
 
     public void gameOver() {
-        boolean haveWin = gs.getPlayer(0).getScore() == gs.getMaxScore();
+        boolean haveWin = gs.getPlayer(playerId).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
-        gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore(), haveWin);
+        gScreen.createEndGameMenu(gs.getPlayer(playerId).getScore(), gs.getMaxScore(), haveWin);
     }
 
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
+
+    public void mouseMoved(int x, int y) {
+        Vector2 v = gScreen.getStage().screenToStageCoordinates(new Vector2(x, y));
+        Creature c = gs.getPlayerCreature(playerId);
+        Vector2 v2 = new Vector2(v.x - c.getActor().getCenterX(), v.y - c.getActor().getCenterY());
+        c.getActor().setRotation(v2.angleDeg() - 90);
+    }
 
     public static Random getRandom() {
         if (ran == null) {

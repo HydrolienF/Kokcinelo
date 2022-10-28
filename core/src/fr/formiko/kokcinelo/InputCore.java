@@ -45,6 +45,9 @@ public class InputCore implements InputProcessor {
     public boolean touchDragged(int x, int y, int pointer) { return false; }
 
     @Override
-    public boolean mouseMoved(int x, int y) { return false; }
+    public boolean mouseMoved(int x, int y) {
+        screen.getController().mouseMoved(x, y);
+        return true;
+    }
 
 }
