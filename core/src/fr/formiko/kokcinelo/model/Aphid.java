@@ -3,6 +3,10 @@ package fr.formiko.kokcinelo.model;
 /**
  * {@summary Aphids are Creatures eated by ladybugs.}
  * Ant always try to protect them.
+ * 
+ * @author Hydrolien
+ * @since 0.1
+ * @version 0.1
  */
 public class Aphid extends Creature {
     /**

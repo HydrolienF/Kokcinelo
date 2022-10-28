@@ -1,5 +1,12 @@
 package fr.formiko.tools;
 
+/**
+ * {@summary Math tools class with usefull static functions.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class Math {
     public static double getDistanceBetweenPoints(int x1, int y1, int x2, int y2) {
         return getDistanceBetweenPoints((double) x1, (double) y1, (double) x2, (double) y2);

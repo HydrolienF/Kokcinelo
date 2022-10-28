@@ -16,6 +16,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
+/**
+ * {@summary Actor that represent a MapItem.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;

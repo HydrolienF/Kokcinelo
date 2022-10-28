@@ -16,6 +16,10 @@ import com.badlogic.gdx.utils.Align;
 
 /**
  * {@summary Represent the map &#38; overlay actor}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public class MapActor extends Actor {
     private Texture texture;

@@ -15,9 +15,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * {*@summary The action game screen.}
+ * {@summary The action game screen.}
  * 
  * @see com.badlogic.gdx.Screen
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public class GameScreen implements Screen {
     private final App game;

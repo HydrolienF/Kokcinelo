@@ -12,6 +12,13 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * {@summary Menu for the end of the game}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class EndGameMenu implements Disposable {
 
     private Stage stage;

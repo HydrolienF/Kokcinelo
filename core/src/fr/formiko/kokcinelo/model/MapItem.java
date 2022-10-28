@@ -6,6 +6,10 @@ import fr.formiko.tools.Math;
 /**
  * {@summary Abstact class that represent any thing on the map.}
  * Moving map item are Creature.
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public abstract class MapItem {
     /** Unique id for every MapItem */

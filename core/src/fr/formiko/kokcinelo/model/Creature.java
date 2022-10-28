@@ -3,6 +3,10 @@ package fr.formiko.kokcinelo.model;
 /**
  * {@summary Abstact class that represent Creature on the map.}
  * Creature can move, fly, hit, eat, died.
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public abstract class Creature extends MapItem {
     protected boolean fliing;

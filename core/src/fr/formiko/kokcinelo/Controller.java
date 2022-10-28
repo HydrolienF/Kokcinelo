@@ -12,6 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * {@summary Controller is the link between View &#38; model.}
  * Because of Seen2D Actor, there is some view item in the model.
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public class Controller {
     private GameState gs;

@@ -4,6 +4,13 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
+/**
+ * {@summary Launch for Windows, MacOs &#38; linux.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class DesktopLauncher {
 	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();

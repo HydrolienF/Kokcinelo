@@ -14,6 +14,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * {@summary Game Hud that display player/game stats.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public class Hud implements Disposable {
 

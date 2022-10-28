@@ -1,5 +1,13 @@
 package fr.formiko.kokcinelo.model;
 
+/**
+ * {@summary Player move a ladybug or an ant.}
+ * Ant controling player figth ladybug controling player &#38; vis versa.
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class Player {
     /** Unique id for every Player */
     private final int id;
@@ -13,22 +21,10 @@ public class Player {
         score = 0;
     }
 
-    public int getScore() {
-        return score;
-    }
-    public void setScore(int score) {
-        this.score = score;
-    }
-    public void addScore(int score) {
-        setScore(getScore() + score);
-    }
-    public Creature getPlayedCreature() {
-        return playedCreature;
-    }
-    public void setPlayedCreature(Creature playedCreature) {
-        this.playedCreature = playedCreature;
-    }
-    public int getId() {
-        return id;
-    }
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+    public void addScore(int score) { setScore(getScore() + score); }
+    public Creature getPlayedCreature() { return playedCreature; }
+    public void setPlayedCreature(Creature playedCreature) { this.playedCreature = playedCreature; }
+    public int getId() { return id; }
 }

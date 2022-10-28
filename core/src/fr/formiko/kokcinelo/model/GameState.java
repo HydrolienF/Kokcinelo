@@ -11,6 +11,13 @@ import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+/**
+ * {@summary Class that containts all data about current game.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
+ */
 public class GameState {
     private List<Aphid> aphids;
     private List<Ant> ants;

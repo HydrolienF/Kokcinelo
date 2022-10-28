@@ -5,6 +5,10 @@ import com.badlogic.gdx.InputProcessor;
 
 /**
  * {@summary React to user inputs.}
+ * 
+ * @author Hydrolien
+ * @version 0.1
+ * @since 0.1
  */
 public class InputCore implements InputProcessor {
 
