@@ -24,7 +24,8 @@ public class EndGameMenu implements Disposable {
         this.haveWin = haveWin;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         // viewport = new FitViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, new OrthographicCamera());
-        // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2,
+        // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
         BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
         // bmf.getData().setScale(3,3);
@@ -44,14 +45,9 @@ public class EndGameMenu implements Disposable {
         stage.addActor(table);
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-
+    public Stage getStage() { return stage; }
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
     private Color getColorFromPercent(double percent) {
         if (haveWin) {

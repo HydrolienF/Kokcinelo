@@ -11,8 +11,6 @@ public class Aphid extends Creature {
     }
 
     @Override
-    public int getGivenPoints() {
-        return 1;
-    }
+    public int getGivenPoints() { return 1; }
 
 }

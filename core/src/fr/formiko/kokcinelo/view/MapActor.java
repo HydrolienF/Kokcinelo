@@ -47,8 +47,8 @@ public class MapActor extends Actor {
 
     @Override
     public String toString() {
-        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", "
-                + getScaleY() + "]";
+        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", "
+                + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY() + "]";
     }
 
     private Texture getMaskedTexture() {
@@ -81,13 +81,9 @@ public class MapActor extends Actor {
         return pixmap;
     }
 
-    public void clearToExclude() {
-        toExcude.clear();
-    }
+    public void clearToExclude() { toExcude.clear(); }
 
-    public void addToExclude(float x, float y, float radius) {
-        toExcude.add(new Circle(x, y, radius));
-    }
+    public void addToExclude(float x, float y, float radius) { toExcude.add(new Circle(x, y, radius)); }
 
     private Pixmap getMaskPixmap(int radius) {
         final int blackLevel = 150; // [0; 255]

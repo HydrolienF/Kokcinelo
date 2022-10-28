@@ -27,11 +27,13 @@ public class App extends Game {
      */
     @Override
     public void create() {
-        // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         batch = new SpriteBatch();
+        // TODO add MainMenuScreen that will be call 1st & call GameMenu after
+        startNewGame();
+    }
+    public void startNewGame() {
         currentScreen = new GameScreen(this);
         this.setScreen(currentScreen);
-        // playMusic();
     }
 
     /**
@@ -40,9 +42,7 @@ public class App extends Game {
      * @see com.badlogic.gdx.Game#render()
      */
     @Override
-    public void render() {
-        super.render();
-    }
+    public void render() { super.render(); }
 
     /**
      * {@summary call dispose function of item that need to be dispose so that App close itself.}
@@ -50,9 +50,7 @@ public class App extends Game {
      * @see com.badlogic.gdx.Game#dispose()
      */
     @Override
-    public void dispose() {
-        System.exit(0);
-    }
+    public void dispose() { System.exit(0); }
 
     // music --------------------------------------------------------------------------------------
     public void playGameMusic() {

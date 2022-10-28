@@ -34,7 +34,8 @@ public class MapItemActor extends Actor {
         if (!textureRegionMap.containsKey(textureName)) {
             textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
         }
-        setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(), getTextureRegion().getRegionHeight());
+        setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
+                getTextureRegion().getRegionHeight());
         setOrigin(Align.center);
     }
     /**
@@ -48,7 +49,8 @@ public class MapItemActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
+                getRotation());
         if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
             batch.end();
             Creature c = (Creature) mapItem;
@@ -71,31 +73,21 @@ public class MapItemActor extends Actor {
 
     @Override
     public String toString() {
-        return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", "
-                + getScaleY() + "]";
+        return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", "
+                + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY() + "]";
     }
 
     // personaliseds functions -------------------------------------------------
 
-    public void setZoom(float zoom) {
-        setScale(zoom, zoom);
-    }
+    public void setZoom(float zoom) { setScale(zoom, zoom); }
     public void setRandomLoaction(float maxX, float maxY) {
         setCenterX(Controller.getRandom().nextFloat(maxX));
         setCenterY(Controller.getRandom().nextFloat(maxY));
     }
-    public float getCenterX() {
-        return getX() + getWidth() / 2;
-    }
-    public float getCenterY() {
-        return getY() + getHeight() / 2;
-    }
-    public void setCenterX(float x) {
-        setX(x - getWidth() / 2);
-    }
-    public void setCenterY(float y) {
-        setY(y - getHeight() / 2);
-    }
+    public float getCenterX() { return getX() + getWidth() / 2; }
+    public float getCenterY() { return getY() + getHeight() / 2; }
+    public void setCenterX(float x) { setX(x - getWidth() / 2); }
+    public void setCenterY(float y) { setY(y - getHeight() / 2); }
 
     public void translate(float x, float y) {
         setX(getX() + x);
@@ -123,7 +115,5 @@ public class MapItemActor extends Actor {
 
     // private -----------------------------------------------------------------
 
-    private TextureRegion getTextureRegion() {
-        return textureRegionMap.get(textureName);
-    }
+    private TextureRegion getTextureRegion() { return textureRegionMap.get(textureName); }
 }

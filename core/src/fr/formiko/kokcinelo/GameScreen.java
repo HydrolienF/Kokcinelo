@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.view.EndGameMenu;
 import fr.formiko.kokcinelo.view.Hud;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -37,7 +38,8 @@ public class GameScreen implements Screen {
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
      * 
-     * @param game the App where the Screen is display
+     * @param game
+     *             the App where the Screen is display
      */
     public GameScreen(final App game) {
         // TODO move to GameState.java the state of current game
@@ -204,6 +206,7 @@ public class GameScreen implements Screen {
     private void createTextUI() {
         hud = new Hud(game.batch, 60);
     }
+
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
     }

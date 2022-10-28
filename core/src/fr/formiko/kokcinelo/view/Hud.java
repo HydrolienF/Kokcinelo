@@ -53,9 +53,7 @@ public class Hud implements Disposable {
         stage.addActor(table);
     }
 
-    public Stage getStage() {
-        return stage;
-    }
+    public Stage getStage() { return stage; }
 
     public void update(float dt) {
         timeCount += dt;
@@ -70,17 +68,11 @@ public class Hud implements Disposable {
         }
     }
 
-    public void setPlayerScore(int value) {
-        scoreLabel.setText(String.format("%d", value));
-    }
+    public void setPlayerScore(int value) { scoreLabel.setText(String.format("%d", value)); }
 
-    public boolean isTimeUp() {
-        return timeUp;
-    }
+    public boolean isTimeUp() { return timeUp; }
 
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
 }

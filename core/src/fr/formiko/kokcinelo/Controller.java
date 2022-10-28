@@ -2,9 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
-
 import java.util.Random;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -57,21 +55,13 @@ public class Controller {
         getCamera().position.y = c.getActor().getCenterY();
     }
 
-    public void createNewGame() {
-        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
-    }
+    public void createNewGame() { gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build(); }
 
-    public void updateActorVisibility(int playerId) {
-        gs.updateActorVisibility(playerId);
-    }
+    public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
 
-    public Iterable<Creature> allCreatures() {
-        return gs.allCreatures();
-    }
+    public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
 
-    public Iterable<Actor> allActors() {
-        return gs.allActors();
-    }
+    public Iterable<Actor> allActors() { return gs.allActors(); }
 
     // public void removeActorFromStage(Actor actor){
     // actor.remove();
@@ -90,9 +80,7 @@ public class Controller {
         gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore(), haveWin);
     }
 
-    public boolean isAllAphidGone() {
-        return gs.isAllAphidGone();
-    }
+    public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
 
     public static Random getRandom() {
         if (ran == null) {

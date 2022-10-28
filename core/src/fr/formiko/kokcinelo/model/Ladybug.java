@@ -8,7 +8,5 @@ public class Ladybug extends Creature {
     }
 
     @Override
-    public int getGivenPoints() {
-        return 10;
-    }
+    public int getGivenPoints() { return 10; }
 }

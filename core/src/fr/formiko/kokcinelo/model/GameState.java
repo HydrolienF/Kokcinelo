@@ -27,18 +27,10 @@ public class GameState {
         players = new ArrayList<Player>();
     }
 
-    public int getMaxScore() {
-        return maxScore;
-    }
-    public void setMaxScore(int maxScore) {
-        this.maxScore = maxScore;
-    }
-    public MapActor getMapActorFg() {
-        return mapActorFg;
-    }
-    public MapActor getMapActor() {
-        return mapActorBg;
-    }
+    public int getMaxScore() { return maxScore; }
+    public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
+    public MapActor getMapActorFg() { return mapActorFg; }
+    public MapActor getMapActor() { return mapActorBg; }
 
     public Player getPlayer(int playerId) {
         for (Player player : players) {
@@ -57,12 +49,8 @@ public class GameState {
         return null;
     }
 
-    public float getMapWidth() {
-        return getMapActor().getWidth();
-    }
-    public float getMapHeight() {
-        return getMapActor().getHeight();
-    }
+    public float getMapWidth() { return getMapActor().getWidth(); }
+    public float getMapHeight() { return getMapActor().getHeight(); }
 
     public void addCreature(Creature c) {
         if (c instanceof Aphid) {
@@ -133,17 +121,14 @@ public class GameState {
 
     @Override
     public String toString() {
-        return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs=" + ladybugs + ", players=" + players + "]" + " " + mapActorBg + " " + mapActorFg;
+        return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs=" + ladybugs + ", players="
+                + players + "]" + " " + mapActorBg + " " + mapActorFg;
     }
 
-    public boolean isAllAphidGone() {
-        return aphids.size() == 0;
-    }
+    public boolean isAllAphidGone() { return aphids.size() == 0; }
 
     // static
-    public static GameStateBuilder builder() {
-        return new GameStateBuilder();
-    }
+    public static GameStateBuilder builder() { return new GameStateBuilder(); }
 
 
     // Builder ------------------------------------------------------------------------------------------------------------
@@ -153,8 +138,7 @@ public class GameState {
         private int maxScore;
         private GameState gs;
 
-        private GameStateBuilder() {
-        }
+        private GameStateBuilder() {}
 
         /**
          * {@summary Build a new GameState.}
@@ -204,7 +188,8 @@ public class GameState {
             addC(antNumber, 0.3f, 0.35f, true, true, Ant.class);
         }
 
-        private void addC(final int numberToAdd, final float zoomMin, final float zoomMax, final boolean randomLocaction, final boolean randomRotation, final Class<? extends Creature> creatureClass) {
+        private void addC(final int numberToAdd, final float zoomMin, final float zoomMax, final boolean randomLocaction,
+                final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
                     Creature c = creatureClass.getDeclaredConstructor().newInstance();
@@ -222,7 +207,8 @@ public class GameState {
                         }
                     }
                     gs.addCreature(c);
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                        | NoSuchMethodException | SecurityException e) {
                     System.out.println("Fail to add a new Creature");
                     e.printStackTrace();
                 }
@@ -230,7 +216,8 @@ public class GameState {
         }
 
         private void addMapBackground() {
-            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
+            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
+                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
             // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
             // Color.OLIVE);
         }

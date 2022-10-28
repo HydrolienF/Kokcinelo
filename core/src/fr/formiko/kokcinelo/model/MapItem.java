@@ -15,18 +15,10 @@ public abstract class MapItem {
         actor = new MapItemActor(textureName, this);
     }
 
-    public String toString() {
-        return "" + id;
-    }
-    public int getId() {
-        return id;
-    }
-    public int getHitRadius() {
-        return hitRadius;
-    }
-    public MapItemActor getActor() {
-        return actor;
-    }
+    public String toString() { return "" + id; }
+    public int getId() { return id; }
+    public int getHitRadius() { return hitRadius; }
+    public MapItemActor getActor() { return actor; }
 
 
     @Override
@@ -51,9 +43,7 @@ public abstract class MapItem {
         return true;
     }
 
-    public boolean hitBoxConnected(MapItem it) {
-        return isInRadius(it, hitRadius + it.hitRadius);
-    }
+    public boolean hitBoxConnected(MapItem it) { return isInRadius(it, hitRadius + it.hitRadius); }
 
     public boolean isInRadius(MapItem mi2, double radius) {
         float dist = distanceTo(mi2);
@@ -61,6 +51,7 @@ public abstract class MapItem {
     }
 
     public float distanceTo(MapItem mi2) {
-        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(), mi2.getActor().getCenterX(), mi2.getActor().getCenterY());
+        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(), mi2.getActor().getCenterX(),
+                mi2.getActor().getCenterY());
     }
 }
