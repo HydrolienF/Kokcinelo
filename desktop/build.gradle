@@ -41,6 +41,11 @@ task dist(type: Jar) {
     with jar
 }
 
+task doc(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 
 dist.dependsOn classes
 
