@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
 /**
- * {@summary Represent the map & overlay actor}
+ * {@summary Represent the map &#38; overlay actor}
  */
 public class MapActor extends Actor {
     private Texture texture;
