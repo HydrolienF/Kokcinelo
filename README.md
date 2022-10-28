@@ -8,3 +8,15 @@ Ladybugs can instant eat aphid while ants need to bite or shoot acid severals ti
 
 # Dev
 Game is done with Java using GUI library libgdx.
+
+# Team
+
+## Developers: 
+Hydrolien
+
+## Graphic designers: 
+Hydrolien
+
+## Musician & Noisemaker: 
+Hydrolien, 
+Felknia
