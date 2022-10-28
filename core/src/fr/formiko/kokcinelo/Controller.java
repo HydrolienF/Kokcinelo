@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
+import fr.formiko.kokcinelo.view.GameScreen;
 import java.util.Random;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -91,6 +92,6 @@ public class Controller {
 
     private OrthographicCamera getCamera() {
         // return gScreen.camera;
-        return GameScreen.camera;
+        return GameScreen.getCamera();
     }
 }

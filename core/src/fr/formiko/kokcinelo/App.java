@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.view.GameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @see com.badlogic.gdx.Game
  */
 public class App extends Game {
-    SpriteBatch batch;
+    public SpriteBatch batch;
     Screen currentScreen;
     private Sound eatingSound;
     private Music mainMusic;

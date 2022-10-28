@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.view.GameScreen;
 import com.badlogic.gdx.InputProcessor;
 
 /**
@@ -9,12 +10,9 @@ public class InputCore implements InputProcessor {
 
     GameScreen screen;
 
-    public InputCore(GameScreen screen) {
-        this.screen = screen;
-    }
+    public InputCore(GameScreen screen) { this.screen = screen; }
 
-    public InputCore() {
-    }
+    public InputCore() {}
 
     /**
      * {@summary Zoom in or out for the camera.}
@@ -29,38 +27,24 @@ public class InputCore implements InputProcessor {
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
+    public boolean keyDown(int keycode) { return false; }
 
     @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
+    public boolean keyUp(int keycode) { return false; }
 
     @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
+    public boolean keyTyped(char character) { return false; }
 
     @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
-        return false;
-    }
+    public boolean touchDown(int x, int y, int pointer, int button) { return false; }
 
     @Override
-    public boolean touchUp(int x, int y, int pointer, int button) {
-        return false;
-    }
+    public boolean touchUp(int x, int y, int pointer, int button) { return false; }
 
     @Override
-    public boolean touchDragged(int x, int y, int pointer) {
-        return false;
-    }
+    public boolean touchDragged(int x, int y, int pointer) { return false; }
 
     @Override
-    public boolean mouseMoved(int x, int y) {
-        return false;
-    }
+    public boolean mouseMoved(int x, int y) { return false; }
 
 }

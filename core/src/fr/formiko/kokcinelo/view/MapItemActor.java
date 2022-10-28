@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.Controller;
-import fr.formiko.kokcinelo.GameScreen;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import java.util.HashMap;

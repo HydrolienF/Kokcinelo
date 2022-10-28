@@ -1,13 +1,12 @@
-package fr.formiko.kokcinelo;
+package fr.formiko.kokcinelo.view;
 
-import fr.formiko.kokcinelo.view.EndGameMenu;
-import fr.formiko.kokcinelo.view.Hud;
-
+import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.InputCore;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -70,20 +69,14 @@ public class GameScreen implements Screen {
         game.playGameMusic();
     }
 
-    public Controller getController() {
-        return controller;
-    }
+    public Controller getController() { return controller; }
 
     /**
      * @return the camera
      */
-    public static Camera getCamera() {
-        return camera;
-    }
+    public static OrthographicCamera getCamera() { return camera; }
 
-    public Stage getStage() {
-        return stage;
-    }
+    public Stage getStage() { return stage; }
 
     @Override
     public void show() {
@@ -164,9 +157,7 @@ public class GameScreen implements Screen {
         controller.interact();
     }
 
-    private void update(float delta) {
-        hud.update(delta);
-    }
+    private void update(float delta) { hud.update(delta); }
 
     /**
      * {@summary Resize ViewPort when Screen is resize.}
@@ -174,9 +165,7 @@ public class GameScreen implements Screen {
      * @see com.badlogic.gdx.Screen#resize(int, int)
      */
     @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
+    public void resize(int width, int height) { viewport.update(width, height); }
 
     @Override
     public void pause() {
@@ -203,19 +192,11 @@ public class GameScreen implements Screen {
     }
 
     // create our game HUD for scores/timers/level info
-    private void createTextUI() {
-        hud = new Hud(game.batch, 60);
-    }
+    private void createTextUI() { hud = new Hud(game.batch, 60); }
 
-    public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
-        egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
-    }
+    public void createEndGameMenu(int score, int maxScore, boolean haveWin) { egm = new EndGameMenu(game.batch, score, maxScore, haveWin); }
 
-    public void setPlayerScore(int score) {
-        hud.setPlayerScore(score);
-    }
+    public void setPlayerScore(int score) { hud.setPlayerScore(score); }
 
-    public boolean isTimeUp() {
-        return hud.isTimeUp();
-    }
+    public boolean isTimeUp() { return hud.isTimeUp(); }
 }
