@@ -2,14 +2,12 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -21,7 +19,7 @@ public class GameState {
     private MapActor mapActorBg;
     private MapActor mapActorFg;
     private int maxScore;
-    
+
     private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
@@ -135,13 +133,11 @@ public class GameState {
 
     @Override
     public String toString() {
-        return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs="
-                + ladybugs + ", players=" + players + "]"
-                + " " + mapActorBg + " " + mapActorFg;
+        return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs=" + ladybugs + ", players=" + players + "]" + " " + mapActorBg + " " + mapActorFg;
     }
 
-    public boolean isAllAphidGone(){
-        return aphids.size()==0;
+    public boolean isAllAphidGone() {
+        return aphids.size() == 0;
     }
 
     // static
@@ -157,7 +153,8 @@ public class GameState {
         private int maxScore;
         private GameState gs;
 
-        private GameStateBuilder() {}
+        private GameStateBuilder() {
+        }
 
         /**
          * {@summary Build a new GameState.}
@@ -169,8 +166,8 @@ public class GameState {
         public GameState build() {
             gs = new GameState();
 
-            if(maxScore<1){
-                maxScore=1;
+            if (maxScore < 1) {
+                maxScore = 1;
             }
             gs.setMaxScore(maxScore);
 
@@ -207,9 +204,7 @@ public class GameState {
             addC(antNumber, 0.3f, 0.35f, true, true, Ant.class);
         }
 
-        private void addC(final int numberToAdd, final float zoomMin, final float zoomMax,
-                final boolean randomLocaction, final boolean randomRotation,
-                final Class<? extends Creature> creatureClass) {
+        private void addC(final int numberToAdd, final float zoomMin, final float zoomMax, final boolean randomLocaction, final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
                     Creature c = creatureClass.getDeclaredConstructor().newInstance();
@@ -227,8 +222,7 @@ public class GameState {
                         }
                     }
                     gs.addCreature(c);
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                     System.out.println("Fail to add a new Creature");
                     e.printStackTrace();
                 }
@@ -236,8 +230,7 @@ public class GameState {
         }
 
         private void addMapBackground() {
-            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
-                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
+            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
             // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
             // Color.OLIVE);
         }

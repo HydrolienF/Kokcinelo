@@ -45,8 +45,7 @@ public class App extends Game {
     }
 
     /**
-     * {@summary call dispose function of item that need to be dispose so that App
-     * close itself.}
+     * {@summary call dispose function of item that need to be dispose so that App close itself.}
      * 
      * @see com.badlogic.gdx.Game#dispose()
      */
@@ -56,24 +55,24 @@ public class App extends Game {
     }
 
     // music --------------------------------------------------------------------------------------
-    public void playGameMusic(){
+    public void playGameMusic() {
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
         mainMusic.play();
     }
-    public void playEatingSound(){
-        if(eatingSound==null){
+    public void playEatingSound() {
+        if (eatingSound == null) {
             eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         }
         eatingSound.play();
     }
-    public void playEndGameSound(boolean haveWin){
+    public void playEndGameSound(boolean haveWin) {
         String fileName;
-        if(haveWin){
-            fileName="win";
-        }else{
-            fileName="lose";
+        if (haveWin) {
+            fileName = "win";
+        } else {
+            fileName = "lose";
         }
-        Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/"+fileName+".mp3"));
+        Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3"));
         mainMusic.stop();
         s.play();
     }

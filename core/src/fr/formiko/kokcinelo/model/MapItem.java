@@ -27,7 +27,7 @@ public abstract class MapItem {
     public MapItemActor getActor() {
         return actor;
     }
-    
+
 
     @Override
     public int hashCode() {
@@ -61,7 +61,6 @@ public abstract class MapItem {
     }
 
     public float distanceTo(MapItem mi2) {
-        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(),
-                mi2.getActor().getCenterX(), mi2.getActor().getCenterY());
+        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(), mi2.getActor().getCenterX(), mi2.getActor().getCenterY());
     }
 }

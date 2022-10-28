@@ -20,23 +20,23 @@ public class EndGameMenu implements Disposable {
     private Label replayButton;
     private boolean haveWin;
 
-    public EndGameMenu(SpriteBatch sb, int score, int maxScore, boolean haveWin){
-        this.haveWin=haveWin;
+    public EndGameMenu(SpriteBatch sb, int score, int maxScore, boolean haveWin) {
+        this.haveWin = haveWin;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         // viewport = new FitViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, new OrthographicCamera());
         // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
         BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
         // bmf.getData().setScale(3,3);
-        
+
         Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
-        scoreLabel = new Label(score+"%", new Label.LabelStyle(bmf, getColorFromPercent((double)(score)/(double)(maxScore))));
+        scoreLabel = new Label(score + "%", new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         replayButton = new Label("↻", style);
 
         Table table = new Table();
-        table.setSize(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         table.center();
-        table.setPosition(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/2);
+        table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2);
         table.add(scoreLabel).expandX();
         // TODO add a replay button.
         table.add(replayButton).expandX();
@@ -53,14 +53,14 @@ public class EndGameMenu implements Disposable {
         stage.dispose();
     }
 
-    private Color getColorFromPercent(double percent){
-        if(haveWin){
+    private Color getColorFromPercent(double percent) {
+        if (haveWin) {
             return Color.GREEN;
-        }else if(percent>0.5){
+        } else if (percent > 0.5) {
             return Color.YELLOW;
-        }else{
+        } else {
             return Color.RED;
         }
     }
-    
+
 }

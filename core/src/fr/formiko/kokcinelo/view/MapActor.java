@@ -1,8 +1,8 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.tools.Math;
 import java.util.HashSet;
 import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import fr.formiko.tools.Math;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
@@ -48,9 +47,8 @@ public class MapActor extends Actor {
 
     @Override
     public String toString() {
-        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", "
-                + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY()
-                + "]";
+        return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", " + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", "
+                + getScaleY() + "]";
     }
 
     private Texture getMaskedTexture() {

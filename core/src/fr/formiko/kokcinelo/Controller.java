@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
 /**
  * {@summary Controller is the link between View &#38; model.}
  * Because of Seen2D Actor, there is some view item in the model.
@@ -57,11 +58,7 @@ public class Controller {
     }
 
     public void createNewGame() {
-        gs = GameState.builder()
-                .setMaxScore(100)
-                .setMapHeight(2000)
-                .setMapWidth(2000)
-                .build();
+        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
     }
 
     public void updateActorVisibility(int playerId) {
@@ -87,13 +84,13 @@ public class Controller {
         }
     }
 
-    public void gameOver(){
-        boolean haveWin = gs.getPlayer(0).getScore()==gs.getMaxScore();
+    public void gameOver() {
+        boolean haveWin = gs.getPlayer(0).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(0).getScore(), gs.getMaxScore(), haveWin);
     }
 
-    public boolean isAllAphidGone(){
+    public boolean isAllAphidGone() {
         return gs.isAllAphidGone();
     }
 
