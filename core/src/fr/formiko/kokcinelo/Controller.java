@@ -30,21 +30,22 @@ public class Controller {
         // Circle(getCamera().position.x,getCamera().position.y,300*getCamera().zoom));
     }
 
-    public void movePlayer(int playerId, double moveX, double moveY) {
-        double moveAviable = 300;
-        if (moveX != 0 && moveY != 0) {
-            double multDiagonal = Math.sqrt(2) / 2.0;
-            moveX *= moveAviable * multDiagonal;
-            moveY *= moveAviable * multDiagonal;
-        } else if (moveX != 0) {
-            moveX *= moveAviable;
+    public void movePlayer(int playerId) {
+        float moveAviable = 5;
+        // if (moveX != 0 && moveY != 0) {
+        // double multDiagonal = Math.sqrt(2) / 2.0;
+        // moveX *= moveAviable * multDiagonal;
+        // moveY *= moveAviable * multDiagonal;
+        // } else if (moveX != 0) {
+        // moveX *= moveAviable;
 
-        } else if (moveY != 0) {
-            moveY *= moveAviable;
-        }
+        // } else if (moveY != 0) {
+        // moveY *= moveAviable;
+        // }
 
         Creature c = gs.getPlayerCreature(playerId);
-        c.getActor().translate((float) moveX, (float) moveY);
+        c.getActor().moveFront(moveAviable);
+        // c.getActor().translate((float) moveX, (float) moveY);
         c.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
         synchronizeCamera(c);
         if (gs.getMapActorFg() != null) {

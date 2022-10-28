@@ -129,20 +129,20 @@ public class GameScreen implements Screen {
         }
         // TODO get a vector from mouse position & send it to controler to move the
         // player
-        double moveY = 0;
-        double moveX = 0;
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            moveY += Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            moveY -= Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            moveX -= Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            moveX += Gdx.graphics.getDeltaTime();
-        }
+        // double moveY = 0;
+        // double moveX = 0;
+        // if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        // moveY += Gdx.graphics.getDeltaTime();
+        // }
+        // if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        // moveY -= Gdx.graphics.getDeltaTime();
+        // }
+        // if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        // moveX -= Gdx.graphics.getDeltaTime();
+        // }
+        // if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        // moveX += Gdx.graphics.getDeltaTime();
+        // }
         if (Gdx.input.isKeyPressed(Input.Keys.B)) {
             camera.rotate(-rotationSpeed, 0, 0, 1);
         }
@@ -153,7 +153,8 @@ public class GameScreen implements Screen {
             camera.zoom = maxZoom;
         }
 
-        controller.movePlayer(playerId, moveX, moveY);
+        controller.movePlayer(playerId);
+        // controller.movePlayer(playerId, moveX, moveY);
         controller.interact();
     }
 

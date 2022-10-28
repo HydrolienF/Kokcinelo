@@ -87,10 +87,13 @@ public class MapItemActor extends Actor {
     public float getCenterY() { return getY() + getHeight() / 2; }
     public void setCenterX(float x) { setX(x - getWidth() / 2); }
     public void setCenterY(float y) { setY(y - getHeight() / 2); }
-
     public void translate(float x, float y) {
         setX(getX() + x);
         setY(getY() + y);
+    }
+    public void moveFront(float distance) {
+        float angle = getRotation() + 90;
+        translate((float) (distance * Math.cos(Math.toRadians(angle))), (float) (distance * Math.sin(Math.toRadians(angle))));
     }
 
     /**
