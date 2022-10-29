@@ -28,7 +28,7 @@ public class GameState {
     private int maxScore;
 
     // CONSTRUCTORS --------------------------------------------------------------
-    /**
+    /***
      * {@summary Private main constructor.}
      * Use GameState.builder() to create a new GameState.
      */
@@ -89,7 +89,11 @@ public class GameState {
             ladybugs.add((Ladybug) c);
         }
     }
-
+    /**
+     * {@summary Let ladybugs eat aphids.}
+     * 
+     * @return true if a ladybug have interact
+     */
     public boolean ladybugEat() {
         boolean haveInteract = false;
         for (Ladybug ladybug : ladybugs) {
@@ -121,7 +125,12 @@ public class GameState {
         l.addAll(ladybugs);
         return l;
     }
-
+    /**
+     * {@summary Return all the actor that GameState have.}
+     * It is used to add them to stage.
+     * 
+     * @return all actors to draw
+     */
     public Iterable<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
         if (mapActorBg != null) {
@@ -137,7 +146,11 @@ public class GameState {
         }
         return l;
     }
-
+    /**
+     * {@summary Update actor visibility so that the only visible actor are the one close enoth to the player.}
+     * 
+     * @param playerId current player id
+     */
     public void updateActorVisibility(int playerId) {
         Creature playedCreature = getPlayerCreature(playerId);
         if (playedCreature != null) {
@@ -146,7 +159,11 @@ public class GameState {
             }
         }
     }
-
+    /**
+     * {@summary Return most importants variables.}
+     * 
+     * @return Most importants variables as String
+     */
     @Override
     public String toString() {
         return "GameState [mapCoordinate=" + mapActorBg + ", aphids=" + aphids + ", ants=" + ants + ", ladybugs=" + ladybugs + ", players="
@@ -158,8 +175,14 @@ public class GameState {
     // static
     public static GameStateBuilder builder() { return new GameStateBuilder(); }
 
-
     // Builder ------------------------------------------------------------------------------------------------------------
+    /**
+     * {@summary Builder to use to get a GameState.}
+     * 
+     * @author Hydrolien
+     * @version 0.1
+     * @since 0.1
+     */
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
@@ -194,28 +217,59 @@ public class GameState {
             // System.out.println(gs);
             return gs;
         }
-
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
         public GameStateBuilder setMapWidth(int mapWidth) {
             this.mapWidth = mapWidth;
             return this;
         }
-
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
         public GameStateBuilder setMapHeight(int mapHeight) {
             this.mapHeight = mapHeight;
             return this;
         }
-
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
         public GameStateBuilder setMaxScore(int maxScore) {
             this.maxScore = maxScore;
             return this;
         }
 
-        private void addCreatures(int aphidsNumber, int ladybugNumber, int antNumber) {
+
+        // private ------------------------------------------------------------------
+        /**
+         * {@summary Add all Creatures}
+         * 
+         * @param aphidsNumber   number of aphids to play with
+         * @param ladybugsNumber number of ladybugs to play with
+         * @param antsNumber     number of ants to play with
+         */
+        private void addCreatures(int aphidsNumber, int ladybugsNumber, int antsNumber) {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
-            addC(ladybugNumber, 0.4f, 0.4f, true, false, Ladybug.class);
-            addC(antNumber, 0.3f, 0.35f, true, true, Ant.class);
+            addC(ladybugsNumber, 0.4f, 0.4f, true, false, Ladybug.class);
+            addC(antsNumber, 0.3f, 0.35f, true, true, Ant.class);
         }
 
+        /**
+         * {@summary Add a class of Creature.}
+         * 
+         * @param numberToAdd     number of creatures to play with
+         * @param zoomMin         mininum zoom on added creatures
+         * @param zoomMax         maximum zoom on added creatures
+         * @param randomLocaction if true, place creatures in random location on map
+         * @param randomRotation  if true creatures have random roation
+         * @param creatureClass   Class of the creatures to add
+         */
         private void addC(final int numberToAdd, final float zoomMin, final float zoomMax, final boolean randomLocaction,
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
@@ -242,14 +296,18 @@ public class GameState {
                 }
             }
         }
-
+        /**
+         * {@summary Add the map background.}
+         */
         private void addMapBackground() {
             gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
                     new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
             // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
             // Color.OLIVE);
         }
-
+        /**
+         * {@summary Add the map foreground as a black mask.}
+         */
         private void addMapForeground() {
             gs.mapActorFg = new MapActor(Math.max(1, mapWidth * 2), Math.max(1, mapHeight * 2), Color.BLACK);
             gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(0).getVisionRadius());

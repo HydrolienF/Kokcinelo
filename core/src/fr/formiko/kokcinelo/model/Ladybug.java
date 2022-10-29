@@ -9,6 +9,7 @@ package fr.formiko.kokcinelo.model;
  * @since 0.1
  */
 public class Ladybug extends Creature {
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {@summary Main constructor with default texture, high radius, low hit point &#38; high heal point.}
      */
@@ -18,9 +19,10 @@ public class Ladybug extends Creature {
         hitRadius = 100;
     }
 
+    // GET SET -------------------------------------------------------------------
     @Override
     public int getGivenPoints() { return 10; }
-
     @Override
     public float getMaxRotationPerSecond() { return 140f; }
+    // FUNCTIONS -----------------------------------------------------------------
 }

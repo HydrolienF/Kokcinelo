@@ -36,15 +36,14 @@ public class GameScreen implements Screen {
     // private Label playerScore;
     private boolean isPause;
 
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
      * 
-     * @param game
-     *             the App where the Screen is display
+     * @param game the App where the Screen is display
      */
     public GameScreen(final App game) {
-        // TODO move to GameState.java the state of current game
         this.game = game;
         controller = new Controller(game, this);
         controller.createNewGame();
@@ -54,7 +53,7 @@ public class GameScreen implements Screen {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (h / w));
-        camera.position.set(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f, 0);
+        camera.position.set(w * 0.5f, h * 0.5f, 0);
         // camera.setToOrtho(false, 800, 480);
         viewport = new ScreenViewport(camera);
 
@@ -72,16 +71,14 @@ public class GameScreen implements Screen {
         game.playGameMusic();
     }
 
+    // GET SET -------------------------------------------------------------------
     public Controller getController() { return controller; }
     public boolean isPause() { return isPause; }
     public static OrthographicCamera getCamera() { return camera; }
     public Stage getStage() { return stage; }
 
-    @Override
-    public void show() {
-        // TODO Auto-generated method stub
-    }
 
+    // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Draw all thing that need to be draw during a game.}
      * 
@@ -153,10 +150,14 @@ public class GameScreen implements Screen {
         // controller.movePlayer(playerId, moveX, moveY);
         controller.interact();
     }
-
+    /***
+     * {@summary Update all subpanels.}
+     * 
+     * @param delta time since last update
+     */
     private void update(float delta) { hud.update(delta); }
 
-    /**
+    /***
      * {@summary Resize ViewPort when Screen is resize.}
      * 
      * @see com.badlogic.gdx.Screen#resize(int, int)
@@ -165,29 +166,22 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) { viewport.update(width, height); }
 
     @Override
-    public void pause() {
-        isPause = true;
-
-    }
-
+    public void pause() { isPause = true; }
     @Override
     public void resume() { isPause = false; }
-    @Override
-    public void hide() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-    }
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() { hud = new Hud(game.batch, 60); }
-
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) { egm = new EndGameMenu(game.batch, score, maxScore, haveWin); }
-
     public void setPlayerScore(int score) { hud.setPlayerScore(score); }
-
     public boolean isTimeUp() { return hud.isTimeUp(); }
+
+
+    // TODO Auto-generated method stub
+    @Override
+    public void hide() {}
+    @Override
+    public void dispose() {}
+    @Override
+    public void show() {}
 }

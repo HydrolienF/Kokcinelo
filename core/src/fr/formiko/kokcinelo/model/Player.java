@@ -15,16 +15,26 @@ public class Player {
     private Creature playedCreature;
     private int score;
 
+    // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Create a player with given creature.}
+     * 
+     * @param c player embodied creature
+     */
     public Player(Creature c) {
         id = idCpt++;
         playedCreature = c;
         score = 0;
     }
 
+    // GET SET -------------------------------------------------------------------
     public int getScore() { return score; }
     public void setScore(int score) { this.score = score; }
     public void addScore(int score) { setScore(getScore() + score); }
     public Creature getPlayedCreature() { return playedCreature; }
     public void setPlayedCreature(Creature playedCreature) { this.playedCreature = playedCreature; }
     public int getId() { return id; }
+
+    // FUNCTIONS -----------------------------------------------------------------
 }
+

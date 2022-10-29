@@ -16,9 +16,10 @@ public abstract class MapItem {
     private final int id;
     private static int idCpt = 0;
     private MapItemActor actor;
-    /** hit radius is used */
+    /** hit radius is used as an hitBox for interaction */
     protected int hitRadius;
 
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {@summary Create a new MapItem with an actor using texture.}
      * 
@@ -29,14 +30,16 @@ public abstract class MapItem {
         actor = new MapItemActor(textureName, this);
     }
 
+    // GET SET -------------------------------------------------------------------
     public int getId() { return id; }
     public int getHitRadius() { return hitRadius; }
     public MapItemActor getActor() { return actor; }
+
+    // FUNCTIONS -----------------------------------------------------------------
     @Override
     public String toString() { return "" + id; }
     @Override
     public int hashCode() { return id; }
-
     /**
      * {@summary Equals function that compare class then id.}
      */

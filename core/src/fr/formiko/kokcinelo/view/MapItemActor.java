@@ -27,7 +27,7 @@ public class MapItemActor extends Actor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = true;
+    private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
     int i = 0;
 

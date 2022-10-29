@@ -27,6 +27,15 @@ public class EndGameMenu implements Disposable {
     private Label replayButton;
     private boolean haveWin;
 
+    // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Create a new end game menu.}
+     * 
+     * @param sb       Batch to use to draw
+     * @param score    score that player reach
+     * @param maxScore score that player may have reach
+     * @param haveWin  true if player have win the game
+     */
     public EndGameMenu(SpriteBatch sb, int score, int maxScore, boolean haveWin) {
         this.haveWin = haveWin;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -52,17 +61,23 @@ public class EndGameMenu implements Disposable {
         stage.addActor(table);
     }
 
+    // GET SET -------------------------------------------------------------------
     public Stage getStage() { return stage; }
     @Override
     public void dispose() { stage.dispose(); }
 
+    // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Return color depending of haveWin or percent of score.}
+     * 
+     * @param percent score percent [0;1]
+     * @return color
+     */
     private Color getColorFromPercent(double percent) {
         if (haveWin) {
             return Color.GREEN;
-        } else if (percent > 0.5) {
-            return Color.YELLOW;
         } else {
-            return Color.RED;
+            return new Color(1f, (float) percent, 0f, 1f);
         }
     }
 
