@@ -1,7 +1,9 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
+import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.view.GameScreen;
 import java.util.Random;
 import com.badlogic.gdx.Gdx;
@@ -53,10 +55,8 @@ public class Controller {
      * @param playerId id of the player to move
      */
     public void movePlayer(int playerId) {
-        float moveAviable = 5;
-
         Creature c = gs.getPlayerCreature(playerId);
-        c.getActor().moveFront(moveAviable);
+        c.moveFront();
         c.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
         // synchonize things that depend of c position
         synchronizeCamera(c);
@@ -65,6 +65,26 @@ public class Controller {
             gs.getMapActorFg().setY(c.getActor().getCenterY() - gs.getMapActorFg().getHeight() / 2);
         }
         mouseMoved(Gdx.input.getX(), Gdx.input.getY());
+    }
+
+    public void moveAphids() {
+        for (Aphid aphid : gs.getAphids()) {
+            Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
+            if (ladybug != null) {
+                // TODO rotate to run aways.
+                aphid.moveFront();
+            } else {
+                // TODO avoid borders
+                double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
+                System.out.println(r);
+                if (r < 0.01) {
+                    aphid.getActor().setRotation((float) (aphid.getActor().getRotation()
+                            + aphid.getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime() * 2 * (Math.random() - 0.5)));
+                }
+                aphid.moveFront(0.3f);
+            }
+            aphid.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
+        }
     }
 
     /**
@@ -101,6 +121,7 @@ public class Controller {
         if (!gScreen.isPause()) {
             Vector2 v = gScreen.getStage().screenToStageCoordinates(new Vector2(x, y));
             Creature c = gs.getPlayerCreature(playerId);
+            // TODO move this function to Creature so that aphids can use the same.
             Vector2 v2 = new Vector2(v.x - c.getActor().getCenterX(), v.y - c.getActor().getCenterY());
             float previousRotation = c.getActor().getRotation() % 360;
             float newRotation = v2.angleDeg() - 90;

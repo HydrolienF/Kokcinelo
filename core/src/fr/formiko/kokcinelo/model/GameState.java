@@ -44,6 +44,9 @@ public class GameState {
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
     public MapActor getMapActorFg() { return mapActorFg; }
     public MapActor getMapActor() { return mapActorBg; }
+    public List<Aphid> getAphids() { return aphids; }
+    public List<Ant> getAnts() { return ants; }
+    public List<Ladybug> getLadybugs() { return ladybugs; }
     /**
      * {@summary Return player from the list of player or null if not found.}
      * 

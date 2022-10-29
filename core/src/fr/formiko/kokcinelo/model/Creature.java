@@ -15,6 +15,7 @@ public abstract class Creature extends MapItem {
     protected float shootPoints;
     protected float visionRadius;
     protected int color;
+    protected float movingSpeed;
 
     // CONSTRUCTORS --------------------------------------------------------------
     public Creature(String textureName) { super(textureName); }
@@ -23,7 +24,18 @@ public abstract class Creature extends MapItem {
     public int getGivenPoints() { return 0; }
     public float getVisionRadius() { return visionRadius; }
     public float getMaxRotationPerSecond() { return 90f; }
+    public float getMovingSpeed() { return movingSpeed; }
 
     // FUNCTIONS -----------------------------------------------------------------
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
+    /***
+     * {@summary Move in the facing direction at speed percentOfSpeed.}
+     * 
+     * @param percentOfSpeed percent of max speed.
+     */
+    public void moveFront(float percentOfSpeed) { getActor().moveFront(getMovingSpeed() * percentOfSpeed); }
+    /***
+     * {@summary Move in the facing direction at max speed.}
+     */
+    public void moveFront() { moveFront(1f); }
 }

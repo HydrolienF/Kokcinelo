@@ -16,6 +16,7 @@ public class Ant extends Creature {
         // TODO to complete.
         super("ant");
         hitRadius = 50;
+        movingSpeed = 4f;
     }
 
     // GET SET -------------------------------------------------------------------

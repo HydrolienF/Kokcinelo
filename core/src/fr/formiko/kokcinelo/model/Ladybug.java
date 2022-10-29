@@ -17,6 +17,7 @@ public class Ladybug extends Creature {
         super("ladybug");
         visionRadius = 500;
         hitRadius = 100;
+        movingSpeed = 5f;
     }
 
     // GET SET -------------------------------------------------------------------

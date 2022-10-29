@@ -147,6 +147,7 @@ public class GameScreen implements Screen {
             camera.zoom = maxZoom;
         }
         controller.movePlayer(playerId);
+        controller.moveAphids();
         // controller.movePlayer(playerId, moveX, moveY);
         controller.interact();
     }

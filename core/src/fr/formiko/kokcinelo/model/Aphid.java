@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import java.util.Collection;
+
 /**
  * {@summary Aphids are Creatures eated by ladybugs.}
  * Ant always try to protect them.
@@ -21,6 +23,7 @@ public class Aphid extends Creature {
         shootPoints = 0;
         visionRadius = 120;
         hitRadius = 20;
+        movingSpeed = 1.5f;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -30,5 +33,15 @@ public class Aphid extends Creature {
     public float getMaxRotationPerSecond() { return 500f; }
 
     // FUNCTIONS -----------------------------------------------------------------
-
+    public Ladybug closestLadybug(Collection<Ladybug> coll) {
+        Ladybug closest = null;
+        for (Ladybug ladybug : coll) {
+            if (isInRadius(ladybug, ladybug.getHitRadius() + getVisionRadius())) {
+                if (closest == null || distanceTo(ladybug) < distanceTo(closest)) {
+                    closest = ladybug;
+                }
+            }
+        }
+        return closest;
+    }
 }
