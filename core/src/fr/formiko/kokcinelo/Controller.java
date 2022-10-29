@@ -24,11 +24,21 @@ public class Controller {
     private GameScreen gScreen;
     private static int playerId = 0;
 
+    // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Main constructor.}
+     * 
+     * @param app     app to send action to
+     * @param gScreen GameScreen to send action to
+     */
     public Controller(App app, GameScreen gScreen) {
         this.app = app;
         this.gScreen = gScreen;
     }
 
+    // GET SET -------------------------------------------------------------------
+
+    // FUNCTIONS -----------------------------------------------------------------
     public void addZoom(float amountY) {
         // getCamera().zoom += amountY * 0.05f;
         getCamera().zoom *= (1 - amountY / 20);

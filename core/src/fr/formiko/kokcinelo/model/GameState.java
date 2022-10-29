@@ -27,6 +27,11 @@ public class GameState {
     private MapActor mapActorFg;
     private int maxScore;
 
+    // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Private main constructor.}
+     * Use GameState.builder() to create a new GameState.
+     */
     private GameState() {
         aphids = new ArrayList<Aphid>();
         ants = new ArrayList<Ant>();
@@ -34,11 +39,17 @@ public class GameState {
         players = new ArrayList<Player>();
     }
 
+    // GET SET -------------------------------------------------------------------
     public int getMaxScore() { return maxScore; }
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
     public MapActor getMapActorFg() { return mapActorFg; }
     public MapActor getMapActor() { return mapActorBg; }
-
+    /**
+     * {@summary Return player from the list of player or null if not found.}
+     * 
+     * @param playerId id of the player
+     * @return player that match playerId
+     */
     public Player getPlayer(int playerId) {
         for (Player player : players) {
             if (player.getId() == playerId) {
@@ -47,7 +58,12 @@ public class GameState {
         }
         return null;
     }
-
+    /**
+     * {@summary Return player creature or null if not found.}
+     * 
+     * @param playerId id of the player
+     * @return Creature that player embody.
+     */
     public Creature getPlayerCreature(int playerId) {
         Player p = getPlayer(playerId);
         if (p != null) {
@@ -55,10 +71,15 @@ public class GameState {
         }
         return null;
     }
-
     public float getMapWidth() { return getMapActor().getWidth(); }
     public float getMapHeight() { return getMapActor().getHeight(); }
 
+    // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Add a Creature to a list of Creature where class match.}
+     * 
+     * @param c Creature to add
+     */
     public void addCreature(Creature c) {
         if (c instanceof Aphid) {
             aphids.add((Aphid) c);

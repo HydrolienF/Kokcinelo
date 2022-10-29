@@ -9,6 +9,7 @@ package fr.formiko.kokcinelo.model;
  * @version 0.1
  */
 public class Aphid extends Creature {
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {@summary Main Constructor with all default params}:
      * aphid texture, low life points, no hit points, no shoot points, a small visionRadius &#38; a small hit radius.
@@ -22,9 +23,12 @@ public class Aphid extends Creature {
         hitRadius = 20;
     }
 
+    // GET SET -------------------------------------------------------------------
     @Override
     public int getGivenPoints() { return 1; }
     @Override
     public float getMaxRotationPerSecond() { return 500f; }
+
+    // FUNCTIONS -----------------------------------------------------------------
 
 }

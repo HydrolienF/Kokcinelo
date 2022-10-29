@@ -8,6 +8,7 @@ package fr.formiko.kokcinelo.model;
  * @since 0.1
  */
 public class Ant extends Creature {
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {@summary Create new Ants.}
      */
@@ -17,7 +18,9 @@ public class Ant extends Creature {
         hitRadius = 50;
     }
 
+    // GET SET -------------------------------------------------------------------
     @Override
     public float getMaxRotationPerSecond() { return 200f; }
 
+    // FUNCTIONS -----------------------------------------------------------------
 }

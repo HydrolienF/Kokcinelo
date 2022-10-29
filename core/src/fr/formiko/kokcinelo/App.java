@@ -23,6 +23,7 @@ public class App extends Game {
     private Sound eatingSound;
     private Music mainMusic;
 
+    // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Main function call when App is created}
      * It call MainMenuScreen
@@ -35,6 +36,9 @@ public class App extends Game {
         // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
     }
+    /**
+     * {@summary Start a new Game on this app in GUI.}
+     */
     public void startNewGame() {
         currentScreen = new GameScreen(this);
         this.setScreen(currentScreen);
@@ -57,16 +61,29 @@ public class App extends Game {
     public void dispose() { System.exit(0); }
 
     // music --------------------------------------------------------------------------------------
+    /**
+     * {@summary Play the game music.}
+     */
     public void playGameMusic() {
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
         mainMusic.play();
     }
+    /**
+     * {@summary Play the eating sound.}
+     * Sound can be play many times &#38; at same time.
+     */
     public void playEatingSound() {
         if (eatingSound == null) {
             eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         }
         eatingSound.play();
     }
+    /**
+     * {@summary Play the end game sound.}
+     * Sound can be play many times &#38; at same time.
+     * 
+     * @param haveWin the sound is different if game is win or lost
+     */
     public void playEndGameSound(boolean haveWin) {
         String fileName;
         if (haveWin) {

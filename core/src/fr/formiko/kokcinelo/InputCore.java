@@ -14,9 +14,11 @@ public class InputCore implements InputProcessor {
 
     GameScreen screen;
 
+    // CONSTRUCTORS --------------------------------------------------------------
     public InputCore(GameScreen screen) { this.screen = screen; }
     public InputCore() {}
 
+    // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Zoom in or out for the camera.}
      * 
@@ -29,12 +31,6 @@ public class InputCore implements InputProcessor {
         return true;
     }
 
-    @Override
-    public boolean mouseMoved(int x, int y) {
-        // screen.getController().mouseMoved(x, y);
-        // return true;
-        return false;
-    }
 
     // Not usefull yet.
     @Override
@@ -49,4 +45,6 @@ public class InputCore implements InputProcessor {
     public boolean touchUp(int x, int y, int pointer, int button) { return false; }
     @Override
     public boolean touchDragged(int x, int y, int pointer) { return false; }
+    @Override
+    public boolean mouseMoved(int x, int y) { return false; }
 }
