@@ -5,7 +5,6 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.view.GameScreen;
-import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Controller {
     private GameState gs;
-    private static Random ran;
     private App app;
     private GameScreen gScreen;
     private static int playerId = 0;
