@@ -52,13 +52,16 @@ public class App extends Game {
     @Override
     public void render() { super.render(); }
 
-    /***
+    /**
      * {@summary call dispose function of item that need to be dispose so that App close itself.}
      * 
      * @see com.badlogic.gdx.Game#dispose()
      */
     @Override
-    public void dispose() { System.exit(0); }
+    public void dispose() {
+        // TODO be able to dispose even for html version
+        System.exit(0);
+    }
 
     // music --------------------------------------------------------------------------------------
     /**

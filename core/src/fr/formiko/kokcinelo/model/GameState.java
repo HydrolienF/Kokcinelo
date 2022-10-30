@@ -277,6 +277,15 @@ public class GameState {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
                     Creature c = creatureClass.getDeclaredConstructor().newInstance();
+                    // version to replace last line that work in html
+                    // Creature c = null;
+                    // if (creatureClass.toString().endsWith("Aphid")) {
+                    // c = new Aphid();
+                    // } else if (creatureClass.toString().endsWith("Ant")) {
+                    // c = new Ant();
+                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
+                    // c = new Ladybug();
+                    // }
                     if (randomLocaction) {
                         c.getActor().setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
@@ -293,6 +302,7 @@ public class GameState {
                     gs.addCreature(c);
                 } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                         | NoSuchMethodException | SecurityException e) {
+                    // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
                     System.out.println("Fail to add a new Creature");
                     e.printStackTrace();
                 }

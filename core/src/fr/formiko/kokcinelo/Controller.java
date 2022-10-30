@@ -113,7 +113,7 @@ public class Controller {
         getCamera().position.y = c.getActor().getCenterY();
     }
 
-    public void createNewGame() { gs = GameState.builder().setMaxScore(2).setMapHeight(2000).setMapWidth(2000).build(); }
+    public void createNewGame() { gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build(); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }

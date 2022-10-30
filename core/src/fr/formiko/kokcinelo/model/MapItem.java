@@ -1,7 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.view.MapItemActor;
-import fr.formiko.tools.Math;
 
 /**
  * {@summary Abstact class that represent any thing on the map.}

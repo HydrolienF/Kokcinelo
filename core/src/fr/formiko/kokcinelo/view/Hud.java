@@ -44,7 +44,7 @@ public class Hud implements Disposable {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
         Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
-        countdownLabel = new Label(String.format("", worldTimer), style);
+        countdownLabel = new Label("", style);
         scoreLabel = new Label("", style);
 
         // define a table used to organize our hud's labels
@@ -63,7 +63,7 @@ public class Hud implements Disposable {
     }
 
     public Stage getStage() { return stage; }
-    public void setPlayerScore(int value) { scoreLabel.setText(String.format("%d", value)); }
+    public void setPlayerScore(int value) { scoreLabel.setText("" + value); }
     public boolean isTimeUp() { return timeUp; }
 
     /**
@@ -79,7 +79,7 @@ public class Hud implements Disposable {
             } else {
                 timeUp = true;
             }
-            countdownLabel.setText(String.format("%d", worldTimer));
+            countdownLabel.setText("" + worldTimer);
             timeCount = 0;
         }
     }

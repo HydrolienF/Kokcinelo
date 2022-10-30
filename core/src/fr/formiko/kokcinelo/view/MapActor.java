@@ -1,6 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
-import fr.formiko.tools.Math;
+import fr.formiko.kokcinelo.tools.Math;
 import java.util.HashSet;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;

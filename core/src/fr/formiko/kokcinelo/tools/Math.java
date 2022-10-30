@@ -1,4 +1,4 @@
-package fr.formiko.tools;
+package fr.formiko.kokcinelo.tools;
 
 /**
  * {@summary Math tools class with usefull static functions.}

@@ -50,9 +50,9 @@ public abstract class Creature extends MapItem {
      */
     public void moveFront(float percentOfSpeed) {
         if (getWantedRotation() != -1000f && (getWantedRotation() + 360) % 360 != (getActor().getRotation() + 360) % 360) {
-            if (this instanceof Aphid) {
-                System.out.println("rotate from " + (getActor().getRotation() + 360) % 360 + " to " + (getWantedRotation() + 360) % 360);
-            }
+            // if (this instanceof Aphid) {
+            // System.out.println("rotate from " + (getActor().getRotation() + 360) % 360 + " to " + (getWantedRotation() + 360) % 360);
+            // }
             rotateAStep();
         }
         getActor().moveFront(getMovingSpeed() * percentOfSpeed);
@@ -69,10 +69,10 @@ public abstract class Creature extends MapItem {
         if (wantedRotation > 180) {
             wantedRotation -= 360;
         }
-        float rotationToDo = (wantedRotation - previousRotation) % 360;
-        if (this instanceof Aphid) {
-            System.out.println("rotation to do " + rotationToDo);
-        }
+        // float rotationToDo = (wantedRotation - previousRotation) % 360;
+        // if (this instanceof Aphid) {
+        // System.out.println("rotation to do " + rotationToDo);
+        // }
         float allowedRotation = Math.min(getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime(), Math.abs(wantedRotation));
         if (wantedRotation > 0) {
             allowedRotation *= -1;
