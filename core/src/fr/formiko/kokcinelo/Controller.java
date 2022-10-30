@@ -64,26 +64,32 @@ public class Controller {
             gs.getMapActorFg().setX(c.getActor().getCenterX() - gs.getMapActorFg().getWidth() / 2);
             gs.getMapActorFg().setY(c.getActor().getCenterY() - gs.getMapActorFg().getHeight() / 2);
         }
-        mouseMoved(Gdx.input.getX(), Gdx.input.getY());
+        c.goTo(getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
     }
 
     public void moveAphids() {
         for (Aphid aphid : gs.getAphids()) {
             Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
             if (ladybug != null) {
-                // TODO rotate to run aways.
+                aphid.runAwayFrom(new Vector2(ladybug.getActor().getCenterX(), ladybug.getActor().getCenterY()));
                 aphid.moveFront();
             } else {
-                // TODO avoid borders
                 double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
-                System.out.println(r);
                 if (r < 0.01) {
                     aphid.getActor().setRotation((float) (aphid.getActor().getRotation()
                             + aphid.getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime() * 2 * (Math.random() - 0.5)));
                 }
+                // TODO aphid need to stop rotate even if we don't set there rotation.
+                // if (aphid.isRunningAway()) {
+                // aphid.setWantedRotation(-1000f);
+                // aphid.setRunningAway(false);
+                // }
                 aphid.moveFront(0.3f);
             }
-            aphid.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
+            // if have been move to avoid wall
+            if (aphid.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight())) {
+                aphid.setWantedRotation((aphid.getActor().getRotation() + 160f + (float) (Math.random() * 40)) % 360f);
+            }
         }
     }
 
@@ -97,7 +103,7 @@ public class Controller {
         getCamera().position.y = c.getActor().getCenterY();
     }
 
-    public void createNewGame() { gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build(); }
+    public void createNewGame() { gs = GameState.builder().setMaxScore(2).setMapHeight(2000).setMapWidth(2000).build(); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
@@ -117,27 +123,6 @@ public class Controller {
         gScreen.createEndGameMenu(gs.getPlayer(playerId).getScore(), gs.getMaxScore(), haveWin);
     }
 
-    public void mouseMoved(int x, int y) {
-        if (!gScreen.isPause()) {
-            Vector2 v = gScreen.getStage().screenToStageCoordinates(new Vector2(x, y));
-            Creature c = gs.getPlayerCreature(playerId);
-            // TODO move this function to Creature so that aphids can use the same.
-            Vector2 v2 = new Vector2(v.x - c.getActor().getCenterX(), v.y - c.getActor().getCenterY());
-            float previousRotation = c.getActor().getRotation() % 360;
-            float newRotation = v2.angleDeg() - 90;
-            float wantedRotation = (previousRotation - newRotation + 360) % 360;
-            if (wantedRotation > 180) {
-                wantedRotation -= 360;
-            }
-            float allowedRotation = Math.min(c.getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime(), Math.abs(wantedRotation));
-            if (wantedRotation > 0) {
-                allowedRotation *= -1;
-            }
-            // System.out.println(wantedRotation + " " + allowedRotation);
-            c.getActor().setRotation(previousRotation + allowedRotation);
-        }
-    }
-
     public static Random getRandom() {
         if (ran == null) {
             ran = new Random();
@@ -149,4 +134,6 @@ public class Controller {
         // return gScreen.camera;
         return GameScreen.getCamera();
     }
+
+    private Vector2 getVectorStageCoordinates(float x, float y) { return gScreen.getStage().screenToStageCoordinates(new Vector2(x, y)); }
 }

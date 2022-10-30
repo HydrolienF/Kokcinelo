@@ -15,7 +15,7 @@ public class Ladybug extends Creature {
      */
     public Ladybug() {
         super("ladybug");
-        visionRadius = 500;
+        visionRadius = 5000;
         hitRadius = 100;
         movingSpeed = 5f;
     }

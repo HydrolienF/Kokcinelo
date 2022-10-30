@@ -113,18 +113,25 @@ public class MapItemActor extends Actor {
      * 
      * @param maxX the max x for the creature
      * @param maxY the max y for the creature
+     * @return true if Creature have been move
      */
-    public void moveIn(float maxX, float maxY) {
+    public boolean moveIn(float maxX, float maxY) {
+        boolean haveMove = false;
         if (getCenterX() > maxX) {
             setCenterX(maxX);
+            haveMove = true;
         } else if (getCenterX() < 0) {
             setCenterX(0f);
+            haveMove = true;
         }
         if (getCenterY() > maxY) {
             setCenterY(maxY);
+            haveMove = true;
         } else if (getCenterY() < 0) {
             setCenterY(0f);
+            haveMove = true;
         }
+        return haveMove;
     }
 
     // private -----------------------------------------------------------------
