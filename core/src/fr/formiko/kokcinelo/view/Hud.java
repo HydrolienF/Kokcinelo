@@ -30,7 +30,12 @@ public class Hud implements Disposable {
     /** true when the world timer reaches 0 */
     private boolean timeUp;
     private Label countdownLabel;
-
+    /**
+     * {@summary Main constructor}
+     * 
+     * @param sb         SpriteBatch to use
+     * @param worldTimer starting value of world timer
+     */
     public Hud(SpriteBatch sb, int worldTimer) {
         this.worldTimer = worldTimer;
         timeCount = 0;
@@ -58,7 +63,14 @@ public class Hud implements Disposable {
     }
 
     public Stage getStage() { return stage; }
+    public void setPlayerScore(int value) { scoreLabel.setText(String.format("%d", value)); }
+    public boolean isTimeUp() { return timeUp; }
 
+    /**
+     * {@summary Update Component that need to be update on time.}
+     * 
+     * @param dt Delta time that occure since last update
+     */
     public void update(float dt) {
         timeCount += dt;
         if (timeCount >= 1) {
@@ -71,10 +83,6 @@ public class Hud implements Disposable {
             timeCount = 0;
         }
     }
-
-    public void setPlayerScore(int value) { scoreLabel.setText(String.format("%d", value)); }
-
-    public boolean isTimeUp() { return timeUp; }
 
     @Override
     public void dispose() { stage.dispose(); }

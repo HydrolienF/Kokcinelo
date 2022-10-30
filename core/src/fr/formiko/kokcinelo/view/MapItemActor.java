@@ -30,7 +30,12 @@ public class MapItemActor extends Actor {
     private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
     int i = 0;
-
+    /**
+     * {@summary Main constructor.}
+     * 
+     * @param textureName name of the texture to use to represent this Actor
+     * @param mapItem     MapItem represent by this
+     */
     public MapItemActor(String textureName, MapItem mapItem) {
         this.textureName = textureName;
         this.mapItem = mapItem;
@@ -76,7 +81,9 @@ public class MapItemActor extends Actor {
             batch.begin();
         }
     }
-
+    /**
+     * {@summary Standard toString that return important vars as String.}
+     */
     @Override
     public String toString() {
         return "MapItemActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", "
@@ -86,6 +93,12 @@ public class MapItemActor extends Actor {
     // personaliseds functions -------------------------------------------------
 
     public void setZoom(float zoom) { setScale(zoom, zoom); }
+    /**
+     * {@summary Set center loaction to a random loaction}
+     * 
+     * @param maxX max value of x
+     * @param maxY max value of y
+     */
     public void setRandomLoaction(float maxX, float maxY) {
         setCenterX(Controller.getRandom().nextFloat(maxX));
         setCenterY(Controller.getRandom().nextFloat(maxY));
@@ -94,6 +107,12 @@ public class MapItemActor extends Actor {
     public float getCenterY() { return getY() + getHeight() / 2; }
     public void setCenterX(float x) { setX(x - getWidth() / 2); }
     public void setCenterY(float y) { setY(y - getHeight() / 2); }
+    /**
+     * {@summary Move in x &#38; y}
+     * 
+     * @param x x
+     * @param y y
+     */
     public void translate(float x, float y) {
         setX(getX() + x);
         setY(getY() + y);

@@ -33,6 +33,12 @@ public class Aphid extends Creature {
     public float getMaxRotationPerSecond() { return 500f; }
 
     // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Return the closest laydbug from the collection.}
+     * 
+     * @param coll Collection to iterate over
+     * @return the closest laydbug from the collection
+     */
     public Ladybug closestLadybug(Collection<Ladybug> coll) {
         Ladybug closest = null;
         for (Ladybug ladybug : coll) {

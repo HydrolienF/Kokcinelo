@@ -26,7 +26,13 @@ public class MapActor extends Actor {
     private Texture textureWithDark;
     private Set<Circle> toExcude;
     private ShapeRenderer shapeRenderer;
-
+    /**
+     * {@summary Main constructor.}
+     * 
+     * @param width  width of this
+     * @param height heigth of this
+     * @param color  color of this
+     */
     public MapActor(float width, float height, Color color) {
         toExcude = new HashSet<Circle>();
         setColor(color);
@@ -40,6 +46,9 @@ public class MapActor extends Actor {
         shapeRenderer.setAutoShapeType(true);
     }
 
+    /**
+     * {@summary Draw the texture that represent this.}
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
@@ -48,13 +57,21 @@ public class MapActor extends Actor {
         Gdx.gl.glDepthFunc(GL30.GL_LESS);
         batch.draw(getMaskedTexture(), getX(), getY(), getWidth(), getHeight());
     }
-
+    /**
+     * {@summary Standard toString that return important vars as String.}
+     */
     @Override
     public String toString() {
         return "MapActor " + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + ", " + getRotation() + ", "
                 + getOriginX() + ", " + getOriginY() + ", " + getScaleX() + ", " + getScaleY() + "]";
     }
-
+    /**
+     * {@summary Return maskedTexture.}
+     * Default texture is full of color.
+     * It have a circle area to exclude.
+     * 
+     * @return texture without first circle area to exclude
+     */
     private Texture getMaskedTexture() {
         if (toExcude.size() == 0) {
             return texture;
@@ -71,13 +88,25 @@ public class MapActor extends Actor {
             return textureWithDark;
         }
     }
-
+    /**
+     * {@summary Create a texture with width, heigth &#38; color.}
+     * 
+     * @param width  width of texture
+     * @param height heigth of texture
+     * @param color  color of texture
+     */
     private void createTexture(int width, int height, Color color) {
         Pixmap pixmap = createPixmap(width, height, color);
         texture = new Texture(pixmap);
         pixmap.dispose();
     }
-
+    /**
+     * {@summary Create a pixmap with a single color.}
+     * 
+     * @param width  width of pixmap
+     * @param height heigth of pixmap
+     * @param color  color of pixmap
+     */
     private Pixmap createPixmap(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
@@ -89,6 +118,11 @@ public class MapActor extends Actor {
 
     public void addToExclude(float x, float y, float radius) { toExcude.add(new Circle(x, y, radius)); }
 
+    /**
+     * {@summary Return pixmap without a centered circle of pixel.}
+     * 
+     * @return pixmap without a centered circle of pixel
+     */
     private Pixmap getMaskPixmap(int radius) {
         final int blackLevel = 150; // [0; 255]
         final float egdeSize = 0.2f;

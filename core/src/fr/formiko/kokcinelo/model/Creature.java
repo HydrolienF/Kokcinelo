@@ -20,9 +20,13 @@ public abstract class Creature extends MapItem {
     protected int color;
     protected float movingSpeed;
     protected float wantedRotation;
-    // protected boolean runningAway;
 
     // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Main constructor.}
+     * 
+     * @param textureName name of the texture to use from assets/images/
+     */
     public Creature(String textureName) {
         super(textureName);
         wantedRotation = -1000f;
@@ -35,8 +39,6 @@ public abstract class Creature extends MapItem {
     public float getMovingSpeed() { return movingSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
-    // public boolean isRunningAway() { return runningAway; }
-    // public void setRunningAway(boolean runningAway) { this.runningAway = runningAway; }
 
     // FUNCTIONS -----------------------------------------------------------------
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
@@ -106,8 +108,5 @@ public abstract class Creature extends MapItem {
      * 
      * @param v contains coordinate of Point to run away from
      */
-    public void runAwayFrom(Vector2 v) {
-        goTo(v, 180f);
-        // runningAway = true;
-    }
+    public void runAwayFrom(Vector2 v) { goTo(v, 180f); }
 }
