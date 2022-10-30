@@ -47,7 +47,8 @@ public class EndGameMenu implements Disposable {
         // bmf.getData().setScale(3,3);
 
         Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
-        scoreLabel = new Label(score + "%", new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
+        scoreLabel = new Label(score * 100 / maxScore + "%",
+                new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         replayButton = new Label("↻", style);
 
         Table table = new Table();
