@@ -41,7 +41,13 @@ public class Controller {
     // GET SET -------------------------------------------------------------------
 
     // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Update zoom of camera.}
+     * 
+     * @param amountY zoom amount
+     */
     public void addZoom(float amountY) {
+        amountY *= -1;
         // getCamera().zoom += amountY * 0.05f;
         getCamera().zoom *= (1 - amountY / 20);
         if (getCamera().zoom < 0.1f) {
@@ -67,6 +73,12 @@ public class Controller {
         c.goTo(getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
     }
 
+    /**
+     * {@summary Move aphids.}
+     * Aphids first run away from the closest ladybug they can see if they can see one.
+     * Else they move slowly to a random direction & some time change it.
+     * If they hit a wall, they change there wanted rotation angle for the nexts turns.
+     */
     public void moveAphids() {
         for (Aphid aphid : gs.getAphids()) {
             Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
@@ -110,26 +122,29 @@ public class Controller {
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
     // public void removeActorFromStage(Actor actor) { actor.remove(); }
 
+    /**
+     * {@summary Let Creature interact with each other.}
+     * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
+     */
     public void interact() {
         if (gs.ladybugEat()) {
             gScreen.setPlayerScore(gs.getPlayer(0).getScore());
             app.playEatingSound();
         }
     }
-
+    /**
+     * {@summary End game by launching sound &#38; end game menu.}
+     */
     public void gameOver() {
         boolean haveWin = gs.getPlayer(playerId).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(playerId).getScore(), gs.getMaxScore(), haveWin);
     }
-
-    public static Random getRandom() {
-        if (ran == null) {
-            ran = new Random();
-        }
-        return ran;
-    }
-
+    /**
+     * {@summary Return current used camera.}
+     * 
+     * @return current used camera
+     */
     private OrthographicCamera getCamera() {
         // return gScreen.camera;
         return GameScreen.getCamera();

@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo.model;
 
-import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -282,11 +281,11 @@ public class GameState {
                         c.getActor().setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
                     if (randomRotation) {
-                        c.getActor().setRotation(Controller.getRandom().nextFloat(360f));
+                        c.getActor().setRotation((float) Math.random() * 360f);
                     }
                     if (zoomMin > 0) {
                         if (zoomMax > zoomMin) {
-                            c.getActor().setZoom(zoomMin + Controller.getRandom().nextFloat(zoomMax - zoomMin));
+                            c.getActor().setZoom(zoomMin + (float) Math.random() * (zoomMax - zoomMin));
                         } else {
                             c.getActor().setZoom(zoomMin);
                         }

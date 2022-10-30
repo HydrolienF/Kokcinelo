@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo.view;
 
-import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import java.util.HashMap;
@@ -100,8 +99,8 @@ public class MapItemActor extends Actor {
      * @param maxY max value of y
      */
     public void setRandomLoaction(float maxX, float maxY) {
-        setCenterX(Controller.getRandom().nextFloat(maxX));
-        setCenterY(Controller.getRandom().nextFloat(maxY));
+        setCenterX((float) Math.random() * maxX);
+        setCenterY((float) Math.random() * maxY);
     }
     public float getCenterX() { return getX() + getWidth() / 2; }
     public float getCenterY() { return getY() + getHeight() / 2; }
