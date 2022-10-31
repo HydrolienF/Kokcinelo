@@ -55,7 +55,7 @@ public abstract class Creature extends MapItem {
             // }
             rotateAStep();
         }
-        moveFront(getMovingSpeed() * percentOfSpeed);
+        getActor().moveFront(getMovingSpeed() * percentOfSpeed);
     }
     /***
      * {@summary Move in the facing direction at max speed.}

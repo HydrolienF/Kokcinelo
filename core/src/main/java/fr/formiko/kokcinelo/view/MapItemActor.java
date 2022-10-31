@@ -29,7 +29,6 @@ public class MapItemActor extends Actor {
     private MapItem mapItem;
     private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
-    int i = 0;
     /**
      * {@summary Main constructor.}
      * 
@@ -45,13 +44,16 @@ public class MapItemActor extends Actor {
         if (!textureRegionMap.containsKey(textureName)) {
             if (Gdx.files != null && textureName != null) {
                 textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
-            } else {
-                this.textureName = "default";
-                textureRegionMap.put(textureName, new TextureRegion(new Texture(getDefaultPixmap(100, 100))));
             }
         }
-        setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
-                getTextureRegion().getRegionHeight());
+        if (getTextureRegion() != null) {
+            setSize(getTextureRegion().getRegionWidth(), getTextureRegion().getRegionHeight());
+            setOrigin(Align.center);
+        }
+    }
+    public MapItemActor(MapItem mapItem, int width, int height) {
+        this(null, mapItem);
+        setSize(width, height);
         setOrigin(Align.center);
     }
     /**
@@ -63,6 +65,9 @@ public class MapItemActor extends Actor {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (getTextureRegion() == null) {
+            return;
+        }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),

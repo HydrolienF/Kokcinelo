@@ -29,6 +29,16 @@ public abstract class MapItem {
         id = idCpt++;
         actor = new MapItemActor(textureName, this);
     }
+    /**
+     * {@summary Only for test constructor.}
+     * 
+     * @param width
+     * @param height
+     */
+    protected MapItem(int width, int height) {
+        id = idCpt++;
+        actor = new MapItemActor(this, width, height);
+    }
 
     // GET SET -------------------------------------------------------------------
     public int getId() { return id; }
