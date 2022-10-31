@@ -61,12 +61,12 @@ public class Controller {
     public void movePlayer(int playerId) {
         Creature c = gs.getPlayerCreature(playerId);
         c.moveFront();
-        c.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight());
+        c.moveIn(gs.getMapWidth(), gs.getMapHeight());
         // synchonize things that depend of c position
         synchronizeCamera(c);
         if (gs.getMapActorFg() != null) {
-            gs.getMapActorFg().setX(c.getActor().getCenterX() - gs.getMapActorFg().getWidth() / 2);
-            gs.getMapActorFg().setY(c.getActor().getCenterY() - gs.getMapActorFg().getHeight() / 2);
+            gs.getMapActorFg().setX(c.getCenterX() - gs.getMapActorFg().getWidth() / 2);
+            gs.getMapActorFg().setY(c.getCenterY() - gs.getMapActorFg().getHeight() / 2);
         }
         c.goTo(getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
     }
@@ -81,12 +81,12 @@ public class Controller {
         for (Aphid aphid : gs.getAphids()) {
             Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
             if (ladybug != null) {
-                aphid.runAwayFrom(new Vector2(ladybug.getActor().getCenterX(), ladybug.getActor().getCenterY()));
+                aphid.runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
                 aphid.moveFront();
             } else {
                 double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
                 if (r < 0.01) {
-                    aphid.getActor().setRotation((float) (aphid.getActor().getRotation()
+                    aphid.setRotation((float) (aphid.getRotation()
                             + aphid.getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime() * 2 * (Math.random() - 0.5)));
                 }
                 // TODO aphid need to stop rotate even if we don't set there rotation.
@@ -97,8 +97,8 @@ public class Controller {
                 aphid.moveFront(0.3f);
             }
             // if have been move to avoid wall
-            if (aphid.getActor().moveIn(gs.getMapWidth(), gs.getMapHeight())) {
-                aphid.setWantedRotation((aphid.getActor().getRotation() + 160f + (float) (Math.random() * 40)) % 360f);
+            if (aphid.moveIn(gs.getMapWidth(), gs.getMapHeight())) {
+                aphid.setWantedRotation((aphid.getRotation() + 160f + (float) (Math.random() * 40)) % 360f);
             }
         }
     }
@@ -109,8 +109,8 @@ public class Controller {
      * @param c creature to synchronize with
      */
     public void synchronizeCamera(Creature c) {
-        getCamera().position.x = c.getActor().getCenterX();
-        getCamera().position.y = c.getActor().getCenterY();
+        getCamera().position.x = c.getCenterX();
+        getCamera().position.y = c.getCenterY();
     }
 
     public void createNewGame() { gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build(); }

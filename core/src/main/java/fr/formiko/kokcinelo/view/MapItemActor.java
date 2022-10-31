@@ -7,6 +7,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -42,7 +43,12 @@ public class MapItemActor extends Actor {
             textureRegionMap = new HashMap<String, TextureRegion>();
         }
         if (!textureRegionMap.containsKey(textureName)) {
-            textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
+            if (Gdx.files != null && textureName != null) {
+                textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
+            } else {
+                this.textureName = "default";
+                textureRegionMap.put(textureName, new TextureRegion(new Texture(getDefaultPixmap(100, 100))));
+            }
         }
         setBounds(getTextureRegion().getRegionX(), getTextureRegion().getRegionY(), getTextureRegion().getRegionWidth(),
                 getTextureRegion().getRegionHeight());
@@ -154,4 +160,11 @@ public class MapItemActor extends Actor {
 
     // private -----------------------------------------------------------------
     private TextureRegion getTextureRegion() { return textureRegionMap.get(textureName); }
+
+    private Pixmap getDefaultPixmap(int width, int height) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(1, 0, 1, 1));
+        pixmap.fillRectangle(0, 0, width, height);
+        return pixmap;
+    }
 }

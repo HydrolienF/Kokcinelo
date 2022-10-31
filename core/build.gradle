@@ -11,3 +11,5 @@ task doc(type: Javadoc) {
     classpath = sourceSets.main.runtimeClasspath
     options.addBooleanOption("version", true)
 }
+
+//TODO add Jacoco to (cf https://docs.gradle.org/current/userguide/jacoco_plugin.html)

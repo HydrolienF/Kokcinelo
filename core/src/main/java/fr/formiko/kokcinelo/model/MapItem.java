@@ -34,6 +34,15 @@ public abstract class MapItem {
     public int getId() { return id; }
     public int getHitRadius() { return hitRadius; }
     public MapItemActor getActor() { return actor; }
+    // Actor allowed getter / setter.
+    public float getCenterX() { return getActor().getCenterX(); }
+    public float getCenterY() { return getActor().getCenterY(); }
+    public boolean moveIn(float maxX, float maxY) { return getActor().moveIn(maxX, maxY); }
+    public float getRotation() { return getActor().getRotation(); }
+    public void setRotation(float degrees) { getActor().setRotation(degrees); }
+    public void setRandomLoaction(float maxX, float maxY) { getActor().setRandomLoaction(maxX, maxY); }
+    public void setZoom(float zoom) { getActor().setZoom(zoom); }
+    public void removeActor() { getActor().remove(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override
@@ -72,7 +81,6 @@ public abstract class MapItem {
      * of an other MapItem.}
      */
     public float distanceTo(MapItem mi2) {
-        return (float) Math.getDistanceBetweenPoints(getActor().getCenterX(), getActor().getCenterY(), mi2.getActor().getCenterX(),
-                mi2.getActor().getCenterY());
+        return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.getCenterX(), mi2.getCenterY());
     }
 }

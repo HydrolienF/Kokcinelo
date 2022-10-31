@@ -49,13 +49,13 @@ public abstract class Creature extends MapItem {
      * @param percentOfSpeed percent of max speed.
      */
     public void moveFront(float percentOfSpeed) {
-        if (getWantedRotation() != -1000f && (getWantedRotation() + 360) % 360 != (getActor().getRotation() + 360) % 360) {
+        if (getWantedRotation() != -1000f && (getWantedRotation() + 360) % 360 != (getRotation() + 360) % 360) {
             // if (this instanceof Aphid) {
-            // System.out.println("rotate from " + (getActor().getRotation() + 360) % 360 + " to " + (getWantedRotation() + 360) % 360);
+            // System.out.println("rotate from " + (getRotation() + 360) % 360 + " to " + (getWantedRotation() + 360) % 360);
             // }
             rotateAStep();
         }
-        getActor().moveFront(getMovingSpeed() * percentOfSpeed);
+        moveFront(getMovingSpeed() * percentOfSpeed);
     }
     /***
      * {@summary Move in the facing direction at max speed.}
@@ -65,7 +65,7 @@ public abstract class Creature extends MapItem {
      * {@summary Rotate as mutch as possible between 2 frames.}
      */
     private void rotateAStep() {
-        float previousRotation = getActor().getRotation() % 360;
+        float previousRotation = getRotation() % 360;
         if (wantedRotation > 180) {
             wantedRotation -= 360;
         }
@@ -80,7 +80,7 @@ public abstract class Creature extends MapItem {
         if (allowedRotation == wantedRotation) {
             wantedRotation = -1000f;
         }
-        getActor().setRotation(previousRotation + allowedRotation);
+        setRotation(previousRotation + allowedRotation);
     }
     /**
      * {@summary Set wanted rotation to go to v.}
@@ -90,8 +90,8 @@ public abstract class Creature extends MapItem {
      */
     public void goTo(Vector2 v, float degdif) {
         // Update wantedRotation
-        Vector2 v2 = new Vector2(v.x - getActor().getCenterX(), v.y - getActor().getCenterY());
-        float previousRotation = getActor().getRotation() % 360;
+        Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        float previousRotation = getRotation() % 360;
         float newRotation = v2.angleDeg() - 90;
         float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
         setWantedRotation(wantedRotation);

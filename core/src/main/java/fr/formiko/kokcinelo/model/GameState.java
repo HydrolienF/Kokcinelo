@@ -111,7 +111,7 @@ public class GameState {
             }
             aphids.removeAll(eated);
             for (Aphid aphid : eated) {
-                aphid.getActor().remove();
+                aphid.removeActor();
             }
         }
         return haveInteract;
@@ -213,7 +213,6 @@ public class GameState {
             // TODO move to the builder parameter
             addCreatures(maxScore, 1, 0);
             gs.players.add(new Player(gs.ladybugs.get(0)));
-            // gs.players.get(0).getPlayedCreature().getActor().addToExclude();
             addMapForeground();
 
             // System.out.println(gs);
@@ -287,16 +286,16 @@ public class GameState {
                     // c = new Ladybug();
                     // }
                     if (randomLocaction) {
-                        c.getActor().setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
+                        c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
                     if (randomRotation) {
-                        c.getActor().setRotation((float) Math.random() * 360f);
+                        c.setRotation((float) Math.random() * 360f);
                     }
                     if (zoomMin > 0) {
                         if (zoomMax > zoomMin) {
-                            c.getActor().setZoom(zoomMin + (float) Math.random() * (zoomMax - zoomMin));
+                            c.setZoom(zoomMin + (float) Math.random() * (zoomMax - zoomMin));
                         } else {
-                            c.getActor().setZoom(zoomMin);
+                            c.setZoom(zoomMin);
                         }
                     }
                     gs.addCreature(c);
