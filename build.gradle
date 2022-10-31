@@ -103,5 +103,15 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation('org.junit.jupiter:junit-jupiter:5.9.1')
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
 }
+
