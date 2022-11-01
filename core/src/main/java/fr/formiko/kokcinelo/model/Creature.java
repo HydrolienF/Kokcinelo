@@ -73,11 +73,7 @@ public abstract class Creature extends MapItem {
         if (wantedRotation > 0) {
             allowedRotation *= -1;
         }
-        if (this instanceof Aphid) {
-            System.out.print("wanted rotation " + wantedRotation + " ");
-            wantedRotation += allowedRotation;
-            System.out.println(wantedRotation);
-        }
+        wantedRotation += allowedRotation;
         setRotation(previousRotation + allowedRotation);
     }
     /**

@@ -26,6 +26,9 @@ public class MapActor extends Actor {
     private Texture textureWithDark;
     private Set<Circle> toExcude;
     private ShapeRenderer shapeRenderer;
+    private static final float MAX_ROCK_RADIUS = 50f;
+    private static final float MIN_ROCK_RADIUS = 10f;
+
     /**
      * {@summary Main constructor.}
      * 
@@ -35,10 +38,10 @@ public class MapActor extends Actor {
      */
     public MapActor(float width, float height, Color color) {
         toExcude = new HashSet<Circle>();
-        setColor(color);
+        // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
-        createTexture((int) width, (int) height, color);
+        createTexture((int) width, (int) height, color, 10);
         setOrigin(Align.center);
         setVisible(true);
 
@@ -76,12 +79,12 @@ public class MapActor extends Actor {
         if (toExcude.size() == 0) {
             return texture;
         } else {
-            Circle c = null;
-            for (Circle circle : toExcude) {
-                c = circle;
-                break;
-            }
             if (textureWithDark == null) {
+                Circle c = null;
+                for (Circle circle : toExcude) {
+                    c = circle;
+                    break;
+                }
                 System.out.println("new textureWithDark");
                 textureWithDark = new Texture(getMaskPixmap((int) c.radius));
             }
@@ -94,9 +97,11 @@ public class MapActor extends Actor {
      * @param width  width of texture
      * @param height heigth of texture
      * @param color  color of texture
+     * @param rocks  number of rocks to add
      */
-    private void createTexture(int width, int height, Color color) {
+    private void createTexture(int width, int height, Color color, int rocks) {
         Pixmap pixmap = createPixmap(width, height, color);
+        drawRocks(pixmap, width, height, rocks);
         texture = new Texture(pixmap);
         pixmap.dispose();
     }
@@ -144,5 +149,39 @@ public class MapActor extends Actor {
             }
         }
         return darkedArea;
+    }
+
+    /**
+     * {@summary Draw rocks on pixmap.}
+     * 
+     * @param pixmap pixmap were to draw
+     * @param width  width of the area to draw
+     * @param height height of the area to draw
+     * @param rocks  number of rocks to draw
+     */
+    private void drawRocks(Pixmap pixmap, int width, int height, int rocks) {
+        for (int i = 0; i < rocks; i++) {
+            pixmap.setColor(getRandomGrey());
+            int radius = (int) ((random() * (MAX_ROCK_RADIUS - MIN_ROCK_RADIUS)) + MIN_ROCK_RADIUS);
+            int x = (int) (random() * width);
+            int y = (int) (random() * height);
+            pixmap.fillCircle(x, y, radius);
+            int subrocks = 1 + (int) (random() * 3);
+            for (int j = 0; j < subrocks; j++) {
+                pixmap.setColor(getRandomGrey());
+                pixmap.fillCircle((int) (x + ((random() - 0.5) * 2.0 * radius)), (int) (y + ((random() - 0.5) * radius)),
+                        (int) ((double) radius / ((random() * 2) + 1.5)));
+            }
+        }
+    }
+    private double random() { return java.lang.Math.random(); }
+    /**
+     * {@summary Create a random grey.}
+     * 
+     * @return a random grey
+     */
+    private Color getRandomGrey() {
+        float r = (float) (random() / 2.0 + 0.2);
+        return new Color(r, r, r, 1f);
     }
 }
