@@ -81,24 +81,22 @@ public class Controller {
         for (Aphid aphid : gs.getAphids()) {
             Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
             if (ladybug != null) {
+                // Run away move
                 aphid.runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
                 aphid.moveFront();
             } else {
+                // Normal move
                 double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
-                if (r < 0.01) {
-                    aphid.setRotation((float) (aphid.getRotation()
-                            + aphid.getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime() * 2 * (Math.random() - 0.5)));
+                if (r < 0.02) { // randomize rotation
+                    aphid.setWantedRotation((float) (Math.random() * 40) - 20f);
                 }
-                // TODO aphid need to stop rotate even if we don't set there rotation.
-                // if (aphid.isRunningAway()) {
-                // aphid.setWantedRotation(-1000f);
-                // aphid.setRunningAway(false);
-                // }
                 aphid.moveFront(0.3f);
             }
             // if have been move to avoid wall
             if (aphid.moveIn(gs.getMapWidth(), gs.getMapHeight())) {
-                aphid.setWantedRotation((aphid.getRotation() + 160f + (float) (Math.random() * 40)) % 360f);
+                if (aphid.getWantedRotation() == 0f) { // if have not already choose a new angle to get out.
+                    aphid.setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
+                }
             }
         }
     }

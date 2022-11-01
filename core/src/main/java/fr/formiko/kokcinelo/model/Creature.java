@@ -29,7 +29,7 @@ public abstract class Creature extends MapItem {
      */
     public Creature(String textureName) {
         super(textureName);
-        wantedRotation = -1000f;
+        wantedRotation = 0f;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -44,17 +44,12 @@ public abstract class Creature extends MapItem {
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
     /**
      * {@summary Move in the facing direction at speed percentOfSpeed.}
-     * If a wantedRotation have been set, go to it.
+     * If a wantedRotation have been set, go for it.
      * 
      * @param percentOfSpeed percent of max speed.
      */
     public void moveFront(float percentOfSpeed) {
-        if (getWantedRotation() != -1000f && (getWantedRotation() + 360) % 360 != (getRotation() + 360) % 360) {
-            // if (this instanceof Aphid) {
-            // System.out.println("rotate from " + (getRotation() + 360) % 360 + " to " + (getWantedRotation() + 360) % 360);
-            // }
-            rotateAStep();
-        }
+        rotateAStep();
         getActor().moveFront(getMovingSpeed() * percentOfSpeed);
     }
     /***
@@ -63,22 +58,25 @@ public abstract class Creature extends MapItem {
     public void moveFront() { moveFront(1f); }
     /**
      * {@summary Rotate as mutch as possible between 2 frames.}
+     * It don't rotate if no wanted rotation have been set.
      */
     private void rotateAStep() {
+        if (wantedRotation == 0f) {
+            return;
+        }
         float previousRotation = getRotation() % 360;
+        wantedRotation = (wantedRotation + 360) % 360;
         if (wantedRotation > 180) {
             wantedRotation -= 360;
         }
-        // float rotationToDo = (wantedRotation - previousRotation) % 360;
-        // if (this instanceof Aphid) {
-        // System.out.println("rotation to do " + rotationToDo);
-        // }
         float allowedRotation = Math.min(getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime(), Math.abs(wantedRotation));
         if (wantedRotation > 0) {
             allowedRotation *= -1;
         }
-        if (allowedRotation == wantedRotation) {
-            wantedRotation = -1000f;
+        if (this instanceof Aphid) {
+            System.out.print("wanted rotation " + wantedRotation + " ");
+            wantedRotation += allowedRotation;
+            System.out.println(wantedRotation);
         }
         setRotation(previousRotation + allowedRotation);
     }
