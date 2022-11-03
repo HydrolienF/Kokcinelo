@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
@@ -36,12 +37,12 @@ public class MapActor extends Actor {
      * @param height heigth of this
      * @param color  color of this
      */
-    public MapActor(float width, float height, Color color) {
+    public MapActor(float width, float height, Color color, boolean withDetails) {
         toExcude = new HashSet<Circle>();
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
-        createTexture((int) width, (int) height, color, 10);
+        createTexture((int) width, (int) height, color, withDetails);
         setOrigin(Align.center);
         setVisible(true);
 
@@ -97,11 +98,14 @@ public class MapActor extends Actor {
      * @param width  width of texture
      * @param height heigth of texture
      * @param color  color of texture
-     * @param rocks  number of rocks to add
+     * @param stones number of stones to add
      */
-    private void createTexture(int width, int height, Color color, int rocks) {
+    private void createTexture(int width, int height, Color color, boolean withDetails) {
         Pixmap pixmap = createPixmap(width, height, color);
-        drawRocks(pixmap, width, height, rocks);
+        if (withDetails) {
+            drawStones(pixmap, width, height, 10);
+            drawSticks(pixmap, width, height, 20);
+        }
         texture = new Texture(pixmap);
         pixmap.dispose();
     }
@@ -152,25 +156,77 @@ public class MapActor extends Actor {
     }
 
     /**
-     * {@summary Draw rocks on pixmap.}
+     * {@summary Draw stones on pixmap.}
      * 
      * @param pixmap pixmap were to draw
      * @param width  width of the area to draw
      * @param height height of the area to draw
-     * @param rocks  number of rocks to draw
+     * @param stones number of stones to draw
      */
-    private void drawRocks(Pixmap pixmap, int width, int height, int rocks) {
-        for (int i = 0; i < rocks; i++) {
+    private void drawStones(Pixmap pixmap, int width, int height, int stones) {
+        for (int i = 0; i < stones; i++) {
             pixmap.setColor(getRandomGrey());
             int radius = (int) ((random() * (MAX_ROCK_RADIUS - MIN_ROCK_RADIUS)) + MIN_ROCK_RADIUS);
             int x = (int) (random() * width);
             int y = (int) (random() * height);
             pixmap.fillCircle(x, y, radius);
-            int subrocks = 1 + (int) (random() * 3);
-            for (int j = 0; j < subrocks; j++) {
+            int substones = 1 + (int) (random() * 3);
+            for (int j = 0; j < substones; j++) {
                 pixmap.setColor(getRandomGrey());
                 pixmap.fillCircle((int) (x + ((random() - 0.5) * 2.0 * radius)), (int) (y + ((random() - 0.5) * radius)),
                         (int) ((double) radius / ((random() * 2) + 1.5)));
+            }
+        }
+    }
+    private static int MAX_STIK_LENGTH = 400;
+    private static int MIN_STIK_LENGTH = 80;
+    private static int MIN_STIK_WIDTH = 5;
+    private static int MAX_STIK_WIDTH = 25;
+    private static int MAX_STIK_SEGMENT = 4;
+    private static int MIN_STIK_SEGMENT = 2;
+    /**
+     * {@summary Draw woods sticks on pixmap.}
+     * 
+     * @param pixmap pixmap were to draw
+     * @param width  width of the area to draw
+     * @param height height of the area to draw
+     * @param sticks number of sticks to draw
+     */
+    private void drawSticks(Pixmap pixmap, int width, int height, int sticks) {
+        for (int i = 0; i < sticks; i++) {
+            // TODO add sub branchs to sticks between 0.6 & 0.8 of the length.
+            // TODO fill intercection with one more triangle.
+            pixmap.setColor(getRandomBrown());
+            float x = (float) (random() * width);
+            float y = (float) (random() * height);
+            int segments = (int) (random() * MAX_STIK_SEGMENT - MIN_STIK_SEGMENT) + MIN_STIK_SEGMENT;
+            float rotation = (float) (random() * 360);
+            float length = (float) ((random() * (MAX_STIK_LENGTH - MIN_STIK_LENGTH)) + MIN_STIK_LENGTH);
+            float thikness = (float) ((random() * (MAX_STIK_WIDTH - MIN_STIK_WIDTH)) + MIN_STIK_WIDTH);
+            for (int j = 0; j < segments; j++) {
+                float thiknessModifier = (float) (random() * 0.2) + 0.6f;
+                float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
+                float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));
+                float rotation2 = rotation - 90;
+                float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
+                float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
+                // pixmap.fillTriangle(x, y, x + MAX_STIK_WIDTH, y + MAX_STIK_WIDTH, x + length, y + length);
+                if (x + lengthX + thiknessX > width || x + lengthX < 0) {
+                    continue;
+                } else if (y + lengthY + thiknessY > height || y + lengthY < 0) {
+                    continue;
+                }
+                pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY), (int) (x + thiknessX),
+                        (int) (y + thiknessY));
+                pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY),
+                        (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+                pixmap.fillTriangle((int) (x + thiknessX), (int) (y + thiknessY), (int) (int) (x + lengthX), (int) (y + lengthY),
+                        (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+                x += lengthX;
+                y += lengthY;
+                rotation += (float) (random() * 40 - 20);
+                thikness *= thiknessModifier;
+                length *= (random() * 1.3);
             }
         }
     }
@@ -183,5 +239,13 @@ public class MapActor extends Actor {
     private Color getRandomGrey() {
         float r = (float) (random() / 2.0 + 0.2);
         return new Color(r, r, r, 1f);
+    }
+    /**
+     * {@summary Create a random brown.}
+     * 
+     * @return a random brown
+     */
+    private Color getRandomBrown() {
+        return new Color((float) (random() * 0.3) + 0.35f, (float) (random() * 0.08) + 0.08f, (float) (random() * 0.05), 1f);
     }
 }

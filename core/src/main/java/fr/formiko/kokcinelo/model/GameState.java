@@ -317,7 +317,7 @@ public class GameState {
          */
         private void addMapBackground() {
             gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
-                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f));
+                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f), true);
             // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
             // Color.OLIVE);
         }
@@ -325,7 +325,7 @@ public class GameState {
          * {@summary Add the map foreground as a black mask.}
          */
         private void addMapForeground() {
-            gs.mapActorFg = new MapActor(Math.max(1, mapWidth * 2), Math.max(1, mapHeight * 2), Color.BLACK);
+            gs.mapActorFg = new MapActor(Math.max(1, mapWidth * 2), Math.max(1, mapHeight * 2), Color.BLACK, false);
             gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(gs.getLocalPlayerId()).getVisionRadius());
         }
     }
