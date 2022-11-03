@@ -36,7 +36,7 @@ public class InputCore implements InputProcessor {
     }
 
     /**
-     * {@summary React to key press onces.}
+     * {@summary React to key pressed once.}
      * 
      * @param keycode the key pressed
      */

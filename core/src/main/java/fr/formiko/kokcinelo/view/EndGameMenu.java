@@ -1,15 +1,18 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -27,7 +30,7 @@ public class EndGameMenu implements Disposable {
     private Stage stage;
     private Viewport viewport;
     private Label scoreLabel;
-    private ImageButton replayButton;
+    private Image replayButton;
     private boolean haveWin;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -54,7 +57,11 @@ public class EndGameMenu implements Disposable {
                 new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         Texture t = new Texture(Gdx.files.internal("images/" + "replay" + ".png"));
         // TODO change color of t to white.
-        replayButton = new ImageButton(new TextureRegionDrawable(t));
+        replayButton = new Image(new TextureRegionDrawable(t));
+        replayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
+        });
 
         Table table = new Table();
         table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);

@@ -1,9 +1,7 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.kokcinelo.view.GameScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class App extends Game {
     public SpriteBatch batch;
-    Screen currentScreen;
     private Sound eatingSound;
     private Music mainMusic;
 
@@ -40,8 +37,9 @@ public class App extends Game {
      * {@summary Start a new Game on this app in GUI.}
      */
     public void startNewGame() {
-        currentScreen = new GameScreen(this);
-        this.setScreen(currentScreen);
+        Controller c = new Controller(this);
+        Controller.setController(c);
+        c.createNewGame();
     }
 
     /***

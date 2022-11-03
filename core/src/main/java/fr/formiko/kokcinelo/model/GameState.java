@@ -25,6 +25,7 @@ public class GameState {
     private MapActor mapActorBg;
     private MapActor mapActorFg;
     private int maxScore;
+    private int localPlayerId;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /***
@@ -46,6 +47,8 @@ public class GameState {
     public List<Aphid> getAphids() { return aphids; }
     public List<Ant> getAnts() { return ants; }
     public List<Ladybug> getLadybugs() { return ladybugs; }
+    public int getLocalPlayerId() { return localPlayerId; }
+    public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
     /**
      * {@summary Return player from the list of player or null if not found.}
      * 
@@ -105,7 +108,7 @@ public class GameState {
                     haveInteract = true;
                     eated.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
-                    getPlayer(0).addScore(aphid.getGivenPoints());
+                    getPlayer(getLocalPlayerId()).addScore(aphid.getGivenPoints());
                     // System.out.println("Eating " + aphid);
                 }
             }
@@ -212,7 +215,9 @@ public class GameState {
             addMapBackground();
             // TODO move to the builder parameter
             addCreatures(maxScore, 1, 0);
-            gs.players.add(new Player(gs.ladybugs.get(0)));
+            Player p = new Player(gs.ladybugs.get(0));
+            gs.players.add(p);
+            gs.setLocalPlayerId(p.getId());
             addMapForeground();
 
             // System.out.println(gs);
@@ -321,7 +326,7 @@ public class GameState {
          */
         private void addMapForeground() {
             gs.mapActorFg = new MapActor(Math.max(1, mapWidth * 2), Math.max(1, mapHeight * 2), Color.BLACK);
-            gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(0).getVisionRadius());
+            gs.mapActorFg.addToExclude(0f, 0f, gs.getPlayerCreature(gs.getLocalPlayerId()).getVisionRadius());
         }
     }
 }

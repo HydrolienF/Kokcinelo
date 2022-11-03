@@ -22,7 +22,8 @@ public class Controller {
     private GameState gs;
     private App app;
     private GameScreen gScreen;
-    private static int playerId = 0;
+
+    private static Controller controller;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -31,12 +32,17 @@ public class Controller {
      * @param app     app to send action to
      * @param gScreen GameScreen to send action to
      */
-    public Controller(App app, GameScreen gScreen) {
+    public Controller(App app) {
         this.app = app;
-        this.gScreen = gScreen;
+        controller = this;
     }
 
     // GET SET -------------------------------------------------------------------
+    public static Controller getController() { return controller; }
+    public static void setController(Controller controller) { Controller.controller = controller; }
+    public GameScreen getGameScreen() { return gScreen; }
+    public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
+
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -110,8 +116,17 @@ public class Controller {
         getCamera().position.x = c.getCenterX();
         getCamera().position.y = c.getCenterY();
     }
-
-    public void createNewGame() { gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build(); }
+    /**
+     * {@summary Create a new Game.}
+     * Create the GameState with Game data.
+     * Set current Screen as a new GameScreen.
+     */
+    public void createNewGame() {
+        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
+        gScreen = new GameScreen(app);
+        app.setScreen(gScreen);
+    }
+    public void restartGame() { createNewGame(); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
@@ -124,7 +139,7 @@ public class Controller {
      */
     public void interact() {
         if (gs.ladybugEat()) {
-            gScreen.setPlayerScore(gs.getPlayer(0).getScore());
+            gScreen.setPlayerScore(gs.getPlayer(getLocalPlayerId()).getScore());
             app.playEatingSound();
         }
     }
@@ -133,9 +148,9 @@ public class Controller {
      */
     public void gameOver() {
         gScreen.stop();
-        boolean haveWin = gs.getPlayer(playerId).getScore() == gs.getMaxScore();
+        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
-        gScreen.createEndGameMenu(gs.getPlayer(playerId).getScore(), gs.getMaxScore(), haveWin);
+        gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
     }
     /**
      * {@summary Return current used camera.}

@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -29,13 +30,11 @@ public class GameScreen implements Screen {
     private Hud hud;
     private EndGameMenu egm;
     static OrthographicCamera camera;
-    private float rotationSpeed;
+    // private float rotationSpeed;
     private float maxZoom;
-    private Controller controller;
-    private int playerId;
-    // private Label playerScore;
     private boolean isPause;
     private boolean isStop;
+    private InputMultiplexer inputMultiplexer;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -46,9 +45,6 @@ public class GameScreen implements Screen {
      */
     public GameScreen(final App game) {
         this.game = game;
-        controller = new Controller(game, this);
-        controller.createNewGame();
-        playerId = 0;
 
         // Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
@@ -59,25 +55,28 @@ public class GameScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
-        for (Actor a : controller.allActors()) {
+        for (Actor a : Controller.getController().allActors()) {
             stage.addActor(a);
         }
 
-        rotationSpeed = 0.5f;
+        // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this, controller);
-        Gdx.input.setInputProcessor(inputProcessor);
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this, getController());
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
         createTextUI();
         game.playGameMusic();
     }
 
     // GET SET -------------------------------------------------------------------
-    public Controller getController() { return controller; }
+    public Controller getController() { return Controller.getController(); }
     public boolean isPause() { return isPause; }
     public boolean isStop() { return isStop; }
     public static OrthographicCamera getCamera() { return camera; }
     public Stage getStage() { return stage; }
+    public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -96,18 +95,19 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0f, 0f, 0f, 1);
         // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
         game.batch.setProjectionMatrix(camera.combined);
-        getController().updateActorVisibility(playerId);
+        getController().updateActorVisibility(Controller.getController().getLocalPlayerId());
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
         if (!isPause) {
             if (isTimeUp() || getController().isAllAphidGone()) {
-                controller.gameOver();
+                getController().gameOver();
             }
         }
         if (egm != null) {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
+            egm.getStage().act(delta);
             egm.getStage().draw();
         }
     }
@@ -138,19 +138,19 @@ public class GameScreen implements Screen {
         // if (Gdx.input.isKeyPressed(Input.Keys.D)) {
         // moveX += Gdx.graphics.getDeltaTime();
         // }
-        if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-            camera.rotate(-rotationSpeed, 0, 0, 1);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-            camera.rotate(rotationSpeed, 0, 0, 1);
-        }
+        // if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+        // camera.rotate(-rotationSpeed, 0, 0, 1);
+        // }
+        // if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+        // camera.rotate(rotationSpeed, 0, 0, 1);
+        // }
         if (camera.zoom < maxZoom) {
             camera.zoom = maxZoom;
         }
-        controller.movePlayer(playerId);
-        controller.moveAphids();
+        getController().movePlayer(Controller.getController().getLocalPlayerId());
+        getController().moveAphids();
         // controller.movePlayer(playerId, moveX, moveY);
-        controller.interact();
+        getController().interact();
     }
     /***
      * {@summary Update all subpanels.}
@@ -193,7 +193,10 @@ public class GameScreen implements Screen {
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() { hud = new Hud(game.batch, 60); }
-    public void createEndGameMenu(int score, int maxScore, boolean haveWin) { egm = new EndGameMenu(game.batch, score, maxScore, haveWin); }
+    public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
+        egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
+        addProcessor(egm.getStage());
+    }
     public void setPlayerScore(int score) { hud.setPlayerScore(score); }
     public boolean isTimeUp() { return hud.isTimeUp(); }
 
