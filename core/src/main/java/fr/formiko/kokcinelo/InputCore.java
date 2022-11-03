@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.view.GameScreen;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
@@ -36,7 +37,16 @@ public class InputCore implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) { return false; }
     @Override
-    public boolean keyUp(int keycode) { return false; }
+    public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.P) {
+            if (screen.isPause()) {
+                screen.resume();
+            } else {
+                screen.pause();
+            }
+        }
+        return true;
+    }
     @Override
     public boolean keyTyped(char character) { return false; }
     @Override
