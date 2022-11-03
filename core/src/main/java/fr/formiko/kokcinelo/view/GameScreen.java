@@ -166,9 +166,15 @@ public class GameScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) { viewport.update(width, height); }
-
+    /***
+     * {@summary Temporary pause current game.}
+     */
     @Override
     public void pause() { isPause = true; }
+    /**
+     * {@summary Resume current Game.}
+     * Current game, may not be resumable if it have been stop.
+     */
     @Override
     public void resume() {
         if (isStop) {
@@ -177,7 +183,9 @@ public class GameScreen implements Screen {
         }
         isPause = false;
     }
-
+    /**
+     * {@summary Definitivly stop current game.}
+     */
     public void stop() {
         isStop = true;
         pause();
