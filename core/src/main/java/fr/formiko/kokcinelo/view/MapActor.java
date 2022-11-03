@@ -182,6 +182,7 @@ public class MapActor extends Actor {
     private static int MIN_STIK_LENGTH = 80;
     private static int MIN_STIK_WIDTH = 5;
     private static int MAX_STIK_WIDTH = 25;
+    private static int MAX_STIK_SUBSEGMENT = 1;
     private static int MAX_STIK_SEGMENT = 4;
     private static int MIN_STIK_SEGMENT = 2;
     /**
@@ -194,43 +195,62 @@ public class MapActor extends Actor {
      */
     private void drawSticks(Pixmap pixmap, int width, int height, int sticks) {
         for (int i = 0; i < sticks; i++) {
-            // TODO add sub branchs to sticks between 0.6 & 0.8 of the length.
             // TODO fill intercection with one more triangle.
             pixmap.setColor(getRandomBrown());
             float x = (float) (random() * width);
             float y = (float) (random() * height);
             int segments = (int) (random() * MAX_STIK_SEGMENT - MIN_STIK_SEGMENT) + MIN_STIK_SEGMENT;
+            int subsegments = (int) (random() * MAX_STIK_SUBSEGMENT + 0.8);
             float rotation = (float) (random() * 360);
             float length = (float) ((random() * (MAX_STIK_LENGTH - MIN_STIK_LENGTH)) + MIN_STIK_LENGTH);
             float thikness = (float) ((random() * (MAX_STIK_WIDTH - MIN_STIK_WIDTH)) + MIN_STIK_WIDTH);
-            for (int j = 0; j < segments; j++) {
-                float thiknessModifier = (float) (random() * 0.2) + 0.6f;
-                float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
-                float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));
-                float rotation2 = rotation - 90;
-                float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
-                float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
-                // pixmap.fillTriangle(x, y, x + MAX_STIK_WIDTH, y + MAX_STIK_WIDTH, x + length, y + length);
-                if (x + lengthX + thiknessX > width || x + lengthX < 0) {
-                    continue;
-                } else if (y + lengthY + thiknessY > height || y + lengthY < 0) {
-                    continue;
+            drawStickBranch(pixmap, width, height, x, y, segments, subsegments, rotation, length, thikness);
+        }
+    }
+    /**
+     * {@summary Recurcive function to draw a stick.}
+     * Most param are used for the next segment to with fiew lower variable.
+     * 
+     * @param pixmap   pixmap were to draw
+     * @param width    width of the area to draw
+     * @param height   height of the area to draw
+     * @param x        x start of the branch
+     * @param y        y start of the branch
+     * @param segments segment left to draw
+     * @param rotation rotation of this segment
+     * @param length   length of this segement
+     * @param thikness thikness of this segment
+     */
+    private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation,
+            float length, float thikness) {
+        float thiknessModifier = (float) (random() * 0.2) + 0.6f;
+        float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
+        float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));
+        float rotation2 = rotation - 90;
+        float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
+        float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
+        if (x + lengthX + thiknessX > width || x + lengthX < 0 || y + lengthY + thiknessY > height || y + lengthY < 0) {
+            return; // avoid to go out of the pixmap
+        }
+        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY), (int) (x + thiknessX), (int) (y + thiknessY));
+        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY),
+                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+        pixmap.fillTriangle((int) (x + thiknessX), (int) (y + thiknessY), (int) (int) (x + lengthX), (int) (y + lengthY),
+                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+        if (segments > 1) {
+            drawStickBranch(pixmap, width, height, x + lengthX, y + lengthY, segments - 1, subsegments,
+                    rotation + (float) (random() * 40 - 20), length * (random() * 1.3f), thikness * thiknessModifier);
+            for (int i = 0; i < subsegments; i++) {
+                float modRotation = 50f + random() * 30f;
+                if (random() > 0.5) {
+                    modRotation *= -1f;
                 }
-                pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY), (int) (x + thiknessX),
-                        (int) (y + thiknessY));
-                pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY),
-                        (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
-                pixmap.fillTriangle((int) (x + thiknessX), (int) (y + thiknessY), (int) (int) (x + lengthX), (int) (y + lengthY),
-                        (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
-                x += lengthX;
-                y += lengthY;
-                rotation += (float) (random() * 40 - 20);
-                thikness *= thiknessModifier;
-                length *= (random() * 1.3);
+                drawStickBranch(pixmap, width, height, x + lengthX * (0.6f + random() * 0.2f), y + lengthY * (0.6f + random() * 0.2f),
+                        segments - 1, 0, rotation + modRotation, length * (random() * 0.6f), thikness * thiknessModifier);
             }
         }
     }
-    private double random() { return java.lang.Math.random(); }
+    private float random() { return (float) java.lang.Math.random(); }
     /**
      * {@summary Create a random grey.}
      * 
@@ -246,6 +266,6 @@ public class MapActor extends Actor {
      * @return a random brown
      */
     private Color getRandomBrown() {
-        return new Color((float) (random() * 0.3) + 0.35f, (float) (random() * 0.08) + 0.08f, (float) (random() * 0.05), 1f);
+        return new Color((float) (random() * 0.2) + 0.35f, (float) (random() * 0.08) + 0.08f, (float) (random() * 0.05), 1f);
     }
 }
