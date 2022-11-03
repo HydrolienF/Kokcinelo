@@ -49,7 +49,7 @@ public class EndGameMenu implements Disposable {
         BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
         // bmf.getData().setScale(3,3);
 
-        Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
+        // Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
         scoreLabel = new Label(score * 100 / maxScore + "%",
                 new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         Texture t = new Texture(Gdx.files.internal("images/" + "replay" + ".png"));

@@ -132,6 +132,7 @@ public class Controller {
      * {@summary End game by launching sound &#38; end game menu.}
      */
     public void gameOver() {
+        gScreen.stop();
         boolean haveWin = gs.getPlayer(playerId).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(playerId).getScore(), gs.getMaxScore(), haveWin);

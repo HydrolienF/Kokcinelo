@@ -13,11 +13,14 @@ import com.badlogic.gdx.InputProcessor;
  */
 public class InputCore implements InputProcessor {
 
-    GameScreen screen;
+    private GameScreen screen;
+    private Controller controller;
 
     // CONSTRUCTORS --------------------------------------------------------------
-    public InputCore(GameScreen screen) { this.screen = screen; }
-    public InputCore() {}
+    public InputCore(GameScreen screen, Controller controller) {
+        this.screen = screen;
+        this.controller = controller;
+    }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -32,10 +35,11 @@ public class InputCore implements InputProcessor {
         return true;
     }
 
-
-    // Not usefull yet.
-    @Override
-    public boolean keyDown(int keycode) { return false; }
+    /**
+     * {@summary React to key press onces.}
+     * 
+     * @param keycode the key pressed
+     */
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P) {
@@ -45,8 +49,14 @@ public class InputCore implements InputProcessor {
                 screen.pause();
             }
         }
+        if (keycode == Input.Keys.S) {
+            controller.gameOver();
+        }
         return true;
     }
+    // Not usefull yet.
+    @Override
+    public boolean keyDown(int keycode) { return false; }
     @Override
     public boolean keyTyped(char character) { return false; }
     @Override

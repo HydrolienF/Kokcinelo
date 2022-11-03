@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     private int playerId;
     // private Label playerScore;
     private boolean isPause;
+    private boolean isStop;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -65,7 +66,7 @@ public class GameScreen implements Screen {
         rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this, controller);
         Gdx.input.setInputProcessor(inputProcessor);
         createTextUI();
         game.playGameMusic();
@@ -74,6 +75,7 @@ public class GameScreen implements Screen {
     // GET SET -------------------------------------------------------------------
     public Controller getController() { return controller; }
     public boolean isPause() { return isPause; }
+    public boolean isStop() { return isStop; }
     public static OrthographicCamera getCamera() { return camera; }
     public Stage getStage() { return stage; }
 
@@ -101,7 +103,6 @@ public class GameScreen implements Screen {
         hud.getStage().draw();
         if (!isPause) {
             if (isTimeUp() || getController().isAllAphidGone()) {
-                pause();
                 controller.gameOver();
             }
         }
@@ -169,7 +170,18 @@ public class GameScreen implements Screen {
     @Override
     public void pause() { isPause = true; }
     @Override
-    public void resume() { isPause = false; }
+    public void resume() {
+        if (isStop) {
+            System.out.println("Can't resume stop game.");
+            return;
+        }
+        isPause = false;
+    }
+
+    public void stop() {
+        isStop = true;
+        pause();
+    }
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() { hud = new Hud(game.batch, 60); }
