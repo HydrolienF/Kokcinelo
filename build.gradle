@@ -102,6 +102,7 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation 'com.github.HydrolienF:usual:0.2.103'
         testImplementation('org.junit.jupiter:junit-jupiter:5.9.1')
     }
 

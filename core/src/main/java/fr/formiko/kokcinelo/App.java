@@ -1,9 +1,12 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.usual.ReadFile;
+import fr.formiko.usual.erreur;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -19,6 +22,10 @@ public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
     private Music mainMusic;
+    private String[] args;
+
+    public App(String[] args) { this.args = args; }
+    public App() { this(null); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -29,6 +36,7 @@ public class App extends Game {
      */
     @Override
     public void create() {
+        setOptionsFromArgs();
         batch = new SpriteBatch();
         // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
@@ -95,5 +103,24 @@ public class App extends Game {
         Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3"));
         mainMusic.stop();
         s.play();
+    }
+
+
+    private void setOptionsFromArgs() {
+        if (args == null) {
+            return;
+        }
+        for (String arg : args) {
+            switch (arg) {
+            case "--version", "-v": {
+                FileHandle versionFile = Gdx.files.internal("version.md");
+                System.out.println(ReadFile.readFile(versionFile.file()));
+                System.exit(0);
+            }
+            default: {
+                erreur.alerte(arg + " don't match any args possible");
+            }
+            }
+        }
     }
 }
