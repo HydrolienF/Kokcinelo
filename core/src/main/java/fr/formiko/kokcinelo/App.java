@@ -1,7 +1,11 @@
 package fr.formiko.kokcinelo;
 
 import fr.formiko.usual.ReadFile;
+import fr.formiko.usual.color;
 import fr.formiko.usual.erreur;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -23,6 +27,9 @@ public class App extends Game {
     private Sound eatingSound;
     private Music mainMusic;
     private String[] args;
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private int logLevel = Application.LOG_INFO;
+    private static boolean launchFromLauncher;
 
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
@@ -37,6 +44,9 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
+        color.iniColor();
+        Gdx.app.setLogLevel(logLevel);
+        App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
         // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
@@ -105,17 +115,147 @@ public class App extends Game {
         s.play();
     }
 
+    // LOGS -------------------------------------------------------------------
+    /**
+     * {@summary Save or print log using Gdx.app settings.}
+     * 
+     * @param logLevel  int value from 0 (debug) to 4 (error) to represent gravity of log
+     * @param tag       tag of the log
+     * @param message   message of the log
+     * @param exception exception that have been catch
+     */
+    public static void log(int logLevel, String tag, String message, Exception exception) {
+        // tag = updatedTag(logLevel, tag);
+        String tagTemp = getCurrentTime() + " " + logLevelToString(logLevel) + " " + Thread.currentThread().getName();
+        if (tag == null || tag.equals("")) {
+            tag = tagTemp;
+        } else {
+            tag = tagTemp + " " + tag;
+        }
+        if (!launchFromLauncher) {
+            tag = logLevelToStringColor(logLevel) + tag + color.NEUTRAL;
+        }
+        if (Gdx.app != null) {
+            switch (logLevel) {
+            case 0:
+                Gdx.app.debug(tag, message);
+                break;
+            case 1:
+                Gdx.app.log(tag, message);
+                break;
+            case 2, 3, 4:
+                if (exception != null) {
+                    Gdx.app.error(tag, message, exception);
+                } else {
+                    Gdx.app.error(tag, message);
+                }
+                if (logLevel == 4) {
+                    Controller.getController().dispose();
+                }
+                break;
+            }
+        }
+    }
+    /***
+     * {@summary Save or print log using Gdx.app settings.}
+     * 
+     * @param logLevel int value from 0 (debug) to 4 (error) to represent gravity of log
+     * @param tag      tag of the log
+     * @param message  message of the log
+     */
+    public static void log(int logLevel, String tag, String message) { log(logLevel, tag, message, null); }
+    /***
+     * {@summary Save or print log using Gdx.app settings.}
+     * 
+     * @param logLevel int value from 0 (debug) to 4 (error) to represent gravity of log
+     * @param message  message of the log
+     */
+    public static void log(int logLevel, String message) { log(logLevel, null, message); }
+    /***
+     * {@summary Save or print log using Gdx.app settings.}
+     * 
+     * @param message message of the log
+     */
+    public static void log(String message) { log(0, message); }
+    /**
+     * {@summary Return log level String.}
+     * 
+     * @param logLevel int value from 0 (debug) to 4 (error) to represent gravity of log
+     * @return log level String
+     */
+    private static String logLevelToString(int logLevel) {
+        switch (logLevel) {
+        case 0:
+            return "DEBUG";
+        case 1:
+            return "INFO";
+        case 2:
+            return "WARNING";
+        case 3:
+            return "ERROR";
+        case 4:
+            return "FATAL ERROR";
+        default:
+            return "NULL";
+        }
+    }
+    /**
+     * {@summary Return log level String color.}
+     * 
+     * @param logLevel int value from 0 (debug) to 4 (error) to represent gravity of log
+     * @return log level String color
+     */
+    private static String logLevelToStringColor(int logLevel) {
+        switch (logLevel) {
+        case 0:
+            return color.BROWN;
+        case 1:
+            return color.BLUE;
+        case 2:
+            return color.YELLOW;
+        case 3:
+            return color.RED;
+        case 4:
+            return color.RED;
+        default:
+            return color.NEUTRAL;
+        }
+    }
+    /***
+     * {@summary Return current time in standardized format.}
+     * 
+     * @return current time in standardized format
+     */
+    public static String getCurrentTime() { return formatter.format(new Date(System.currentTimeMillis())); }
+
 
     private void setOptionsFromArgs() {
         if (args == null) {
             return;
         }
         for (String arg : args) {
+            while (arg != null && arg.length() > 1 && arg.charAt(0) == '-') {
+                arg = arg.substring(1);
+            }
             switch (arg) {
-            case "--version", "-v": {
+            case "version", "v": {
                 FileHandle versionFile = Gdx.files.internal("version.md");
                 System.out.println(ReadFile.readFile(versionFile.file()));
                 System.exit(0);
+                break;
+            }
+            case "quiet", "q": {
+                logLevel = Application.LOG_NONE;
+                break;
+            }
+            case "verbose": {
+                logLevel = Application.LOG_DEBUG;
+                break;
+            }
+            case "launchFromLauncher": {
+                launchFromLauncher = true;
+                logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
+                break;
             }
             default: {
                 erreur.alerte(arg + " don't match any args possible");

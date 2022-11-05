@@ -27,6 +27,8 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        log4jVersion = '2.19.0'
+        junitVersion = '5.9.1'
     }
 
     repositories {
@@ -103,7 +105,9 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation 'com.github.HydrolienF:usual:0.2.103'
-        testImplementation('org.junit.jupiter:junit-jupiter:5.9.1')
+        testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+        // implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
+        // implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
     }
 
     test {

@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -60,6 +61,7 @@ public class Hud implements Disposable {
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
+        App.log(0, "constructor", "new Hud: " + toString());
     }
 
     public Stage getStage() { return stage; }

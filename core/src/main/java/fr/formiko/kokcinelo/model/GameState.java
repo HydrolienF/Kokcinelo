@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -307,7 +308,7 @@ public class GameState {
                 } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                         | NoSuchMethodException | SecurityException e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    System.out.println("Fail to add a new Creature");
+                    App.log(3, "", "Fail to add a new Creature", e);
                     e.printStackTrace();
                 }
             }

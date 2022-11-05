@@ -35,6 +35,7 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
+        App.log(0, "constructor", "new Controller: " + toString());
     }
 
     // GET SET -------------------------------------------------------------------
@@ -152,6 +153,8 @@ public class Controller {
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
     }
+
+    public void dispose() { app.dispose(); }
     /**
      * {@summary Return current used camera.}
      * 

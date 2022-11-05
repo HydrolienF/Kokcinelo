@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.tools.Math;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,6 +49,7 @@ public class MapActor extends Actor {
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
+        App.log(0, "constructor", "new MapActor: " + toString());
     }
 
     /**
@@ -86,7 +88,6 @@ public class MapActor extends Actor {
                     c = circle;
                     break;
                 }
-                System.out.println("new textureWithDark");
                 textureWithDark = new Texture(getMaskPixmap((int) c.radius));
             }
             return textureWithDark;

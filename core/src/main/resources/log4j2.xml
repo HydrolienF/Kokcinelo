@@ -1,0 +1,10 @@
+<Configuration status="debug" name="baeldung" packages="">
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %p %m%n" />
+        </Console>
+    </Appenders>
+    <Root level="debug">
+        <AppenderRef ref="STDOUT" />
+    </Root>
+</Configuration>
