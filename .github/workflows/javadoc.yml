@@ -1,0 +1,48 @@
+#Common javadoc for all the formiko connected project
+
+name: Javadoc
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  JAVA_VERSION: '18'
+  JAVA_DISTRIBUTION: 'temurin'
+  JRE_VERSION: '18.0.6'
+  GITHUB_TOKEN: ${{ github.token }}
+  ARTIFACT_NAME: 'Kokcinelo'
+
+jobs:
+  updateJavadoc:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: ${{ env.JAVA_DISTRIBUTION }}
+        java-version: ${{ env.JAVA_VERSION }}
+    - name: Javadoc update
+      run: |
+        # TODO use personalized header for Javadoc
+        ./gradlew :core:doc
+        mv core/build/docs/ docs/
+
+    - name: Commit
+      run: |
+        if [[ `git status --untracked-files=no --porcelain docs/` != "\n" ]]; then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git config pull.rebase true
+          git add docs/
+          git commit -m "Auto javadoc update"
+          git fetch
+          git pull
+          git push
+        fi

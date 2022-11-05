@@ -29,8 +29,7 @@ public class Controller {
     /**
      * {@summary Main constructor.}
      * 
-     * @param app     app to send action to
-     * @param gScreen GameScreen to send action to
+     * @param app app to send action to
      */
     public Controller(App app) {
         this.app = app;
@@ -81,7 +80,7 @@ public class Controller {
     /**
      * {@summary Move aphids.}
      * Aphids first run away from the closest ladybug they can see if they can see one.
-     * Else they move slowly to a random direction & some time change it.
+     * Else they move slowly to a random direction &#38; some time change it.
      * If they hit a wall, they change there wanted rotation angle for the nexts turns.
      */
     public void moveAphids() {

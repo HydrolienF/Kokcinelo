@@ -32,8 +32,8 @@ public abstract class MapItem {
     /**
      * {@summary Only for test constructor.}
      * 
-     * @param width
-     * @param height
+     * @param width  width of Map
+     * @param height height of Map
      */
     protected MapItem(int width, int height) {
         id = idCpt++;
