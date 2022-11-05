@@ -28,10 +28,15 @@ jobs:
       with:
         distribution: ${{ env.JAVA_DISTRIBUTION }}
         java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Version-Tool
+      uses: HydrolienF/Version-Tool@0.6.4
+      id: version
+
     - name: Javadoc update
       run: |
         # TODO use personalized header for Javadoc
-        ./gradlew :core:doc
+        ./gradlew :core:doc -Pversion='${{ steps.version.outputs.version }}'
         mv core/build/docs/ docs/
 
     - name: Commit
