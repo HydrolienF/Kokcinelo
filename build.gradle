@@ -104,7 +104,7 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation 'com.github.HydrolienF:usual:0.2.103'
+        api "com.github.HydrolienF:usual:0.2.103"
         testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
         // implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
         // implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
