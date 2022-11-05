@@ -1,5 +1,7 @@
 # Kokcinelo
 
+Support & community channel: https://discord.gg/vqvfGzf
+
 # Principle of the game
 Kokcinelo is a small, multiplayer competitive/cooperative game where players enbody ladybugs (kokcineloj) or ants (formikoj).
 The aim of ladybugs is to eat as much aphid as possible when ant aim is to save as much aphid as possible.
