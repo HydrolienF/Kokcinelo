@@ -36,9 +36,10 @@ jobs:
     - name: Javadoc update
       run: |
         # TODO use personalized header for Javadoc
-        rm -fr docs/javadoc/
         ./gradlew :core:doc -Pversion='${{ steps.version.outputs.version }}'
-        mv core/build/docs/ docs/
+        rm -fr docs/
+        mkdir docs
+        mv core/build/docs/* docs/.
 
     - name: Commit
       run: |
