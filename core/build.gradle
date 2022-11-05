@@ -10,6 +10,7 @@ task doc(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
     options.addBooleanOption("version", true)
+    title = "Kokcinelo Core Javadoc "+version
 }
 
 //TODO add Jacoco to (cf https://docs.gradle.org/current/userguide/jacoco_plugin.html)
