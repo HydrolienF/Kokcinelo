@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -72,6 +73,7 @@ public class EndGameMenu implements Disposable {
         table.add(replayButton).expandX();
 
         stage.addActor(table);
+        App.log(0, "constructor", "new EndGameMenu: " + toString());
     }
 
     // GET SET -------------------------------------------------------------------

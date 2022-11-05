@@ -12,12 +12,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
  * @since 0.1
  */
 public class DesktopLauncher {
-	public static void main(String[] arg) {
+	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setWindowedMode(1920, 1080);
 		// config.useVsync(true);
 		config.setTitle("Kokcinelo");
-		new Lwjgl3Application(new App(), config);
+		new Lwjgl3Application(new App(args), config);
 	}
 }

@@ -68,6 +68,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
         createTextUI();
         game.playGameMusic();
+        App.log(0, "constructor", "new GameScreen: " + toString());
     }
 
     // GET SET -------------------------------------------------------------------
@@ -178,7 +179,7 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {
         if (isStop) {
-            System.out.println("Can't resume stop game.");
+            App.log(2, "Can't resume stop game.");
             return;
         }
         isPause = false;
