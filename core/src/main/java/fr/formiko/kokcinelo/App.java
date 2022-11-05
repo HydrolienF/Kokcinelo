@@ -1,8 +1,6 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.usual.ReadFile;
 import fr.formiko.usual.color;
-import fr.formiko.usual.erreur;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.badlogic.gdx.Application;
@@ -154,6 +152,8 @@ public class App extends Game {
                 }
                 break;
             }
+        } else {
+            System.out.println("[" + tag + "] " + message);
         }
     }
     /***
@@ -240,7 +240,7 @@ public class App extends Game {
             switch (arg) {
             case "version", "v": {
                 FileHandle versionFile = Gdx.files.internal("version.md");
-                System.out.println(ReadFile.readFile(versionFile.file()));
+                System.out.println(versionFile.readString());
                 System.exit(0);
                 break;
             }
@@ -258,7 +258,7 @@ public class App extends Game {
                 break;
             }
             default: {
-                erreur.alerte(arg + " don't match any args possible");
+                log(2, arg + " don't match any args possible");
             }
             }
         }
