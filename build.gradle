@@ -19,9 +19,8 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '0.1'
     ext {
-        appName = "kokcinelo"
+        appName = "Kokcinelo"
         gdxVersion = '1.11.0'
         roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'
