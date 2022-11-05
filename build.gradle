@@ -13,17 +13,14 @@ buildscript {
         classpath 'org.gretty:gretty:3.0.7'
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
-        
-
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.0'
     ext {
-        appName = "kokcinelo"
+        appName = "Kokcinelo"
         gdxVersion = '1.11.0'
         roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'
@@ -67,24 +64,22 @@ project(":desktop") {
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-        
 //     }
 // }
 
-// project(":ios") {
-//     apply plugin: "java-library"
-//     apply plugin: "robovm"
+project(":ios") {
+    apply plugin: "java-library"
+    apply plugin: "robovm"
 
 
-//     dependencies {
-//         implementation project(":core")
-//         api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
-//         api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-//         api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-//         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        
-//     }
-// }
+    dependencies {
+        implementation project(":core")
+        api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+        api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    }
+}
 
 project(":html") {
     apply plugin: "java-library"
@@ -98,7 +93,6 @@ project(":html") {
         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
         api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        
     }
 }
 
@@ -108,6 +102,15 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        testImplementation('org.junit.jupiter:junit-jupiter:5.9.1')
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
 }
+

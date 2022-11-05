@@ -1,6 +1,15 @@
 sourceCompatibility = 17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+// this is default value :
+// sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 
 eclipse.project.name = appName + "-core"
+
+task doc(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+    options.addBooleanOption("version", true)
+}
+
+//TODO add Jacoco to (cf https://docs.gradle.org/current/userguide/jacoco_plugin.html)

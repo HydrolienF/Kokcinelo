@@ -1,0 +1,54 @@
+name: publish release with maven
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+env:
+  JAVA_VERSION: '18'
+  JAVA_DISTRIBUTION: 'temurin'
+  JRE_VERSION: '18.0.6'
+  GITHUB_TOKEN: ${{ github.token }}
+  ARTIFACT_NAME: 'Kokcinelo'
+
+jobs:
+  releaseJob:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: ${{ env.JAVA_DISTRIBUTION }}
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Version-Tool
+      uses: HydrolienF/Version-Tool@0.6.4
+      id: version
+
+    - name: create release
+      run: |
+        ./gradlew desktop:dist -Pversion='${{ steps.version.outputs.version }}'
+        ls desktop/build/libs/
+        mv desktop/build/libs/Kokcinelo-${{ steps.version.outputs.version }}.jar Kokcinelo.jar
+        ls
+
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: true
+        release_name: ${{ steps.version.outputs.version }}
+        tag_name: ${{ steps.version.outputs.version }}
+        body_path: CHANGELOG.md
+    - name: upload .jar artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ env.ARTIFACT_NAME}}.jar
+        asset_name: ${{ env.ARTIFACT_NAME}}.jar
+        asset_content_type: application/jar
