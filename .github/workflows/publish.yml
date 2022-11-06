@@ -57,10 +57,10 @@ jobs:
         asset_name: ${{ env.ARTIFACT_NAME}}.jar
         asset_content_type: application/jar
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.8
+      uses: HydrolienF/LauncherJar@0.1.9
       with:
         project-name: Kokcinelo
-        launcher-jar-version: 0.1.8
+        launcher-jar-version: 0.1.9
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
