@@ -69,18 +69,18 @@ jobs:
         launcher-extension: 'jar'
 
   WindowsArtifact:
-      if: github.event.pull_request.merged == true
-      needs: releaseJob
-      runs-on: windows-latest
-      steps:
-      - uses: actions/checkout@v3
+    if: github.event.pull_request.merged == true
+    needs: releaseJob
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
 
-      - name: LauncherJar
-      uses: HydrolienF/LauncherJar@${{ env.LAUNCHER_JAR_VERSION }}
-      with:
-        project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: ${{ env.LAUNCHER_JAR_VERSION }}
-        GITHUB_TOKEN: ${{ github.token }}
-        release-url: ${{ steps.create_release.outputs.upload_url }}
-        app-version: ${{ steps.version.outputs.version }}
-        launcher-extension: 'msi'
+    - name: LauncherJar
+    uses: HydrolienF/LauncherJar@${{ env.LAUNCHER_JAR_VERSION }}
+    with:
+      project-name: ${{ env.ARTIFACT_NAME }}
+      launcher-jar-version: ${{ env.LAUNCHER_JAR_VERSION }}
+      GITHUB_TOKEN: ${{ github.token }}
+      release-url: ${{ steps.create_release.outputs.upload_url }}
+      app-version: ${{ steps.version.outputs.version }}
+      launcher-extension: 'msi'
