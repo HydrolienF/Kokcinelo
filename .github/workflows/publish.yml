@@ -26,7 +26,7 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
 
     - name: Version-Tool
-      uses: HydrolienF/Version-Tool@0.6.4
+      uses: HydrolienF/Version-Tool@0.7.0
       id: version
 
     - name: update version.md
@@ -57,7 +57,9 @@ jobs:
         asset_name: ${{ env.ARTIFACT_NAME}}.jar
         asset_content_type: application/jar
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.4
+      uses: HydrolienF/LauncherJar@0.1.5
       with:
         project-name: Kokcinelo
-        launcher-jar-version: 0.1.4
+        launcher-jar-version: 0.1.5
+        GITHUB_TOKEN: ${{ github.token }}
+      release-url: ${{ steps.create_release.outputs.upload_url }} 
