@@ -34,8 +34,8 @@ public class App extends Game {
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
-     * {@summary Main function call when App is created}
-     * It call MainMenuScreen
+     * {@summary Main function call when App is created.}
+     * It call MainMenuScreen.
      * 
      * @see com.badlogic.gdx.ApplicationListener#create()
      */
