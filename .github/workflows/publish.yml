@@ -87,7 +87,7 @@ jobs:
   LinuxArtifact:
     if: github.event.pull_request.merged == true
     needs: releaseJob
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
@@ -104,7 +104,7 @@ jobs:
   MacArtifact:
     if: github.event.pull_request.merged == true
     needs: releaseJob
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
 
