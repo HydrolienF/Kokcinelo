@@ -58,10 +58,10 @@ jobs:
         asset_name: ${{ env.ARTIFACT_NAME}}.jar
         asset_content_type: application/jar
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.15
+      uses: HydrolienF/LauncherJar@0.1.16
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.15
+        launcher-jar-version: 0.1.16
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
@@ -75,10 +75,10 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.15
+      uses: HydrolienF/LauncherJar@0.1.16
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.15
+        launcher-jar-version: 0.1.16
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
@@ -92,10 +92,10 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.15
+      uses: HydrolienF/LauncherJar@0.1.16
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.15
+        launcher-jar-version: 0.1.16
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
@@ -109,10 +109,10 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.15
+      uses: HydrolienF/LauncherJar@0.1.16
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.15
+        launcher-jar-version: 0.1.16
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
