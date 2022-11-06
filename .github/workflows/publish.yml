@@ -62,4 +62,4 @@ jobs:
         project-name: Kokcinelo
         launcher-jar-version: 0.1.5
         GITHUB_TOKEN: ${{ github.token }}
-      release-url: ${{ steps.create_release.outputs.upload_url }} 
+        release-url: ${{ steps.create_release.outputs.upload_url }} 
