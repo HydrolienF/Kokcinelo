@@ -26,7 +26,7 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
 
     - name: Version-Tool
-      uses: HydrolienF/Version-Tool@0.7.0
+      uses: HydrolienF/Version-Tool@0.7.1
       id: version
 
     - name: update version.md
