@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.usual.Usual;
 import fr.formiko.usual.color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,10 @@ public class App extends Game {
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
 
-    public App(String[] args) { this.args = args; }
+    public App(String[] args) {
+        this.args = args;
+        Usual.main(args);
+    }
     public App() { this(null); }
 
     // FUNCTIONS -----------------------------------------------------------------
