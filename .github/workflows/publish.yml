@@ -83,3 +83,37 @@ jobs:
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
         launcher-extension: 'msi'
+
+  LinuxArtifact:
+    if: github.event.pull_request.merged == true
+    needs: releaseJob
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: LauncherJar
+      uses: HydrolienF/LauncherJar@0.1.14
+      with:
+        project-name: ${{ env.ARTIFACT_NAME }}
+        launcher-jar-version: 0.1.14
+        GITHUB_TOKEN: ${{ github.token }}
+        release-url: ${{ steps.create_release.outputs.upload_url }}
+        app-version: ${{ steps.version.outputs.version }}
+        launcher-extension: 'deb'
+
+  MacArtifact:
+    if: github.event.pull_request.merged == true
+    needs: releaseJob
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: LauncherJar
+      uses: HydrolienF/LauncherJar@0.1.14
+      with:
+        project-name: ${{ env.ARTIFACT_NAME }}
+        launcher-jar-version: 0.1.14
+        GITHUB_TOKEN: ${{ github.token }}
+        release-url: ${{ steps.create_release.outputs.upload_url }}
+        app-version: ${{ steps.version.outputs.version }}
+        launcher-extension: 'dmg'
