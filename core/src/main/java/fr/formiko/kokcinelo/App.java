@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.usual.Usual;
 import fr.formiko.usual.color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +31,6 @@ public class App extends Game {
 
     public App(String[] args) {
         this.args = args;
-        Usual.main(args);
     }
     public App() { this(null); }
 
