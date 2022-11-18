@@ -63,8 +63,8 @@ jobs:
       uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
+        user-name: ${{ env.USER_NAME }}
         launcher-jar-version: 0.1.46
-        project-name: ${{ env.USER_NAME }}
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
@@ -81,7 +81,7 @@ jobs:
       uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        project-name: ${{ env.USER_NAME }}
+        user-name: ${{ env.USER_NAME }}
         launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
@@ -99,7 +99,7 @@ jobs:
       uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        project-name: ${{ env.USER_NAME }}
+        user-name: ${{ env.USER_NAME }}
         launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
@@ -117,7 +117,7 @@ jobs:
       uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        project-name: ${{ env.USER_NAME }}
+        user-name: ${{ env.USER_NAME }}
         launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
