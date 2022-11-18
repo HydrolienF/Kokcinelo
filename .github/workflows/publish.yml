@@ -81,8 +81,8 @@ jobs:
         project-name: ${{ env.ARTIFACT_NAME }}
         launcher-jar-version: 0.1.45
         GITHUB_TOKEN: ${{ github.token }}
-        release-url: ${{ steps.create_release.outputs.upload_url }}
-        app-version: ${{ steps.version.outputs.version }}
+        release-url: ${{ needs.releaseJob.outputs.upload_url }}
+        app-version: ${{ needs.releaseJob.outputs.version }}
         launcher-extension: 'msi'
 
   LinuxArtifact:
@@ -98,8 +98,8 @@ jobs:
         project-name: ${{ env.ARTIFACT_NAME }}
         launcher-jar-version: 0.1.45
         GITHUB_TOKEN: ${{ github.token }}
-        release-url: ${{ steps.create_release.outputs.upload_url }}
-        app-version: ${{ steps.version.outputs.version }}
+        release-url: ${{ needs.releaseJob.outputs.upload_url }}
+        app-version: ${{ needs.releaseJob.outputs.version }}
         launcher-extension: 'deb'
 
   MacArtifact:
@@ -115,6 +115,6 @@ jobs:
         project-name: ${{ env.ARTIFACT_NAME }}
         launcher-jar-version: 0.1.45
         GITHUB_TOKEN: ${{ github.token }}
-        release-url: ${{ steps.create_release.outputs.upload_url }}
-        app-version: ${{ steps.version.outputs.version }}
+        release-url: ${{ needs.releaseJob.outputs.upload_url }}
+        app-version: ${{ needs.releaseJob.outputs.version }}
         launcher-extension: 'dmg'
