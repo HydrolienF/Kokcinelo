@@ -11,6 +11,7 @@ env:
   JRE_VERSION: '18.0.7'
   GITHUB_TOKEN: ${{ github.token }}
   ARTIFACT_NAME: 'Kokcinelo'
+  USER_NAME: 'HydrolienF'
 
 jobs:
   releaseJob:
@@ -59,10 +60,11 @@ jobs:
         asset_name: ${{ env.ARTIFACT_NAME}}.jar
         asset_content_type: application/jar
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.45
+      uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.45
+        launcher-jar-version: 0.1.46
+        project-name: ${{ env.USER_NAME }}
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
@@ -76,10 +78,11 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.45
+      uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.45
+        project-name: ${{ env.USER_NAME }}
+        launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
         app-version: ${{ needs.releaseJob.outputs.version }}
@@ -93,10 +96,11 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.45
+      uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.45
+        project-name: ${{ env.USER_NAME }}
+        launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
         app-version: ${{ needs.releaseJob.outputs.version }}
@@ -110,10 +114,11 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.1.45
+      uses: HydrolienF/LauncherJar@0.1.46
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
-        launcher-jar-version: 0.1.45
+        project-name: ${{ env.USER_NAME }}
+        launcher-jar-version: 0.1.46
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
         app-version: ${{ needs.releaseJob.outputs.version }}
