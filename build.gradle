@@ -29,6 +29,7 @@ allprojects {
         gdxControllersVersion = '2.2.1'
         log4jVersion = '2.19.0'
         junitVersion = '5.9.1'
+        usualVersion = '0.2.117'
     }
 
     repositories {
@@ -95,6 +96,9 @@ project(":html") {
         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
         api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+
+        // Isn't enoth, maybe because it start with 
+        api "com.github.HydrolienF:usual:$usualVersion"
     }
 }
 
@@ -104,7 +108,7 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "com.github.HydrolienF:usual:0.2.117"
+        api "com.github.HydrolienF:usual:$usualVersion"
         testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     }
 

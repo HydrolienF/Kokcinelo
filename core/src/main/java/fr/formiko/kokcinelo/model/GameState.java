@@ -2,7 +2,6 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.view.MapActor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -281,16 +280,16 @@ public class GameState {
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
-                    Creature c = creatureClass.getDeclaredConstructor().newInstance();
+                    // Creature c = creatureClass.getDeclaredConstructor().newInstance(); //HTML INCOMPATIBLE
                     // version to replace last line that work in html
-                    // Creature c = null;
-                    // if (creatureClass.toString().endsWith("Aphid")) {
-                    // c = new Aphid();
-                    // } else if (creatureClass.toString().endsWith("Ant")) {
-                    // c = new Ant();
-                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
-                    // c = new Ladybug();
-                    // }
+                    Creature c = null;
+                    if (creatureClass.toString().endsWith("Aphid")) {
+                        c = new Aphid();
+                    } else if (creatureClass.toString().endsWith("Ant")) {
+                        c = new Ant();
+                    } else if (creatureClass.toString().endsWith("Ladybug")) {
+                        c = new Ladybug();
+                    }
                     if (randomLocaction) {
                         c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
@@ -305,8 +304,10 @@ public class GameState {
                         }
                     }
                     gs.addCreature(c);
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                        | NoSuchMethodException | SecurityException e) {
+                    // HTML INCOMPATIBLE
+                    // } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                    // | NoSuchMethodException | SecurityException e) {
+                } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
                     App.log(3, "", "Fail to add a new Creature", e);
                     e.printStackTrace();
