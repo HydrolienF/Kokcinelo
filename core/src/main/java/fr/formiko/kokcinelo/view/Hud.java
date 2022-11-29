@@ -34,8 +34,10 @@ public class Hud implements Disposable {
     /**
      * {@summary Main constructor}
      * 
-     * @param sb         SpriteBatch to use
-     * @param worldTimer starting value of world timer
+     * @param sb
+     *            SpriteBatch to use
+     * @param worldTimer
+     *            starting value of world timer
      */
     public Hud(SpriteBatch sb, int worldTimer) {
         this.worldTimer = worldTimer;
@@ -44,7 +46,8 @@ public class Hud implements Disposable {
         // define our stage using that viewport and our games spritebatch
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
-        Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
+        BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+        Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
         countdownLabel = new Label("", style);
         scoreLabel = new Label("", style);
 
@@ -64,14 +67,21 @@ public class Hud implements Disposable {
         App.log(0, "constructor", "new Hud: " + toString());
     }
 
-    public Stage getStage() { return stage; }
-    public void setPlayerScore(int value) { scoreLabel.setText("" + value); }
-    public boolean isTimeUp() { return timeUp; }
+    public Stage getStage() {
+        return stage;
+    }
+    public void setPlayerScore(int value) {
+        scoreLabel.setText("" + value);
+    }
+    public boolean isTimeUp() {
+        return timeUp;
+    }
 
     /**
      * {@summary Update Component that need to be update on time.}
      * 
-     * @param dt Delta time that occure since last update
+     * @param dt
+     *            Delta time that occure since last update
      */
     public void update(float dt) {
         timeCount += dt;
@@ -87,6 +97,8 @@ public class Hud implements Disposable {
     }
 
     @Override
-    public void dispose() { stage.dispose(); }
+    public void dispose() {
+        stage.dispose();
+    }
 
 }

@@ -1,8 +1,6 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.usual.color;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+// import fr.formiko.usual.color;//HTML INCOMPATIBLE
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,13 +23,11 @@ public class App extends Game {
     private Sound eatingSound;
     private Music mainMusic;
     private String[] args;
-    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    // private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
 
-    public App(String[] args) {
-        this.args = args;
-    }
+    public App(String[] args) { this.args = args; }
     public App() { this(null); }
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -44,7 +40,7 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
-        color.iniColor();
+        // color.iniColor();//HTML INCOMPATIBLE
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
@@ -76,7 +72,8 @@ public class App extends Game {
     @Override
     public void dispose() {
         // TODO be able to dispose even for html version
-        System.exit(0);
+        // System.exit(0); //HTML INCOMPATIBLE
+        Gdx.app.exit();
     }
 
     // music --------------------------------------------------------------------------------------
@@ -126,14 +123,16 @@ public class App extends Game {
      */
     public static void log(int logLevel, String tag, String message, Exception exception) {
         // tag = updatedTag(logLevel, tag);
-        String tagTemp = getCurrentTime() + " " + logLevelToString(logLevel) + " " + Thread.currentThread().getName();
+        String tagTemp = getCurrentTime() + " " + logLevelToString(logLevel);
+        // tagTemp+= " " + Thread.currentThread().getName(); //HTML INCOMPATIBLE
         if (tag == null || tag.equals("")) {
             tag = tagTemp;
         } else {
             tag = tagTemp + " " + tag;
         }
         if (!launchFromLauncher) {
-            tag = logLevelToStringColor(logLevel) + tag + color.NEUTRAL;
+            tag = logLevelToStringColor(logLevel) + tag;
+            // tag+=color.NEUTRAL;//HTML INCOMPATIBLE
         }
         if (Gdx.app != null) {
             switch (logLevel) {
@@ -143,7 +142,10 @@ public class App extends Game {
             case 1:
                 Gdx.app.log(tag, message);
                 break;
-            case 2, 3, 4:
+            // case 2, 3, 4: //HTML INCOMPATIBLE
+            case 2:
+            case 3:
+            case 4:
                 if (exception != null) {
                     Gdx.app.error(tag, message, exception);
                 } else {
@@ -208,27 +210,32 @@ public class App extends Game {
      * @return log level String color
      */
     private static String logLevelToStringColor(int logLevel) {
-        switch (logLevel) {
-        case 0:
-            return color.BROWN;
-        case 1:
-            return color.BLUE;
-        case 2:
-            return color.YELLOW;
-        case 3:
-            return color.RED;
-        case 4:
-            return color.RED;
-        default:
-            return color.NEUTRAL;
-        }
+        // HTML INCOMPATIBLE
+        // switch (logLevel) {
+        // case 0:
+        // return color.BROWN;
+        // case 1:
+        // return color.BLUE;
+        // case 2:
+        // return color.YELLOW;
+        // case 3:
+        // return color.RED;
+        // case 4:
+        // return color.RED;
+        // default:
+        // return color.NEUTRAL;
+        // }
+        return "";
     }
     /***
      * {@summary Return current time in standardized format.}
      * 
      * @return current time in standardized format
      */
-    public static String getCurrentTime() { return formatter.format(new Date(System.currentTimeMillis())); }
+    public static String getCurrentTime() {
+        // return formatter.format(new Date(System.currentTimeMillis()));//HTML INCOMPATIBLE
+        return "";
+    }
 
 
     private void setOptionsFromArgs() {
@@ -240,13 +247,18 @@ public class App extends Game {
                 arg = arg.substring(1);
             }
             switch (arg) {
-            case "version", "v": {
+            // case "version", "v": { //HTML INCOMPATIBLE
+            case "version":
+            case "v": {
                 FileHandle versionFile = Gdx.files.internal("version.md");
                 System.out.println(versionFile.readString());
-                System.exit(0);
+                // System.exit(0); //HTML INCOMPATIBLE
+                Gdx.app.exit();
                 break;
             }
-            case "quiet", "q": {
+            // case "quiet", "q": { //HTML INCOMPATIBLE
+            case "quiet":
+            case "q": {
                 logLevel = Application.LOG_NONE;
                 break;
             }
