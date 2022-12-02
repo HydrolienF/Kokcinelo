@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     private float maxZoom;
     private boolean isPause;
     private boolean isStop;
+    private boolean stopAfterNextDrawBool;
     private InputMultiplexer inputMultiplexer;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -88,6 +89,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
         if (!isPause) {
             update(delta);
@@ -110,6 +112,10 @@ public class GameScreen implements Screen {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
             egm.getStage().act(delta);
             egm.getStage().draw();
+        }
+        if (stopAtTheEnd) {
+            stopAfterNextDrawBool = false;
+            stop();
         }
     }
 
@@ -191,6 +197,11 @@ public class GameScreen implements Screen {
         isStop = true;
         pause();
     }
+    /***
+     * {@summary Definitivly stop current game after next draw.}
+     * It can be use to update game screen a last time before stop.
+     */
+    public void stopAfterNextDraw() { stopAfterNextDrawBool = true; }
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() { hud = new Hud(game.batch, 60); }

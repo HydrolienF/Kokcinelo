@@ -156,11 +156,11 @@ public class GameState {
      * 
      * @param playerId current player id
      */
-    public void updateActorVisibility(int playerId) {
+    public void updateActorVisibility(int playerId, boolean spectatorMode) {
         Creature playedCreature = getPlayerCreature(playerId);
         if (playedCreature != null) {
             for (Creature creature : allCreatures()) {
-                creature.getActor().setVisible(playedCreature.see(creature));
+                creature.getActor().setVisible(playedCreature.see(creature) || spectatorMode);
             }
         }
     }

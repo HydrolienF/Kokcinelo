@@ -71,6 +71,7 @@ public class MapItemActor extends Actor {
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
                 getRotation());
+
         if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
             batch.end();
             Creature c = (Creature) mapItem;

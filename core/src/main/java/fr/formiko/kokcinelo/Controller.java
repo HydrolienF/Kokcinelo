@@ -22,6 +22,7 @@ public class Controller {
     private GameState gs;
     private App app;
     private GameScreen gScreen;
+    private boolean spectatorMode;
 
     private static Controller controller;
 
@@ -42,7 +43,8 @@ public class Controller {
     public static void setController(Controller controller) { Controller.controller = controller; }
     public GameScreen getGameScreen() { return gScreen; }
     public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
-
+    public boolean isSpectatorMode() { return spectatorMode; }
+    public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -70,9 +72,11 @@ public class Controller {
         c.moveIn(gs.getMapWidth(), gs.getMapHeight());
         // synchonize things that depend of c position
         synchronizeCamera(c);
+
         if (gs.getMapActorFg() != null) {
             gs.getMapActorFg().setX(c.getCenterX() - gs.getMapActorFg().getWidth() / 2);
             gs.getMapActorFg().setY(c.getCenterY() - gs.getMapActorFg().getHeight() / 2);
+            gs.getMapActorFg().setVisible(!isSpectatorMode());
         }
         c.goTo(getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
     }
@@ -122,12 +126,13 @@ public class Controller {
      * Set current Screen as a new GameScreen.
      */
     public void createNewGame() {
+        setSpectatorMode(false);
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
         gScreen = new GameScreen(app);
         app.setScreen(gScreen);
     }
     public void restartGame() { createNewGame(); }
-    public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
+    public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
@@ -147,7 +152,8 @@ public class Controller {
      * {@summary End game by launching sound &#38; end game menu.}
      */
     public void gameOver() {
-        gScreen.stop();
+        setSpectatorMode(true);
+        gScreen.stopAfterNextDraw();
         boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
