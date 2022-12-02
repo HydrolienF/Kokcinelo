@@ -198,13 +198,13 @@ public class MapActor extends Actor {
         for (int i = 0; i < sticks; i++) {
             // TODO fill intercection with one more triangle.
             pixmap.setColor(getRandomBrown());
-            float x = (float) (random() * width);
-            float y = (float) (random() * height);
+            float thikness = (float) ((random() * (MAX_STIK_WIDTH - MIN_STIK_WIDTH)) + MIN_STIK_WIDTH);
+            float x = (float) (random() * width - thikness) + thikness / 2;
+            float y = (float) (random() * height - thikness) + thikness / 2;
             int segments = (int) (random() * MAX_STIK_SEGMENT - MIN_STIK_SEGMENT) + MIN_STIK_SEGMENT;
             int subsegments = (int) (random() * MAX_STIK_SUBSEGMENT + 0.8);
             float rotation = (float) (random() * 360);
             float length = (float) ((random() * (MAX_STIK_LENGTH - MIN_STIK_LENGTH)) + MIN_STIK_LENGTH);
-            float thikness = (float) ((random() * (MAX_STIK_WIDTH - MIN_STIK_WIDTH)) + MIN_STIK_WIDTH);
             drawStickBranch(pixmap, width, height, x, y, segments, subsegments, rotation, length, thikness);
         }
     }
