@@ -67,7 +67,8 @@ public class GameScreen implements Screen {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
-        createTextUI();
+        createTextUI(-1);
+        pause();
         App.log(0, "constructor", "new GameScreen: " + toString());
     }
 
@@ -91,7 +92,11 @@ public class GameScreen implements Screen {
         boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
         if (!isPause) {
-            update(delta);
+            if (delta < 0.5) {
+                update(delta);
+            } else {
+                App.log(1, "skip a delta to avoid lag.");
+            }
         }
         // ScreenUtils.clear(0.1f, 1f, 0f, 1);
         ScreenUtils.clear(0f, 0f, 0f, 1);
@@ -203,13 +208,14 @@ public class GameScreen implements Screen {
     public void stopAfterNextDraw() { stopAfterNextDrawBool = true; }
 
     // create our game HUD for scores/timers/level info
-    private void createTextUI() { hud = new Hud(game.batch, 60); }
+    private void createTextUI(int gameTime) { hud = new Hud(game.batch, gameTime); }
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
         addProcessor(egm.getStage());
     }
     public void setPlayerScore(int score) { hud.setPlayerScore(score); }
     public boolean isTimeUp() { return hud.isTimeUp(); }
+    public void setGameTime(int gameTime) { hud.setGameTime(gameTime); }
 
 
     // TODO Auto-generated method stub

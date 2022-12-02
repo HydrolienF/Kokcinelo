@@ -126,11 +126,18 @@ public class Controller {
      * Set current Screen as a new GameScreen.
      */
     public void createNewGame() {
+        int gameTime = 60;
         setSpectatorMode(false);
-        app.playGameMusic();
+        app.createGameMusic();
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
         gScreen = new GameScreen(app);
         app.setScreen(gScreen);
+        app.getGameMusic().play();
+        App.log(1, "start new Game");
+        // app.getGameMusic().setPosition(178.1f - gameTime); // end at 178
+        gScreen.resume();
+        gScreen.setGameTime(gameTime);
+        App.log(1, "new Game started");
     }
     public void restartGame() { createNewGame(); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
@@ -153,6 +160,7 @@ public class Controller {
      * {@summary End game by launching sound &#38; end game menu.}
      */
     public void gameOver() {
+        App.log(1, "gameOver");
         if (gScreen.isStop()) {
             return;
         }
@@ -163,7 +171,10 @@ public class Controller {
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
     }
-
+    /**
+     * {@summary Pause game or resume depening of current state.}
+     * It pause move of creature & music.
+     */
     public void pauseResume() {
         if (gScreen.isPause()) {
             gScreen.resume();

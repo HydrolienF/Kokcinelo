@@ -26,22 +26,23 @@ public class Hud implements Disposable {
     private Stage stage;
     private Viewport viewport;
     private Label scoreLabel;
-    private float timeCount;
-    private Integer worldTimer;
+    // private float timeCount;
+    // private Integer worldTimer;
     /** true when the world timer reaches 0 */
     private boolean timeUp;
     private Label countdownLabel;
+    // private long startTime;
+    private float gameTime;
+
     /**
      * {@summary Main constructor}
      * 
-     * @param sb
-     *            SpriteBatch to use
-     * @param worldTimer
-     *            starting value of world timer
+     * @param sb         SpriteBatch to use
+     * @param worldTimer starting value of world timer
      */
     public Hud(SpriteBatch sb, int worldTimer) {
-        this.worldTimer = worldTimer;
-        timeCount = 0;
+        // this.worldTimer = worldTimer;
+        // timeCount = 0;
         // setup the HUD viewport using a new camera seperate from our gamecam
         // define our stage using that viewport and our games spritebatch
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -65,40 +66,46 @@ public class Hud implements Disposable {
 
         stage.addActor(table);
         App.log(0, "constructor", "new Hud: " + toString());
+        // startTime = System.currentTimeMillis();
+        gameTime = worldTimer;
     }
 
-    public Stage getStage() {
-        return stage;
+    public Stage getStage() { return stage; }
+    public void setPlayerScore(int value) { scoreLabel.setText("" + value); }
+    public float getGameTime() { return gameTime; }
+    /**
+     * {@summary Set the game time.}
+     */
+    public void setGameTime(float gameTime) {
+        App.log(1, "gameTime=" + gameTime);
+        this.gameTime = gameTime;
     }
-    public void setPlayerScore(int value) {
-        scoreLabel.setText("" + value);
-    }
-    public boolean isTimeUp() {
-        return timeUp;
-    }
+    public boolean isTimeUp() { return timeUp; }
 
     /**
      * {@summary Update Component that need to be update on time.}
      * 
-     * @param dt
-     *            Delta time that occure since last update
+     * @param dt Delta time that occure since last update
      */
     public void update(float dt) {
-        timeCount += dt;
-        if (timeCount >= 1) {
-            if (worldTimer > 0) {
-                worldTimer--;
-            } else {
-                timeUp = true;
-            }
-            countdownLabel.setText("" + worldTimer);
-            timeCount = 0;
+        gameTime -= dt;
+        countdownLabel.setText("" + (int) (gameTime + 0.1));
+        if (gameTime < 0) {
+            timeUp = true;
         }
+        // timeCount = System.currentTimeMillis() - startTime;
+        // if (timeCount > 0) {
+        // if (worldTimer > 0) {
+        // worldTimer--;
+        // } else {
+        // timeUp = true;
+        // }
+        // countdownLabel.setText("" + worldTimer);
+        // timeCount = 0;
+        // }
     }
 
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
 }
