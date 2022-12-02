@@ -43,11 +43,7 @@ public class InputCore implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P) {
-            if (screen.isPause()) {
-                screen.resume();
-            } else {
-                screen.pause();
-            }
+            controller.pauseResume();
         }
         if (keycode == Input.Keys.S) {
             controller.gameOver();

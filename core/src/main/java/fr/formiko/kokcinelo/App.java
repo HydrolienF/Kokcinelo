@@ -21,7 +21,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
-    private Music mainMusic;
+    private Music gameMusic;
+
     private String[] args;
     // private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
@@ -29,6 +30,8 @@ public class App extends Game {
 
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
+
+    public Music getGameMusic() { return gameMusic; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -81,8 +84,8 @@ public class App extends Game {
      * {@summary Play the game music.}
      */
     public void playGameMusic() {
-        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
-        mainMusic.play();
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
+        gameMusic.play();
     }
     /**
      * {@summary Play the eating sound.}
@@ -108,7 +111,7 @@ public class App extends Game {
             fileName = "lose";
         }
         Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3"));
-        mainMusic.stop();
+        gameMusic.stop();
         s.play();
     }
 

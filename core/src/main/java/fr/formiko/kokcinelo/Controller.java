@@ -127,6 +127,7 @@ public class Controller {
      */
     public void createNewGame() {
         setSpectatorMode(false);
+        app.playGameMusic();
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
         gScreen = new GameScreen(app);
         app.setScreen(gScreen);
@@ -152,11 +153,25 @@ public class Controller {
      * {@summary End game by launching sound &#38; end game menu.}
      */
     public void gameOver() {
+        if (gScreen.isStop()) {
+            return;
+        }
+        app.getGameMusic().dispose();
         setSpectatorMode(true);
         gScreen.stopAfterNextDraw();
-        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
+        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
+    }
+
+    public void pauseResume() {
+        if (gScreen.isPause()) {
+            gScreen.resume();
+            app.getGameMusic().play();
+        } else {
+            gScreen.pause();
+            app.getGameMusic().pause();
+        }
     }
 
     public void dispose() { app.dispose(); }

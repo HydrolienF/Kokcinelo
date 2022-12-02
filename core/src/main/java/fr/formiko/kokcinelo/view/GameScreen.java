@@ -68,7 +68,6 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
         createTextUI();
-        game.playGameMusic();
         App.log(0, "constructor", "new GameScreen: " + toString());
     }
 
