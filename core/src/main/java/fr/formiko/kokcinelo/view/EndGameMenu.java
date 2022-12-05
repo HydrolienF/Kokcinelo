@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -33,6 +35,7 @@ public class EndGameMenu implements Disposable {
     private Label scoreLabel;
     private Image replayButton;
     private boolean haveWin;
+    private int buttonSize;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -57,22 +60,27 @@ public class EndGameMenu implements Disposable {
         scoreLabel = new Label(score * 100 / maxScore + "%",
                 new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         Texture t = new Texture(Gdx.files.internal("images/" + "replay" + ".png"));
-        // TODO change color of t to white.
         replayButton = new Image(new TextureRegionDrawable(t));
         replayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
         });
 
+
         Table table = new Table();
-        table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        table.center();
-        table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2);
+        table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 10);
+        table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 2 / 3);
         table.add(scoreLabel).expandX();
-        // TODO add a replay button.
         table.add(replayButton).expandX();
 
         stage.addActor(table);
+
+        buttonSize = Gdx.graphics.getHeight() / 10;
+        Table btable = getButtonsTable();
+        btable.setSize(buttonSize * 3, buttonSize);
+        btable.setPosition((Gdx.graphics.getWidth() - btable.getWidth()) / 2, 0);
+        stage.addActor(btable);
+
         App.log(0, "constructor", "new EndGameMenu: " + toString());
     }
 
@@ -96,4 +104,33 @@ public class EndGameMenu implements Disposable {
         }
     }
 
+    private Table getButtonsTable() {
+        Table table = new Table();
+        table.add(getClickageLink("homeWebSiteLink", "https://formiko.fr/kokcinelo"));
+        table.add(getClickageLink("discordLink", "https://discord.gg/vqvfGzf"));
+        // table.add(getClickageLink("reportBugLink", "https://formiko.fr/kokcinelo"));
+        table.add(getClickageLink("supportGameLink", "https://tipeee.com/formiko"));
+        return table;
+    }
+
+    private Image getClickageLink(String imageName, String url) {
+        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize);
+        Image b = new Image(new TextureRegionDrawable(t));
+        b.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { Gdx.net.openURI(url); }
+        });
+        b.setScaling(Scaling.fillY);
+        return b;
+    }
+
+    private Texture resizeTexture(String textureName, int size) {
+        Pixmap pixmapIn = new Pixmap(Gdx.files.internal(textureName));
+        Pixmap pixmapOut = new Pixmap(size, size, pixmapIn.getFormat());
+        pixmapOut.drawPixmap(pixmapIn, 0, 0, pixmapIn.getWidth(), pixmapIn.getHeight(), 0, 0, pixmapOut.getWidth(), pixmapOut.getHeight());
+        Texture texture = new Texture(pixmapOut);
+        pixmapIn.dispose();
+        pixmapOut.dispose();
+        return texture;
+    }
 }

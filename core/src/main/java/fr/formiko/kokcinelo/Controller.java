@@ -22,6 +22,7 @@ public class Controller {
     private GameState gs;
     private App app;
     private GameScreen gScreen;
+    private boolean spectatorMode;
 
     private static Controller controller;
 
@@ -42,7 +43,8 @@ public class Controller {
     public static void setController(Controller controller) { Controller.controller = controller; }
     public GameScreen getGameScreen() { return gScreen; }
     public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
-
+    public boolean isSpectatorMode() { return spectatorMode; }
+    public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -70,9 +72,11 @@ public class Controller {
         c.moveIn(gs.getMapWidth(), gs.getMapHeight());
         // synchonize things that depend of c position
         synchronizeCamera(c);
+
         if (gs.getMapActorFg() != null) {
             gs.getMapActorFg().setX(c.getCenterX() - gs.getMapActorFg().getWidth() / 2);
             gs.getMapActorFg().setY(c.getCenterY() - gs.getMapActorFg().getHeight() / 2);
+            gs.getMapActorFg().setVisible(!isSpectatorMode());
         }
         c.goTo(getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
     }
@@ -122,12 +126,21 @@ public class Controller {
      * Set current Screen as a new GameScreen.
      */
     public void createNewGame() {
+        int gameTime = 60;
+        setSpectatorMode(false);
+        app.createGameMusic();
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
         gScreen = new GameScreen(app);
         app.setScreen(gScreen);
+        app.getGameMusic().play();
+        App.log(1, "start new Game");
+        // app.getGameMusic().setPosition(178.1f - gameTime); // end at 178
+        gScreen.resume();
+        gScreen.setGameTime(gameTime);
+        App.log(1, "new Game started");
     }
     public void restartGame() { createNewGame(); }
-    public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId); }
+    public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
@@ -147,10 +160,29 @@ public class Controller {
      * {@summary End game by launching sound &#38; end game menu.}
      */
     public void gameOver() {
-        gScreen.stop();
-        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
+        App.log(1, "gameOver");
+        if (gScreen.isStop()) {
+            return;
+        }
+        app.getGameMusic().dispose();
+        setSpectatorMode(true);
+        gScreen.stopAfterNextDraw();
+        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
+    }
+    /**
+     * {@summary Pause game or resume depening of current state.}
+     * It pause move of creature & music.
+     */
+    public void pauseResume() {
+        if (gScreen.isPause()) {
+            gScreen.resume();
+            app.getGameMusic().play();
+        } else {
+            gScreen.pause();
+            app.getGameMusic().pause();
+        }
     }
 
     public void dispose() { app.dispose(); }

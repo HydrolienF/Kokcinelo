@@ -1,6 +1,8 @@
 package fr.formiko.kokcinelo;
 
-// import fr.formiko.usual.color;//HTML INCOMPATIBLE
+import fr.formiko.usual.color;// HTML INCOMPATIBLE
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -21,14 +23,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
-    private Music mainMusic;
+    private Music gameMusic;
+
     private String[] args;
-    // private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
 
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
+
+    public Music getGameMusic() { return gameMusic; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -80,9 +85,9 @@ public class App extends Game {
     /**
      * {@summary Play the game music.}
      */
-    public void playGameMusic() {
-        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
-        mainMusic.play();
+    public void createGameMusic() {
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
+        // gameMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night shorted.mp3"));
     }
     /**
      * {@summary Play the eating sound.}
@@ -108,7 +113,7 @@ public class App extends Game {
             fileName = "lose";
         }
         Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3"));
-        mainMusic.stop();
+        gameMusic.stop();
         s.play();
     }
 
@@ -132,7 +137,7 @@ public class App extends Game {
         }
         if (!launchFromLauncher) {
             tag = logLevelToStringColor(logLevel) + tag;
-            // tag+=color.NEUTRAL;//HTML INCOMPATIBLE
+            tag += color.NEUTRAL;// HTML INCOMPATIBLE
         }
         if (Gdx.app != null) {
             switch (logLevel) {
@@ -211,21 +216,21 @@ public class App extends Game {
      */
     private static String logLevelToStringColor(int logLevel) {
         // HTML INCOMPATIBLE
-        // switch (logLevel) {
-        // case 0:
-        // return color.BROWN;
-        // case 1:
-        // return color.BLUE;
-        // case 2:
-        // return color.YELLOW;
-        // case 3:
-        // return color.RED;
-        // case 4:
-        // return color.RED;
-        // default:
-        // return color.NEUTRAL;
-        // }
-        return "";
+        switch (logLevel) {
+        case 0:
+            return color.BROWN;
+        case 1:
+            return color.BLUE;
+        case 2:
+            return color.YELLOW;
+        case 3:
+            return color.RED;
+        case 4:
+            return color.RED;
+        default:
+            return color.NEUTRAL;
+        }
+        // return "";
     }
     /***
      * {@summary Return current time in standardized format.}
@@ -233,8 +238,8 @@ public class App extends Game {
      * @return current time in standardized format
      */
     public static String getCurrentTime() {
-        // return formatter.format(new Date(System.currentTimeMillis()));//HTML INCOMPATIBLE
-        return "";
+        return formatter.format(new Date(System.currentTimeMillis()));// HTML INCOMPATIBLE
+        // return "";
     }
 
 
