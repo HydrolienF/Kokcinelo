@@ -34,6 +34,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(1920, 1080);
 		// config.useVsync(true);
 		config.setTitle("Kokcinelo");
+		config.setWindowIcon("images/icons/appIcon.png");
 		new Lwjgl3Application(new App(args), config);
 	}
 }
