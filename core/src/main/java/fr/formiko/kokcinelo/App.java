@@ -59,6 +59,7 @@ public class App extends Game {
         Controller c = new Controller(this);
         Controller.setController(c);
         c.createNewGame();
+        // c.createNewVideoScreen();
     }
 
     /***

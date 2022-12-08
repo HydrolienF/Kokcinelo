@@ -5,7 +5,9 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.view.GameScreen;
+import fr.formiko.kokcinelo.view.VideoScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -186,6 +188,11 @@ public class Controller {
     }
 
     public void dispose() { app.dispose(); }
+
+    public void createNewVideoScreen() {
+        Screen screen = new VideoScreen(app);
+        app.setScreen(screen);
+    }
     /**
      * {@summary Return current used camera.}
      * 
