@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -129,8 +130,17 @@ public class GameScreen implements Screen {
      */
     private void handleInput() {
         // while debuging game close on escape
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.dispose();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.F11)) {
+            Boolean fullScreen = Gdx.graphics.isFullscreen();
+            Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+            if (fullScreen == true)
+                Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+            else
+                Gdx.graphics.setFullscreenMode(currentMode);
+        }
 
         if (isPause) {
             return;
