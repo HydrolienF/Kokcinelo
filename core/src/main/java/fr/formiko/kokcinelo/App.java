@@ -49,7 +49,8 @@ public class App extends Game {
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        // set full screen
+        // Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
     }
@@ -59,8 +60,8 @@ public class App extends Game {
     public void startNewGame() {
         Controller c = new Controller(this);
         Controller.setController(c);
-        c.createNewGame();
-        // c.createNewVideoScreen();
+        // c.createNewGame();
+        c.createNewVideoScreen();
     }
 
     /***

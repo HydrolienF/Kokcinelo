@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
 /**
@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Align;
  * @version 0.1
  * @since 0.1
  */
-public class MapItemActor extends Actor {
+public class MapItemActor extends Group {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
@@ -64,13 +64,16 @@ public class MapItemActor extends Actor {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
         if (getTextureRegion() == null) {
             return;
         }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
-                getRotation());
+        if (!(this instanceof MapItemActorAnimate)) {
+            batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
+                    getRotation());
+        }
 
         if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
             batch.end();
