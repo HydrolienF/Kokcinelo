@@ -10,10 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class MemberActor extends MapItemActor {
     private List<Action> listAction;
     private List<MemberActor> listMia;
+    private float angleChangeBySpeed = 0f;
 
     public MemberActor(String bodyTextureName, MapItem mapItem) {
         super(bodyTextureName, mapItem);
@@ -21,6 +23,9 @@ public class MemberActor extends MapItemActor {
         listMia = new ArrayList<MemberActor>();
     }
 
+
+    public float getAngleChangeBySpeed() { return angleChangeBySpeed; }
+    public void setAngleChangeBySpeed(float angleChangeBySpeed) { this.angleChangeBySpeed = angleChangeBySpeed; }
     public void addAvailableAction(Action action) { listAction.add(action); }
     public void addMember(MemberActor actor) {
         addActor(actor);
@@ -66,4 +71,12 @@ public class MemberActor extends MapItemActor {
     }
 
     public void addToOrigin(float x, float y) { setOrigin(getCenterX() + x, getCenterY() + y); }
+
+
+    public void setSpeedChange(float speedChange) {
+        addAction(Actions.rotateBy(speedChange * angleChangeBySpeed, 0.5f));
+        for (MemberActor memberActor : listMia) {
+            memberActor.setSpeedChange(speedChange);
+        }
+    }
 }
