@@ -169,7 +169,8 @@ public class Controller {
         app.getGameMusic().dispose();
         setSpectatorMode(true);
         gScreen.stopAfterNextDraw();
-        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
+        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
+        // boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
         gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
     }
