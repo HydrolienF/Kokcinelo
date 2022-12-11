@@ -2,15 +2,20 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -26,7 +31,15 @@ public class VideoScreen implements Screen {
     private static OrthographicCamera camera;
     private Viewport viewport;
     private Music music;
+    private Sound flyingSound;
+    private Sound crockSound;
+    private Sound tingSound;
     private float targetZoom;
+    private MapItemActorAnimate ladybug;
+    private boolean drawRedCircle;
+    private Aphid aphid;
+    private MemberActor head;
+    private MemberActor mandible;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -58,26 +71,68 @@ public class VideoScreen implements Screen {
         };
         actor.setSize((int) (w * 1.5), (int) (h * 1.5));
         stage.addActor(actor);
-        // TODO form a groups off actor or load all images in one actor where we can control rotation of the wings.
-        MapItemActorAnimate ladybug = loadAnimateLadybug();
-        ladybug.addAction(Actions.sequence(Actions.delay(1f), Actions.run(new Runnable() {
-            public void run() { targetZoom = 20f; }
-            // public void run() { camera. }
-        }), Actions.sequence(Actions.delay(1f), Actions.run(new Runnable() {
+        loadBackground();
+        aphid = loadAphid();
+        music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
+        flyingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flying.mp3"));
+        crockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
+        tingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ting.mp3"));
+
+        music.setVolume(0.4f);
+        music.play();
+        long soundId = flyingSound.play(0.2f);
+        flyingSound.setLooping(soundId, true);
+
+        float lastDelay = 3;
+
+        // Form a groups off actor or load all images in one actor where we can control rotation of the wings.
+        ladybug = loadAnimateLadybug();
+        ladybug.addAction(Actions.sequence(Actions.delay(0.5f), Actions.run(new Runnable() {
+            public void run() { targetZoom = 4f; }
+        }), Actions.sequence(Actions.delay(2f), Actions.run(new Runnable() {
+            public void run() {
+                tingSound.play();
+                drawRedCircle = true;
+            }
+        }), Actions.delay(2f), Actions.run(new Runnable() {
+            public void run() {
+                targetZoom = 0.4f;
+                drawRedCircle = false;
+            }
+        }), Actions.delay(0.5f), Actions.run(new Runnable() {
             public void run() { ladybug.setSpeed(3); }
-        }), Actions.parallel(Actions.moveBy(200, 0, 1f, Interpolation.swingOut), Actions.rotateTo(20, 1f)),
-                Actions.parallel(Actions.moveBy(200, 0, 0.5f, Interpolation.swingOut), Actions.rotateTo(-60, 0.5f, Interpolation.swingOut)),
-                Actions.delay(3f), Actions.run(new Runnable() {
-                    public void run() { ladybug.setSpeed(2.4f); }
-                }), Actions.rotateTo(0, 0.5f), Actions.delay(1f), Actions.run(new Runnable() {
-                    public void run() { ladybug.setSpeed(1); }
-                }), Actions.moveBy(-400, 0, 1f, Interpolation.swingOut), Actions.delay(3f), Actions.run(new Runnable() {
+        }), Actions.parallel(Actions.moveBy(100, 0, 0.5f, Interpolation.swingOut), Actions.rotateTo(20, 0.5f)),
+                Actions.parallel(Actions.moveBy(1600, -1600, 1.5f), Actions.run(new Runnable() {
+                    public void run() {
+                        ladybug.setSpeed(2.4f);
+                        flyingSound.setVolume(soundId, 1f);
+                    }
+                }), Actions.parallel(Actions.moveBy(100, 0, 0.5f, Interpolation.swingOut),
+                        Actions.rotateTo(-60, 0.2f, Interpolation.swingOut)),
+                        Actions.sequence(Actions.delay(1.1f), Actions.run(new Runnable() {
+                            public void run() {
+                                ladybug.setSpeed(1);
+                                flyingSound.setVolume(soundId, 0.2f);
+                            }
+                        }), Actions.rotateTo(0, 0.5f))),
+                Actions.parallel(Actions.moveBy(30, 0, 0.2f), Actions.run(new Runnable() {
+                    public void run() {
+                        crockSound.play();
+                        head.addAction(Actions.rotateBy(20f, 0.1f, Interpolation.smooth));
+                        mandible.addAction(Actions.rotateBy(60f, 0.1f));
+                    }
+                })), Actions.run(new Runnable() {
+                    public void run() {
+                        aphid.getActor().setVisible(false);
+                        head.addAction(Actions.rotateBy(-20f, 0.1f, Interpolation.smooth));
+                        mandible.addAction(Actions.rotateBy(-60f, 0.1f));
+                    }
+                }), Actions.delay(lastDelay), Actions.run(new Runnable() {
                     public void run() { dispose(); }
                 }))));
-        music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
-        // music.play();
-        camera.zoom = 5f;
-        targetZoom = 5f;
+
+        targetZoom = 0.5f;
+        camera.zoom = targetZoom;
 
         App.log(0, "constructor", "new VideoScreen: " + toString());
     }
@@ -100,9 +155,26 @@ public class VideoScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
         if (camera.zoom < targetZoom) {
-            camera.zoom = Math.min(camera.zoom * 1.03f, targetZoom);
+            camera.zoom = Math.min(camera.zoom * 1.08f, targetZoom);
+            // camera.position = new Vector3(ladybug.getCenterX(), ladybug.getCenterY(), 1);
         } else if (camera.zoom > targetZoom) {
-            camera.zoom = Math.max(camera.zoom / 1.03f, targetZoom);
+            camera.zoom = Math.max(camera.zoom / 1.08f, targetZoom);
+        }
+        camera.position.x = ladybug.getCenterX();
+        camera.position.y = ladybug.getCenterY();
+        // if (ladybug.getSpeed() > 1) {
+        // ladybug.getMapItem().getActor().moveFront(ladybug.getSpeed() - 1);
+        // }
+        if (drawRedCircle) {
+            Gdx.gl.glLineWidth(40);
+            Creature c = (Creature) aphid;
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setProjectionMatrix(getCamera().combined);
+            shapeRenderer.begin(ShapeType.Line);
+            shapeRenderer.setColor(new Color(1f, 0f, 0f, 1f));
+            shapeRenderer.circle(aphid.getCenterX(), aphid.getCenterY(), (float) 300, 200);
+            shapeRenderer.end();
+            Gdx.gl.glLineWidth(1);
         }
     }
 
@@ -132,9 +204,13 @@ public class VideoScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.dispose();// @a
+        flyingSound.dispose();
+        crockSound.dispose();
+        tingSound.dispose();
+        music.dispose();
+        stage.dispose();
+        // game.dispose();// @a
         Controller.getController().createNewGame();
-        music.stop();
     }
 
 
@@ -189,12 +265,12 @@ public class VideoScreen implements Screen {
         ladybug.addMember(body);
 
 
-        MemberActor head = new MemberActor("Creatures/ladybug flying side view head", mi);
+        head = new MemberActor("Creatures/ladybug flying side view head", mi);
         head.addToOrigin(400, 60);
         head.addAvailableAction(loopAction(ladybug, bodyDuration, headRotation, headRotation, head, 0f, false));
         ladybug.addMember(head);
 
-        MemberActor mandible = new MemberActor("Creatures/ladybug flying side view mandible", mi);
+        mandible = new MemberActor("Creatures/ladybug flying side view mandible", mi);
         mandible.setOrigin(1397, lbh - 905);
         mandible.addAvailableAction(loopAction(ladybug, bodyDuration, mandibleRotation, mandibleRotation, mandible, 0f, false));
         mandible.setAngleChangeBySpeed(10);
@@ -225,10 +301,10 @@ public class VideoScreen implements Screen {
 
 
         ladybug.startAction(0);
-        ladybug.setZoom(0.8f);
+        ladybug.setZoom(0.2f);
         stage.addActor(ladybug);
         // ladybug.setDebug(true, true);
-        ladybug.setCenterX(w / 4);
+        ladybug.setCenterX(w / 2);
         ladybug.setCenterY(h / 2);
 
         return ladybug;
@@ -253,5 +329,21 @@ public class VideoScreen implements Screen {
                     public void run() { ma
                             .addAction(loopedAction(ladybug, duration, rotationMin, rotationMax, ma, rotationSpeededBySpeed)); }
                 }));
+    }
+
+    private void loadBackground() {
+        MapActor ma = new MapActor(10000, 1000, new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f), true, 200, 80);
+        ma.setPosition(-ma.getWidth() / 2, -1700);
+        stage.addActor(ma);
+        // TODO also add a cloud saying "KOKCINELO"
+    }
+
+    private Aphid loadAphid() {
+        Aphid c = new Aphid();
+        c.getActor().setZoom(0.1f);
+        c.getActor().setCenterX(2900);
+        c.getActor().setCenterY(-1100);
+        stage.addActor(c.getActor());
+        return c;
     }
 }

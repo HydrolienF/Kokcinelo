@@ -86,9 +86,9 @@ public class MapItemActor extends Group {
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
             shapeRenderer.begin(ShapeType.Line);
             shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
-            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
+            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getVisionRadius());
             shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
-            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getHitRadius());
+            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getHitRadius());
             shapeRenderer.end();
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();

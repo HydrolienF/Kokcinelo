@@ -38,12 +38,12 @@ public class MapActor extends Actor {
      * @param height heigth of this
      * @param color  color of this
      */
-    public MapActor(float width, float height, Color color, boolean withDetails) {
+    public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks) {
         toExcude = new HashSet<Circle>();
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
-        createTexture((int) width, (int) height, color, withDetails);
+        createTexture((int) width, (int) height, color, withDetails, stones, sticks);
         setOrigin(Align.center);
         setVisible(true);
 
@@ -51,6 +51,8 @@ public class MapActor extends Actor {
         shapeRenderer.setAutoShapeType(true);
         App.log(0, "constructor", "new MapActor: " + toString());
     }
+
+    public MapActor(float width, float height, Color color, boolean withDetails) { this(width, height, color, withDetails, 10, 20); }
 
     /**
      * {@summary Draw the texture that represent this.}
@@ -101,11 +103,11 @@ public class MapActor extends Actor {
      * @param color  color of texture
      * @param stones number of stones to add
      */
-    private void createTexture(int width, int height, Color color, boolean withDetails) {
+    private void createTexture(int width, int height, Color color, boolean withDetails, int stones, int sticks) {
         Pixmap pixmap = createPixmap(width, height, color);
         if (withDetails) {
-            drawStones(pixmap, width, height, 10);
-            drawSticks(pixmap, width, height, 20);
+            drawStones(pixmap, width, height, stones);
+            drawSticks(pixmap, width, height, sticks);
         }
         texture = new Texture(pixmap);
         pixmap.dispose();
