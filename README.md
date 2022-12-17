@@ -1,6 +1,6 @@
 # Kokcinelo
 
-Support & community channel: https://discord.gg/vqvfGzf
+Support & community channel on our [Discord](https://discord.gg/vqvfGzf)
 
 # Principle of the game
 Kokcinelo is a small, multiplayer competitive/cooperative game where players enbody ladybugs (kokcineloj) or ants (formikoj).
