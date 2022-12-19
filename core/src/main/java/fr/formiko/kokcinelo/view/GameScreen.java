@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
-        createTextUI(-1);
+        createTextUI();
         pause();
         App.log(0, "constructor", "new GameScreen: " + toString());
     }
@@ -220,7 +220,7 @@ public class GameScreen implements Screen {
     public void stopAfterNextDraw() { stopAfterNextDrawBool = true; }
 
     // create our game HUD for scores/timers/level info
-    private void createTextUI(int gameTime) { hud = new Hud(game.batch, gameTime); }
+    private void createTextUI() { hud = new Hud(game.batch); }
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
         addProcessor(egm.getStage());

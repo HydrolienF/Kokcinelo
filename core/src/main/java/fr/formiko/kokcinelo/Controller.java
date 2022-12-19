@@ -47,6 +47,7 @@ public class Controller {
     public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
     public boolean isSpectatorMode() { return spectatorMode; }
     public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
+    public int getNumberOfAphids() { return gs.getAphids().size(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
