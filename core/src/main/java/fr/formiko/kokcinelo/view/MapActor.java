@@ -233,14 +233,19 @@ public class MapActor extends Actor {
         float rotation2 = rotation - 90;
         float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
         float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
-        if (x + lengthX + thiknessX > width || x + lengthX < 0 || y + lengthY + thiknessY > height || y + lengthY < 0) {
-            return; // avoid to go out of the pixmap
-        }
-        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY), (int) (x + thiknessX), (int) (y + thiknessY));
-        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY),
-                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
-        pixmap.fillTriangle((int) (x + thiknessX), (int) (y + thiknessY), (int) (int) (x + lengthX), (int) (y + lengthY),
-                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+
+        int px = (int) Math.between(0, getWidth(), x);
+        int pxl = (int) Math.between(0, getWidth(), x + lengthX);
+        int pxt = (int) Math.between(0, getWidth(), x + thiknessX);
+        int pxlt = (int) Math.between(0, getWidth(), x + (thiknessX * thiknessModifier) + lengthX);
+        int py = (int) Math.between(0, getHeight(), y);
+        int pyl = (int) Math.between(0, getHeight(), y + lengthY);
+        int pyt = (int) Math.between(0, getHeight(), y + thiknessY);
+        int pylt = (int) Math.between(0, getHeight(), y + (thiknessY * thiknessModifier) + lengthY);
+
+        pixmap.fillTriangle(px, py, pxl, pyl, pxt, pyt);
+        pixmap.fillTriangle(px, py, pxl, pyl, pxlt, pylt);
+        pixmap.fillTriangle(pxt, pyt, pxl, pyl, pxlt, pylt);
         if (segments > 1) {
             drawStickBranch(pixmap, width, height, x + lengthX, y + lengthY, segments - 1, subsegments,
                     rotation + (float) (random() * 40 - 20), length * (random() * 1.3f), thikness * thiknessModifier);
@@ -254,6 +259,7 @@ public class MapActor extends Actor {
             }
         }
     }
+
     private float random() { return (float) java.lang.Math.random(); }
     /**
      * {@summary Create a random grey.}

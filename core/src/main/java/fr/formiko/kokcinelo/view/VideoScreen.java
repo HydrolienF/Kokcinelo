@@ -79,7 +79,7 @@ public class VideoScreen implements Screen {
         crockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         tingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ting.mp3"));
 
-        music.setVolume(0.4f);
+        music.setVolume(0.6f);
         music.play();
         long soundId = flyingSound.play(0.2f);
         flyingSound.setLooping(soundId, true);
