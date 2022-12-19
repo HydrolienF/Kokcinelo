@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,6 +34,7 @@ public class Hud implements Disposable {
     private Label countdownLabel;
     // private long startTime;
     private float gameTime;
+    private int maxValue;
 
     /**
      * {@summary Main constructor}
@@ -40,7 +42,8 @@ public class Hud implements Disposable {
      * @param sb         SpriteBatch to use
      * @param worldTimer starting value of world timer
      */
-    public Hud(SpriteBatch sb, int worldTimer) {
+    public Hud(SpriteBatch sb) {
+        this.maxValue = Controller.getController().getNumberOfAphids();
         // this.worldTimer = worldTimer;
         // timeCount = 0;
         // setup the HUD viewport using a new camera seperate from our gamecam
@@ -67,11 +70,12 @@ public class Hud implements Disposable {
         stage.addActor(table);
         App.log(0, "constructor", "new Hud: " + toString());
         // startTime = System.currentTimeMillis();
-        gameTime = worldTimer;
+        gameTime = -1;
+        setPlayerScore(0);
     }
 
     public Stage getStage() { return stage; }
-    public void setPlayerScore(int value) { scoreLabel.setText("" + value); }
+    public void setPlayerScore(int value) { scoreLabel.setText(value + "/" + maxValue); }
     public float getGameTime() { return gameTime; }
     /**
      * {@summary Set the game time.}

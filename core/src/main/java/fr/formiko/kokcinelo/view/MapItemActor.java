@@ -12,17 +12,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
 /**
  * {@summary Actor that represent a MapItem.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
-public class MapItemActor extends Actor {
+public class MapItemActor extends Group {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
@@ -50,6 +50,13 @@ public class MapItemActor extends Actor {
             setOrigin(Align.center);
         }
     }
+    /**
+     * {@summary Secondary constructor with a null texture but a fix size.}
+     * 
+     * @param mapItem MapItem represent by this
+     * @param width   width of the actor
+     * @param height  height of the actor
+     */
     public MapItemActor(MapItem mapItem, int width, int height) {
         this(null, mapItem);
         setSize(width, height);
@@ -64,13 +71,16 @@ public class MapItemActor extends Actor {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
         if (getTextureRegion() == null) {
             return;
         }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
-                getRotation());
+        if (!(this instanceof MapItemActorAnimate)) {
+            batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
+                    getRotation());
+        }
 
         if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
             batch.end();
@@ -83,9 +93,9 @@ public class MapItemActor extends Actor {
             shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
             shapeRenderer.begin(ShapeType.Line);
             shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
-            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getVisionRadius());
+            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getVisionRadius());
             shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
-            shapeRenderer.circle(getX() + getWidth() / 2, getY() + getHeight() / 2, (float) c.getHitRadius());
+            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getHitRadius());
             shapeRenderer.end();
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();

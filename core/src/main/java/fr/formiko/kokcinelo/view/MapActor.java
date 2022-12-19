@@ -38,12 +38,12 @@ public class MapActor extends Actor {
      * @param height heigth of this
      * @param color  color of this
      */
-    public MapActor(float width, float height, Color color, boolean withDetails) {
+    public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks) {
         toExcude = new HashSet<Circle>();
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
-        createTexture((int) width, (int) height, color, withDetails);
+        createTexture((int) width, (int) height, color, withDetails, stones, sticks);
         setOrigin(Align.center);
         setVisible(true);
 
@@ -51,6 +51,8 @@ public class MapActor extends Actor {
         shapeRenderer.setAutoShapeType(true);
         App.log(0, "constructor", "new MapActor: " + toString());
     }
+
+    public MapActor(float width, float height, Color color, boolean withDetails) { this(width, height, color, withDetails, 10, 20); }
 
     /**
      * {@summary Draw the texture that represent this.}
@@ -101,11 +103,11 @@ public class MapActor extends Actor {
      * @param color  color of texture
      * @param stones number of stones to add
      */
-    private void createTexture(int width, int height, Color color, boolean withDetails) {
+    private void createTexture(int width, int height, Color color, boolean withDetails, int stones, int sticks) {
         Pixmap pixmap = createPixmap(width, height, color);
         if (withDetails) {
-            drawStones(pixmap, width, height, 10);
-            drawSticks(pixmap, width, height, 20);
+            drawStones(pixmap, width, height, stones);
+            drawSticks(pixmap, width, height, sticks);
         }
         texture = new Texture(pixmap);
         pixmap.dispose();
@@ -222,22 +224,28 @@ public class MapActor extends Actor {
      * @param length   length of this segement
      * @param thikness thikness of this segment
      */
-    private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation,
-            float length, float thikness) {
+    //@formatter:off
+    private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation, float length, float thikness) {
+    //@formatter:on
         float thiknessModifier = (float) (random() * 0.2) + 0.6f;
         float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
         float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));
         float rotation2 = rotation - 90;
         float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
         float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
-        if (x + lengthX + thiknessX > width || x + lengthX < 0 || y + lengthY + thiknessY > height || y + lengthY < 0) {
-            return; // avoid to go out of the pixmap
-        }
-        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY), (int) (x + thiknessX), (int) (y + thiknessY));
-        pixmap.fillTriangle((int) x, (int) y, (int) (int) (x + lengthX), (int) (y + lengthY),
-                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
-        pixmap.fillTriangle((int) (x + thiknessX), (int) (y + thiknessY), (int) (int) (x + lengthX), (int) (y + lengthY),
-                (int) (x + (thiknessX * thiknessModifier) + lengthX), (int) (y + (thiknessY * thiknessModifier) + lengthY));
+
+        int px = (int) Math.between(0, getWidth(), x);
+        int pxl = (int) Math.between(0, getWidth(), x + lengthX);
+        int pxt = (int) Math.between(0, getWidth(), x + thiknessX);
+        int pxlt = (int) Math.between(0, getWidth(), x + (thiknessX * thiknessModifier) + lengthX);
+        int py = (int) Math.between(0, getHeight(), y);
+        int pyl = (int) Math.between(0, getHeight(), y + lengthY);
+        int pyt = (int) Math.between(0, getHeight(), y + thiknessY);
+        int pylt = (int) Math.between(0, getHeight(), y + (thiknessY * thiknessModifier) + lengthY);
+
+        pixmap.fillTriangle(px, py, pxl, pyl, pxt, pyt);
+        pixmap.fillTriangle(px, py, pxl, pyl, pxlt, pylt);
+        pixmap.fillTriangle(pxt, pyt, pxl, pyl, pxlt, pylt);
         if (segments > 1) {
             drawStickBranch(pixmap, width, height, x + lengthX, y + lengthY, segments - 1, subsegments,
                     rotation + (float) (random() * 40 - 20), length * (random() * 1.3f), thikness * thiknessModifier);
@@ -251,6 +259,7 @@ public class MapActor extends Actor {
             }
         }
     }
+
     private float random() { return (float) java.lang.Math.random(); }
     /**
      * {@summary Create a random grey.}

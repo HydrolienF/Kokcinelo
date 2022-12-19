@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -24,6 +25,7 @@ public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
     private Music gameMusic;
+    private String language = "en";
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -34,6 +36,10 @@ public class App extends Game {
     public App() { this(null); }
 
     public Music getGameMusic() { return gameMusic; }
+    public String getLanguage() { return language; }
+    public void setLanguage(String language) { this.language = language; }
+
+    public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -45,10 +51,19 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
-        // color.iniColor();//HTML INCOMPATIBLE
+        // // full screen
+        // try {
+        // Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+        // Gdx.graphics.setFullscreenMode(currentMode);
+        // } catch (Exception e) {
+        // Gdx.app.log("Init", "Fail to set full screen");
+        // }
+        color.iniColor();// HTML INCOMPATIBLE
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
+        // set full screen
+        // Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
     }
@@ -58,7 +73,7 @@ public class App extends Game {
     public void startNewGame() {
         Controller c = new Controller(this);
         Controller.setController(c);
-        c.createNewGame();
+        c.startApp();
     }
 
     /***
@@ -232,7 +247,7 @@ public class App extends Game {
         }
         // return "";
     }
-    /***
+    /**
      * {@summary Return current time in standardized format.}
      * 
      * @return current time in standardized format
@@ -242,7 +257,9 @@ public class App extends Game {
         // return "";
     }
 
-
+    /**
+     * {@summary Update some option from command line args.}
+     */
     private void setOptionsFromArgs() {
         if (args == null) {
             return;

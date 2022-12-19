@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -20,7 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class GameScreen implements Screen {
@@ -63,11 +64,11 @@ public class GameScreen implements Screen {
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this, getController());
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
-        createTextUI(-1);
+        createTextUI();
         pause();
         App.log(0, "constructor", "new GameScreen: " + toString());
     }
@@ -109,7 +110,9 @@ public class GameScreen implements Screen {
         hud.getStage().draw();
         if (!isPause) {
             if (isTimeUp() || getController().isAllAphidGone()) {
-                getController().gameOver();
+                if (!stopAtTheEnd) {
+                    getController().gameOver();
+                }
             }
         }
         if (egm != null) {
@@ -125,12 +128,21 @@ public class GameScreen implements Screen {
 
     /**
      * {@summary Handle user input &#38; mostly move camera.}<br>
-     * Some input are handle on InputCore that allow more input handling.
+     * Some input are handle on InputCore that allow more input handling as user click on the screen.
      */
     private void handleInput() {
-        // while debuging game close on escape
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-            game.dispose();
+        // // while debuging game close on escape
+        // if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        // game.dispose();
+        // }
+        if (Gdx.input.isKeyPressed(Input.Keys.F11)) {
+            Boolean fullScreen = Gdx.graphics.isFullscreen();
+            Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+            if (fullScreen == true)
+                Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+            else
+                Gdx.graphics.setFullscreenMode(currentMode);
+        }
 
         if (isPause) {
             return;
@@ -208,7 +220,10 @@ public class GameScreen implements Screen {
     public void stopAfterNextDraw() { stopAfterNextDrawBool = true; }
 
     // create our game HUD for scores/timers/level info
-    private void createTextUI(int gameTime) { hud = new Hud(game.batch, gameTime); }
+    private void createTextUI() { hud = new Hud(game.batch); }
+    /**
+     * {@summary Create an EndGameMenu as a HUD &#38; add the input listener to this.}
+     */
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
         addProcessor(egm.getStage());
@@ -217,12 +232,21 @@ public class GameScreen implements Screen {
     public boolean isTimeUp() { return hud.isTimeUp(); }
     public void setGameTime(int gameTime) { hud.setGameTime(gameTime); }
 
+    /**
+     * {@summary Dispose the screen.}
+     * It stop music and free memory.
+     */
+    @Override
+    public void dispose() {
+        App.log(0, "destructor", "dispose GameScreen: " + toString());
+        stage.dispose();
+        game.getGameMusic().stop();
+    }
+
 
     // TODO Auto-generated method stub
     @Override
     public void hide() {}
-    @Override
-    public void dispose() {}
     @Override
     public void show() {}
 }
