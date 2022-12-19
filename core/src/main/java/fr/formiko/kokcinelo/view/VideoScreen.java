@@ -8,6 +8,7 @@ import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -133,6 +134,8 @@ public class VideoScreen implements Screen {
 
         targetZoom = 0.5f;
         camera.zoom = targetZoom;
+
+        addInputCore();
 
         App.log(0, "constructor", "new VideoScreen: " + toString());
     }
@@ -345,5 +348,39 @@ public class VideoScreen implements Screen {
         c.getActor().setCenterY(-1100);
         stage.addActor(c.getActor());
         return c;
+    }
+
+    private void addInputCore() {
+        InputProcessor inputProcessor = (InputProcessor) new InputProcessor() {
+
+            @Override
+            public boolean keyDown(int keycode) { return false; }
+
+            @Override
+            public boolean keyUp(int keycode) { return false; }
+
+            @Override
+            public boolean keyTyped(char character) { return false; }
+
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                dispose();
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
+
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) { return false; }
+
+            @Override
+            public boolean mouseMoved(int screenX, int screenY) { return false; }
+
+            @Override
+            public boolean scrolled(float amountX, float amountY) { return false; }
+
+        };
+        Gdx.input.setInputProcessor(inputProcessor);
     }
 }

@@ -24,6 +24,7 @@ public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
     private Music gameMusic;
+    private String language = "en";
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -34,6 +35,8 @@ public class App extends Game {
     public App() { this(null); }
 
     public Music getGameMusic() { return gameMusic; }
+    public String getLanguage() { return language; }
+    public void setLanguage(String language) { this.language = language; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -45,7 +48,14 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
-        // color.iniColor();//HTML INCOMPATIBLE
+        // // full screen
+        // try {
+        // Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+        // Gdx.graphics.setFullscreenMode(currentMode);
+        // } catch (Exception e) {
+        // Gdx.app.log("Init", "Fail to set full screen");
+        // }
+        color.iniColor();// HTML INCOMPATIBLE
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
