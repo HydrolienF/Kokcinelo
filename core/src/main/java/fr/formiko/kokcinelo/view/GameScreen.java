@@ -110,7 +110,9 @@ public class GameScreen implements Screen {
         hud.getStage().draw();
         if (!isPause) {
             if (isTimeUp() || getController().isAllAphidGone()) {
-                getController().gameOver();
+                if (!stopAtTheEnd) {
+                    getController().gameOver();
+                }
             }
         }
         if (egm != null) {
