@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Align;
  * {@summary Actor that represent a MapItem.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class MapItemActor extends Group {
@@ -50,6 +50,13 @@ public class MapItemActor extends Group {
             setOrigin(Align.center);
         }
     }
+    /**
+     * {@summary Secondary constructor with a null texture but a fix size.}
+     * 
+     * @param mapItem MapItem represent by this
+     * @param width   width of the actor
+     * @param height  height of the actor
+     */
     public MapItemActor(MapItem mapItem, int width, int height) {
         this(null, mapItem);
         setSize(width, height);

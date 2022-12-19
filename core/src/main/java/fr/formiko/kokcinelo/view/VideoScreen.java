@@ -129,7 +129,7 @@ public class VideoScreen implements Screen {
                         mandible.addAction(Actions.rotateBy(-60f, 0.1f));
                     }
                 }), Actions.delay(lastDelay), Actions.run(new Runnable() {
-                    public void run() { dispose(); }
+                    public void run() { Controller.getController().endVideoScreen(); }
                 }))));
 
         targetZoom = 0.5f;
@@ -196,6 +196,11 @@ public class VideoScreen implements Screen {
     public void hide() { // TODO Auto-generated method stub
     }
 
+    /**
+     * {@summary Dispose all variable that need to be dispose to save memory.}
+     * 
+     * @see com.badlogic.gdx.Game#dispose()
+     */
     @Override
     public void dispose() {
         App.log(0, "destructor", "dispose VideoScreen: " + toString());

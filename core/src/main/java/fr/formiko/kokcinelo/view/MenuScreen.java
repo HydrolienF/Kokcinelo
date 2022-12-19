@@ -6,44 +6,66 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+/**
+ * {@summary The main menu screen.}
+ * 
+ * @see com.badlogic.gdx.Screen
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 public class MenuScreen implements Screen {
+    private Stage stage;
 
+    // CONSTRUCTORS --------------------------------------------------------------
+    /**
+     * {@summary Main constructor.}
+     */
     public MenuScreen() {
         addInputCore();
+        stage = new Stage();
         App.log(0, "constructor", "new MenuScreen: " + toString());
+
+    }
+    // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Render the screen.}
+     */
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(App.BLUE_BACKGROUND);
+        stage.act();
     }
 
-    @Override
-    public void show() { // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void render(float delta) { ScreenUtils.clear(App.BLUE_BACKGROUND); }
-
-
-    @Override
-    public void resize(int width, int height) { // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void pause() { // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void resume() { // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void hide() { // TODO Auto-generated method stub
-    }
-
+    /**
+     * {@summary Dispose all variable that need to be dispose to save memory.}
+     * 
+     * @see com.badlogic.gdx.Game#dispose()
+     */
     @Override
     public void dispose() {
         App.log(0, "destructor", "dispose MenuScreen: " + toString());
-        // TODO
+        stage.dispose();
     }
+
+    // TODO Auto-generated method stub
+    @Override
+    public void show() {}
+
+    @Override
+    public void resize(int width, int height) {}
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
 
     /**
      * {@summary Handle user input.}<br>

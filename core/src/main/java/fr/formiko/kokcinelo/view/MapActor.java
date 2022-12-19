@@ -224,8 +224,9 @@ public class MapActor extends Actor {
      * @param length   length of this segement
      * @param thikness thikness of this segment
      */
-    private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation,
-            float length, float thikness) {
+    //@formatter:off
+    private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation, float length, float thikness) {
+    //@formatter:on
         float thiknessModifier = (float) (random() * 0.2) + 0.6f;
         float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
         float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));

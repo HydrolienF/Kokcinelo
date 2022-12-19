@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class Controller {
@@ -58,7 +58,10 @@ public class Controller {
     private void createNewVideoScreen() { setScreen(new VideoScreen(app)); }
 
     private void createNewMenuScreen() { setScreen(new MenuScreen()); }
-
+    /**
+     * {@summary End the current screen.}
+     * Current screen is supposed to be a MenuScreen. Other wise it will do nothing.
+     */
     public synchronized void endMenuScreen() {
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
@@ -68,7 +71,10 @@ public class Controller {
             App.log(0, "", "getScreen() is not a MenuScreen");
         }
     }
-
+    /**
+     * {@summary End the current screen.}
+     * Current screen is supposed to be a VideoScreen. Other wise it will do nothing.
+     */
     public synchronized void endVideoScreen() {
         if (getScreen() != null && getScreen() instanceof VideoScreen) {
             Screen toDispose = getScreen();
@@ -79,6 +85,10 @@ public class Controller {
         }
     }
 
+    /**
+     * {@summary End the current screen.}
+     * Current screen is supposed to be a GameScreen. Other wise it will do nothing.
+     */
     public synchronized void endGameScreen() {
         if (getScreen() != null && getScreen() instanceof GameScreen) {
             Screen toDispose = getScreen();
@@ -239,7 +249,13 @@ public class Controller {
         // return gScreen.camera;
         return GameScreen.getCamera();
     }
-
+    /**
+     * {@summary Return a vector of coordinate from screen x, y to stage x, y.}
+     * 
+     * @param x x screen coordinate
+     * @param y y screen coordinate
+     * @return Vector of coordinate from screen x, y to stage x, y
+     */
     private Vector2 getVectorStageCoordinates(float x, float y) {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }

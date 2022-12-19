@@ -8,19 +8,20 @@ import com.badlogic.gdx.InputProcessor;
  * {@summary React to user inputs.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class InputCore implements InputProcessor {
 
     private GameScreen screen;
-    private Controller controller;
 
     // CONSTRUCTORS --------------------------------------------------------------
-    public InputCore(GameScreen screen, Controller controller) {
-        this.screen = screen;
-        this.controller = controller;
-    }
+    /***
+     * {@summary Main constructor.}
+     * 
+     * @param screen screen to interact with
+     */
+    public InputCore(GameScreen screen) { this.screen = screen; }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -31,7 +32,7 @@ public class InputCore implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // System.out.println("mouse scrolled of "+amountX+" "+amountY);
-        screen.getController().addZoom(amountY);
+        Controller.getController().addZoom(amountY);
         return true;
     }
 
@@ -43,10 +44,10 @@ public class InputCore implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P) {
-            controller.pauseResume();
+            Controller.getController().pauseResume();
         }
         if (keycode == Input.Keys.S) {
-            controller.gameOver();
+            Controller.getController().gameOver();
         }
         if ((keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) && screen.isStop()) {
             Controller.getController().endGameScreen();

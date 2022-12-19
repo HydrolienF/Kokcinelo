@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class GameScreen implements Screen {
@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this, getController());
+        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -221,6 +221,9 @@ public class GameScreen implements Screen {
 
     // create our game HUD for scores/timers/level info
     private void createTextUI() { hud = new Hud(game.batch); }
+    /**
+     * {@summary Create an EndGameMenu as a HUD &#38; add the input listener to this.}
+     */
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
         addProcessor(egm.getStage());
@@ -229,16 +232,21 @@ public class GameScreen implements Screen {
     public boolean isTimeUp() { return hud.isTimeUp(); }
     public void setGameTime(int gameTime) { hud.setGameTime(gameTime); }
 
-
-    // TODO Auto-generated method stub
-    @Override
-    public void hide() {}
+    /**
+     * {@summary Dispose the screen.}
+     * It stop music and free memory.
+     */
     @Override
     public void dispose() {
         App.log(0, "destructor", "dispose GameScreen: " + toString());
         stage.dispose();
         game.getGameMusic().stop();
     }
+
+
+    // TODO Auto-generated method stub
+    @Override
+    public void hide() {}
     @Override
     public void show() {}
 }

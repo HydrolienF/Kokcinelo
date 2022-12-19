@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * {@summary Menu for the end of the game}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 0.2
  * @since 0.1
  */
 public class EndGameMenu implements Disposable {
@@ -104,16 +104,26 @@ public class EndGameMenu implements Disposable {
         }
     }
 
+    /**
+     * {@summary Return a table of web site link button.}
+     * 
+     * @return A table of web site link button
+     */
     private Table getButtonsTable() {
         Table table = new Table();
-        table.add(getClickageLink("homeWebSiteLink", "https://formiko.fr/kokcinelo"));
-        table.add(getClickageLink("discordLink", "https://discord.gg/vqvfGzf"));
-        // table.add(getClickageLink("reportBugLink", "https://formiko.fr/kokcinelo"));
-        table.add(getClickageLink("supportGameLink", "https://tipeee.com/formiko"));
+        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo"));
+        table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf"));
+        // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo"));
+        table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko"));
         return table;
     }
 
-    private Image getClickageLink(String imageName, String url) {
+    /**
+     * {@summary Return a web site link button.}
+     * 
+     * @return A web site link button
+     */
+    private Image getClickableLink(String imageName, String url) {
         Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize);
         Image b = new Image(new TextureRegionDrawable(t));
         b.addListener(new ClickListener() {
@@ -124,6 +134,12 @@ public class EndGameMenu implements Disposable {
         return b;
     }
 
+    /**
+     * {@summary Return a resized texture.}
+     * It is used to resize link button icons.
+     * 
+     * @return A resized texture
+     */
     private Texture resizeTexture(String textureName, int size) {
         Pixmap pixmapIn = new Pixmap(Gdx.files.internal(textureName));
         Pixmap pixmapOut = new Pixmap(size, size, pixmapIn.getFormat());

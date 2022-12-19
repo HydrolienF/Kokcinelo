@@ -247,7 +247,7 @@ public class App extends Game {
         }
         // return "";
     }
-    /***
+    /**
      * {@summary Return current time in standardized format.}
      * 
      * @return current time in standardized format
@@ -257,7 +257,9 @@ public class App extends Game {
         // return "";
     }
 
-
+    /**
+     * {@summary Update some option from command line args.}
+     */
     private void setOptionsFromArgs() {
         if (args == null) {
             return;
