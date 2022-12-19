@@ -48,6 +48,10 @@ public class InputCore implements InputProcessor {
         if (keycode == Input.Keys.S) {
             controller.gameOver();
         }
+        if ((keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) && screen.isStop()) {
+            Controller.getController().endGameScreen();
+        }
+
         return true;
     }
     // Not usefull yet.

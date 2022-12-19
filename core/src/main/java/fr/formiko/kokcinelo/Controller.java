@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.view.GameScreen;
+import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -23,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Controller {
     private GameState gs;
     private App app;
-    private GameScreen gScreen;
     private boolean spectatorMode;
 
     private static Controller controller;
@@ -43,13 +43,52 @@ public class Controller {
     // GET SET -------------------------------------------------------------------
     public static Controller getController() { return controller; }
     public static void setController(Controller controller) { Controller.controller = controller; }
-    public GameScreen getGameScreen() { return gScreen; }
+    public GameScreen getGameScreen() { return (GameScreen) getScreen(); }
+    public Screen getScreen() { return app.getScreen(); }
+    public void setScreen(Screen screen) { app.setScreen(screen); }
     public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
     public boolean isSpectatorMode() { return spectatorMode; }
     public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
     public int getNumberOfAphids() { return gs.getAphids().size(); }
 
     // FUNCTIONS -----------------------------------------------------------------
+
+    public void startApp() { createNewMenuScreen(); }
+
+    private void createNewVideoScreen() { setScreen(new VideoScreen(app)); }
+
+    private void createNewMenuScreen() { setScreen(new MenuScreen()); }
+
+    public synchronized void endMenuScreen() {
+        if (getScreen() != null && getScreen() instanceof MenuScreen) {
+            Screen toDispose = getScreen();
+            createNewVideoScreen();
+            toDispose.dispose();
+        } else {
+            App.log(0, "", "getScreen() is not a MenuScreen");
+        }
+    }
+
+    public synchronized void endVideoScreen() {
+        if (getScreen() != null && getScreen() instanceof VideoScreen) {
+            Screen toDispose = getScreen();
+            createNewGame();
+            toDispose.dispose();
+        } else {
+            App.log(0, "", "getScreen() is not a VideoScreen");
+        }
+    }
+
+    public synchronized void endGameScreen() {
+        if (getScreen() != null && getScreen() instanceof GameScreen) {
+            Screen toDispose = getScreen();
+            createNewMenuScreen();
+            toDispose.dispose();
+        } else {
+            App.log(0, "", "getScreen() is not a GameScreen");
+        }
+    }
+
     /**
      * {@summary Update zoom of camera.}
      * 
@@ -128,18 +167,18 @@ public class Controller {
      * Create the GameState with Game data.
      * Set current Screen as a new GameScreen.
      */
-    public void createNewGame() {
+    private void createNewGame() {
+        App.log(0, "Need to start new Game");
         int gameTime = 60;
         setSpectatorMode(false);
         app.createGameMusic();
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
-        gScreen = new GameScreen(app);
-        app.setScreen(gScreen);
+        app.setScreen(new GameScreen(app));
         app.getGameMusic().play();
         App.log(1, "start new Game");
         // app.getGameMusic().setPosition(178.1f - gameTime); // end at 178
-        gScreen.resume();
-        gScreen.setGameTime(gameTime);
+        getGameScreen().resume();
+        getGameScreen().setGameTime(gameTime);
         App.log(1, "new Game started");
     }
     public void restartGame() { createNewGame(); }
@@ -155,7 +194,7 @@ public class Controller {
      */
     public void interact() {
         if (gs.ladybugEat()) {
-            gScreen.setPlayerScore(gs.getPlayer(getLocalPlayerId()).getScore());
+            getGameScreen().setPlayerScore(gs.getPlayer(getLocalPlayerId()).getScore());
             app.playEatingSound();
         }
     }
@@ -164,37 +203,33 @@ public class Controller {
      */
     public void gameOver() {
         App.log(1, "gameOver");
-        if (gScreen.isStop()) {
+        if (getGameScreen().isStop()) {
             return;
         }
         app.getGameMusic().dispose();
         setSpectatorMode(true);
-        gScreen.stopAfterNextDraw();
+        getGameScreen().stopAfterNextDraw();
         boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
         // boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
-        gScreen.createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
+        getGameScreen().createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
     }
     /**
      * {@summary Pause game or resume depening of current state.}
      * It pause move of creature & music.
      */
     public void pauseResume() {
-        if (gScreen.isPause()) {
-            gScreen.resume();
+        if (getGameScreen().isPause()) {
+            getGameScreen().resume();
             app.getGameMusic().play();
         } else {
-            gScreen.pause();
+            getGameScreen().pause();
             app.getGameMusic().pause();
         }
     }
 
     public void dispose() { app.dispose(); }
 
-    public void createNewVideoScreen() {
-        Screen screen = new VideoScreen(app);
-        app.setScreen(screen);
-    }
     /**
      * {@summary Return current used camera.}
      * 
@@ -205,5 +240,7 @@ public class Controller {
         return GameScreen.getCamera();
     }
 
-    private Vector2 getVectorStageCoordinates(float x, float y) { return gScreen.getStage().screenToStageCoordinates(new Vector2(x, y)); }
+    private Vector2 getVectorStageCoordinates(float x, float y) {
+        return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
+    }
 }

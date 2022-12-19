@@ -128,13 +128,13 @@ public class GameScreen implements Screen {
 
     /**
      * {@summary Handle user input &#38; mostly move camera.}<br>
-     * Some input are handle on InputCore that allow more input handling.
+     * Some input are handle on InputCore that allow more input handling as user click on the screen.
      */
     private void handleInput() {
-        // while debuging game close on escape
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.dispose();
-        }
+        // // while debuging game close on escape
+        // if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        // game.dispose();
+        // }
         if (Gdx.input.isKeyPressed(Input.Keys.F11)) {
             Boolean fullScreen = Gdx.graphics.isFullscreen();
             Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
@@ -234,7 +234,11 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {}
     @Override
-    public void dispose() {}
+    public void dispose() {
+        App.log(0, "destructor", "dispose GameScreen: " + toString());
+        stage.dispose();
+        game.getGameMusic().stop();
+    }
     @Override
     public void show() {}
 }

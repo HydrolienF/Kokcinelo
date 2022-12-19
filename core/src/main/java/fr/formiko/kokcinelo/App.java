@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -37,6 +38,8 @@ public class App extends Game {
     public Music getGameMusic() { return gameMusic; }
     public String getLanguage() { return language; }
     public void setLanguage(String language) { this.language = language; }
+
+    public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -70,8 +73,7 @@ public class App extends Game {
     public void startNewGame() {
         Controller c = new Controller(this);
         Controller.setController(c);
-        c.createNewVideoScreen();
-        // c.createNewGame();
+        c.startApp();
     }
 
     /***

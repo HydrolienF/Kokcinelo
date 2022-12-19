@@ -153,8 +153,7 @@ public class VideoScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        handleInput();
-        ScreenUtils.clear(0, 203f / 255, 1, 1);
+        ScreenUtils.clear(App.BLUE_BACKGROUND);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
         if (camera.zoom < targetZoom) {
@@ -181,14 +180,6 @@ public class VideoScreen implements Screen {
         }
     }
 
-    private void handleInput() {
-        // while debuging game close on escape
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.SPACE)
-                || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            dispose();
-        }
-    }
-
     @Override
     public void resize(int width, int height) { // TODO Auto-generated method stub
     }
@@ -207,13 +198,12 @@ public class VideoScreen implements Screen {
 
     @Override
     public void dispose() {
+        App.log(0, "destructor", "dispose VideoScreen: " + toString());
         flyingSound.dispose();
         crockSound.dispose();
         tingSound.dispose();
         music.dispose();
         stage.dispose();
-        // game.dispose();// @a
-        Controller.getController().createNewGame();
     }
 
 
@@ -350,24 +340,44 @@ public class VideoScreen implements Screen {
         return c;
     }
 
+    /**
+     * {@summary Handle user input.}<br>
+     */
     private void addInputCore() {
         InputProcessor inputProcessor = (InputProcessor) new InputProcessor() {
 
             @Override
             public boolean keyDown(int keycode) { return false; }
-
+            /**
+             * {@summary React to key pressed once.}
+             * 
+             * @param keycode the key pressed
+             */
             @Override
-            public boolean keyUp(int keycode) { return false; }
+            public boolean keyUp(int keycode) {
+                if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
+                    Controller.getController().endVideoScreen();
+                }
+                return true;
+            }
 
             @Override
             public boolean keyTyped(char character) { return false; }
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                dispose();
+                Controller.getController().endVideoScreen();
                 return true;
             }
 
+            /**
+             * {@summary React to a mouse clic.}
+             * 
+             * @param screenX x screen location of the mouse
+             * @param screenY y screen location of the mouse
+             * @param pointer pointer id
+             * @param button  mouse button id
+             */
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
 
