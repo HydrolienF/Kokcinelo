@@ -55,7 +55,7 @@ public class Controller {
 
     public void startApp() { createNewMenuScreen(); }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen(app)); }
+    private void createNewVideoScreen() { setScreen(new VideoScreen()); }
 
     private void createNewMenuScreen() { setScreen(new MenuScreen()); }
     /**

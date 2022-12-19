@@ -3,7 +3,6 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
-import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
 import com.badlogic.gdx.Gdx;
@@ -26,8 +25,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * {@summary The video screen.}
+ * It is used to display before level video.
+ * 
+ * @see com.badlogic.gdx.Screen
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 public class VideoScreen implements Screen {
-    private final App game;
     private Stage stage;
     private static OrthographicCamera camera;
     private Viewport viewport;
@@ -41,16 +48,13 @@ public class VideoScreen implements Screen {
     private Aphid aphid;
     private MemberActor head;
     private MemberActor mandible;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
-     * 
-     * @param game the App where the Screen is display
      */
-    public VideoScreen(final App game) {
-        this.game = game;
-
+    public VideoScreen() {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (h / w));
@@ -59,15 +63,11 @@ public class VideoScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
-        // Texture t = new Texture(Gdx.files.internal("images/" + "videoBackground" + ".png"));
         Actor actor = new Actor() {
             @Override
             public void draw(Batch batch, float parentAlpha) {
                 Color color = getColor();
                 batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-                // batch.draw(new TextureRegion(t), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(),
-                // getScaleX(),
-                // getScaleY(), getRotation());
             }
         };
         actor.setSize((int) (w * 1.5), (int) (h * 1.5));
@@ -158,19 +158,13 @@ public class VideoScreen implements Screen {
         stage.draw();
         if (camera.zoom < targetZoom) {
             camera.zoom = Math.min(camera.zoom * 1.08f, targetZoom);
-            // camera.position = new Vector3(ladybug.getCenterX(), ladybug.getCenterY(), 1);
         } else if (camera.zoom > targetZoom) {
             camera.zoom = Math.max(camera.zoom / 1.08f, targetZoom);
         }
         camera.position.x = ladybug.getCenterX();
         camera.position.y = ladybug.getCenterY();
-        // if (ladybug.getSpeed() > 1) {
-        // ladybug.getMapItem().getActor().moveFront(ladybug.getSpeed() - 1);
-        // }
         if (drawRedCircle) {
             Gdx.gl.glLineWidth(40);
-            Creature c = (Creature) aphid;
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.setProjectionMatrix(getCamera().combined);
             shapeRenderer.begin(ShapeType.Line);
             shapeRenderer.setColor(new Color(1f, 0f, 0f, 1f));
@@ -180,21 +174,18 @@ public class VideoScreen implements Screen {
         }
     }
 
+    // TODO Auto-generated method stub
     @Override
-    public void resize(int width, int height) { // TODO Auto-generated method stub
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() { // TODO Auto-generated method stub
-    }
+    public void pause() {}
 
     @Override
-    public void resume() { // TODO Auto-generated method stub
-    }
+    public void resume() {}
 
     @Override
-    public void hide() { // TODO Auto-generated method stub
-    }
+    public void hide() {}
 
     /**
      * {@summary Dispose all variable that need to be dispose to save memory.}
@@ -232,7 +223,7 @@ public class VideoScreen implements Screen {
 
 
         MemberActor wing = new MemberActor("Creatures/ladybug flying side view wing", mi);
-        float lbw = ladybug.getWidth();
+        // float lbw = ladybug.getWidth();
         float lbh = ladybug.getHeight();
         wing.addToOrigin(280, 0);
         wing.addAvailableAction(loopAction(ladybug, duration, rotationMin, rotationMax, wing, 0f, true));
