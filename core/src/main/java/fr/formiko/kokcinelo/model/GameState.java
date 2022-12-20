@@ -26,6 +26,7 @@ public class GameState {
     private MapActor mapActorFg;
     private int maxScore;
     private int localPlayerId;
+    private String levelId;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /***
@@ -42,6 +43,8 @@ public class GameState {
     // GET SET -------------------------------------------------------------------
     public int getMaxScore() { return maxScore; }
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
+    public int getScore() { return getPlayer(getLocalPlayerId()).getScore(); }
+    public int getPercentScore() { return (getScore() * 100) / getMaxScore(); }
     public MapActor getMapActorFg() { return mapActorFg; }
     public MapActor getMapActor() { return mapActorBg; }
     public List<Aphid> getAphids() { return aphids; }
@@ -49,6 +52,8 @@ public class GameState {
     public List<Ladybug> getLadybugs() { return ladybugs; }
     public int getLocalPlayerId() { return localPlayerId; }
     public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
+    public String getLevelId() { return levelId; }
+    private void setLevelId(String levelId) { this.levelId = levelId; }
     /**
      * {@summary Return player from the list of player or null if not found.}
      * 
@@ -193,6 +198,7 @@ public class GameState {
         private int mapHeight;
         private int maxScore;
         private GameState gs;
+        private String levelId;
 
         private GameStateBuilder() {}
 
@@ -210,6 +216,11 @@ public class GameState {
                 maxScore = 1;
             }
             gs.setMaxScore(maxScore);
+
+            if (levelId == null) {
+                levelId = "1K";
+            }
+            gs.setLevelId(levelId);
 
             // initialize default game
             addMapBackground();
@@ -248,6 +259,15 @@ public class GameState {
          */
         public GameStateBuilder setMaxScore(int maxScore) {
             this.maxScore = maxScore;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setLevelId(String levelId) {
+            this.levelId = levelId;
             return this;
         }
 

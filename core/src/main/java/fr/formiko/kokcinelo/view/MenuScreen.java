@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -77,6 +78,10 @@ public class MenuScreen implements Screen {
     public Controller getController() { return Controller.getController(); }
     public Stage getStage() { return stage; }
     public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
+    public String getLevelId() {
+        // TODO return selected level id.
+        return "1K";
+    }
     // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Render the screen.}
@@ -84,11 +89,13 @@ public class MenuScreen implements Screen {
     @Override
     public void render(float delta) {
         // TODO remove when menu will be ready.
-        Controller.getController().endMenuScreen();
-        return;
-        // ScreenUtils.clear(App.BLUE_BACKGROUND);
-        // stage.act(delta);
-        // stage.draw();
+        if (true) {
+            Controller.getController().endMenuScreen();
+            return;
+        }
+        ScreenUtils.clear(App.BLUE_BACKGROUND);
+        stage.act(delta);
+        stage.draw();
     }
 
     /**

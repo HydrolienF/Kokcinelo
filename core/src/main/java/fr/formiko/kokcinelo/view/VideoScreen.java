@@ -53,8 +53,10 @@ public class VideoScreen implements Screen {
     /**
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
+     * 
+     * @param levelId the level id
      */
-    public VideoScreen() {
+    public VideoScreen(String levelId) {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (h / w));
@@ -63,6 +65,9 @@ public class VideoScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
+
+        // TODO take levelId in account
+
         Actor actor = new Actor() {
             @Override
             public void draw(Batch batch, float parentAlpha) {

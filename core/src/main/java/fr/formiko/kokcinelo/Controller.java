@@ -4,11 +4,13 @@ import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +27,7 @@ public class Controller {
     private GameState gs;
     private App app;
     private boolean spectatorMode;
+    private String levelId;
 
     private static Controller controller;
 
@@ -55,7 +58,7 @@ public class Controller {
 
     public void startApp() { createNewMenuScreen(); }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen()); }
+    private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
 
     private void createNewMenuScreen() { setScreen(new MenuScreen()); }
     /**
@@ -65,6 +68,7 @@ public class Controller {
     public synchronized void endMenuScreen() {
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
+            levelId = ((MenuScreen) (getScreen())).getLevelId();
             createNewVideoScreen();
             toDispose.dispose();
         } else {
@@ -182,7 +186,7 @@ public class Controller {
         int gameTime = 60;
         setSpectatorMode(false);
         app.createGameMusic();
-        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
+        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).setLevelId(levelId).build();
         app.setScreen(new GameScreen(app));
         app.getGameMusic().play();
         App.log(1, "start new Game");
@@ -204,7 +208,7 @@ public class Controller {
      */
     public void interact() {
         if (gs.ladybugEat()) {
-            getGameScreen().setPlayerScore(gs.getPlayer(getLocalPlayerId()).getScore());
+            getGameScreen().setPlayerScore(gs.getScore());
             app.playEatingSound();
         }
     }
@@ -219,11 +223,13 @@ public class Controller {
         app.getGameMusic().dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
-        // boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
+        boolean haveWin = gs.getScore() == gs.getMaxScore();
+        // boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
-        getGameScreen().createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
+        getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
+        saveScoreInFile();
     }
+
     /**
      * {@summary Pause game or resume depening of current state.}
      * It pause move of creature & music.
@@ -239,6 +245,90 @@ public class Controller {
     }
 
     public void dispose() { app.dispose(); }
+
+
+    // Files ----------------------------------------------------------------------------------------------
+    /**
+     * {@summary Save a string in a file.}
+     * 
+     * @param fileName       name of the file
+     * @param contentToWrite content to write into the file
+     * @param append         if true, append the content to the file, else overwrite the content of the file
+     */
+    public void saveStringInFile(String fileName, String contentToWrite, boolean append) {
+        App.log(0, "FILES", "Save \"" + contentToWrite + "\" into " + fileName + " append=" + append);
+        FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        file.writeString(contentToWrite, append);
+    }
+    /**
+     * {@summary Read a string from a file.}
+     * 
+     * @param fileName name of the file
+     * @return content of the file
+     */
+    public String readStringInFile(String fileName) {
+        App.log(0, "FILES", "Read the content of " + fileName);
+        FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        if (file.exists()) {
+            return file.readString();
+        } else {
+            return null;
+        }
+    }
+    private static String getScoresFileName() { return "scores.csv"; }
+    /**
+     * {@summary Save the score of the current game.}
+     * It save the levelId, the score and the time of the game.
+     */
+    public void saveScoreInFile() {
+        saveStringInFile(getScoresFileName(), gs.getLevelId() + "," + gs.getPercentScore() + "," + System.currentTimeMillis() + "\n", true);
+    }
+    /**
+     * {@summary Return the best score of a level.}
+     * 
+     * @param levelId id of the level
+     * @return best score of the level
+     */
+    public int getBestScore(String levelId) {
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            return 0;
+        }
+        int max = 0;
+        for (String line : scores.split("\n")) {
+            String[] data = line.split(",");
+            if (data[0].equals(levelId)) {
+                max = Math.max(max, Integer.parseInt(data[1]));
+            }
+        }
+        return max;
+    }
+    /**
+     * {@summary Return the last score of a level.}
+     * 
+     * @param levelId id of the level
+     * @return last score of the level
+     */
+    public int getLastScore(String levelId) {
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            return 0;
+        }
+        int score = 0;
+        long maxTime = 0;
+        for (String line : scores.split("\n")) {
+            String[] data = line.split(",");
+            if (data[0].equals(levelId)) {
+                long time = Long.parseLong(data[2]);
+                if (maxTime < time) {
+                    maxTime = time;
+                    score = Integer.parseInt(data[1]);
+                }
+            }
+        }
+        return score;
+    }
+
 
     /**
      * {@summary Return current used camera.}

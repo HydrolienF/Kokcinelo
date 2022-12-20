@@ -73,6 +73,8 @@ public class App extends Game {
     public void startNewGame() {
         Controller c = new Controller(this);
         Controller.setController(c);
+        App.log(1, "SCORE", "Current best score " + c.getBestScore("1K"));
+        App.log(1, "SCORE", "Last score " + c.getLastScore("1K"));
         c.startApp();
     }
 
