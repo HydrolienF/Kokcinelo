@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -16,11 +17,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -55,20 +59,33 @@ public class MenuScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
 
+        final int w = Gdx.graphics.getWidth();
+        final int h = Gdx.graphics.getHeight();
+
         final TextButton button = new TextButton("Play", skin);
         button.setSize(100, 100);
         table.add(button);
         button.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Clicked! Is checked: " + button.isChecked());
-                button.setText("Good job!");
-            }
+            @Override
+            public void changed(ChangeEvent event, Actor actor) { getController().endMenuScreen(); }
         });
+
+
+        final Label scoresText = new Label(g.get("BEST_SCORE") + " : " + getController().getBestScore(getLevelId()) + "\n"
+                + g.get("LAST_SCORE") + " : " + getController().getLastScore(getLevelId()), skin);
+        scoresText.setBounds(0, h * 2 / 3, w / 3, h / 3);
+        scoresText.setAlignment(Align.center);
+
+        Label levelDescription = new Label(g.get("DESCRIPTION_LEVEL_" + getLevelId()), skin);
+        levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
+        levelDescription.setAlignment(Align.center);
 
 
         Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, batch);
         stage.addActor(table);
+        stage.addActor(scoresText);
+        stage.addActor(levelDescription);
         addProcessor(stage);
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
@@ -88,11 +105,11 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // TODO remove when menu will be ready.
-        if (true) {
-            Controller.getController().endMenuScreen();
-            return;
-        }
+        // // TODO remove when menu will be ready.
+        // if (false) {
+        // Controller.getController().endMenuScreen();
+        // return;
+        // }
         ScreenUtils.clear(App.BLUE_BACKGROUND);
         stage.act(delta);
         stage.draw();
@@ -178,7 +195,7 @@ public class MenuScreen implements Screen {
         skin.add("white", new Texture(pixmap));
 
         // Store the default libGDX font under the name "default".
-        skin.add("default", new BitmapFont());
+        skin.add("default", new BitmapFont(Gdx.files.internal("fonts/font.fnt")));
 
         // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -187,7 +204,10 @@ public class MenuScreen implements Screen {
         // textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
         // textButtonStyle.over = skin.newDrawable("white", Color.RED);
         textButtonStyle.font = skin.getFont("default");
+        // textButtonStyle.fontColor = Color.RED;
         skin.add("default", textButtonStyle);
+
+        skin.add("default", new LabelStyle(skin.getFont("default"), Color.WHITE));
 
         return skin;
     }
