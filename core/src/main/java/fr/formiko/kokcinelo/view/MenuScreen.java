@@ -62,6 +62,7 @@ public class MenuScreen implements Screen {
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
 
+        // TODO button should be a triangle image (draw on Pixmap or loaded from file)
         final TextButton button = new TextButton("Play", skin);
         button.setSize(100, 100);
         table.add(button);
@@ -71,14 +72,23 @@ public class MenuScreen implements Screen {
         });
 
 
-        final Label scoresText = new Label(g.get("BEST_SCORE") + " : " + getController().getBestScore(getLevelId()) + "\n"
-                + g.get("LAST_SCORE") + " : " + getController().getLastScore(getLevelId()), skin);
+        // TODO save translation text
+        final Label scoresText = new Label(g.get("bestScore") + " : " + getController().getBestScore(getLevelId()) + "%\n"
+                + g.get("lastScore") + " : " + getController().getLastScore(getLevelId()) + "%", skin);
         scoresText.setBounds(0, h * 2 / 3, w / 3, h / 3);
         scoresText.setAlignment(Align.center);
 
-        Label levelDescription = new Label(g.get("DESCRIPTION_LEVEL_" + getLevelId()), skin);
+        Label levelDescription = new Label(g.get("descriptionLevel" + getLevelId()), skin);
         levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
         levelDescription.setAlignment(Align.center);
+
+        // TODO add the level button as circle
+
+        // TODO be able to select a level
+
+        // TODO add round image for buton
+
+        // TODO draw button image as grey image + a black lok over it.
 
 
         Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());

@@ -1,6 +1,8 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
+import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.badlogic.gdx.Application;
@@ -51,6 +53,7 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
+        g.setMap(Files.getText("fr"));
         // // full screen
         // try {
         // Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();

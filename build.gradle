@@ -110,6 +110,8 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.github.HydrolienF:usual:$usualVersion"
         testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+        implementation 'org.yaml:snakeyaml:1.21'
     }
 
     test {
