@@ -48,5 +48,7 @@ public class Shapes {
      * @param color      color of the circle
      * @return a Pixmap with the circle in it
      */
-    public static Texture getCircle(int radius, int edgeLength, Color color) { return getCircle(radius, edgeLength, color.toIntBits()); }
+    public static Texture getCircle(int radius, int edgeLength, Color color) {
+        return getCircle(radius, edgeLength, Color.rgba8888(color));
+    }
 }

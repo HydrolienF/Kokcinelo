@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -56,12 +57,16 @@ public class MenuScreen implements Screen {
         skin = getDefautSkin();
         batch = new SpriteBatch();
 
-        // Create a table that fills the screen. Everything else will go inside this table.
-        Table table = new Table();
-        table.setFillParent(true);
+        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+        stage = new Stage(viewport, batch);
 
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
+
+        Table table = new Table();
+        table.setBounds(0, h / 3, w, h / 3);
+        // table.setFillParent(true);
+
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
         final TextButton button = new TextButton("Play", skin);
@@ -82,8 +87,29 @@ public class MenuScreen implements Screen {
         levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
         levelDescription.setAlignment(Align.center);
 
-        // TODO add the 9 level buttons as circle
-        // LevelButton levelButton = new LevelButton();
+        // Add the 9 level buttons as circle to fill all aviable space & preserve same space between buttons.
+        // TODO have same space between button & with borders.
+        Table tableLevelButton = new Table();
+        tableLevelButton.setBounds(0, 0, w, h / 3);
+        int buttonRadius = (int) tableLevelButton.getWidth() / 25;
+        int buttonSize = buttonRadius * 2;
+        int len = 5;
+        int xPerButton = (int) tableLevelButton.getWidth() / len;
+        int yPerButton = (int) tableLevelButton.getHeight() / 2;
+        int xMargin = xPerButton / 2 - buttonRadius;
+        int yMargin = yPerButton - buttonRadius;
+        for (int i = 0; i < len; i++) {
+            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K");
+            levelButtonK.setPosition(w * i / len + xMargin, tableLevelButton.getHeight() - yMargin);
+            if (i == 0) {
+                levelButtonK.setSelected(true);
+            } else {
+                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F");
+                levelButtonF.setPosition(w * i / len + xMargin, yMargin);
+                tableLevelButton.addActor(levelButtonF);
+            }
+            tableLevelButton.addActor(levelButtonK);
+        }
 
         // TODO be able to select a level
 
@@ -92,11 +118,10 @@ public class MenuScreen implements Screen {
         // TODO draw button image as grey image + a black lok over it.
 
 
-        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-        stage = new Stage(viewport, batch);
         stage.addActor(table);
         stage.addActor(scoresText);
         stage.addActor(levelDescription);
+        stage.addActor(tableLevelButton);
         addProcessor(stage);
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
@@ -217,6 +242,10 @@ public class MenuScreen implements Screen {
         textButtonStyle.font = skin.getFont("default");
         // textButtonStyle.fontColor = Color.RED;
         skin.add("default", textButtonStyle);
+
+        ButtonStyle buttonStyle = new ButtonStyle();
+        skin.add("default", buttonStyle);
+
 
         skin.add("default", new LabelStyle(skin.getFont("default"), Color.WHITE));
 
