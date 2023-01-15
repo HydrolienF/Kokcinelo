@@ -42,6 +42,7 @@ public class MenuScreen implements Screen {
     private SpriteBatch batch;
     private Skin skin;
     private InputMultiplexer inputMultiplexer;
+    // private Texture redCircle = Shapes.getCircle(300 / 2, 40, 0);
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -72,7 +73,6 @@ public class MenuScreen implements Screen {
         });
 
 
-        // TODO save translation text
         final Label scoresText = new Label(g.get("bestScore") + " : " + getController().getBestScore(getLevelId()) + "%\n"
                 + g.get("lastScore") + " : " + getController().getLastScore(getLevelId()) + "%", skin);
         scoresText.setBounds(0, h * 2 / 3, w / 3, h / 3);
@@ -82,7 +82,8 @@ public class MenuScreen implements Screen {
         levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
         levelDescription.setAlignment(Align.center);
 
-        // TODO add the level button as circle
+        // TODO add the 9 level buttons as circle
+        // LevelButton levelButton = new LevelButton();
 
         // TODO be able to select a level
 

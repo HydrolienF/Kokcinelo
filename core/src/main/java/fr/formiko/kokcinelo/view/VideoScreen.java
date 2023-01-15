@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.Shapes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -13,9 +14,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -44,11 +44,10 @@ public class VideoScreen implements Screen {
     private Sound tingSound;
     private float targetZoom;
     private MapItemActorAnimate ladybug;
-    private boolean drawRedCircle;
     private Aphid aphid;
     private MemberActor head;
     private MemberActor mandible;
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Actor redCircle;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
@@ -98,12 +97,14 @@ public class VideoScreen implements Screen {
         }), Actions.sequence(Actions.delay(2f), Actions.run(new Runnable() {
             public void run() {
                 tingSound.play();
-                drawRedCircle = true;
+                redCircle.setVisible(true);
+                redCircle.setPosition(aphid.getActor().getCenterX() - redCircle.getWidth() / 2,
+                        aphid.getActor().getCenterY() - redCircle.getHeight() / 2);
             }
         }), Actions.delay(2f), Actions.run(new Runnable() {
             public void run() {
                 targetZoom = 0.4f;
-                drawRedCircle = false;
+                redCircle.setVisible(false);
             }
         }), Actions.delay(0.5f), Actions.run(new Runnable() {
             public void run() { ladybug.setSpeed(3); }
@@ -140,6 +141,19 @@ public class VideoScreen implements Screen {
         targetZoom = 0.5f;
         camera.zoom = targetZoom;
 
+        redCircle = new Actor() {
+            private Texture redCircle = Shapes.getCircle(300 / 2, 40, Color.RED);
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                Color color = getColor();
+                batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+                batch.draw(redCircle, getX(), getY(), getWidth(), getHeight());
+            }
+        };
+        redCircle.setSize(300, 300);
+        redCircle.setVisible(false);
+        stage.addActor(redCircle);
+
         addInputCore();
 
         App.log(0, "constructor", "new VideoScreen: " + toString());
@@ -168,15 +182,6 @@ public class VideoScreen implements Screen {
         }
         camera.position.x = ladybug.getCenterX();
         camera.position.y = ladybug.getCenterY();
-        if (drawRedCircle) {
-            Gdx.gl.glLineWidth(40);
-            shapeRenderer.setProjectionMatrix(getCamera().combined);
-            shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(new Color(1f, 0f, 0f, 1f));
-            shapeRenderer.circle(aphid.getCenterX(), aphid.getCenterY(), (float) 300, 200);
-            shapeRenderer.end();
-            Gdx.gl.glLineWidth(1);
-        }
     }
 
     // TODO Auto-generated method stub
