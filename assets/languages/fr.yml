@@ -1,6 +1,8 @@
 test: fr
 
 # Menu
+level: niveau
 bestScore: meilleur score
 lastScore: dernier score
-descriptionLevel1K: Dévorez un maximum de pucerons en 1 minute !
+descriptionLevel1K: dévorez un maximum de pucerons en 1 minute !
+commingSoon: Bientot disponible.

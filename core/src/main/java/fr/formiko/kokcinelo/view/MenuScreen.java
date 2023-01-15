@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -43,7 +45,8 @@ public class MenuScreen implements Screen {
     private SpriteBatch batch;
     private Skin skin;
     private InputMultiplexer inputMultiplexer;
-    // private Texture redCircle = Shapes.getCircle(300 / 2, 40, 0);
+    private final Label scoresLabel;
+    private final Label levelDescription;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -63,65 +66,38 @@ public class MenuScreen implements Screen {
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
 
-        Table table = new Table();
-        table.setBounds(0, h / 3, w, h / 3);
-        // table.setFillParent(true);
+        Table centerTable = new Table();
+        centerTable.setBounds(0, h / 2, w, h / 6);
 
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
         final TextButton button = new TextButton("Play", skin);
         button.setSize(100, 100);
-        table.add(button);
+        centerTable.add(button);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) { getController().endMenuScreen(); }
         });
 
+        stage.addActor(getLevelButtonTable()); // need to be done before use getScoresText()
 
-        final Label scoresText = new Label(g.get("bestScore") + " : " + getController().getBestScore(getLevelId()) + "%\n"
-                + g.get("lastScore") + " : " + getController().getLastScore(getLevelId()) + "%", skin);
-        scoresText.setBounds(0, h * 2 / 3, w / 3, h / 3);
-        scoresText.setAlignment(Align.center);
+        scoresLabel = new Label("", skin);
+        scoresLabel.setBounds(0, h * 2 / 3, w / 3, h / 3);
+        scoresLabel.setAlignment(Align.center);
+        scoresLabel.setWrap(true);
 
-        Label levelDescription = new Label(g.get("descriptionLevel" + getLevelId()), skin);
+        levelDescription = new Label("", skin);
         levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
         levelDescription.setAlignment(Align.center);
+        levelDescription.setWrap(true);
 
-        // Add the 9 level buttons as circle to fill all aviable space & preserve same space between buttons.
-        // TODO have same space between button & with borders.
-        Table tableLevelButton = new Table();
-        tableLevelButton.setBounds(0, 0, w, h / 3);
-        int buttonRadius = (int) tableLevelButton.getWidth() / 25;
-        int buttonSize = buttonRadius * 2;
-        int len = 5;
-        int xPerButton = (int) tableLevelButton.getWidth() / len;
-        int yPerButton = (int) tableLevelButton.getHeight() / 2;
-        int xMargin = xPerButton / 2 - buttonRadius;
-        int yMargin = yPerButton - buttonRadius;
-        for (int i = 0; i < len; i++) {
-            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K");
-            levelButtonK.setPosition(w * i / len + xMargin, tableLevelButton.getHeight() - yMargin);
-            if (i == 0) {
-                levelButtonK.setSelected(true);
-            } else {
-                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F");
-                levelButtonF.setPosition(w * i / len + xMargin, yMargin);
-                tableLevelButton.addActor(levelButtonF);
-            }
-            tableLevelButton.addActor(levelButtonK);
-        }
-
-        // TODO be able to select a level
-
-        // TODO add round image for buton
-
-        // TODO draw button image as grey image + a black lok over it.
+        updateSelectedLevel(getLevelId());
 
 
-        stage.addActor(table);
-        stage.addActor(scoresText);
+        stage.addActor(centerTable);
+        stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        stage.addActor(tableLevelButton);
+        // stage.setDebugAll(true);
         addProcessor(stage);
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
@@ -131,10 +107,7 @@ public class MenuScreen implements Screen {
     public Controller getController() { return Controller.getController(); }
     public Stage getStage() { return stage; }
     public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
-    public String getLevelId() {
-        // TODO return selected level id.
-        return "1K";
-    }
+    public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
     // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Render the screen.}
@@ -221,6 +194,9 @@ public class MenuScreen implements Screen {
         return inputProcessor;
     }
 
+    /**
+     * @return A simple skin that menus use
+     */
     public Skin getDefautSkin() {
         Skin skin = new Skin();
 
@@ -247,9 +223,89 @@ public class MenuScreen implements Screen {
         skin.add("default", buttonStyle);
 
 
-        skin.add("default", new LabelStyle(skin.getFont("default"), Color.WHITE));
+        skin.add("default", new LabelStyle(skin.getFont("default"), Color.BLACK));
 
         return skin;
+    }
+
+    // private ------------------------------------------------------------------------------------
+    /**
+     * Add the 9 level buttons as circle to fill all aviable space & preserve same space between buttons.
+     * 
+     * @return The level button table
+     */
+    private Table getLevelButtonTable() {
+        LevelButton.clearList();
+        final int w = Gdx.graphics.getWidth();
+        final int h = Gdx.graphics.getHeight();
+
+        Table levelButtonTable = new Table();
+        levelButtonTable.setBounds(0, 0, w, h / 2);
+        int buttonRadius = (int) levelButtonTable.getWidth() / 20;
+        int buttonSize = buttonRadius * 2;
+        int len = 5;
+
+        int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
+        int xSpaceBetweenButton = xFreeSpace / (len + 1);
+
+        int yFreeSpace = (int) levelButtonTable.getHeight() - (2 * buttonSize);
+        int ySpaceBetweenButton = yFreeSpace / 3;
+
+        for (int i = 0; i < len; i++) {
+            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K");
+            levelButtonK.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i,
+                    levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize);
+            if (i == 0) {
+                levelButtonK.setChecked(true);
+            } else {
+                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F");
+                levelButtonF.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i, ySpaceBetweenButton);
+            }
+        }
+        for (LevelButton levelButton : LevelButton.getList()) {
+            levelButtonTable.addActor(levelButton);
+            levelButton.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) { updateSelectedLevel(levelButton.getId()); }
+            });
+        }
+
+
+        // TODO draw button image as grey image + a black lok over it.
+
+
+        return levelButtonTable;
+    }
+
+    /**
+     * Update the label that depend of selected level.
+     * 
+     * @param levelId the selected level
+     */
+    private void updateSelectedLevel(String levelId) {
+        scoresLabel.setText(getScoresText(levelId));
+        levelDescription.setText(getLevelDescription(levelId));
+    }
+    /**
+     * @param levelId the level id
+     * @return A String with level name, last &#38; best score
+     */
+    private String getScoresText(String levelId) {
+        return g.get("Level") + " " + levelIdToString(levelId) + "\n" + g.get("BestScore") + " : " + getController().getBestScore(levelId)
+                + "%\n" + g.get("LastScore") + " : " + getController().getLastScore(levelId) + "%";
+    }
+    private String getLevelDescription(String levelId) { return g.get("DescriptionLevel" + levelId, g.get("CommingSoon")); }
+    /**
+     * @param levelId the level id
+     * @return A String representing the level id.
+     */
+    private String levelIdToString(String levelId) {
+        String r = "" + levelId.charAt(0) + " - ";
+        if (levelId.charAt(1) == 'K') {
+            r += "Kokcinelo";
+        } else {
+            r += "Formiko";
+        }
+        return r;
     }
 
 }
