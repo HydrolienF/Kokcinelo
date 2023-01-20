@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
@@ -60,7 +61,10 @@ public class Controller {
 
     private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
 
-    private void createNewMenuScreen() { setScreen(new MenuScreen()); }
+    private void createNewMenuScreen() {
+        setScreen(new MenuScreen());
+        Musics.playMenuMusic();
+    }
     /**
      * {@summary End the current screen.}
      * Current screen is supposed to be a MenuScreen. Other wise it will do nothing.
@@ -185,10 +189,10 @@ public class Controller {
         App.log(0, "Need to start new Game");
         int gameTime = 60;
         setSpectatorMode(false);
-        app.createGameMusic();
+        Musics.setMusic("Waltz of the Night 1min");
         gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).setLevelId(levelId).build();
         app.setScreen(new GameScreen(app));
-        app.getGameMusic().play();
+        Musics.play();
         App.log(1, "start new Game");
         // app.getGameMusic().setPosition(178.1f - gameTime); // end at 178
         getGameScreen().resume();
@@ -220,7 +224,7 @@ public class Controller {
         if (getGameScreen().isStop()) {
             return;
         }
-        app.getGameMusic().dispose();
+        // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
         boolean haveWin = gs.getScore() == gs.getMaxScore();
@@ -237,10 +241,10 @@ public class Controller {
     public void pauseResume() {
         if (getGameScreen().isPause()) {
             getGameScreen().resume();
-            app.getGameMusic().play();
+            Musics.play();
         } else {
             getGameScreen().pause();
-            app.getGameMusic().pause();
+            Musics.pause();
         }
     }
 

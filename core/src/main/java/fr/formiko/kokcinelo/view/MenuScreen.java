@@ -114,7 +114,6 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // // TODO remove when menu will be ready.
         // if (false) {
         // Controller.getController().endMenuScreen();
         // return;
@@ -270,7 +269,7 @@ public class MenuScreen implements Screen {
         }
 
 
-        // TODO draw button image as grey image + a black lok over it.
+        // TODO draw button image as grey image + a black lock over it.
 
 
         return levelButtonTable;

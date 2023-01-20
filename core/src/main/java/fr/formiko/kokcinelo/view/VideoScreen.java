@@ -5,12 +5,12 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,7 +38,7 @@ public class VideoScreen implements Screen {
     private Stage stage;
     private static OrthographicCamera camera;
     private Viewport viewport;
-    private Music music;
+    // private Music music;
     private Sound flyingSound;
     private Sound crockSound;
     private Sound tingSound;
@@ -78,13 +78,16 @@ public class VideoScreen implements Screen {
         stage.addActor(actor);
         loadBackground();
         aphid = loadAphid();
-        music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
+        Musics.setMusic("Waltz of the Night");
+        // music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
         flyingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flying.mp3"));
         crockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         tingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ting.mp3"));
 
-        music.setVolume(0.6f);
-        music.play();
+        Musics.setVolume(0.6f);
+        Musics.play();
+        // music.setVolume(0.6f);
+        // music.play();
         long soundId = flyingSound.play(0.2f);
         flyingSound.setLooping(soundId, true);
 
@@ -208,7 +211,7 @@ public class VideoScreen implements Screen {
         flyingSound.dispose();
         crockSound.dispose();
         tingSound.dispose();
-        music.dispose();
+        // music.dispose();
         stage.dispose();
     }
 

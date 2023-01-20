@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
@@ -8,7 +9,6 @@ import java.util.Date;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -26,8 +26,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
-    private Music gameMusic;
-    private String language = "en";
+    // private Music gameMusic;
+
+    private String language = "fr";
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -37,7 +38,6 @@ public class App extends Game {
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
 
-    public Music getGameMusic() { return gameMusic; }
     public String getLanguage() { return language; }
     public void setLanguage(String language) { this.language = language; }
 
@@ -53,7 +53,7 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
-        g.setMap(Files.getText("fr"));
+        g.setMap(Files.getText(language));
         // // full screen
         // try {
         // Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
@@ -96,19 +96,11 @@ public class App extends Game {
      */
     @Override
     public void dispose() {
-        // TODO be able to dispose even for html version
-        // System.exit(0); //HTML INCOMPATIBLE
+        App.log(1, "Normal close of the app.");
         Gdx.app.exit();
     }
 
     // music --------------------------------------------------------------------------------------
-    /**
-     * {@summary Play the game music.}
-     */
-    public void createGameMusic() {
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night 1min.mp3"));
-        // gameMusic = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night shorted.mp3"));
-    }
     /**
      * {@summary Play the eating sound.}
      * Sound can be play many times &#38; at same time.
@@ -132,9 +124,7 @@ public class App extends Game {
         } else {
             fileName = "lose";
         }
-        Sound s = Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3"));
-        gameMusic.stop();
-        s.play();
+        Musics.play(fileName);
     }
 
     // LOGS -------------------------------------------------------------------
