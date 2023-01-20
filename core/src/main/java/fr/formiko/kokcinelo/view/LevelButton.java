@@ -46,7 +46,7 @@ class LevelButton extends Button {
             levelButtonList = new HashSet<LevelButton>();
         }
         if (lockedLevel == null) {
-            lockedLevel = Shapes.getCircledTexture(radius, new Color(0.7f, 0.7f, 0.7f, 1f),
+            lockedLevel = Shapes.getCircledTexture(radius, new Color(0.3f, 0.3f, 0.3f, 1f),
                     new Texture(Gdx.files.internal("images/lock.png")), 0.3f);
         }
 
