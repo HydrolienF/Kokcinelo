@@ -338,8 +338,7 @@ public class GameState {
          * {@summary Add the map background.}
          */
         private void addMapBackground() {
-            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
-                    new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f), true);
+            gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight), App.GREEN, true);
             // gs.mapActorBg = new MapActor(Math.max(1, mapWidth), Math.max(1, mapHeight),
             // Color.OLIVE);
         }

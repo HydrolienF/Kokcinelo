@@ -334,7 +334,7 @@ public class VideoScreen implements Screen {
     }
 
     private void loadBackground() {
-        MapActor ma = new MapActor(10000, 1000, new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f), true, 200, 80);
+        MapActor ma = new MapActor(10000, 1000, App.GREEN, true, 200, 80);
         ma.setPosition(-ma.getWidth() / 2, -1700);
         stage.addActor(ma);
         // TODO also add a cloud saying "KOKCINELO"

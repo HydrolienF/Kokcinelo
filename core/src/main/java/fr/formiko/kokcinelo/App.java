@@ -42,6 +42,7 @@ public class App extends Game {
     public void setLanguage(String language) { this.language = language; }
 
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
+    public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
 
     // FUNCTIONS -----------------------------------------------------------------
     /**

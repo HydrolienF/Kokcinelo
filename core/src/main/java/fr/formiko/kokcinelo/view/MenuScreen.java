@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -251,26 +249,19 @@ public class MenuScreen implements Screen {
         int ySpaceBetweenButton = yFreeSpace / 3;
 
         for (int i = 0; i < len; i++) {
-            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K");
+            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K", this);
             levelButtonK.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i,
                     levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize);
             if (i == 0) {
                 levelButtonK.setChecked(true);
             } else {
-                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F");
+                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F", this);
                 levelButtonF.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i, ySpaceBetweenButton);
             }
         }
         for (LevelButton levelButton : LevelButton.getList()) {
             levelButtonTable.addActor(levelButton);
-            levelButton.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) { updateSelectedLevel(levelButton.getId()); }
-            });
         }
-
-
-        // TODO draw button image as grey image + a black lock over it.
-
 
         return levelButtonTable;
     }
@@ -280,7 +271,16 @@ public class MenuScreen implements Screen {
      * 
      * @param levelId the selected level
      */
-    private void updateSelectedLevel(String levelId) {
+    public void updateSelectedLevel(String levelId) {
+        scoresLabel.setText(getScoresText(levelId));
+        levelDescription.setText(getLevelDescription(levelId));
+    }
+    /**
+     * Update the label that depend of selected level.
+     * 
+     * @param levelId the selected level
+     */
+    public void updateOveredLevel(String levelId) {
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
     }

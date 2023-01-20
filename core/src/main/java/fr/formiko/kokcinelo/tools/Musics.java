@@ -42,7 +42,15 @@ public class Musics {
             music.setVolume(volume);
         }
     }
+    public static void setLooping(boolean isLooping) {
+        if (music != null) {
+            music.setLooping(isLooping);
+        }
+    }
 
-    public static void playMenuMusic() { play("Sun Is Not Falling cut"); }
+    public static void playMenuMusic() {
+        play("Sun Is Not Falling cut");
+        setLooping(true);
+    }
     // public static void playGameMusic() { play("Sun Is Not Falling"); }
 }
