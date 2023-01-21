@@ -76,6 +76,12 @@ class LevelButton extends Button {
 
 
     public String getId() { return id; }
+    public int getNumber() { return Integer.parseInt(id.substring(0, 1)); }
+    public String getLetter() { return id.substring(1, 2); }
+    public float getCenterX() { return getX() + getWidth() / 2; }
+    public float getCenterY() { return getY() + getHeight() / 2; }
+    public void setCenterX(float x) { setX(x - getWidth() / 2); }
+    public void setCenterY(float y) { setY(y - getHeight() / 2); }
     /**
      * Setter that make sure that only one button is checked a same time.
      */
@@ -121,6 +127,21 @@ class LevelButton extends Button {
     }
     public static void clearList() { levelButtonList = null; }
     public static Set<LevelButton> getList() { return levelButtonList; }
+    /**
+     * @param id id of the level button to get.
+     * @return a level button by it's id.
+     */
+    public static LevelButton getLevelButton(String id) {
+        for (LevelButton levelButton : levelButtonList) {
+            if (levelButton.getId().equals(id)) {
+                return levelButton;
+            }
+        }
+        return null;
+    }
+    /**
+     * @return true if the level is unlocked.
+     */
     public boolean isUnlocked() {
         if (unlockedLevels == null) {
             unlockedLevels = Controller.getController().loadUnlockedLevels();
