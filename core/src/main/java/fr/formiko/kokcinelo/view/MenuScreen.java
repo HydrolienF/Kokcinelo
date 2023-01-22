@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -42,8 +44,10 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private Skin skin;
+    private Skin skinTitle;
     private InputMultiplexer inputMultiplexer;
     private final Label scoresLabel;
+    private final Label levelNameLabel;
     private final Label levelDescription;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -55,7 +59,8 @@ public class MenuScreen implements Screen {
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        skin = getDefautSkin();
+        skin = getDefautSkin(30);
+        skinTitle = getDefautSkin(40);
         batch = new SpriteBatch();
 
         Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -63,9 +68,12 @@ public class MenuScreen implements Screen {
 
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
+        int topSpace = h * 4 / 10;
+        int bottowSpace = h * 5 / 10;
+        int centerSpace = h / 10;
 
         Table centerTable = new Table();
-        centerTable.setBounds(0, h / 2, w, h / 6);
+        centerTable.setBounds(0, bottowSpace, w, centerSpace);
 
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
@@ -77,15 +85,22 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) { getController().endMenuScreen(); }
         });
 
-        stage.addActor(getLevelButtonTable()); // need to be done before use getScoresText()
+        stage.addActor(getLevelButtonTable(w, bottowSpace)); // need to be done before use getScoresText()
+
+
+        levelNameLabel = new Label("", skinTitle);
+        levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
+        // levelNameLabel.setAlignment(Align.center);
+        levelNameLabel.setAlignment(Align.bottom, Align.center);
+        levelNameLabel.setWrap(true);
 
         scoresLabel = new Label("", skin);
-        scoresLabel.setBounds(0, h * 2 / 3, w / 3, h / 3);
-        scoresLabel.setAlignment(Align.center);
+        scoresLabel.setBounds(0, h - topSpace, w / 3, topSpace / 2);
+        scoresLabel.setAlignment(Align.top, Align.center);
         scoresLabel.setWrap(true);
 
         levelDescription = new Label("", skin);
-        levelDescription.setBounds(w * 2 / 3, h * 2 / 3, w / 3, h / 3);
+        levelDescription.setBounds(w * 2 / 3, h - topSpace, w / 3, topSpace);
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
 
@@ -93,6 +108,7 @@ public class MenuScreen implements Screen {
 
 
         stage.addActor(centerTable);
+        stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
         // stage.setDebugAll(true);
@@ -117,6 +133,7 @@ public class MenuScreen implements Screen {
         // return;
         // }
         ScreenUtils.clear(App.BLUE_BACKGROUND);
+        stage.setDebugAll(true);// @a
         stage.act(delta);
         stage.draw();
     }
@@ -194,17 +211,25 @@ public class MenuScreen implements Screen {
     /**
      * @return A simple skin that menus use
      */
-    public Skin getDefautSkin() {
+    public Skin getDefautSkin(int fontSize) {
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
         Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
+        pixmap.setColor(Color.BLACK);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
 
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = fontSize;
+        BitmapFont bmf = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+        // bmf.getData().markupEnabled = true; //Use to set color label by label
+
         // Store the default libGDX font under the name "default".
-        skin.add("default", new BitmapFont(Gdx.files.internal("fonts/font.fnt")));
+        skin.add("default", bmf);
 
         // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -221,6 +246,7 @@ public class MenuScreen implements Screen {
 
 
         skin.add("default", new LabelStyle(skin.getFont("default"), Color.BLACK));
+        // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
         return skin;
     }
@@ -231,13 +257,11 @@ public class MenuScreen implements Screen {
      * 
      * @return The level button table
      */
-    private Table getLevelButtonTable() {
+    private Table getLevelButtonTable(final int w, final int h) {
         LevelButton.clearList();
-        final int w = Gdx.graphics.getWidth();
-        final int h = Gdx.graphics.getHeight();
 
         Table levelButtonTable = new LevelButtonTable(w / 200);
-        levelButtonTable.setBounds(0, 0, w, h / 2);
+        levelButtonTable.setBounds(0, 0, w, h);
         int buttonRadius = (int) levelButtonTable.getWidth() / 20;
         int buttonSize = buttonRadius * 2;
         int len = 4;
@@ -267,20 +291,22 @@ public class MenuScreen implements Screen {
     }
 
     /**
-     * Update the label that depend of selected level.
+     * Update the labels that depend of selected level.
      * 
      * @param levelId the selected level
      */
     public void updateSelectedLevel(String levelId) {
+        levelNameLabel.setText(getLevelNameText(levelId));
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
     }
     /**
-     * Update the label that depend of selected level.
+     * Update the labels that depend of selected level.
      * 
      * @param levelId the selected level
      */
     public void updateOveredLevel(String levelId) {
+        levelNameLabel.setText(getLevelNameText(levelId));
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
     }
@@ -289,9 +315,14 @@ public class MenuScreen implements Screen {
      * @return A String with level name, last &#38; best score
      */
     private String getScoresText(String levelId) {
-        return g.get("Level") + " " + levelIdToString(levelId) + "\n" + g.get("BestScore") + " : " + getController().getBestScore(levelId)
-                + "%\n" + g.get("LastScore") + " : " + getController().getLastScore(levelId) + "%";
+        return g.get("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + g.get("LastScore") + " : "
+                + getController().getLastScore(levelId) + "%";
     }
+    /**
+     * @param levelId the level id
+     * @return A String with level name, last &#38; best score
+     */
+    private String getLevelNameText(String levelId) { return g.get("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
         if (App.isPlayableLevel(levelId)) {
             return g.get("DescriptionLevel" + levelId, g.get("CommingSoon"));

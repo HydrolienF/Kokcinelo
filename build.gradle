@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -51,7 +51,7 @@ project(":desktop") {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        
+        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     }
 }
 
@@ -67,6 +67,12 @@ project(":desktop") {
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
 //         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+//         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
 //     }
 // }
 
@@ -81,26 +87,27 @@ project(":ios") {
         api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
         api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
     }
 }
 
-project(":html") {
-    apply plugin: "java-library"
-    apply plugin: "gwt"
-    apply plugin: "war"
-    apply plugin: "org.gretty"
+// project(":html") {
+//     apply plugin: "java-library"
+//     apply plugin: "gwt"
+//     apply plugin: "war"
+//     apply plugin: "org.gretty"
 
 
-    dependencies {
-        implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+//     dependencies {
+//         implementation project(":core")
+//         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+//         api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+//         api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
 
-        // Isn't enoth, maybe because it start with 
-        api "com.github.HydrolienF:usual:$usualVersion"
-    }
-}
+//         // Isn't enoth, maybe because it start with 
+//         api "com.github.HydrolienF:usual:$usualVersion"
+//     }
+// }
 
 project(":core") {
     apply plugin: "java-library"
@@ -112,6 +119,7 @@ project(":core") {
         testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
         implementation 'org.yaml:snakeyaml:1.21'
+        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 
     test {
