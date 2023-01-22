@@ -240,7 +240,7 @@ public class MenuScreen implements Screen {
         levelButtonTable.setBounds(0, 0, w, h / 2);
         int buttonRadius = (int) levelButtonTable.getWidth() / 20;
         int buttonSize = buttonRadius * 2;
-        int len = 5;
+        int len = 4;
 
         int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
         int xSpaceBetweenButton = xFreeSpace / (len + 1);
@@ -292,7 +292,13 @@ public class MenuScreen implements Screen {
         return g.get("Level") + " " + levelIdToString(levelId) + "\n" + g.get("BestScore") + " : " + getController().getBestScore(levelId)
                 + "%\n" + g.get("LastScore") + " : " + getController().getLastScore(levelId) + "%";
     }
-    private String getLevelDescription(String levelId) { return g.get("DescriptionLevel" + levelId, g.get("CommingSoon")); }
+    private String getLevelDescription(String levelId) {
+        if (App.isPlayableLevel(levelId)) {
+            return g.get("DescriptionLevel" + levelId, g.get("CommingSoon"));
+        } else {
+            return g.get("CommingSoon") + "\n" + g.get("DescriptionLevel" + levelId, "");
+        }
+    }
     /**
      * @param levelId the level id
      * @return A String representing the level id.

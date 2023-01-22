@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -69,7 +68,7 @@ class LevelButton extends Button {
             }
         });
 
-        setDisabled(!isUnlocked() || !List.of("1K").contains(id));
+        setDisabled(!isUnlocked() || !App.isPlayableLevel(id));
 
         // TODO make button a bit bigger & display 0 to 3 starts at 50%, 80%, 100% of the level
     }

@@ -6,6 +6,7 @@ import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -34,6 +35,10 @@ public class App extends Game {
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
+    public static final List<String> PLAYABLE_LEVELS = List.of("1K");
+    public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
+    public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
+
 
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
@@ -41,8 +46,6 @@ public class App extends Game {
     public String getLanguage() { return language; }
     public void setLanguage(String language) { this.language = language; }
 
-    public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
-    public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -100,6 +103,8 @@ public class App extends Game {
         App.log(1, "Normal close of the app.");
         Gdx.app.exit();
     }
+
+    public static boolean isPlayableLevel(String levelId) { return PLAYABLE_LEVELS.contains(levelId); }
 
     // music --------------------------------------------------------------------------------------
     /**
