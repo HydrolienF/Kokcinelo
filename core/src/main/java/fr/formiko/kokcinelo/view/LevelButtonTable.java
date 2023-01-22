@@ -8,10 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class LevelButtonTable extends Table {
     private final ShapeRenderer sr;
+    private final int lineWidth;
 
-    public LevelButtonTable() {
+    public LevelButtonTable(int lineWidth) {
         super();
         sr = new ShapeRenderer();
+        this.lineWidth = lineWidth;
     }
 
     @Override
@@ -26,13 +28,13 @@ public class LevelButtonTable extends Table {
             if (levelButton2 != null) {
                 int x2 = (int) levelButton2.getCenterX();
                 int y2 = (int) levelButton2.getCenterY();
-                sr.rectLine(x1, y1, x2, y2, 20);
+                sr.rectLine(x1, y1, x2, y2, lineWidth);
             }
             if (levelButton.getNumber() == 1) {
                 levelButton2 = LevelButton.getLevelButton((levelButton.getNumber() + 1) + "F");
                 int x2 = (int) levelButton2.getCenterX();
                 int y2 = (int) levelButton2.getCenterY();
-                sr.rectLine(x1, y1, x2, y2, 20);
+                sr.rectLine(x1, y1, x2, y2, lineWidth);
             }
         }
         sr.end();

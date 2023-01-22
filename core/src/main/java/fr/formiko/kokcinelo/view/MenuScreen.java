@@ -236,7 +236,7 @@ public class MenuScreen implements Screen {
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
 
-        Table levelButtonTable = new LevelButtonTable();
+        Table levelButtonTable = new LevelButtonTable(w / 200);
         levelButtonTable.setBounds(0, 0, w, h / 2);
         int buttonRadius = (int) levelButtonTable.getWidth() / 20;
         int buttonSize = buttonRadius * 2;
