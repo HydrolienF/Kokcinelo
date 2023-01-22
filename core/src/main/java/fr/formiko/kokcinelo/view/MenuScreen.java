@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -55,6 +57,8 @@ public class MenuScreen implements Screen {
     private final Label scoresLabel;
     private final Label levelNameLabel;
     private final Label levelDescription;
+    private final ShapeRenderer shapeRenderer;
+    private final Chrono chrono;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -82,6 +86,8 @@ public class MenuScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setAutoShapeType(true);
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
         final TextButton button = new TextButton("Play", skin);
@@ -126,6 +132,9 @@ public class MenuScreen implements Screen {
         stage.addActor(levelDescription);
         // stage.setDebugAll(true);
         addProcessor(stage);
+
+        chrono = new Chrono();
+        chrono.start();
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
     }
@@ -146,6 +155,22 @@ public class MenuScreen implements Screen {
         // return;
         // }
         ScreenUtils.clear(App.BLUE_BACKGROUND);
+
+        // draw blus sky gradient
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        float secToCycle = 3 * 60 + 54;
+        // float secToCycle = 10;
+        chrono.updateDuree();
+        float dark = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+        if (dark < 0.5f) {
+            dark = 1f - dark;
+        }
+        Color topColor = new Color(0, 0.4f * dark, 1f * dark, 1);
+        Color bottomColor = new Color(0, 0.8f * dark, 1f * dark, 1);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.end();
+
         // stage.setDebugAll(true);
         stage.act(delta);
         stage.draw();
