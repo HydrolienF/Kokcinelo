@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.tools;
 
+import fr.formiko.kokcinelo.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
@@ -9,12 +10,15 @@ public class Musics {
     // public static Music getMusic() { return music; }
     public static void setMusic(String fileName) {
         stop();
+        dispose();
         music = Gdx.audio.newMusic(Gdx.files.internal("musics/" + fileName + ".mp3"));
+        App.log(1, "Current music : " + fileName);
     }
 
     public static void play() {
         stop();
         if (music != null) {
+            App.log(1, "Play current music");
             music.play();
         }
     }

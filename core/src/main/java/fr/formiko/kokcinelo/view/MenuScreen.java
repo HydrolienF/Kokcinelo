@@ -15,11 +15,14 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,7 +30,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -59,7 +65,7 @@ public class MenuScreen implements Screen {
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        skin = getDefautSkin(30);
+        skin = getDefautSkin();
         skinTitle = getDefautSkin(40);
         batch = new SpriteBatch();
 
@@ -68,12 +74,13 @@ public class MenuScreen implements Screen {
 
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
-        int topSpace = h * 4 / 10;
-        int bottowSpace = h * 5 / 10;
-        int centerSpace = h / 10;
+        int topSpace = h * 50 / 100;
+        int bottomSpace = h * 50 / 100;
+        int bottomLinksSpace = h * 5 / 100;
+        int centerSpace = h * 10 / 100;
 
         Table centerTable = new Table();
-        centerTable.setBounds(0, bottowSpace, w, centerSpace);
+        centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
@@ -85,7 +92,7 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) { getController().endMenuScreen(); }
         });
 
-        stage.addActor(getLevelButtonTable(w, bottowSpace)); // need to be done before use getScoresText()
+        stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
 
         levelNameLabel = new Label("", skinTitle);
@@ -106,7 +113,13 @@ public class MenuScreen implements Screen {
 
         updateSelectedLevel(getLevelId());
 
+        Table btable = getLinkButtonsTable(bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 4, bottomLinksSpace);
+        btable.setPosition(0, 0);
+        stage.addActor(btable);
 
+
+        stage.addActor(btable);
         stage.addActor(centerTable);
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
@@ -133,7 +146,7 @@ public class MenuScreen implements Screen {
         // return;
         // }
         ScreenUtils.clear(App.BLUE_BACKGROUND);
-        stage.setDebugAll(true);// @a
+        // stage.setDebugAll(true);
         stage.act(delta);
         stage.draw();
     }
@@ -209,9 +222,10 @@ public class MenuScreen implements Screen {
     }
 
     /**
+     * @param fontSize size of the font
      * @return A simple skin that menus use
      */
-    public Skin getDefautSkin(int fontSize) {
+    public static Skin getDefautSkin(int fontSize) {
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
@@ -250,6 +264,10 @@ public class MenuScreen implements Screen {
 
         return skin;
     }
+    /**
+     * @return A simple skin that menus use
+     */
+    public static Skin getDefautSkin() { return getDefautSkin(28); }
 
     // private ------------------------------------------------------------------------------------
     /**
@@ -310,6 +328,71 @@ public class MenuScreen implements Screen {
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
     }
+
+
+    // Private -------------------------------------------------------------------------------------
+    /**
+     * {@summary Return a table of web site link button.}
+     * 
+     * @return A table of web site link button
+     */
+    private Table getLinkButtonsTable(int size) {
+        Table table = new Table();
+        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size));
+        table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size));
+        // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
+        table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size));
+
+        Image flag = getClickableLink(App.getLanguage(), null, size);
+        flag.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String lang = App.getLanguage();
+                int nextId = (App.SUPPORTED_LANGUAGE.indexOf(lang) + 1) % App.SUPPORTED_LANGUAGE.size();
+                App.setLanguage(App.SUPPORTED_LANGUAGE.get(nextId));
+                updateSelectedLevel(getLevelId());
+                Texture texture = resizeTexture("images/icons/" + App.getLanguage() + ".png", size);
+                flag.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
+            }
+        });
+        table.add(flag);
+        return table;
+    }
+
+    /**
+     * {@summary Return a web site link button.}
+     * 
+     * @return A web site link button
+     */
+    private Image getClickableLink(String imageName, String url, int buttonSize) {
+        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize);
+        Image b = new Image(t);
+        if (url != null) {
+            b.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) { Gdx.net.openURI(url); }
+            });
+        }
+        b.setScaling(Scaling.fillY);
+        return b;
+    }
+
+    /**
+     * {@summary Return a resized texture.}
+     * It is used to resize link button icons.
+     * 
+     * @return A resized texture
+     */
+    private Texture resizeTexture(String textureName, int size) {
+        Pixmap pixmapIn = new Pixmap(Gdx.files.internal(textureName));
+        Pixmap pixmapOut = new Pixmap(size, size, pixmapIn.getFormat());
+        pixmapOut.drawPixmap(pixmapIn, 0, 0, pixmapIn.getWidth(), pixmapIn.getHeight(), 0, 0, pixmapOut.getWidth(), pixmapOut.getHeight());
+        Texture texture = new Texture(pixmapOut);
+        pixmapIn.dispose();
+        pixmapOut.dispose();
+        return texture;
+    }
+
     /**
      * @param levelId the level id
      * @return A String with level name, last &#38; best score

@@ -9,7 +9,10 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -63,7 +66,7 @@ public class Controller {
 
     private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
 
-    private void createNewMenuScreen() {
+    public void createNewMenuScreen() {
         setScreen(new MenuScreen());
         Musics.playMenuMusic();
     }
@@ -293,6 +296,44 @@ public class Controller {
      */
     public void saveScoreInFile() {
         saveStringInFile(getScoresFileName(), gs.getLevelId() + "," + gs.getPercentScore() + "," + System.currentTimeMillis() + "\n", true);
+    }
+    /**
+     * {@summary Save all important data.}
+     */
+    public void saveData() {
+        Map<String, String> map = App.getDataMap();
+        map.put("lastDatePlayed", System.currentTimeMillis() + "");
+        long toAddTimePlayed = System.currentTimeMillis() - Long.parseLong(map.get("startPlaying"));
+        App.log(1, "FILES", "Added time played: " + toAddTimePlayed);
+        long timePlayed;
+        if (map.containsKey("timePlayed")) {
+            timePlayed = Long.parseLong(map.get("timePlayed"));
+        } else {
+            timePlayed = 0;
+        }
+        map.put("timePlayed", "" + (timePlayed + toAddTimePlayed));
+        Files.saveInFile("data.yml", map);
+        App.log(1, "FILES", "Saved data: " + map);
+    }
+    /**
+     * {@summary Load all important data.}
+     */
+    public Map<String, String> loadData() {
+        Map<String, String> map;
+        try {
+            map = Files.loadFromFile("data.yml");
+        } catch (Exception e) {
+            map = new HashMap<String, String>();
+            map.put("firstDatePlayed", System.currentTimeMillis() + "");
+            String l = Locale.getDefault().getLanguage();
+            if (!App.SUPPORTED_LANGUAGE.contains(l)) {
+                l = "en";
+            }
+            map.put("language", l);
+        }
+        map.put("startPlaying", System.currentTimeMillis() + "");
+        App.log(1, "FILES", "Loaded data: " + map);
+        return map;
     }
     /**
      * {@summary Return the best score of a level.}

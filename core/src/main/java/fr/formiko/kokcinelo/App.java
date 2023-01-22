@@ -7,6 +7,7 @@ import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -27,15 +28,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
-    // private Music gameMusic;
 
-    private String language = "fr";
+    private static Map<String, String> data;
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K");
+    public static final List<String> SUPPORTED_LANGUAGE = List.of("en", "fr", "eo");
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
 
@@ -43,8 +44,26 @@ public class App extends Game {
     public App(String[] args) { this.args = args; }
     public App() { this(null); }
 
-    public String getLanguage() { return language; }
-    public void setLanguage(String language) { this.language = language; }
+    public static Map<String, String> getDataMap() { return data; }
+    public static String getLanguage() { return data.get("language"); }
+    /**
+     * {@summary Set language & update translation list.}
+     * 
+     * @param language language to switch to
+     */
+    public static void setLanguage(String language) {
+        if (language != null) {
+            data.put("language", language);
+        }
+        updateLanguage();
+    }
+    /**
+     * {@summary Update translation list.}
+     */
+    private static void updateLanguage() {
+        g.setMap(Files.getText(getLanguage()));
+        App.log(1, "Current language: " + getLanguage());
+    }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -57,7 +76,9 @@ public class App extends Game {
     @Override
     public void create() {
         setOptionsFromArgs();
-        g.setMap(Files.getText(language));
+        Controller.setController(new Controller(this));
+        data = Controller.getController().loadData();
+        updateLanguage();
         // // full screen
         // try {
         // Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
@@ -78,11 +99,9 @@ public class App extends Game {
      * {@summary Start a new Game on this app in GUI.}
      */
     public void startNewGame() {
-        Controller c = new Controller(this);
-        Controller.setController(c);
-        App.log(1, "SCORE", "Current best score " + c.getBestScore("1K"));
-        App.log(1, "SCORE", "Last score " + c.getLastScore("1K"));
-        c.startApp();
+        App.log(1, "SCORE", "Current best score " + Controller.getController().getBestScore("1K"));
+        App.log(1, "SCORE", "Last score " + Controller.getController().getLastScore("1K"));
+        Controller.getController().startApp();
     }
 
     /***
@@ -100,6 +119,8 @@ public class App extends Game {
      */
     @Override
     public void dispose() {
+        // Save played time etc
+        Controller.getController().saveData();
         App.log(1, "Normal close of the app.");
         Gdx.app.exit();
     }

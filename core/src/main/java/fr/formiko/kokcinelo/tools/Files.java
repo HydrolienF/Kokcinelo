@@ -4,11 +4,20 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.usual.Os;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class Files {
+    private static Yaml yaml;
+
+    private static Yaml getYaml() {
+        if (yaml == null) {
+            yaml = new Yaml();
+        }
+        return yaml;
+    }
     public static String getDataPath() {
         if (Os.getOs().isWindows()) {
             return System.getenv("APPDATA") + "/.kokcinelo/data/";
@@ -17,6 +26,12 @@ public class Files {
         }
     }
 
+    /**
+     * Get the translated text from a json file. The file must be in the folder languages and have the name of the language code.
+     * 
+     * @param languageCode language 2 or 3 char code of the file to load.
+     * @return the translated text.
+     */
     public static HashMap<String, String> getText(String languageCode) {
         try {
             // InputStream is = new Files().getClass().getClassLoader().getResourceAsStream("languages/" + languageCode + ".json");
@@ -24,13 +39,20 @@ public class Files {
             FileHandle file = Gdx.files.internal("languages/" + languageCode + ".yml");
             InputStream is = file.read();
             // return new ObjectMapper().readValue(file.file(), HashMap.class);
-            Yaml yaml = new Yaml();
-            HashMap<String, String> map = yaml.load(is);
+            HashMap<String, String> map = getYaml().load(is);
             App.log(1, "", "translated text map: " + map);
             return map;
         } catch (Exception e) {
             App.log(2, "", "fail to load translated map " + e);
             return new HashMap<String, String>();
         }
+    }
+
+    public static void saveInFile(String fileName, Map<String, String> content) {
+        getYaml().dump(content, Gdx.files.absolute(getDataPath() + fileName).writer(false));
+    }
+
+    public static HashMap<String, String> loadFromFile(String fileName) {
+        return getYaml().load(Gdx.files.absolute(getDataPath() + fileName).read());
     }
 }

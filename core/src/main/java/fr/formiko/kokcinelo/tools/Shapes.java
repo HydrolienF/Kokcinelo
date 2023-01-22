@@ -39,7 +39,7 @@ public class Shapes {
     }
 
     public static Texture getCircledTexture(int radius, Color color, Texture texture, float zoom) {
-        App.log(1, "Start to create circled texture.");
+        App.log(0, "Start to create circled texture.");
         Pixmap pixmap = getCirclePixmap(radius, radius + 1, Color.rgba8888(color));
         // get image as pixmap
         if (!texture.getTextureData().isPrepared()) {
@@ -79,7 +79,7 @@ public class Shapes {
                 }
             }
         }
-        App.log(1, "End to create circled texture.");
+        App.log(0, "End to create circled texture.");
         return new Texture(pixmap);
     }
 

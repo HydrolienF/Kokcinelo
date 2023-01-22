@@ -1,0 +1,17 @@
+test: en
+
+# Global
+level: level
+mainMenu: main menu
+
+#Menu
+bestScore: best score
+lastScore: last score
+# descriptionLevel1K: Dévorez un maximum de pucerons en 1 minute !
+# descriptionLevel2K: Dévorez un maximum de pucerons en 1 minute ! Les fourmis feront tout leur possible pour vous en empècher. Méfiez vous de leurs mandibules acérées et de leurs jets d'acide !
+# descriptionLevel2F: Protégez un macimum de pucerons en 1 minute ! Les coccinelles tenterons d'en dévorer autant que possible. Pour les en enpècher, vous pouvez faire usage de vos mandibules ou de votre acide formique. Vous pouvez égallement déplacer les pucerons vers des zones plus protégées, mais il ne reste jamais bien longtemps en place.
+# descriptionLevel3K: Dévorez un maximum de pucerons en 1 minute ! Chaque pucerons dévoré vous accordera un bonus de vie, de vitesse ou de point.
+# descriptionLevel3F: Protégez un maximum de pucerons en 1 minute ! Vos amis les pucerons sécrettent du mielat dont vous raffolez. En fonctions de l'espèce de puceron, le miellat vous rendra plus rapide ou rendra vos attaques plus efficace.
+# descriptionLevel4K: Dévorez un maximum de pucerons en 1 minute ! Certain pucerons vollent. Pour les attraper vous devez voller aussi (espace). Mais attention, en vol vous n'attrapper plus les pucerons au sol.
+# descriptionLevel4F: Protégez un maximum de pucerons en 1 minute ! Les coccinelles vollent ! Lorsqu'elles vollent vous devez miser uniquement sur votre acide pour les arrêter.
+# commingSoon: Bientot disponible.

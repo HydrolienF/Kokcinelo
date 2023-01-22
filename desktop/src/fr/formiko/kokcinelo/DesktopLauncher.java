@@ -36,7 +36,7 @@ public class DesktopLauncher {
 		config.setTitle("Kokcinelo");
 		config.setWindowIcon("images/icons/appIcon.png");
 		App game = new App(args);
-		game.setLanguage(System.getProperty("user.language"));
+		// game.setLanguage(System.getProperty("user.language"));
 		new Lwjgl3Application(game, config);
 	}
 }
