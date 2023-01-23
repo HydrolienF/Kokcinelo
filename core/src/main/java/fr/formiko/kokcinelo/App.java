@@ -92,7 +92,6 @@ public class App extends Game {
         batch = new SpriteBatch();
         // set full screen
         // Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        // TODO add MainMenuScreen that will be call 1st & call GameMenu after
         startNewGame();
     }
     /**

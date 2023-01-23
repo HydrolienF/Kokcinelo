@@ -237,10 +237,6 @@ public class Controller {
         app.playEndGameSound(haveWin);
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
         saveScoreInFile();
-        // TODO it may be a better id to save score only & find if level are unlock from score file.
-        if (haveWin) { // TODO & level haven't been unlock yet.
-            unlockNextLevel(levelId);
-        }
     }
 
     /**
@@ -289,7 +285,6 @@ public class Controller {
         }
     }
     private static String getScoresFileName() { return "scores.csv"; }
-    private static String getUnlockedLevelsFileName() { return "unlockedLevels.csv"; }
     /**
      * {@summary Save the score of the current game.}
      * It save the levelId, the score and the time of the game.
@@ -385,36 +380,24 @@ public class Controller {
      */
     public Set<String> loadUnlockedLevels() {
         HashSet<String> unlockedLevels = new HashSet<String>();
-        String s = readStringInFile(getUnlockedLevelsFileName());
-        unlockedLevels.add("1K");
-        if (s == null || s.equals("")) {
-            unlockLevel("1K");
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            unlockedLevels.add("1K");
         } else {
-            String[] data = s.split(",");
-            for (String string : data) {
-                if (!string.equals("")) {
-                    unlockedLevels.add(string);
+            for (String line : scores.split("\n")) {
+                String[] data = line.split(",");
+                String levelId = data[0];
+                unlockedLevels.add(levelId);
+                int num = Integer.parseInt(levelId.substring(0, 1));
+                unlockedLevels.add((num + 1) + levelId.substring(1, 2));
+                if (num == 1) {
+                    unlockedLevels.add((num + 1) + "F");
                 }
             }
         }
-        App.log(1, "Unlocked levels: " + unlockedLevels);
+        App.log(1, "FILES", "Unlocked levels: " + unlockedLevels);
         return unlockedLevels;
     }
-    /**
-     * {@summary Save new unlocked levels.}
-     */
-    public void unlockNextLevel(String levelId) {
-        if (levelId.equals("1K")) {
-            unlockLevel("2K");
-            unlockLevel("2F");
-        } else {
-            unlockLevel((levelId.charAt(0) + 1) + levelId.substring(1, 2));
-        }
-    }
-    /**
-     * {@summary Save a new unlocked level.}
-     */
-    public void unlockLevel(String levelId) { saveStringInFile(getUnlockedLevelsFileName(), "," + levelId, true); }
 
 
     /**
