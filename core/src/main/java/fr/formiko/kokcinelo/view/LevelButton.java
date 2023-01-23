@@ -28,9 +28,11 @@ class LevelButton extends Button {
     private static Texture circleSelected;
     private static Texture circleSelectedDisable;
     private static Texture lockedLevel;
+    private static Texture star;
     private Texture texture;
     private final String id;
     private static Set<String> unlockedLevels;
+    private final int radius;
 
     /**
      * {@summary Main constructor.}
@@ -44,14 +46,17 @@ class LevelButton extends Button {
     public LevelButton(int radius, Skin skin, String id, MenuScreen ms) {
         super(skin);
         this.id = id;
-        setSize(radius * 2, radius * 2);
+        this.radius = radius;
+        // int size = (int) (radius * 2.5f);
+        int size = (int) (radius * 2f);
+        setSize(size, size);
 
         // Initialised by lazy
         if (circle == null) {
             circle = Shapes.getCircle(radius, radius / 10, Color.BLACK);
         }
         if (circleSelected == null) {
-            circleSelected = Shapes.getCircle(radius, radius / 5, Color.ORANGE);
+            circleSelected = Shapes.getCircle(radius, radius / 5, new Color(0, 0, 0.75f, 1));
         }
         if (circleSelectedDisable == null) {
             circleSelectedDisable = Shapes.getCircle(radius, radius / 5, Color.GRAY);
@@ -62,6 +67,10 @@ class LevelButton extends Button {
         if (lockedLevel == null) {
             lockedLevel = Shapes.getCircledTexture(radius, new Color(0.3f, 0.3f, 0.3f, 1f),
                     new Texture(Gdx.files.internal("images/lock.png")), 0.3f);
+        }
+        if (star == null) {
+            int starSize = ((int) (radius * 0.6f));
+            star = Shapes.resize(new Texture(Gdx.files.internal("images/star.png")), starSize, starSize);
         }
 
         levelButtonList.add(this);
@@ -89,8 +98,6 @@ class LevelButton extends Button {
         });
 
         setDisabled(!isUnlocked() || !App.isPlayableLevel(id));
-
-        // TODO make button display 0 to 3 starts at 50%, 80%, 100% of the level
     }
 
     // GET SET -----------------------------------------------------------------
@@ -181,19 +188,31 @@ class LevelButton extends Button {
         // Gdx.gl.glColorMask(true, true, true, true);
         // Gdx.gl.glDepthFunc(GL30.GL_LESS);
         if (isDisabled()) {
-            batch.draw(lockedLevel, getX(), getY(), getWidth(), getHeight());
+            batch.draw(lockedLevel, getX(), getY());
         } else {
-            batch.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
+            batch.draw(getTexture(), getX(), getY());
         }
 
         if (isChecked() || isOver()) {
             if (isDisabled()) {
-                batch.draw(circleSelectedDisable, getX(), getY(), getWidth(), getHeight());
+                batch.draw(circleSelectedDisable, getX(), getY(), radius * 2, radius * 2);
             } else {
-                batch.draw(circleSelected, getX(), getY(), getWidth(), getHeight());
+                batch.draw(circleSelected, getX(), getY(), radius * 2, radius * 2);
             }
         } else {
-            batch.draw(circle, getX(), getY(), getWidth(), getHeight());
+            batch.draw(circle, getX(), getY(), radius * 2, radius * 2);
+        }
+        if (!isDisabled()) {
+            int bestScore = Controller.getController().getBestScore(id);
+            if (bestScore >= App.STARS_SCORES.get(0)) {
+                batch.draw(star, getX(), getY());
+            }
+            if (bestScore >= App.STARS_SCORES.get(1)) {
+                batch.draw(star, getX() + (getWidth() - star.getWidth()) / 2, getY() - star.getWidth() / 3);
+            }
+            if (bestScore >= App.STARS_SCORES.get(2)) {
+                batch.draw(star, getX() + getWidth() - star.getWidth(), getY());
+            }
         }
     }
     /**
@@ -204,12 +223,11 @@ class LevelButton extends Button {
             // TODO return a texture depending of the level id.
             switch (id) {
             case "1K": {
-                texture = Shapes.getCircledTexture((int) (getWidth() / 2), App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")),
-                        0.6f);
+                texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")), 0.6f);
                 break;
             }
             default: {
-                texture = Shapes.getCircle((int) (getWidth() / 2), App.GREEN);
+                texture = Shapes.getCircle(radius, App.GREEN);
             }
             }
 

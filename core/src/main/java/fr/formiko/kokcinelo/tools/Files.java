@@ -52,7 +52,7 @@ public class Files {
             InputStream is = file.read();
             // return new ObjectMapper().readValue(file.file(), HashMap.class);
             HashMap<String, String> map = getYaml().load(is);
-            App.log(1, "", "translated text map: " + map);
+            App.log(0, "", "translated text map: " + map);
             return map;
         } catch (Exception e) {
             App.log(2, "", "fail to load translated map " + e);

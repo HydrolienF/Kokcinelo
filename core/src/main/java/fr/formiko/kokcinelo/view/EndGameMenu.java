@@ -59,7 +59,7 @@ public class EndGameMenu implements Disposable {
         // Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
         scoreLabel = new Label(score * 100 / maxScore + "%",
                 new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
-        Texture t = new Texture(Gdx.files.internal("images/" + "replay" + ".png"));
+        Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
         replayButton = new Image(t);
         replayButton.addListener(new ClickListener() {
             @Override

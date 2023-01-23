@@ -82,7 +82,7 @@ public class MenuScreen implements Screen {
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
-        final Image playButton = new Image(new Texture(Gdx.files.internal("images/play.png")));
+        final Image playButton = new Image(new Texture(Gdx.files.internal("images/icons/basic/play.png")));
         // TODO button need to get table size.
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
@@ -114,7 +114,7 @@ public class MenuScreen implements Screen {
         updateSelectedLevel(getLevelId());
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
-        btable.setSize(bottomLinksSpace * 4, bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
         btable.setPosition(0, 0);
         stage.addActor(btable);
 
@@ -347,6 +347,8 @@ public class MenuScreen implements Screen {
      */
     private Table getLinkButtonsTable(int size) {
         Table table = new Table();
+        table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size));
+
         table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size));
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));

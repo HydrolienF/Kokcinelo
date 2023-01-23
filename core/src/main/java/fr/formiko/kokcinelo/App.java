@@ -36,7 +36,9 @@ public class App extends Game {
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K");
+    // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
     public static final List<String> SUPPORTED_LANGUAGE = List.of("en", "fr", "eo");
+    public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
 
@@ -98,8 +100,8 @@ public class App extends Game {
      * {@summary Start a new Game on this app in GUI.}
      */
     public void startNewGame() {
-        App.log(1, "SCORE", "Current best score " + Controller.getController().getBestScore("1K"));
-        App.log(1, "SCORE", "Last score " + Controller.getController().getLastScore("1K"));
+        // App.log(1, "SCORE", "Current best score " + Controller.getController().getBestScore("1K"));
+        // App.log(1, "SCORE", "Last score " + Controller.getController().getLastScore("1K"));
         Controller.getController().startApp();
     }
 

@@ -141,4 +141,24 @@ public class Shapes {
         return pixmap;
     }
 
+    /**
+     * Resize a Texture.
+     * 
+     * @param in        texture to resize
+     * @param outWidth  new width
+     * @param outHeigth new height
+     * @return resized texture
+     */
+    public static Texture resize(Texture in, int outWidth, int outHeigth) {
+        // get image as pixmap
+        if (!in.getTextureData().isPrepared()) {
+            in.getTextureData().prepare();
+        }
+        Pixmap inPm = in.getTextureData().consumePixmap();
+
+        Pixmap outPm = new Pixmap(outWidth, outHeigth, Pixmap.Format.RGBA8888);
+        outPm.drawPixmap(inPm, 0, 0, inPm.getWidth(), inPm.getHeight(), 0, 0, outWidth, outHeigth);
+        return new Texture(outPm);
+    }
+
 }
