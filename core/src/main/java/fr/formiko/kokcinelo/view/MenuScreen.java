@@ -33,7 +33,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -90,7 +89,8 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
         });
-        centerTable.add(playButton).expandY();
+        playButton.setScaling(Scaling.fillY);
+        centerTable.add(playButton).expand().fill();
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -124,7 +124,7 @@ public class MenuScreen implements Screen {
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        stage.setDebugAll(true);
+        // stage.setDebugAll(true);
         addProcessor(stage);
 
         chrono = new Chrono();
@@ -144,21 +144,17 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // if (false) {
-        // Controller.getController().endMenuScreen();
-        // return;
-        // }
-        ScreenUtils.clear(App.BLUE_BACKGROUND);
+        // ScreenUtils.clear(App.BLUE_BACKGROUND);
 
         // draw blue sky gradient
         float secToCycle = 3 * 60 + 54;
         // float secToCycle = 10;
         chrono.updateDuree();
-        float dark = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-        if (dark < 0.5f) {
-            dark = 1f - dark;
+        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+        if (ligth < 0.5f) {
+            ligth = 1f - ligth;
         }
-        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), dark);
+        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
 
         stage.act(delta);
         stage.draw();

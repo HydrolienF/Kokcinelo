@@ -15,8 +15,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
-
-    public static void drawSky(int width, int heigth, float dark) {
+    /**
+     * {@summary Draw a sky gradient.}
+     * 
+     * @param width  width of the sky rectangle
+     * @param heigth height of the sky rectangle
+     * @param ligth  ligth of the sky bewteen 0 and 1
+     */
+    public static void drawSky(int width, int heigth, float ligth) {
         if (shapeRenderer == null) {
             shapeRenderer = new ShapeRenderer();
             shapeRenderer.setAutoShapeType(true);
@@ -24,8 +30,8 @@ public class Shapes {
         // draw blue sky gradient
         shapeRenderer.begin();
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        Color topColor = new Color(0, 0.4f * dark, 1f * dark, 1);
-        Color bottomColor = new Color(0, 0.8f * dark, 1f * dark, 1);
+        Color topColor = new Color(0, 0.4f * ligth, 1f * ligth, 1);
+        Color bottomColor = new Color(0, 0.8f * ligth, 1f * ligth, 1);
         shapeRenderer.rect(0, 0, width, heigth, bottomColor, bottomColor, topColor, topColor);
         shapeRenderer.end();
     }
