@@ -177,6 +177,7 @@ public class VideoScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(App.BLUE_BACKGROUND);
+        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1f);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
         if (camera.zoom < targetZoom) {
@@ -338,7 +339,6 @@ public class VideoScreen implements Screen {
         MapActor ma = new MapActor(10000, 1000, App.GREEN, true, 200, 80);
         ma.setPosition(-ma.getWidth() / 2, -1700);
         stage.addActor(ma);
-        // TODO also add a cloud saying "KOKCINELO"
     }
 
     private Aphid loadAphid() {

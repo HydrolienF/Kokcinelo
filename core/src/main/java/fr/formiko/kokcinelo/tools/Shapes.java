@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
@@ -13,6 +14,21 @@ import com.badlogic.gdx.graphics.Texture;
  * @since 0.2
  */
 public class Shapes {
+    private static ShapeRenderer shapeRenderer;
+
+    public static void drawSky(int width, int heigth, float dark) {
+        if (shapeRenderer == null) {
+            shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setAutoShapeType(true);
+        }
+        // draw blue sky gradient
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        Color topColor = new Color(0, 0.4f * dark, 1f * dark, 1);
+        Color bottomColor = new Color(0, 0.8f * dark, 1f * dark, 1);
+        shapeRenderer.rect(0, 0, width, heigth, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.end();
+    }
     /**
      * {@summary Return a circle with a thik border.}
      * 

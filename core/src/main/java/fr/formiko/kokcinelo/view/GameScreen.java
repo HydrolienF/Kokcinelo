@@ -245,7 +245,6 @@ public class GameScreen implements Screen {
     }
 
 
-    // TODO Auto-generated method stub
     @Override
     public void hide() {}
     @Override

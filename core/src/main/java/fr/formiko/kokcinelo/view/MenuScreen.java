@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
@@ -19,8 +20,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -29,9 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -57,7 +54,6 @@ public class MenuScreen implements Screen {
     private final Label scoresLabel;
     private final Label levelNameLabel;
     private final Label levelDescription;
-    private final ShapeRenderer shapeRenderer;
     private final Chrono chrono;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -86,17 +82,15 @@ public class MenuScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
-
         // TODO button should be a triangle image (draw on Pixmap or loaded from file)
-        final TextButton button = new TextButton("Play", skin);
-        button.setSize(100, 100);
-        centerTable.add(button);
-        button.addListener(new ChangeListener() {
+        final Image playButton = new Image(new Texture(Gdx.files.internal("images/play.png")));
+        // TODO button need to get table size.
+        playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
+        playButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { getController().endMenuScreen(); }
+            public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
         });
+        centerTable.add(playButton).expandY();
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -130,7 +124,7 @@ public class MenuScreen implements Screen {
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        // stage.setDebugAll(true);
+        stage.setDebugAll(true);
         addProcessor(stage);
 
         chrono = new Chrono();
@@ -156,9 +150,7 @@ public class MenuScreen implements Screen {
         // }
         ScreenUtils.clear(App.BLUE_BACKGROUND);
 
-        // draw blus sky gradient
-        shapeRenderer.begin();
-        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        // draw blue sky gradient
         float secToCycle = 3 * 60 + 54;
         // float secToCycle = 10;
         chrono.updateDuree();
@@ -166,12 +158,8 @@ public class MenuScreen implements Screen {
         if (dark < 0.5f) {
             dark = 1f - dark;
         }
-        Color topColor = new Color(0, 0.4f * dark, 1f * dark, 1);
-        Color bottomColor = new Color(0, 0.8f * dark, 1f * dark, 1);
-        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), bottomColor, bottomColor, topColor, topColor);
-        shapeRenderer.end();
+        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), dark);
 
-        // stage.setDebugAll(true);
         stage.act(delta);
         stage.draw();
     }

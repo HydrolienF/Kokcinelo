@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -61,7 +60,7 @@ public class EndGameMenu implements Disposable {
         scoreLabel = new Label(score * 100 / maxScore + "%",
                 new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
         Texture t = new Texture(Gdx.files.internal("images/" + "replay" + ".png"));
-        replayButton = new Image(new TextureRegionDrawable(t));
+        replayButton = new Image(t);
         replayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
