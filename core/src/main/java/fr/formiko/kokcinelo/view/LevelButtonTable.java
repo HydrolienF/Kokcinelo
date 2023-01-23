@@ -6,16 +6,34 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+/**
+ * {@summary Table containing button to select a level in main menu.}
+ * 
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 public class LevelButtonTable extends Table {
     private final ShapeRenderer sr;
     private final int lineWidth;
 
+    /**
+     * {@summary Main constructor.}
+     * 
+     * @param lineWidth width of the line between buttons
+     */
     public LevelButtonTable(int lineWidth) {
         super();
         sr = new ShapeRenderer();
         this.lineWidth = lineWidth;
     }
 
+    /**
+     * {@summary Draw the lines between buttons &#38; buttons.}
+     * 
+     * @param batch       batch to draw on
+     * @param parentAlpha alpha of the parent
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         sr.setColor(Color.BLACK);

@@ -15,6 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+/**
+ * {@summary Button to select a level in main menu.}
+ * 
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 class LevelButton extends Button {
     private static Set<LevelButton> levelButtonList;
     private static Texture circle;
@@ -25,7 +32,15 @@ class LevelButton extends Button {
     private final String id;
     private static Set<String> unlockedLevels;
 
-
+    /**
+     * {@summary Main constructor.}
+     * It add listener to react to user cick depending of the state of the button.
+     * 
+     * @param radius radius of the button
+     * @param skin   graphic style to use
+     * @param id     id of the button
+     * @param ms     link to the menu screen
+     */
     public LevelButton(int radius, Skin skin, String id, MenuScreen ms) {
         super(skin);
         this.id = id;
@@ -51,6 +66,9 @@ class LevelButton extends Button {
 
         levelButtonList.add(this);
         addListener(new ClickListener() {
+            /**
+             * React to user click by set selected to true if button can be selected.
+             */
             public void clicked(InputEvent event, float x, float y) {
                 if (!isDisabled()) {
                     ms.updateSelectedLevel(getId());
@@ -59,9 +77,11 @@ class LevelButton extends Button {
             }
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) { ms.updateOveredLevel(getId()); }
+            /**
+             * Reset overed level if mouse exit the button.
+             */
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                // App.log(1, "exit buttonh " + pointer);
                 if (pointer == -1) {
                     ms.updateOveredLevel(getCheckedButton().getId());
                 }
@@ -70,10 +90,10 @@ class LevelButton extends Button {
 
         setDisabled(!isUnlocked() || !App.isPlayableLevel(id));
 
-        // TODO make button a bit bigger & display 0 to 3 starts at 50%, 80%, 100% of the level
+        // TODO make button display 0 to 3 starts at 50%, 80%, 100% of the level
     }
 
-
+    // GET SET -----------------------------------------------------------------
     public String getId() { return id; }
     public int getNumber() { return Integer.parseInt(id.substring(0, 1)); }
     public String getLetter() { return id.substring(1, 2); }
@@ -124,7 +144,6 @@ class LevelButton extends Button {
         }
         return getCheckedButton();
     }
-    public static void clearList() { levelButtonList = null; }
     public static Set<LevelButton> getList() { return levelButtonList; }
     /**
      * @param id id of the level button to get.
@@ -148,7 +167,12 @@ class LevelButton extends Button {
         return unlockedLevels.contains(id);
     }
 
+    // FUNCTIONS ---------------------------------------------------------------
+    public static void clearList() { levelButtonList = null; }
 
+    /**
+     * {@summary Draw the button with the rigth border circle &#38; the rigth content texture.}
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -172,12 +196,23 @@ class LevelButton extends Button {
             batch.draw(circle, getX(), getY(), getWidth(), getHeight());
         }
     }
-
+    /**
+     * @return the texture of the level button depending of the level id.
+     */
     private Texture getTexture() {
         if (texture == null) {
             // TODO return a texture depending of the level id.
-            texture = Shapes.getCircledTexture((int) (getWidth() / 2), App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")),
-                    0.6f);
+            switch (id) {
+            case "1K": {
+                texture = Shapes.getCircledTexture((int) (getWidth() / 2), App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")),
+                        0.6f);
+                break;
+            }
+            default: {
+                texture = Shapes.getCircle((int) (getWidth() / 2), App.GREEN);
+            }
+            }
+
         }
         return texture;
     }

@@ -12,6 +12,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+/**
+ * {@summary Actor of part of other actor.}
+ * This class should be remove/rework when Spine will be used
+ * 
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 public class MemberActor extends MapItemActor {
     private List<Action> listAction;
     private List<MemberActor> listMia;

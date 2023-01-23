@@ -65,7 +65,9 @@ public class Controller {
     public void startApp() { createNewMenuScreen(); }
 
     private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
-
+    /**
+     * {@summary Create a new Menu Screen &#38; start music.}
+     */
     public void createNewMenuScreen() {
         setScreen(new MenuScreen());
         Musics.playMenuMusic();

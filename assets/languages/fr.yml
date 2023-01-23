@@ -7,7 +7,7 @@ mainMenu: menu principal
 # Menu
 bestScore: meilleur score
 lastScore: dernier score
-descriptionLevel1K: Dévorez un maximum de pucerons en 1 minute !
+descriptionLevel1K: Dévorez un maximum de pucerons en 1 minute ! Dirigez votre coccinelle avec le pointeur de la sourie et zoomer avec la molette de la sourie.
 descriptionLevel2K: Dévorez un maximum de pucerons en 1 minute ! Les fourmis feront tout leur possible pour vous en empècher. Méfiez vous de leurs mandibules acérées et de leurs jets d'acide !
 descriptionLevel2F: Protégez un maximum de pucerons en 1 minute ! Les coccinelles tenterons d'en dévorer autant que possible. Pour les en enpècher, vous pouvez faire usage de vos mandibules ou de votre acide formique. Vous pouvez égallement déplacer les pucerons vers des zones plus protégées, mais il ne reste jamais bien longtemps en place.
 descriptionLevel3K: Dévorez un maximum de pucerons en 1 minute ! Chaque pucerons dévoré vous accordera un bonus de vie, de vitesse ou de point.

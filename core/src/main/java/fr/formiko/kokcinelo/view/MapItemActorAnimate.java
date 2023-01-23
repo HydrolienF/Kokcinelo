@@ -4,6 +4,14 @@ import fr.formiko.kokcinelo.model.MapItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@summary Actor of MapItem that can move.}
+ * This class should be remove/rework when Spine will be used
+ * 
+ * @author Hydrolien
+ * @version 0.2
+ * @since 0.2
+ */
 public class MapItemActorAnimate extends MapItemActor {
     private List<MemberActor> listMia;
     private MapItem mapItem;

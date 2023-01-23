@@ -38,6 +38,15 @@ public class Shapes {
         return getCircle(radius, edgeLength, Color.rgba8888(color));
     }
 
+    /**
+     * {@summary Return a texture that fit into a circle.}
+     * 
+     * @param radius  radius of the circle
+     * @param color   color of the circle
+     * @param texture texture to put into the circle
+     * @param zoom    zoom of the texture
+     * @return a texture that fit into a circle
+     */
     public static Texture getCircledTexture(int radius, Color color, Texture texture, float zoom) {
         App.log(0, "Start to create circled texture.");
         Pixmap pixmap = getCirclePixmap(radius, radius + 1, Color.rgba8888(color));
@@ -83,7 +92,14 @@ public class Shapes {
         return new Texture(pixmap);
     }
 
-
+    /**
+     * {@summary Return a Pixmap that include a circle.}
+     * 
+     * @param radius     radius of the circle
+     * @param edgeLength size of the border line of the circle
+     * @param color      color of the circle
+     * @return a Pixmap that include a circle
+     */
     private static Pixmap getCirclePixmap(int radius, int edgeLength, int color) {
         App.log(0, "Start generate circle");
         Pixmap pixmap = new Pixmap(radius * 2, radius * 2, Pixmap.Format.RGBA8888);

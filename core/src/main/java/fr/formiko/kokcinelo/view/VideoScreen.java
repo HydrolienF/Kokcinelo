@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * {@summary The video screen.}
  * It is used to display before level video.
+ * This class should be remove/rework when Spine will be used
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
