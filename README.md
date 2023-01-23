@@ -14,14 +14,14 @@ Game is done with Java using GUI library libgdx.
 # Team
 
 ## Developers: 
-Hydrolien
+[Hydrolien](https://www.youtube.com/hydrolien)
 
 ## Graphic designers: 
 Hydrolien
 
 ## Musicians & Noisemakers: 
 Hydrolien, 
-Felknia
+[Felknia](https://www.youtube.com/FelkniaMusic)
 
 # License
 Full license available on LICENSE.md To make it shorter, it allowed you to use, or modify the game but you need to merge modification on this repository to have it on the game.
