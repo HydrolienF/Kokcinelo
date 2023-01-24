@@ -94,7 +94,7 @@ public class MenuScreen implements Screen {
 
         Image ladybug = new Image(new Texture(Gdx.files.internal("images/creatures/ladybug flying.png")));
         ladybug.setScaling(Scaling.contain); // Do not distort the image
-        ladybug.setBounds(w / 3, h - topSpace + centerSpace, w / 3, topSpace - centerSpace);
+        ladybug.setBounds(w / 3, h - topSpace, w / 3, topSpace);
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
