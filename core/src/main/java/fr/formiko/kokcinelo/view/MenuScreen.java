@@ -89,11 +89,11 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
         });
-        playButton.setScaling(Scaling.fillY);
+        playButton.setScaling(Scaling.contain); // Do not distort the image
         centerTable.add(playButton).expand().fill();
 
         Image ladybug = new Image(new Texture(Gdx.files.internal("images/creatures/ladybug flying.png")));
-        ladybug.setScaling(Scaling.fillY);
+        ladybug.setScaling(Scaling.contain); // Do not distort the image
         ladybug.setBounds(w * 3 / 10, h - topSpace, w / 3, topSpace);
         // topCenterTable.add(ladybug).expand().fill();
 
