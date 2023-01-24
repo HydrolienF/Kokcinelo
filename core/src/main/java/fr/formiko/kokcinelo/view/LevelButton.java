@@ -70,7 +70,7 @@ class LevelButton extends Button {
         }
         if (star == null) {
             int starSize = ((int) (radius * 0.6f));
-            star = Shapes.resize(new Texture(Gdx.files.internal("images/star.png")), starSize, starSize);
+            star = Shapes.outLine(Shapes.resize(new Texture(Gdx.files.internal("images/star.png")), starSize, starSize));
         }
 
         levelButtonList.add(this);

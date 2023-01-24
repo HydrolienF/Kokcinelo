@@ -1,10 +1,13 @@
 package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
+import java.util.HashSet;
+import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
@@ -44,7 +47,10 @@ public class Shapes {
      * @return a Pixmap with the circle in it
      */
     public static Texture getCircle(int radius, int edgeLength, int color) {
-        return new Texture(getCirclePixmap(radius, edgeLength, color));
+        Pixmap pm = getCirclePixmap(radius, edgeLength, color);
+        Texture t = new Texture(pm);
+        pm.dispose();
+        return t;
     }
     public static Texture getCircle(int radius, Color color) { return getCircle(radius, radius + 1, Color.rgba8888(color)); }
 
@@ -72,11 +78,8 @@ public class Shapes {
     public static Texture getCircledTexture(int radius, Color color, Texture texture, float zoom) {
         App.log(0, "Start to create circled texture.");
         Pixmap pixmap = getCirclePixmap(radius, radius + 1, Color.rgba8888(color));
-        // get image as pixmap
-        if (!texture.getTextureData().isPrepared()) {
-            texture.getTextureData().prepare();
-        }
-        Pixmap texturePixmap = texture.getTextureData().consumePixmap();
+
+        Pixmap texturePixmap = textureToPixmap(texture);
         int size = java.lang.Math.max(texturePixmap.getWidth(), texturePixmap.getHeight());
         int xOffset = (size - texturePixmap.getWidth()) / 2;
         int yOffset = (size - texturePixmap.getHeight()) / 2;
@@ -94,6 +97,8 @@ public class Shapes {
         Pixmap texturePixmapSized = new Pixmap((int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom), Pixmap.Format.RGBA8888);
         texturePixmapSized.drawPixmap(squarePixmap, 0, 0, squarePixmap.getWidth(), squarePixmap.getHeight(), 0, 0,
                 (int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom));
+        // Pixmap texturePixmapSized = resize(squarePixmap, (int) (squarePixmap.getWidth() * zoom), (int) (squarePixmap.getHeight() * zoom),
+        // true);
 
         // draw center circle of the image
         int xCenter = (int) (pixmap.getWidth() / 2);
@@ -111,7 +116,11 @@ public class Shapes {
             }
         }
         App.log(0, "End to create circled texture.");
-        return new Texture(pixmap);
+        Texture t = new Texture(pixmap);
+        texturePixmap.dispose();
+        pixmap.dispose();
+        texturePixmapSized.dispose();
+        return t;
     }
 
     /**
@@ -150,15 +159,79 @@ public class Shapes {
      * @return resized texture
      */
     public static Texture resize(Texture in, int outWidth, int outHeigth) {
+        return new Texture(resize(textureToPixmap(in), outWidth, outHeigth));
+    }
+    /**
+     * Resize a Pixmap.
+     * 
+     * @param in        Pixmap to resize
+     * @param outWidth  new width
+     * @param outHeigth new height
+     * @return resized Pixmap
+     */
+    public static Pixmap resize(Pixmap inPm, int outWidth, int outHeigth) {
+        Pixmap outPm = new Pixmap(outWidth, outHeigth, Pixmap.Format.RGBA8888);
+        outPm.drawPixmap(inPm, 0, 0, inPm.getWidth(), inPm.getHeight(), 0, 0, outWidth, outHeigth);
+        inPm.dispose();
+        return outPm;
+    }
+
+
+    /***
+     * Add a black border over the shapes in a texture.
+     * For each pixel It check if the 4 next pixels are colored. If they are it, save location to be colored.
+     * For each location to color, it place a black pixel.
+     * 
+     * @param in Texture to outline
+     * @return a new Texture with a black border over the shapes
+     */
+    public static Texture outLine(Texture in) {
+        Pixmap pm = outLine(textureToPixmap(in));
+        Texture t = new Texture(pm);
+        pm.dispose();
+        return t;
+    }
+
+    /**
+     * Add a black border over the shapes in a texture.
+     * For each pixel It check if the 4 next pixels are colored. If they are it, save location to be colored.
+     * For each location to color, it place a black pixel.
+     * 
+     * @param in PixelMap to outline
+     * @return a new Pixmap with a black border over the shapes
+     */
+    public static Pixmap outLine(Pixmap inPm) {
+        Set<Vector2> locationsToColor = new HashSet<Vector2>();
+        for (int x = 0; x < inPm.getWidth(); x++) {
+            for (int y = 0; y < inPm.getHeight(); y++) {
+                // If one of the 4 next pixels is colored, it save the location to be colored.
+                if (((x > 0 && inPm.getPixel(x - 1, y) != 0) || (x < inPm.getWidth() - 1 && inPm.getPixel(x + 1, y) != 0)
+                        || (y > 0 && inPm.getPixel(x, y - 1) != 0) || (y < inPm.getHeight() - 1 && inPm.getPixel(x, y + 1) != 0))
+                        && ((x > 0 && inPm.getPixel(x - 1, y) == 0) || (x < inPm.getWidth() - 1 && inPm.getPixel(x + 1, y) == 0)
+                                || (y > 0 && inPm.getPixel(x, y - 1) == 0) || (y < inPm.getHeight() - 1 && inPm.getPixel(x, y + 1) == 0))) {
+                    locationsToColor.add(new Vector2(x, y));
+                }
+            }
+        }
+        int color = 255;
+        for (Vector2 vector2 : locationsToColor) {
+            inPm.drawPixel((int) vector2.x, (int) vector2.y, color);
+        }
+        return inPm;
+    }
+
+    /**
+     * Return the pixmap of a texture.
+     * 
+     * @param in texture
+     * @return the pixmap of a texture
+     */
+    private static Pixmap textureToPixmap(Texture in) {
         // get image as pixmap
         if (!in.getTextureData().isPrepared()) {
             in.getTextureData().prepare();
         }
-        Pixmap inPm = in.getTextureData().consumePixmap();
-
-        Pixmap outPm = new Pixmap(outWidth, outHeigth, Pixmap.Format.RGBA8888);
-        outPm.drawPixmap(inPm, 0, 0, inPm.getWidth(), inPm.getHeight(), 0, 0, outWidth, outHeigth);
-        return new Texture(outPm);
+        return in.getTextureData().consumePixmap();
     }
 
 }

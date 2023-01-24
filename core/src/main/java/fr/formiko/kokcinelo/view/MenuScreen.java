@@ -347,14 +347,14 @@ public class MenuScreen implements Screen {
      */
     private Table getLinkButtonsTable(int size) {
         Table table = new Table();
-        table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size));
+        table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size, false));
 
-        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size));
-        table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size));
+        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size, false));
+        table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
-        table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size));
+        table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
-        Image flag = getClickableLink(App.getLanguage(), null, size);
+        Image flag = getClickableLink(App.getLanguage(), null, size, false);
         flag.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -362,7 +362,7 @@ public class MenuScreen implements Screen {
                 int nextId = (App.SUPPORTED_LANGUAGE.indexOf(lang) + 1) % App.SUPPORTED_LANGUAGE.size();
                 App.setLanguage(App.SUPPORTED_LANGUAGE.get(nextId));
                 updateSelectedLevel(getLevelId());
-                Texture texture = resizeTexture("images/icons/" + App.getLanguage() + ".png", size);
+                Texture texture = resizeTexture("images/icons/" + App.getLanguage() + ".png", size, false);
                 flag.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
             }
         });
@@ -375,8 +375,8 @@ public class MenuScreen implements Screen {
      * 
      * @return A web site link button
      */
-    private Image getClickableLink(String imageName, String url, int buttonSize) {
-        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize);
+    private Image getClickableLink(String imageName, String url, int buttonSize, boolean outlined) {
+        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize, outlined);
         Image b = new Image(t);
         if (url != null) {
             b.addListener(new ClickListener() {
@@ -394,12 +394,12 @@ public class MenuScreen implements Screen {
      * 
      * @return A resized texture
      */
-    private Texture resizeTexture(String textureName, int size) {
-        Pixmap pixmapIn = new Pixmap(Gdx.files.internal(textureName));
-        Pixmap pixmapOut = new Pixmap(size, size, pixmapIn.getFormat());
-        pixmapOut.drawPixmap(pixmapIn, 0, 0, pixmapIn.getWidth(), pixmapIn.getHeight(), 0, 0, pixmapOut.getWidth(), pixmapOut.getHeight());
+    private Texture resizeTexture(String textureName, int size, boolean outlined) {
+        Pixmap pixmapOut = Shapes.resize(new Pixmap(Gdx.files.internal(textureName)), size, size);
+        if (outlined) {
+            pixmapOut = Shapes.outLine(pixmapOut);
+        }
         Texture texture = new Texture(pixmapOut);
-        pixmapIn.dispose();
         pixmapOut.dispose();
         return texture;
     }
