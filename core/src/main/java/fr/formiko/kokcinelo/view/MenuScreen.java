@@ -247,6 +247,7 @@ public class MenuScreen implements Screen {
         pixmap.setColor(Color.BLACK);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
+        pixmap.dispose();
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -272,8 +273,13 @@ public class MenuScreen implements Screen {
         ButtonStyle buttonStyle = new ButtonStyle();
         skin.add("default", buttonStyle);
 
-
-        skin.add("default", new LabelStyle(skin.getFont("default"), Color.BLACK));
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
+        pixmap = new Pixmap(1, 1, Format.RGBA8888);
+        pixmap.setColor(new Color(0.2f, 0.2f, 0.2f, 0.5f));
+        pixmap.fill();
+        labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
+        pixmap.dispose();
+        skin.add("default", labelStyle);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
         return skin;
