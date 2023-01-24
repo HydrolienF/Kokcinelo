@@ -349,7 +349,7 @@ public class MenuScreen implements Screen {
         Table table = new Table();
         table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size, false));
 
-        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size, false));
+        table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size, true));
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
