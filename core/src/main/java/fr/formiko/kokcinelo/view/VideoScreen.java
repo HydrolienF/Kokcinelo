@@ -92,7 +92,7 @@ public class VideoScreen implements Screen {
         long soundId = flyingSound.play(0.2f);
         flyingSound.setLooping(soundId, true);
 
-        float lastDelay = 3;
+        float lastDelay = 2f;
 
         // Form a groups off actor or load all images in one actor where we can control rotation of the wings.
         ladybug = loadAnimateLadybug();

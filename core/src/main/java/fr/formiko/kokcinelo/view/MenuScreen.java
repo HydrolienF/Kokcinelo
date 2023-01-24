@@ -54,6 +54,8 @@ public class MenuScreen implements Screen {
     private final Label levelNameLabel;
     private final Label levelDescription;
     private final Chrono chrono;
+    private final int topSpace;
+    private static final boolean backgroundLabelColored = true;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -73,7 +75,7 @@ public class MenuScreen implements Screen {
 
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
-        int topSpace = h * 50 / 100;
+        topSpace = h * 40 / 100;
         int bottomSpace = h * 50 / 100;
         int bottomLinksSpace = h * 5 / 100;
         int centerSpace = h * 10 / 100;
@@ -81,9 +83,7 @@ public class MenuScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        // TODO button should be a triangle image (draw on Pixmap or loaded from file)
         final Image playButton = new Image(new Texture(Gdx.files.internal("images/icons/basic/play.png")));
-        // TODO button need to get table size.
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
             @Override
@@ -100,18 +100,19 @@ public class MenuScreen implements Screen {
 
 
         levelNameLabel = new Label("", skinTitle);
-        levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
+        // levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
         // levelNameLabel.setAlignment(Align.center);
-        levelNameLabel.setAlignment(Align.bottom, Align.center);
+        levelNameLabel.setAlignment(Align.center);
         // levelNameLabel.setWrap(true);
 
         scoresLabel = new Label("", skin);
-        scoresLabel.setBounds(0, h - topSpace, w / 3, topSpace / 2);
-        scoresLabel.setAlignment(Align.top, Align.center);
+        // scoresLabel.setBounds(0, h - topSpace, w / 3, topSpace / 2);
+        scoresLabel.setAlignment(Align.center);
         // scoresLabel.setWrap(true);
 
         levelDescription = new Label("", skin);
-        levelDescription.setBounds(w * 2 / 3, h - topSpace, w / 3, topSpace);
+        // levelDescription.setBounds(w * 2 / 3, h - topSpace, w / 3, topSpace);
+        levelDescription.setSize(w / 3, topSpace);
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
 
@@ -274,12 +275,14 @@ public class MenuScreen implements Screen {
         skin.add("default", buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
-        // //set bacground
-        // pixmap = new Pixmap(1, 1, Format.RGBA8888);
-        // pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
-        // pixmap.fill();
-        // labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
-        // pixmap.dispose();
+        // //set background
+        if (backgroundLabelColored) {
+            pixmap = new Pixmap(1, 1, Format.RGBA8888);
+            pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
+            pixmap.fill();
+            labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
+            pixmap.dispose();
+        }
 
         skin.add("default", labelStyle);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
@@ -356,11 +359,17 @@ public class MenuScreen implements Screen {
      * Update the labels location &#38; size.
      */
     private void updateLabels() {
-        // TODO curently not working with wrap.
-        // levelDescription.pack();
-        // scoresLabel.pack();
-        // levelNameLabel.pack();
-        // scoresLabel.setPosition(scoresLabel.getM(), 0);
+        int maxLabelWidth = Gdx.graphics.getWidth() / 3;
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        scoresLabel.pack();
+        levelNameLabel.pack();
+        levelDescription.pack();
+        levelDescription.setWidth(maxLabelWidth);
+        scoresLabel.setPosition((maxLabelWidth - scoresLabel.getWidth()) / 2, h - topSpace / 2 - scoresLabel.getHeight());
+        levelNameLabel.setPosition((maxLabelWidth - levelNameLabel.getWidth()) / 2, h - topSpace / 2);
+        levelDescription.setPosition(w * 2 / 3 + (maxLabelWidth - levelDescription.getWidth()) / 2,
+                Math.min(h - (topSpace + levelDescription.getHeight()) / 2, h - levelDescription.getHeight()));
     }
 
 
