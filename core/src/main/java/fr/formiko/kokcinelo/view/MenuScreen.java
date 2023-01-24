@@ -92,6 +92,11 @@ public class MenuScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand().fill();
 
+        Image ladybug = new Image(new Texture(Gdx.files.internal("images/creatures/ladybug flying.png")));
+        ladybug.setScaling(Scaling.fillY);
+        ladybug.setBounds(w * 3 / 10, h - topSpace, w / 3, topSpace);
+        // topCenterTable.add(ladybug).expand().fill();
+
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
 
@@ -124,6 +129,7 @@ public class MenuScreen implements Screen {
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
+        stage.addActor(ladybug);
         // stage.setDebugAll(true);
         addProcessor(stage);
 
