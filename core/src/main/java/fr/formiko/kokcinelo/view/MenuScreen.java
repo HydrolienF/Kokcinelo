@@ -103,12 +103,12 @@ public class MenuScreen implements Screen {
         levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
         // levelNameLabel.setAlignment(Align.center);
         levelNameLabel.setAlignment(Align.bottom, Align.center);
-        levelNameLabel.setWrap(true);
+        // levelNameLabel.setWrap(true);
 
         scoresLabel = new Label("", skin);
         scoresLabel.setBounds(0, h - topSpace, w / 3, topSpace / 2);
         scoresLabel.setAlignment(Align.top, Align.center);
-        scoresLabel.setWrap(true);
+        // scoresLabel.setWrap(true);
 
         levelDescription = new Label("", skin);
         levelDescription.setBounds(w * 2 / 3, h - topSpace, w / 3, topSpace);
@@ -129,7 +129,7 @@ public class MenuScreen implements Screen {
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
         stage.addActor(ladybug);
-        stage.setDebugAll(true);
+        // stage.setDebugAll(true);
         addProcessor(stage);
 
         chrono = new Chrono();
@@ -274,11 +274,13 @@ public class MenuScreen implements Screen {
         skin.add("default", buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
-        pixmap = new Pixmap(1, 1, Format.RGBA8888);
-        pixmap.setColor(new Color(0.2f, 0.2f, 0.2f, 0.5f));
-        pixmap.fill();
-        labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
-        pixmap.dispose();
+        // //set bacground
+        // pixmap = new Pixmap(1, 1, Format.RGBA8888);
+        // pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
+        // pixmap.fill();
+        // labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
+        // pixmap.dispose();
+
         skin.add("default", labelStyle);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
@@ -337,6 +339,7 @@ public class MenuScreen implements Screen {
         levelNameLabel.setText(getLevelNameText(levelId));
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
+        updateLabels();
     }
     /**
      * Update the labels that depend of selected level.
@@ -347,6 +350,17 @@ public class MenuScreen implements Screen {
         levelNameLabel.setText(getLevelNameText(levelId));
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
+        updateLabels();
+    }
+    /**
+     * Update the labels location &#38; size.
+     */
+    private void updateLabels() {
+        // TODO curently not working with wrap.
+        // levelDescription.pack();
+        // scoresLabel.pack();
+        // levelNameLabel.pack();
+        // scoresLabel.setPosition(scoresLabel.getM(), 0);
     }
 
 
