@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ class LevelButton extends Button {
     private static Texture lockedLevel;
     private static Texture star;
     private Texture texture;
-    private final String id;
+    private final Level level;
     private static Set<String> unlockedLevels;
     private final int radius;
 
@@ -40,12 +41,12 @@ class LevelButton extends Button {
      * 
      * @param radius radius of the button
      * @param skin   graphic style to use
-     * @param id     id of the button
+     * @param id     id of the level of the button
      * @param ms     link to the menu screen
      */
     public LevelButton(int radius, Skin skin, String id, MenuScreen ms) {
         super(skin);
-        this.id = id;
+        level = Level.getLevel(id);
         this.radius = radius;
         // int size = (int) (radius * 2.5f);
         int size = (int) (radius * 2f);
@@ -101,9 +102,10 @@ class LevelButton extends Button {
     }
 
     // GET SET -----------------------------------------------------------------
-    public String getId() { return id; }
-    public int getNumber() { return Integer.parseInt(id.substring(0, 1)); }
-    public String getLetter() { return id.substring(1, 2); }
+    public Level getLevel() { return level; }
+    public String getId() { return getLevel().getId(); }
+    public int getNumber() { return getLevel().getNumber(); }
+    public String getLetter() { return getLevel().getLetter(); }
     public float getCenterX() { return getX() + getWidth() / 2; }
     public float getCenterY() { return getY() + getHeight() / 2; }
     public void setCenterX(float x) { setX(x - getWidth() / 2); }
@@ -171,7 +173,7 @@ class LevelButton extends Button {
         if (unlockedLevels == null) {
             unlockedLevels = Controller.getController().loadUnlockedLevels();
         }
-        return unlockedLevels.contains(id);
+        return unlockedLevels.contains(getId());
     }
 
     // FUNCTIONS ---------------------------------------------------------------
@@ -203,7 +205,7 @@ class LevelButton extends Button {
             batch.draw(circle, getX(), getY(), radius * 2, radius * 2);
         }
         if (!isDisabled()) {
-            int bestScore = Controller.getController().getBestScore(id);
+            int bestScore = Controller.getController().getBestScore(getId());
             if (bestScore >= App.STARS_SCORES.get(0)) {
                 batch.draw(star, getX(), getY());
             }
@@ -221,7 +223,7 @@ class LevelButton extends Button {
     private Texture getTexture() {
         if (texture == null) {
             // TODO return a texture depending of the level id.
-            switch (id) {
+            switch (getId()) {
             case "1K": {
                 texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")), 0.6f);
                 break;

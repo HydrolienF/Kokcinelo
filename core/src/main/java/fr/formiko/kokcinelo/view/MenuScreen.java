@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
@@ -305,29 +306,38 @@ public class MenuScreen implements Screen {
 
         Table levelButtonTable = new LevelButtonTable(w / 200);
         levelButtonTable.setBounds(0, 0, w, h);
-        int buttonRadius = (int) levelButtonTable.getWidth() / 20;
+        int buttonRadius = (int) levelButtonTable.getWidth() / 24;
         int buttonSize = buttonRadius * 2;
         int len = 4;
 
         int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
         int xSpaceBetweenButton = xFreeSpace / (len + 1);
 
-        int yFreeSpace = (int) levelButtonTable.getHeight() - (2 * buttonSize);
-        int ySpaceBetweenButton = yFreeSpace / 3;
+        int yFreeSpace = (int) levelButtonTable.getHeight() - (3 * buttonSize);
+        int ySpaceBetweenButton = yFreeSpace / 4;
 
-        for (int i = 0; i < len; i++) {
-            LevelButton levelButtonK = new LevelButton(buttonRadius, skin, (i + 1) + "K", this);
-            levelButtonK.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i,
-                    levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize);
-            if (i == 0) {
-                levelButtonK.setChecked(true);
-            } else {
-                LevelButton levelButtonF = new LevelButton(buttonRadius, skin, (i + 1) + "F", this);
-                levelButtonF.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * i, ySpaceBetweenButton);
+        App.log(1, "Level.getLevelList() " + Level.getLevelList());
+
+        for (Level level : Level.getLevelList()) {
+            LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
+            float y = 0;
+            switch (level.getLetter()) {
+            case "K":
+                y = ySpaceBetweenButton * 2 + buttonSize;
+                break;
+            case "F":
+                y = ySpaceBetweenButton;
+                break;
+            case "A":
+                y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
+                break;
             }
-        }
-        for (LevelButton levelButton : LevelButton.getList()) {
+            levelButton.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), y);
+            if (level.getNumber() == 1) {
+                levelButton.setChecked(true);
+            }
             levelButtonTable.addActor(levelButton);
+
         }
 
         return levelButtonTable;
@@ -467,8 +477,10 @@ public class MenuScreen implements Screen {
         String r = "" + levelId.charAt(0) + " - ";
         if (levelId.charAt(1) == 'K') {
             r += "Kokcinelo";
-        } else {
+        } else if (levelId.charAt(1) == 'F') {
             r += "Formiko";
+        } else if (levelId.charAt(1) == 'A') {
+            r += "Afido";
         }
         return r;
     }

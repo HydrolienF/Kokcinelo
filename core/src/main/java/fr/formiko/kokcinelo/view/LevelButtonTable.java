@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.model.Level;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -42,17 +43,13 @@ public class LevelButtonTable extends Table {
         for (LevelButton levelButton : LevelButton.getList()) {
             int x1 = (int) levelButton.getCenterX();
             int y1 = (int) levelButton.getCenterY();
-            LevelButton levelButton2 = LevelButton.getLevelButton((levelButton.getNumber() - 1) + levelButton.getLetter());
-            if (levelButton2 != null) {
-                int x2 = (int) levelButton2.getCenterX();
-                int y2 = (int) levelButton2.getCenterY();
-                sr.rectLine(x1, y1, x2, y2, lineWidth);
-            }
-            if (levelButton.getNumber() == 1) {
-                levelButton2 = LevelButton.getLevelButton((levelButton.getNumber() + 1) + "F");
-                int x2 = (int) levelButton2.getCenterX();
-                int y2 = (int) levelButton2.getCenterY();
-                sr.rectLine(x1, y1, x2, y2, lineWidth);
+            for (Level next : levelButton.getLevel().getNextLevels()) {
+                LevelButton levelButton2 = LevelButton.getLevelButton(next.getId());
+                if (levelButton2 != null) {
+                    int x2 = (int) levelButton2.getCenterX();
+                    int y2 = (int) levelButton2.getCenterY();
+                    sr.rectLine(x1, y1, x2, y2, lineWidth);
+                }
             }
         }
         sr.end();
