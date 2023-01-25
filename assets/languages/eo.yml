@@ -1,13 +1,10 @@
 test: eo
-
-# Global
+#Global
 level: nivelo
 mainMenu: ĉefa menuo
-
 #Menu
 bestScore: plej bona poentaro
 lastScore: lasta poentaro
-
 descriptionLevelK: Manĝu tiom da afidojn kiom vi povas en 1 minuto!
 descriptionLevelF: Protektu tiom da afidojn kiom vi povas en 1 minuto!
 descriptionLevelA: Postvivu 1 minuton!
