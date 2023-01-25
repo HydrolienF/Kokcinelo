@@ -5,17 +5,17 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.tools.Shapes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * {@summary The video screen.}
  * It is used to display before level video.
+ * This class should be remove/rework when Spine will be used
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
@@ -38,23 +39,24 @@ public class VideoScreen implements Screen {
     private Stage stage;
     private static OrthographicCamera camera;
     private Viewport viewport;
-    private Music music;
+    // private Music music;
     private Sound flyingSound;
     private Sound crockSound;
     private Sound tingSound;
     private float targetZoom;
     private MapItemActorAnimate ladybug;
-    private boolean drawRedCircle;
     private Aphid aphid;
     private MemberActor head;
     private MemberActor mandible;
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Actor redCircle;
 
     /**
      * {*@summary The action game screen constructor that load images &#39; set
      * Creatures locations.}
+     * 
+     * @param levelId the level id
      */
-    public VideoScreen() {
+    public VideoScreen(String levelId) {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(30, 30 * (h / w));
@@ -63,6 +65,9 @@ public class VideoScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
+
+        // TODO take levelId in account
+
         Actor actor = new Actor() {
             @Override
             public void draw(Batch batch, float parentAlpha) {
@@ -74,17 +79,20 @@ public class VideoScreen implements Screen {
         stage.addActor(actor);
         loadBackground();
         aphid = loadAphid();
-        music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
+        Musics.setMusic("Waltz of the Night");
+        // music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
         flyingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flying.mp3"));
         crockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         tingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ting.mp3"));
 
-        music.setVolume(0.6f);
-        music.play();
+        Musics.setVolume(0.6f);
+        Musics.play();
+        // music.setVolume(0.6f);
+        // music.play();
         long soundId = flyingSound.play(0.2f);
         flyingSound.setLooping(soundId, true);
 
-        float lastDelay = 3;
+        float lastDelay = 2f;
 
         // Form a groups off actor or load all images in one actor where we can control rotation of the wings.
         ladybug = loadAnimateLadybug();
@@ -93,12 +101,14 @@ public class VideoScreen implements Screen {
         }), Actions.sequence(Actions.delay(2f), Actions.run(new Runnable() {
             public void run() {
                 tingSound.play();
-                drawRedCircle = true;
+                redCircle.setVisible(true);
+                redCircle.setPosition(aphid.getActor().getCenterX() - redCircle.getWidth() / 2,
+                        aphid.getActor().getCenterY() - redCircle.getHeight() / 2);
             }
         }), Actions.delay(2f), Actions.run(new Runnable() {
             public void run() {
                 targetZoom = 0.4f;
-                drawRedCircle = false;
+                redCircle.setVisible(false);
             }
         }), Actions.delay(0.5f), Actions.run(new Runnable() {
             public void run() { ladybug.setSpeed(3); }
@@ -135,6 +145,19 @@ public class VideoScreen implements Screen {
         targetZoom = 0.5f;
         camera.zoom = targetZoom;
 
+        redCircle = new Actor() {
+            private Texture redCircle = Shapes.getCircle(300 / 2, 40, Color.RED);
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                Color color = getColor();
+                batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+                batch.draw(redCircle, getX(), getY(), getWidth(), getHeight());
+            }
+        };
+        redCircle.setSize(300, 300);
+        redCircle.setVisible(false);
+        stage.addActor(redCircle);
+
         addInputCore();
 
         App.log(0, "constructor", "new VideoScreen: " + toString());
@@ -154,6 +177,7 @@ public class VideoScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(App.BLUE_BACKGROUND);
+        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1f);
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
         if (camera.zoom < targetZoom) {
@@ -163,15 +187,6 @@ public class VideoScreen implements Screen {
         }
         camera.position.x = ladybug.getCenterX();
         camera.position.y = ladybug.getCenterY();
-        if (drawRedCircle) {
-            Gdx.gl.glLineWidth(40);
-            shapeRenderer.setProjectionMatrix(getCamera().combined);
-            shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(new Color(1f, 0f, 0f, 1f));
-            shapeRenderer.circle(aphid.getCenterX(), aphid.getCenterY(), (float) 300, 200);
-            shapeRenderer.end();
-            Gdx.gl.glLineWidth(1);
-        }
     }
 
     // TODO Auto-generated method stub
@@ -198,7 +213,7 @@ public class VideoScreen implements Screen {
         flyingSound.dispose();
         crockSound.dispose();
         tingSound.dispose();
-        music.dispose();
+        // music.dispose();
         stage.dispose();
     }
 
@@ -321,10 +336,9 @@ public class VideoScreen implements Screen {
     }
 
     private void loadBackground() {
-        MapActor ma = new MapActor(10000, 1000, new com.badlogic.gdx.graphics.Color(8 / 255f, 194 / 255f, 0 / 255f, 1f), true, 200, 80);
+        MapActor ma = new MapActor(10000, 1000, App.GREEN, true, 200, 80);
         ma.setPosition(-ma.getWidth() / 2, -1700);
         stage.addActor(ma);
-        // TODO also add a cloud saying "KOKCINELO"
     }
 
     private Aphid loadAphid() {

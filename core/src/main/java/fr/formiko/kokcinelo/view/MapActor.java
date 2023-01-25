@@ -108,6 +108,8 @@ public class MapActor extends Actor {
         if (withDetails) {
             drawStones(pixmap, width, height, stones);
             drawSticks(pixmap, width, height, sticks);
+            // To save the pixmap to a file, uncomment the following line:
+            // PixmapIO.writePNG(new FileHandle("screenshotX.png"), pixmap);// save pixmap to file
         }
         texture = new Texture(pixmap);
         pixmap.dispose();

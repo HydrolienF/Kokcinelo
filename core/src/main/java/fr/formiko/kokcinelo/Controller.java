@@ -4,11 +4,19 @@ import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +33,7 @@ public class Controller {
     private GameState gs;
     private App app;
     private boolean spectatorMode;
+    private String levelId;
 
     private static Controller controller;
 
@@ -55,9 +64,14 @@ public class Controller {
 
     public void startApp() { createNewMenuScreen(); }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen()); }
-
-    private void createNewMenuScreen() { setScreen(new MenuScreen()); }
+    private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
+    /**
+     * {@summary Create a new Menu Screen &#38; start music.}
+     */
+    public void createNewMenuScreen() {
+        setScreen(new MenuScreen());
+        Musics.playMenuMusic();
+    }
     /**
      * {@summary End the current screen.}
      * Current screen is supposed to be a MenuScreen. Other wise it will do nothing.
@@ -65,6 +79,7 @@ public class Controller {
     public synchronized void endMenuScreen() {
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
+            levelId = ((MenuScreen) (getScreen())).getLevelId();
             createNewVideoScreen();
             toDispose.dispose();
         } else {
@@ -181,10 +196,10 @@ public class Controller {
         App.log(0, "Need to start new Game");
         int gameTime = 60;
         setSpectatorMode(false);
-        app.createGameMusic();
-        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).build();
+        Musics.setMusic("Waltz of the Night 1min");
+        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).setLevelId(levelId).build();
         app.setScreen(new GameScreen(app));
-        app.getGameMusic().play();
+        Musics.play();
         App.log(1, "start new Game");
         // app.getGameMusic().setPosition(178.1f - gameTime); // end at 178
         getGameScreen().resume();
@@ -204,7 +219,7 @@ public class Controller {
      */
     public void interact() {
         if (gs.ladybugEat()) {
-            getGameScreen().setPlayerScore(gs.getPlayer(getLocalPlayerId()).getScore());
+            getGameScreen().setPlayerScore(gs.getScore());
             app.playEatingSound();
         }
     }
@@ -216,14 +231,16 @@ public class Controller {
         if (getGameScreen().isStop()) {
             return;
         }
-        app.getGameMusic().dispose();
+        // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() == gs.getMaxScore();
-        // boolean haveWin = gs.getPlayer(getLocalPlayerId()).getScore() >= gs.getMaxScore() / 2;
+        boolean haveWin = gs.getScore() == gs.getMaxScore();
+        // boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
-        getGameScreen().createEndGameMenu(gs.getPlayer(getLocalPlayerId()).getScore(), gs.getMaxScore(), haveWin);
+        getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
+        saveScoreInFile();
     }
+
     /**
      * {@summary Pause game or resume depening of current state.}
      * It pause move of creature & music.
@@ -231,14 +248,159 @@ public class Controller {
     public void pauseResume() {
         if (getGameScreen().isPause()) {
             getGameScreen().resume();
-            app.getGameMusic().play();
+            Musics.play();
         } else {
             getGameScreen().pause();
-            app.getGameMusic().pause();
+            Musics.pause();
         }
     }
 
     public void dispose() { app.dispose(); }
+
+
+    // Files ----------------------------------------------------------------------------------------------
+    /**
+     * {@summary Save a string in a file.}
+     * 
+     * @param fileName       name of the file
+     * @param contentToWrite content to write into the file
+     * @param append         if true, append the content to the file, else overwrite the content of the file
+     */
+    public void saveStringInFile(String fileName, String contentToWrite, boolean append) {
+        App.log(0, "FILES", "Save \"" + contentToWrite + "\" into " + fileName + " append=" + append);
+        FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        file.writeString(contentToWrite, append);
+    }
+    /**
+     * {@summary Read a string from a file.}
+     * 
+     * @param fileName name of the file
+     * @return content of the file
+     */
+    public String readStringInFile(String fileName) {
+        App.log(0, "FILES", "Read the content of " + fileName);
+        FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        if (file.exists()) {
+            return file.readString();
+        } else {
+            return null;
+        }
+    }
+    private static String getScoresFileName() { return "scores.csv"; }
+    /**
+     * {@summary Save the score of the current game.}
+     * It save the levelId, the score and the time of the game.
+     */
+    public void saveScoreInFile() {
+        saveStringInFile(getScoresFileName(), gs.getLevelId() + "," + gs.getPercentScore() + "," + System.currentTimeMillis() + "\n", true);
+    }
+    /**
+     * {@summary Save all important data.}
+     */
+    public void saveData() {
+        Map<String, String> map = App.getDataMap();
+        map.put("lastDatePlayed", System.currentTimeMillis() + "");
+        long toAddTimePlayed = System.currentTimeMillis() - Long.parseLong(map.get("startPlaying"));
+        App.log(1, "FILES", "Added time played: " + toAddTimePlayed);
+        long timePlayed;
+        if (map.containsKey("timePlayed")) {
+            timePlayed = Long.parseLong(map.get("timePlayed"));
+        } else {
+            timePlayed = 0;
+        }
+        map.put("timePlayed", "" + (timePlayed + toAddTimePlayed));
+        Files.saveInFile("data.yml", map);
+        App.log(1, "FILES", "Saved data: " + map);
+    }
+    /**
+     * {@summary Load all important data.}
+     */
+    public Map<String, String> loadData() {
+        Map<String, String> map;
+        try {
+            map = Files.loadFromFile("data.yml");
+        } catch (Exception e) {
+            map = new HashMap<String, String>();
+            map.put("firstDatePlayed", System.currentTimeMillis() + "");
+            String l = Locale.getDefault().getLanguage();
+            if (!App.SUPPORTED_LANGUAGE.contains(l)) {
+                l = "en";
+            }
+            map.put("language", l);
+        }
+        map.put("startPlaying", System.currentTimeMillis() + "");
+        App.log(1, "FILES", "Loaded data: " + map);
+        return map;
+    }
+    /**
+     * {@summary Return the best score of a level.}
+     * 
+     * @param levelId id of the level
+     * @return best score of the level
+     */
+    public int getBestScore(String levelId) {
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            return 0;
+        }
+        int max = 0;
+        for (String line : scores.split("\n")) {
+            String[] data = line.split(",");
+            if (data[0].equals(levelId)) {
+                max = Math.max(max, Integer.parseInt(data[1]));
+            }
+        }
+        return max;
+    }
+    /**
+     * {@summary Return the last score of a level.}
+     * 
+     * @param levelId id of the level
+     * @return last score of the level
+     */
+    public int getLastScore(String levelId) {
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            return 0;
+        }
+        int score = 0;
+        long maxTime = 0;
+        for (String line : scores.split("\n")) {
+            String[] data = line.split(",");
+            if (data[0].equals(levelId)) {
+                long time = Long.parseLong(data[2]);
+                if (maxTime < time) {
+                    maxTime = time;
+                    score = Integer.parseInt(data[1]);
+                }
+            }
+        }
+        return score;
+    }
+    /**
+     * {@summary Load the unlocked levels.}
+     */
+    public Set<String> loadUnlockedLevels() {
+        HashSet<String> unlockedLevels = new HashSet<String>();
+        String scores = readStringInFile(getScoresFileName());
+        if (scores == null) {
+            unlockedLevels.add("1K");
+        } else {
+            for (String line : scores.split("\n")) {
+                String[] data = line.split(",");
+                String levelId = data[0];
+                unlockedLevels.add(levelId);
+                int num = Integer.parseInt(levelId.substring(0, 1));
+                unlockedLevels.add((num + 1) + levelId.substring(1, 2));
+                if (num == 1) {
+                    unlockedLevels.add((num + 1) + "F");
+                }
+            }
+        }
+        App.log(1, "FILES", "Unlocked levels: " + unlockedLevels);
+        return unlockedLevels;
+    }
+
 
     /**
      * {@summary Return current used camera.}

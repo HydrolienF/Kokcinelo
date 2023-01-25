@@ -31,12 +31,13 @@ public class DesktopLauncher {
 		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setWindowedMode(1920, 1080);
+		config.setMaximized(true);
+		config.setResizable(false);
 		config.useVsync(true);
 		config.setTitle("Kokcinelo");
 		config.setWindowIcon("images/icons/appIcon.png");
 		App game = new App(args);
-		game.setLanguage(System.getProperty("user.language"));
+		// game.setLanguage(System.getProperty("user.language"));
 		new Lwjgl3Application(game, config);
 	}
 }

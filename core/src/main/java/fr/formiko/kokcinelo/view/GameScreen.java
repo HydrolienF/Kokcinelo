@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
+import fr.formiko.kokcinelo.tools.Musics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -240,11 +241,10 @@ public class GameScreen implements Screen {
     public void dispose() {
         App.log(0, "destructor", "dispose GameScreen: " + toString());
         stage.dispose();
-        game.getGameMusic().stop();
+        Musics.stop();
     }
 
 
-    // TODO Auto-generated method stub
     @Override
     public void hide() {}
     @Override
