@@ -2,10 +2,13 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.model.Level;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * {@summary Table containing button to select a level in main menu.}
@@ -15,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * @since 0.2
  */
 public class LevelButtonTable extends Table {
-    private final ShapeRenderer sr;
+    private ShapeDrawer sr;
     private final int lineWidth;
 
     /**
@@ -25,7 +28,6 @@ public class LevelButtonTable extends Table {
      */
     public LevelButtonTable(int lineWidth) {
         super();
-        sr = new ShapeRenderer();
         this.lineWidth = lineWidth;
     }
 
@@ -37,9 +39,17 @@ public class LevelButtonTable extends Table {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (sr == null) {
+            Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+            pixmap.setColor(Color.WHITE);
+            pixmap.drawPixel(0, 0);
+            Texture texture = new Texture(pixmap); // remember to dispose of later
+            pixmap.dispose();
+            TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
+            sr = new ShapeDrawer(batch, region);
+            texture.dispose();
+        }
         sr.setColor(Color.BLACK);
-        batch.end();
-        sr.begin(ShapeType.Filled);
         for (LevelButton levelButton : LevelButton.getList()) {
             int x1 = (int) levelButton.getCenterX();
             int y1 = (int) levelButton.getCenterY();
@@ -48,12 +58,10 @@ public class LevelButtonTable extends Table {
                 if (levelButton2 != null) {
                     int x2 = (int) levelButton2.getCenterX();
                     int y2 = (int) levelButton2.getCenterY();
-                    sr.rectLine(x1, y1, x2, y2, lineWidth);
+                    sr.line(x1, y1, x2, y2, lineWidth);
                 }
             }
         }
-        sr.end();
-        batch.begin();
         super.draw(batch, parentAlpha);
     }
 }

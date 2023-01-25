@@ -31,7 +31,7 @@ allprojects {
         log4jVersion = '2.19.0'
         junitVersion = '5.9.1'
         usualVersion = '0.2.117'
-        shapedrawerVersion = '2.6.0'
+        shapedrawerVersion = '2.5.0'
     }
 
     repositories {
@@ -54,7 +54,6 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
     }
 }
 
@@ -123,6 +122,7 @@ project(":core") {
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
         implementation 'org.yaml:snakeyaml:1.21'
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
     }
 
     test {
