@@ -43,7 +43,7 @@ public class LevelButtonTable extends Table {
             Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
             pixmap.setColor(Color.WHITE);
             pixmap.drawPixel(0, 0);
-            Texture texture = new Texture(pixmap); // remember to dispose of later
+            Texture texture = new Texture(pixmap);
             pixmap.dispose();
             TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
             sr = new ShapeDrawer(batch, region);
