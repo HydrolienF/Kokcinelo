@@ -1,10 +1,8 @@
 test: fr
-
-# Global
+#Global
 level: niveau
 mainMenu: menu principal
-
-# Menu
+#Menu
 bestScore: meilleur score
 lastScore: dernier score
 descriptionLevelK: Dévorez un maximum de pucerons en 1 minute !
