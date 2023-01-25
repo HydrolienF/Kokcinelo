@@ -93,7 +93,7 @@ public class MenuScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand().fill();
 
-        Image ladybug = new Image(new Texture(Gdx.files.internal("images/creatures/ladybug flying.png")));
+        Image ladybug = new Image(new Texture(Gdx.files.internal("images/Creatures/ladybug flying.png")));
         ladybug.setScaling(Scaling.contain); // Do not distort the image
         ladybug.setBounds(w / 3, h - topSpace, w / 3, topSpace);
 
