@@ -6,6 +6,7 @@ buildscript {
         mavenCentral()
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url 'https://jitpack.io' }
         google()
     }
     dependencies {
@@ -30,6 +31,7 @@ allprojects {
         log4jVersion = '2.19.0'
         junitVersion = '5.9.1'
         usualVersion = '0.2.117'
+        shapedrawerVersion = '2.6.0'
     }
 
     repositories {
@@ -52,6 +54,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
     }
 }
 
