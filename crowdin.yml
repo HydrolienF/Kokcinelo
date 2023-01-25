@@ -1,0 +1,3 @@
+files:
+  - source: /assets/languages/en.yml
+    translation: /assets/languages/%two_letters_code%.yml
