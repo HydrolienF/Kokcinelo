@@ -452,10 +452,11 @@ public class MenuScreen implements Screen {
      */
     private String getLevelNameText(String levelId) { return g.get("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
+        String desc = g.get("DescriptionLevel" + levelId.substring(1, 2), "") + " " + g.get("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
-            return g.get("DescriptionLevel" + levelId, g.get("CommingSoon"));
+            return desc;
         } else {
-            return g.get("CommingSoon") + "\n" + g.get("DescriptionLevel" + levelId, "");
+            return g.get("CommingSoon") + "\n" + desc;
         }
     }
     /**
