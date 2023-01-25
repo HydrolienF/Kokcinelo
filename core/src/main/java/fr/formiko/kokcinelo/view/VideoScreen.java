@@ -80,7 +80,6 @@ public class VideoScreen implements Screen {
         loadBackground();
         aphid = loadAphid();
         Musics.setMusic("Waltz of the Night");
-        // music = Gdx.audio.newMusic(Gdx.files.internal("musics/Waltz of the Night.mp3"));
         flyingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flying.mp3"));
         crockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         tingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/ting.mp3"));
