@@ -466,7 +466,7 @@ public class MenuScreen implements Screen {
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {
-            return g.get("CommingSoon") + "\n" + desc;
+            return g.get("ComingSoon") + "\n" + desc;
         }
     }
     /**
