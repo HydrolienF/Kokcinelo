@@ -31,7 +31,8 @@ public class DesktopLauncher {
 		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setMaximized(true);
+		// config.setMaximized(true); //create issues on linux.
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.setResizable(false);
 		config.useVsync(true);
 		config.setTitle("Kokcinelo");
