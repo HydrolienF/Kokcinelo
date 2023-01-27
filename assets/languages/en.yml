@@ -18,3 +18,9 @@ descriptionLevel4K: Some aphids fly. To catch them you must also fly (space). In
 descriptionLevel4F: Ladybugs fly! When they fly you must rely only on your acid to stop them.
 descriptionLevel4A: You are the most appetizing of aphids, ladybugs will follow you to death! Use your wings and your allies the ants to get rid of them.
 comingSoon: Coming soon
+#Escape Menu
+restart: restart
+endPartie: end Game
+backToMainMenu: back to main menu
+leaveKokcinelo: leave Kokcinelo
+resume: resume
