@@ -54,7 +54,7 @@ public class EndGameMenu implements Disposable {
         // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
 
-        Skin skin = MenuScreen.getDefautSkin(28, false, Color.WHITE);
+        Skin skin = MenuScreen.getDefautSkin(28, false, getColorFromPercent((double) (score) / (double) (maxScore)));
 
         scoreLabel = new Label(score * 100 / maxScore + "%", skin);
         Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
