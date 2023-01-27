@@ -36,6 +36,7 @@ public class EndGameMenu implements Disposable {
     private Image replayButton;
     private Button mainMenuButton;
     private boolean haveWin;
+    private static Skin skin;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -54,20 +55,24 @@ public class EndGameMenu implements Disposable {
         // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
 
-        Skin skin = MenuScreen.getDefautSkin(28, false, getColorFromPercent((double) (score) / (double) (maxScore)));
+        if (skin == null) {
+            skin = MenuScreen.getDefautSkin();
+        }
 
-        scoreLabel = new Label(score * 100 / maxScore + "%", skin);
         Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
         replayButton = new Image(t);
         replayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
         });
-        mainMenuButton = new TextButton(g.get("MainMenu"), MenuScreen.getDefautSkin());
+        mainMenuButton = new TextButton(g.get("MainMenu"), skin);
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().createNewMenuScreen(); }
         });
+        skin.add("scoreLabelStyle",
+                new Label.LabelStyle(skin.getFont("default"), getColorFromPercent((double) (score) / (double) (maxScore))));
+        scoreLabel = new Label(score * 100 / maxScore + "%", skin, "scoreLabelStyle");
 
 
         Table table = new Table();
