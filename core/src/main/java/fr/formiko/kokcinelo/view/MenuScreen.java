@@ -254,7 +254,7 @@ public class MenuScreen implements Screen {
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ";
-        BitmapFont bmf = generator.generateFont(parameter); // font size 12 pixels
+        BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
         // bmf.getData().markupEnabled = true; //Use to set color label by label
@@ -276,7 +276,7 @@ public class MenuScreen implements Screen {
         skin.add("default", buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), textColor);
-        // //set background
+        // set background
         if (withBackground) {
             pixmap = new Pixmap(1, 1, Format.RGBA8888);
             pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
