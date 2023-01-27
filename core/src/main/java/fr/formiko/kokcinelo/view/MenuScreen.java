@@ -102,7 +102,6 @@ public class MenuScreen implements Screen {
 
         levelNameLabel = new Label("", skinTitle);
         // levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
-        // levelNameLabel.setAlignment(Align.center);
         levelNameLabel.setAlignment(Align.center);
         // levelNameLabel.setWrap(true);
 

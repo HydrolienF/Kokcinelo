@@ -1,13 +1,10 @@
 test: en
-
 # Global
 level: level
 mainMenu: main menu
-
 #Menu
 bestScore: best score
 lastScore: last score
-
 descriptionLevelK: Devour as many aphids as you can in 1 minute!
 descriptionLevelF: Protect as many aphids as you can 1 minute!
 descriptionLevelA: Survive 1 minute!
