@@ -18,11 +18,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+/**
+ * {@summary Menu display when escape key is pressed.}
+ * It contains link to many state of the game.
+ * 
+ * @author Hydrolien
+ * @version 0.3
+ * @since 0.3
+ */
 public class EscapeGameMenu implements Disposable {
     private Stage stage;
     private static Skin skin;
     private static List<String> keyList;
 
+    // CONSTRUCTORS ----------------------------------------------------------------
+    /**
+     * {@summary Main constructor.}
+     * Load skin. Add button. Add listener to button.
+     * 
+     * @param sb batch to draw the menu.
+     */
     public EscapeGameMenu(SpriteBatch sb) {
         FitViewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -46,6 +61,9 @@ public class EscapeGameMenu implements Disposable {
             switch (string) {
             case "restart":
                 itb.addListener(new ClickListener() {
+                    /**
+                     * Restart game.
+                     */
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Controller.getController().removeEscapeMenu();
@@ -56,6 +74,9 @@ public class EscapeGameMenu implements Disposable {
                 break;
             case "backToMainMenu":
                 itb.addListener(new ClickListener() {
+                    /**
+                     * Go back to main menu.
+                     */
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Controller.getController().removeEscapeMenu();
@@ -66,6 +87,9 @@ public class EscapeGameMenu implements Disposable {
                 break;
             case "endPartie":
                 itb.addListener(new ClickListener() {
+                    /**
+                     * End current game.
+                     */
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Controller.getController().removeEscapeMenu();
@@ -75,6 +99,9 @@ public class EscapeGameMenu implements Disposable {
                 break;
             case "leaveKokcinelo":
                 itb.addListener(new ClickListener() {
+                    /**
+                     * Leave game.
+                     */
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Controller.getController().removeEscapeMenu();
@@ -86,10 +113,7 @@ public class EscapeGameMenu implements Disposable {
             case "resume":
                 itb.addListener(new ClickListener() {
                     @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Controller.getController().removeEscapeMenu();
-                        Controller.getController().pauseResume();
-                    }
+                    public void clicked(InputEvent event, float x, float y) { Controller.getController().pauseResume(); }
                 });
                 break;
             }
