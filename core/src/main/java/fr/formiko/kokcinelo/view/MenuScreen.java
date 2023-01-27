@@ -240,12 +240,12 @@ public class MenuScreen implements Screen {
      * @param fontSize size of the font
      * @return A simple skin that menus use
      */
-    public static Skin getDefautSkin(int fontSize) {
+    public static Skin getDefautSkin(int fontSize, boolean withBackground, Color textColor) {
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
         Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-        pixmap.setColor(Color.BLACK);
+        pixmap.setColor(Color.WHITE);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
         pixmap.dispose();
@@ -253,6 +253,7 @@ public class MenuScreen implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ";
         BitmapFont bmf = generator.generateFont(parameter); // font size 12 pixels
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -274,9 +275,9 @@ public class MenuScreen implements Screen {
         ButtonStyle buttonStyle = new ButtonStyle();
         skin.add("default", buttonStyle);
 
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), textColor);
         // //set background
-        if (backgroundLabelColored) {
+        if (withBackground) {
             pixmap = new Pixmap(1, 1, Format.RGBA8888);
             pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
             pixmap.fill();
@@ -289,10 +290,18 @@ public class MenuScreen implements Screen {
 
         return skin;
     }
-    /**
+    /***
      * @return A simple skin that menus use
      */
     public static Skin getDefautSkin() { return getDefautSkin(28); }
+    /***
+     * @return A simple skin that menus use
+     */
+    public static Skin getDefautSkin(int fontSize) { return getDefautSkin(fontSize, backgroundLabelColored, Color.BLACK); }
+    /***
+     * @return A simple skin that menus use
+     */
+    public static Skin getDefautSkin(boolean withBackground) { return getDefautSkin(28, withBackground, Color.BLACK); }
 
     // private ------------------------------------------------------------------------------------
     /**

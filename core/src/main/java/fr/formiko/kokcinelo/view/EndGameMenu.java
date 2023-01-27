@@ -7,13 +7,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -53,12 +53,10 @@ public class EndGameMenu implements Disposable {
         // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2,
         // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
-        BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-        // bmf.getData().setScale(3,3);
 
-        // Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
-        scoreLabel = new Label(score * 100 / maxScore + "%",
-                new Label.LabelStyle(bmf, getColorFromPercent((double) (score) / (double) (maxScore))));
+        Skin skin = MenuScreen.getDefautSkin(28, false, Color.WHITE);
+
+        scoreLabel = new Label(score * 100 / maxScore + "%", skin);
         Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
         replayButton = new Image(t);
         replayButton.addListener(new ClickListener() {
