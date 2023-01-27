@@ -18,3 +18,9 @@ descriptionLevel4K: Certains pucerons volent. Pour les attraper vous devez voler
 descriptionLevel4F: Les coccinelles volent ! Lorsqu'elles volent vous ne pouvez compter que sur votre acide pour les arrêter.
 descriptionLevel4A: Vous êtes le plus appétissant des pucerons, les coccinelles vous suivront jusqu'à la mort ! Faite usage de vos ailes & de vos alliées les fourmis pour vous en débarrasser.
 comingSoon: Bientôt disponible.
+#Escape Menu
+restart: recommencer
+endPartie: finir la partie
+backToMainMenu: retourner au menu
+leaveKokcinelo: quitter Kokcinelo
+resume: reprendre

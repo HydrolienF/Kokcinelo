@@ -48,8 +48,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class MenuScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
-    private Skin skin;
-    private Skin skinTitle;
+    private static Skin skin;
+    private static Skin skinTitle;
     private InputMultiplexer inputMultiplexer;
     private final Label scoresLabel;
     private final Label levelNameLabel;
@@ -67,8 +67,12 @@ public class MenuScreen implements Screen {
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        skin = getDefautSkin();
-        skinTitle = getDefautSkin(40);
+        if (skin == null) {
+            skin = getDefautSkin();
+        }
+        if (skinTitle == null) {
+            skinTitle = getDefautSkin(40);
+        }
         batch = new SpriteBatch();
 
         Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -240,7 +244,7 @@ public class MenuScreen implements Screen {
      * @param fontSize size of the font
      * @return A simple skin that menus use
      */
-    public static Skin getDefautSkin(int fontSize, boolean withBackground, Color textColor) {
+    public static Skin getDefautSkin(int fontSize) {
         Skin skin = new Skin();
 
         // Generate a 1x1 white texture and store it in the skin named "white".
@@ -254,7 +258,7 @@ public class MenuScreen implements Screen {
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ";
-        BitmapFont bmf = generator.generateFont(parameter); // font size 12 pixels
+        BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
         // bmf.getData().markupEnabled = true; //Use to set color label by label
@@ -275,9 +279,9 @@ public class MenuScreen implements Screen {
         ButtonStyle buttonStyle = new ButtonStyle();
         skin.add("default", buttonStyle);
 
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), textColor);
-        // //set background
-        if (withBackground) {
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
+        // set background
+        if (backgroundLabelColored) {
             pixmap = new Pixmap(1, 1, Format.RGBA8888);
             pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
             pixmap.fill();
@@ -294,14 +298,6 @@ public class MenuScreen implements Screen {
      * @return A simple skin that menus use
      */
     public static Skin getDefautSkin() { return getDefautSkin(28); }
-    /***
-     * @return A simple skin that menus use
-     */
-    public static Skin getDefautSkin(int fontSize) { return getDefautSkin(fontSize, backgroundLabelColored, Color.BLACK); }
-    /***
-     * @return A simple skin that menus use
-     */
-    public static Skin getDefautSkin(boolean withBackground) { return getDefautSkin(28, withBackground, Color.BLACK); }
 
     // private ------------------------------------------------------------------------------------
     /**

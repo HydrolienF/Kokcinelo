@@ -43,7 +43,7 @@ public class InputCore implements InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.P) {
+        if (keycode == Input.Keys.P || keycode == Input.Keys.ESCAPE) {
             Controller.getController().pauseResume();
         }
         if (keycode == Input.Keys.S) {

@@ -247,13 +247,16 @@ public class Controller {
      */
     public void pauseResume() {
         if (getGameScreen().isPause()) {
+            removeEscapeMenu();
             getGameScreen().resume();
             Musics.play();
         } else {
             getGameScreen().pause();
             Musics.pause();
+            getGameScreen().createEscapeMenu();
         }
     }
+    public void removeEscapeMenu() { getGameScreen().removeEscapeMenu(); }
 
     public void dispose() { app.dispose(); }
 

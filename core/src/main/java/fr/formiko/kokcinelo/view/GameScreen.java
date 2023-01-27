@@ -31,6 +31,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Hud hud;
     private EndGameMenu egm;
+    private EscapeGameMenu em;
     static OrthographicCamera camera;
     // private float rotationSpeed;
     private float maxZoom;
@@ -81,6 +82,7 @@ public class GameScreen implements Screen {
     public static OrthographicCamera getCamera() { return camera; }
     public Stage getStage() { return stage; }
     public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
+    public void removeProcessor(InputProcessor ip) { inputMultiplexer.removeProcessor(ip); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -120,6 +122,11 @@ public class GameScreen implements Screen {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
             egm.getStage().act(delta);
             egm.getStage().draw();
+        }
+        if (em != null) {
+            game.batch.setProjectionMatrix(em.getStage().getCamera().combined);
+            em.getStage().act(delta);
+            em.getStage().draw();
         }
         if (stopAtTheEnd) {
             stopAfterNextDrawBool = false;
@@ -201,7 +208,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void resume() {
-        if (isStop) {
+        if (isStop || em != null) {
             App.log(2, "Can't resume stop game.");
             return;
         }
@@ -228,6 +235,23 @@ public class GameScreen implements Screen {
     public void createEndGameMenu(int score, int maxScore, boolean haveWin) {
         egm = new EndGameMenu(game.batch, score, maxScore, haveWin);
         addProcessor(egm.getStage());
+    }
+    /**
+     * {@summary Create a simple escape menu.}
+     */
+    public void createEscapeMenu() {
+        em = new EscapeGameMenu(game.batch);
+        addProcessor(em.getStage());
+    }
+    /**
+     * {@summary Remove the escape menu.}
+     */
+    public void removeEscapeMenu() {
+        if (em != null) {
+            removeProcessor(em.getStage());
+            em.dispose();
+            em = null;
+        }
     }
     public void setPlayerScore(int score) { hud.setPlayerScore(score); }
     public boolean isTimeUp() { return hud.isTimeUp(); }
