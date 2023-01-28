@@ -175,6 +175,7 @@ class LevelButton extends Button {
         }
         return unlockedLevels.contains(getId());
     }
+    public static void resetUnlockedLevels() { unlockedLevels = null; }
 
     // FUNCTIONS ---------------------------------------------------------------
     public static void clearList() { levelButtonList = null; }

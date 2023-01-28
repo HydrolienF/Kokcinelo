@@ -323,6 +323,7 @@ public class MenuScreen implements Screen {
 
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
+        LevelButton.resetUnlockedLevels();
         for (Level level : Level.getLevelList()) {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
