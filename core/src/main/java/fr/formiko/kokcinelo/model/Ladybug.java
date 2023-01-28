@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * {@summary Ladybugs are Creature that eat aphids.}
  * Usually ladybugs run away from ants.
@@ -26,4 +28,24 @@ public class Ladybug extends Creature {
     @Override
     public float getMaxRotationPerSecond() { return 140f; }
     // FUNCTIONS -----------------------------------------------------------------
+    public void moveAI(GameState gs) {
+        Ant ant = (Ant) closestCreature(gs.getAnts());
+        if (ant != null) {
+            // Run away move
+            runAwayFrom(new Vector2(ant.getCenterX(), ant.getCenterY()));
+            moveFront();
+        } else {
+            Aphid aphid = (Aphid) closestCreature(gs.getAphids());
+            if (aphid != null) {
+                // Hunt move
+                goTo(new Vector2(aphid.getCenterX(), aphid.getCenterY()));
+                moveFront();
+            } else {
+                // Normal move
+                minorRandomRotation(0.02);
+                moveFront(0.8f);
+            }
+        }
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
+    }
 }

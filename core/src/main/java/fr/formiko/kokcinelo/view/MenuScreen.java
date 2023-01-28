@@ -148,6 +148,7 @@ public class MenuScreen implements Screen {
     public Stage getStage() { return stage; }
     public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
     public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
+    public Level getLevel() { return LevelButton.getCheckedButton().getLevel(); }
     // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Render the screen.}

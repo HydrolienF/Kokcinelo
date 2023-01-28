@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * {@summary Ants are creatures that figth ladybugs to protect aphids.}
  * 
@@ -13,10 +15,10 @@ public class Ant extends Creature {
      * {@summary Create new Ants.}
      */
     public Ant() {
-        // TODO to complete.
         super("ant");
+        visionRadius = 500;
         hitRadius = 50;
-        movingSpeed = 4f;
+        movingSpeed = 3f;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -24,4 +26,17 @@ public class Ant extends Creature {
     public float getMaxRotationPerSecond() { return 200f; }
 
     // FUNCTIONS -----------------------------------------------------------------
+    public void moveAI(GameState gs) {
+        Ladybug ladybug = (Ladybug) closestCreature(gs.getLadybugs());
+        if (ladybug != null) {
+            // Hunt move
+            goTo(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
+            moveFront();
+        } else {
+            // Normal move
+            minorRandomRotation(0.02);
+            moveFront(0.8f);
+        }
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
+    }
 }

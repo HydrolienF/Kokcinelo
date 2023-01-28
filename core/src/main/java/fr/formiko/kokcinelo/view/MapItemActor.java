@@ -26,7 +26,7 @@ public class MapItemActor extends Group {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = false;
+    private static boolean showZone = true;
     private ShapeRenderer shapeRenderer;
     /**
      * {@summary Main constructor.}
@@ -90,13 +90,15 @@ public class MapItemActor extends Group {
             if (shapeRenderer == null) {
                 shapeRenderer = new ShapeRenderer();
             }
-            shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
-            shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
-            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getVisionRadius());
-            shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
-            shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getHitRadius());
-            shapeRenderer.end();
+            if (GameScreen.getCamera() != null) {
+                shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
+                shapeRenderer.begin(ShapeType.Line);
+                shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
+                shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getVisionRadius());
+                shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
+                shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getHitRadius());
+                shapeRenderer.end();
+            }
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();
         }

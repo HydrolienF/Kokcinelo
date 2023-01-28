@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import java.util.Collection;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
@@ -103,4 +104,50 @@ public abstract class Creature extends MapItem {
      * @param v contains coordinate of Point to run away from
      */
     public void runAwayFrom(Vector2 v) { goTo(v, 180f); }
+
+    /**
+     * {@summary Return the closest Creature from the collection.}
+     * 
+     * @param coll Collection to iterate over
+     * @return the closest Creature from the collection
+     */
+    public Creature closestCreature(Collection<? extends Creature> coll) {
+        Creature closest = null;
+        for (Creature c : coll) {
+            if (isInRadius(c, c.getHitRadius() + getVisionRadius())) {
+                if (closest == null || distanceTo(c) < distanceTo(closest)) {
+                    closest = c;
+                }
+            }
+        }
+        return closest;
+    }
+    /**
+     * {@summary move as AI.}
+     * 
+     * @param gs GameState to use
+     */
+    public abstract void moveAI(GameState gs);
+
+    /**
+     * {@summary Check if the Creature is in the map &#38; move inside if needed.}
+     * It also change wantedRotation if a wall have been hit.
+     * 
+     * @param mapWidth  width of the map
+     * @param mapHeigth height of the map
+     */
+    public void stayInMap(float mapWidth, float mapHeigth) {
+        // if have been move to avoid wall
+        if (moveIn(mapWidth, mapHeigth)) {
+            if (getWantedRotation() == 0f) { // if have not already choose a new angle to get out.
+                setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
+            }
+        }
+    }
+    public void minorRandomRotation(double frequency) {
+        double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
+        if (r < frequency) { // randomize rotation
+            setWantedRotation((float) (Math.random() * 40) - 20f);
+        }
+    }
 }

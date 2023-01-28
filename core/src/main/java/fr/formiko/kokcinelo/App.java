@@ -35,7 +35,7 @@ public class App extends Game {
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
-    public static final List<String> PLAYABLE_LEVELS = List.of("1K");
+    public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F");
     // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
     public static final List<String> SUPPORTED_LANGUAGE = List.of("en", "fr", "eo");
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);

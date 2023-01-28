@@ -179,7 +179,7 @@ public class GameScreen implements Screen {
             camera.zoom = maxZoom;
         }
         getController().movePlayer(Controller.getController().getLocalPlayerId());
-        getController().moveAphids();
+        getController().moveAICreature();
         // controller.movePlayer(playerId, moveX, moveY);
         getController().interact();
     }

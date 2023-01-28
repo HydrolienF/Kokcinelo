@@ -26,7 +26,7 @@ public class GameState {
     private MapActor mapActorFg;
     private int maxScore;
     private int localPlayerId;
-    private String levelId;
+    private Level level;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /***
@@ -52,8 +52,9 @@ public class GameState {
     public List<Ladybug> getLadybugs() { return ladybugs; }
     public int getLocalPlayerId() { return localPlayerId; }
     public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
-    public String getLevelId() { return levelId; }
-    private void setLevelId(String levelId) { this.levelId = levelId; }
+    public Level getLevel() { return level; }
+    public String getLevelId() { return getLevel().getId(); }
+    private void setLevel(Level level) { this.level = level; }
     /**
      * {@summary Return player from the list of player or null if not found.}
      * 
@@ -196,9 +197,11 @@ public class GameState {
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
-        private int maxScore;
+        private int antNumber;
+        private int aphidNumber;
+        private int ladybugNumber;
         private GameState gs;
-        private String levelId;
+        private Level level;
 
         private GameStateBuilder() {}
 
@@ -212,21 +215,35 @@ public class GameState {
         public GameState build() {
             gs = new GameState();
 
-            if (maxScore < 1) {
-                maxScore = 1;
+            if (aphidNumber < 1) {
+                aphidNumber = 1;
             }
-            gs.setMaxScore(maxScore);
+            gs.setMaxScore(aphidNumber);
 
-            if (levelId == null) {
-                levelId = "1K";
+            if (level == null) {
+                level = Level.getLevel("1K");
             }
-            gs.setLevelId(levelId);
+            gs.setLevel(level);
 
             // initialize default game
             addMapBackground();
-            // TODO move to the builder parameter
-            addCreatures(maxScore, 1, 0);
-            Player p = new Player(gs.ladybugs.get(0));
+            addCreatures(aphidNumber, ladybugNumber, antNumber);
+            Player p;
+            switch (level.getLetter()) {
+            case "K":
+                p = new Player(gs.ladybugs.get(0));
+                break;
+            case "F":
+                p = new Player(gs.ants.get(0));
+                break;
+            case "A":
+                p = new Player(gs.aphids.get(0));
+                break;
+            default:
+                App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
+                p = new Player(gs.ladybugs.get(0));
+                break;
+            }
             gs.players.add(p);
             gs.setLocalPlayerId(p.getId());
             addMapForeground();
@@ -257,8 +274,8 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setMaxScore(int maxScore) {
-            this.maxScore = maxScore;
+        public GameStateBuilder setAntNumber(int antNumber) {
+            this.antNumber = antNumber;
             return this;
         }
         /**
@@ -266,8 +283,26 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setLevelId(String levelId) {
-            this.levelId = levelId;
+        public GameStateBuilder setAphidNumber(int aphidNumber) {
+            this.aphidNumber = aphidNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setLadybugNumber(int ladybugNumber) {
+            this.ladybugNumber = ladybugNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setLevel(Level level) {
+            this.level = level;
             return this;
         }
 
@@ -282,8 +317,8 @@ public class GameState {
          */
         private void addCreatures(int aphidsNumber, int ladybugsNumber, int antsNumber) {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
-            addC(ladybugsNumber, 0.4f, 0.4f, true, false, Ladybug.class);
-            addC(antsNumber, 0.3f, 0.35f, true, true, Ant.class);
+            addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
+            addC(antsNumber, 0.1f, 0.1f, true, true, Ant.class);
         }
 
         /**
@@ -300,16 +335,16 @@ public class GameState {
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
-                    // Creature c = creatureClass.getDeclaredConstructor().newInstance(); //HTML INCOMPATIBLE
+                    Creature c = creatureClass.getDeclaredConstructor().newInstance(); // HTML INCOMPATIBLE
                     // version to replace last line that work in html
-                    Creature c = null;
-                    if (creatureClass.toString().endsWith("Aphid")) {
-                        c = new Aphid();
-                    } else if (creatureClass.toString().endsWith("Ant")) {
-                        c = new Ant();
-                    } else if (creatureClass.toString().endsWith("Ladybug")) {
-                        c = new Ladybug();
-                    }
+                    // Creature c = null;
+                    // if (creatureClass.toString().endsWith("Aphid")) {
+                    // c = new Aphid();
+                    // } else if (creatureClass.toString().endsWith("Ant")) {
+                    // c = new Ant();
+                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
+                    // c = new Ladybug();
+                    // }
                     if (randomLocaction) {
                         c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }

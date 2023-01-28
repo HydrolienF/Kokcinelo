@@ -1,9 +1,11 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.GameScreen;
@@ -26,14 +28,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.1
  */
 public class Controller {
     private GameState gs;
     private App app;
     private boolean spectatorMode;
-    private String levelId;
+    private Level level;
 
     private static Controller controller;
 
@@ -59,12 +61,14 @@ public class Controller {
     public boolean isSpectatorMode() { return spectatorMode; }
     public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
     public int getNumberOfAphids() { return gs.getAphids().size(); }
+    public Level getLevel() { return level; }
+    public String getLevelId() { return level.getId(); }
 
     // FUNCTIONS -----------------------------------------------------------------
 
     public void startApp() { createNewMenuScreen(); }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
+    private void createNewVideoScreen() { setScreen(new VideoScreen(getLevelId())); }
     /**
      * {@summary Create a new Menu Screen &#38; start music.}
      */
@@ -79,7 +83,7 @@ public class Controller {
     public synchronized void endMenuScreen() {
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
-            levelId = ((MenuScreen) (getScreen())).getLevelId();
+            level = ((MenuScreen) (getScreen())).getLevel();
             createNewVideoScreen();
             toDispose.dispose();
         } else {
@@ -154,26 +158,21 @@ public class Controller {
      * Else they move slowly to a random direction &#38; some time change it.
      * If they hit a wall, they change there wanted rotation angle for the nexts turns.
      */
-    public void moveAphids() {
-        for (Aphid aphid : gs.getAphids()) {
-            Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
-            if (ladybug != null) {
-                // Run away move
-                aphid.runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
-                aphid.moveFront();
-            } else {
-                // Normal move
-                double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
-                if (r < 0.02) { // randomize rotation
-                    aphid.setWantedRotation((float) (Math.random() * 40) - 20f);
-                }
-                aphid.moveFront(0.3f);
+    public void moveAICreature() {
+        Creature playerCreature = gs.getPlayerCreature(getLocalPlayerId());
+        for (Aphid c : gs.getAphids()) {
+            if (!c.equals(playerCreature)) {
+                c.moveAI(gs);
             }
-            // if have been move to avoid wall
-            if (aphid.moveIn(gs.getMapWidth(), gs.getMapHeight())) {
-                if (aphid.getWantedRotation() == 0f) { // if have not already choose a new angle to get out.
-                    aphid.setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
-                }
+        }
+        for (Ladybug c : gs.getLadybugs()) {
+            if (!c.equals(playerCreature)) {
+                c.moveAI(gs);
+            }
+        }
+        for (Ant c : gs.getAnts()) {
+            if (!c.equals(playerCreature)) {
+                c.moveAI(gs);
             }
         }
     }
@@ -197,7 +196,25 @@ public class Controller {
         int gameTime = 60;
         setSpectatorMode(false);
         Musics.setMusic("Waltz of the Night 1min");
-        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).setLevelId(levelId).build();
+        switch (getLevelId()) {
+        case "1K":
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(0).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        case "2K":
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(3).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        case "2F":
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(3).setAntNumber(1).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        default:
+            App.log(3, "levelId not found, use default levelId (1K)");
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(0).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        }
         app.setScreen(new GameScreen(app));
         Musics.play();
         App.log(1, "start new Game");

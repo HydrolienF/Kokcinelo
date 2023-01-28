@@ -1,6 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
-import java.util.Collection;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@summary Aphids are Creatures eated by ladybugs.}
@@ -33,21 +33,17 @@ public class Aphid extends Creature {
     public float getMaxRotationPerSecond() { return 500f; }
 
     // FUNCTIONS -----------------------------------------------------------------
-    /**
-     * {@summary Return the closest laydbug from the collection.}
-     * 
-     * @param coll Collection to iterate over
-     * @return the closest laydbug from the collection
-     */
-    public Ladybug closestLadybug(Collection<Ladybug> coll) {
-        Ladybug closest = null;
-        for (Ladybug ladybug : coll) {
-            if (isInRadius(ladybug, ladybug.getHitRadius() + getVisionRadius())) {
-                if (closest == null || distanceTo(ladybug) < distanceTo(closest)) {
-                    closest = ladybug;
-                }
-            }
+    public void moveAI(GameState gs) {
+        Ladybug ladybug = (Ladybug) closestCreature(gs.getLadybugs());
+        if (ladybug != null) {
+            // Run away move
+            runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
+            moveFront();
+        } else {
+            // Normal move
+            minorRandomRotation(0.02);
+            moveFront(0.3f);
         }
-        return closest;
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
     }
 }
