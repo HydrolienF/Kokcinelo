@@ -28,7 +28,7 @@ Hydrolien
 ## Noisemakers: 
 Hydrolien, [pikbest.com](https://fr.pikbest.com/)
 
-## Beta tester
+## Beta testers
 [Sevi](https://github.com/sevi2000), eureur7
 
 # License
