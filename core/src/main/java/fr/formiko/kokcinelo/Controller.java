@@ -235,10 +235,63 @@ public class Controller {
      * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
      */
     public void interact() {
-        if (gs.ladybugEat()) {
+        if (ladybugEat()) {
             getGameScreen().setPlayerScore(gs.getScore());
             app.playEatingSound();
         }
+        if (antHit()) {
+            // getGameScreen().setPlayerScore(gs.getScore());
+            if (gs.getPlayerCreature(getLocalPlayerId()).getLifePoints() <= 0f) {
+                gameOver();
+            }
+            app.playAntHitSound();
+        }
+    }
+
+    /**
+     * {@summary Let ladybugs eat aphids.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean ladybugEat() {
+        boolean haveInteract = false;
+        for (Ladybug ladybug : gs.getLadybugs()) {
+            Set<Aphid> eated = new HashSet<Aphid>();
+            for (Aphid aphid : gs.getAphids()) {
+                if (ladybug.hitBoxConnected(aphid)) {
+                    haveInteract = true;
+                    eated.add(aphid);
+                    // ladybug.addScorePoints(aphid.getGivenPoints());
+                    gs.getPlayer(getLocalPlayerId()).addScore(aphid.getGivenPoints());
+                    // System.out.println("Eating " + aphid);
+                }
+            }
+            gs.getAphids().removeAll(eated);
+            for (Aphid aphid : eated) {
+                aphid.removeActor();
+            }
+        }
+        return haveInteract;
+    }
+    /**
+     * {@summary Let ant hit ladybug.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean antHit() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            for (Ladybug ladybug : gs.getLadybugs()) {
+                if (ant.hitBoxConnected(ladybug)) {
+                    if (ant.canHit()) {
+                        haveInteract = true;
+                        ant.hit(ladybug);
+                    }
+                    break;
+                }
+            }
+        }
+        return haveInteract;
     }
     /**
      * {@summary End game by launching sound &#38; end game menu.}
@@ -251,8 +304,8 @@ public class Controller {
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        boolean haveWin = gs.getScore() == gs.getMaxScore();
-        // boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
+        // boolean haveWin = gs.getScore() == gs.getMaxScore();
+        boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
         saveScoreInFile();

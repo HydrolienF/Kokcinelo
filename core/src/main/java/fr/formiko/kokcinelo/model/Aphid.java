@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  * Ant always try to protect them.
  * 
  * @author Hydrolien
- * @since 0.1
+ * @since 1.0
  * @version 0.1
  */
 public class Aphid extends Creature {
@@ -18,7 +18,7 @@ public class Aphid extends Creature {
      */
     public Aphid() {
         super("aphid");
-        lifePoints = 1;
+        maxLifePoints = 0;
         hitPoints = 0;
         shootPoints = 0;
         visionRadius = 120;

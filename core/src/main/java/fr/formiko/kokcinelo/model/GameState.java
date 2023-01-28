@@ -3,10 +3,8 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -14,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * {@summary Class that containts all data about current game.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public class GameState {
@@ -29,7 +27,7 @@ public class GameState {
     private Level level;
 
     // CONSTRUCTORS --------------------------------------------------------------
-    /***
+    /**
      * {@summary Private main constructor.}
      * Use GameState.builder() to create a new GameState.
      */
@@ -99,31 +97,6 @@ public class GameState {
         } else if (c instanceof Ladybug) {
             ladybugs.add((Ladybug) c);
         }
-    }
-    /**
-     * {@summary Let ladybugs eat aphids.}
-     * 
-     * @return true if a ladybug have interact
-     */
-    public boolean ladybugEat() {
-        boolean haveInteract = false;
-        for (Ladybug ladybug : ladybugs) {
-            Set<Aphid> eated = new HashSet<Aphid>();
-            for (Aphid aphid : aphids) {
-                if (ladybug.hitBoxConnected(aphid)) {
-                    haveInteract = true;
-                    eated.add(aphid);
-                    // ladybug.addScorePoints(aphid.getGivenPoints());
-                    getPlayer(getLocalPlayerId()).addScore(aphid.getGivenPoints());
-                    // System.out.println("Eating " + aphid);
-                }
-            }
-            aphids.removeAll(eated);
-            for (Aphid aphid : eated) {
-                aphid.removeActor();
-            }
-        }
-        return haveInteract;
     }
 
     /**

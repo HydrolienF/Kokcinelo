@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
  * {@summary Ants are creatures that figth ladybugs to protect aphids.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public class Ant extends Creature {
@@ -18,7 +18,11 @@ public class Ant extends Creature {
         super("ant");
         visionRadius = 500;
         hitRadius = 50;
+        hitPoints = 20;
+        shootPoints = 25;
         movingSpeed = 3f;
+        maxLifePoints = 0;
+        hitFrequency = 1000;
     }
 
     // GET SET -------------------------------------------------------------------

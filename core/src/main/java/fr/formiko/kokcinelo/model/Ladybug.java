@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  * Usually ladybugs run away from ants.
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public class Ladybug extends Creature {
@@ -20,6 +20,8 @@ public class Ladybug extends Creature {
         visionRadius = 600;
         hitRadius = 100;
         movingSpeed = 5f;
+        maxLifePoints = 100;
+        lifePoints = maxLifePoints;
     }
 
     // GET SET -------------------------------------------------------------------

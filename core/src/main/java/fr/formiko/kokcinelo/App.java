@@ -28,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class App extends Game {
     public SpriteBatch batch;
     private Sound eatingSound;
+    private Sound antHitSound;
 
     private static Map<String, String> data;
 
@@ -138,6 +139,16 @@ public class App extends Game {
             eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
         }
         eatingSound.play();
+    }
+    /**
+     * {@summary Play the ant hit sound.}
+     * Sound can be play many times &#38; at same time.
+     */
+    public void playAntHitSound() {
+        if (antHitSound == null) {
+            antHitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
+        }
+        antHitSound.play();
     }
     /**
      * {@summary Play the end game sound.}

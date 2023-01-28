@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import java.util.Collection;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -9,18 +10,21 @@ import com.badlogic.gdx.math.Vector2;
  * Creature can move, fly, hit, eat, died.
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public abstract class Creature extends MapItem {
     protected boolean fliing;
     protected float lifePoints;
+    protected float maxLifePoints;
     protected float hitPoints;
     protected float shootPoints;
     protected float visionRadius;
     protected int color;
     protected float movingSpeed;
     protected float wantedRotation;
+    protected long lastHitTime;
+    protected int hitFrequency;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -40,6 +44,10 @@ public abstract class Creature extends MapItem {
     public float getMovingSpeed() { return movingSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
+    public float getLifePoints() { return lifePoints; }
+    public void setLifePoints(float lifePoints) { this.lifePoints = lifePoints; }
+    public float getHitPoints() { return hitPoints; }
+    public float getShootPoints() { return shootPoints; }
 
     // FUNCTIONS -----------------------------------------------------------------
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
@@ -149,5 +157,24 @@ public abstract class Creature extends MapItem {
         if (r < frequency) { // randomize rotation
             setWantedRotation((float) (Math.random() * 40) - 20f);
         }
+    }
+    /**
+     * @return true if this can hit other creatures
+     */
+    public boolean canHit() {
+        if (hitPoints > 0 && (System.currentTimeMillis() - lastHitTime) > hitFrequency) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * {@summary Hit a Creature.}
+     * 
+     * @param c creature to hit
+     */
+    public void hit(Creature c) {
+        c.setLifePoints(c.getLifePoints() - getHitPoints());
+        lastHitTime = System.currentTimeMillis();
+        App.log(1, this + " hit " + c);
     }
 }
