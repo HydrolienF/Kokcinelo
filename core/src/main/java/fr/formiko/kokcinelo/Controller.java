@@ -206,7 +206,7 @@ public class Controller {
                     .setLevel(getLevel()).build();
             break;
         case "2F":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(3).setAntNumber(1).setMapHeight(2000).setMapWidth(2000)
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setAntNumber(1).setMapHeight(2000).setMapWidth(2000)
                     .setLevel(getLevel()).build();
             break;
         default:
@@ -240,10 +240,6 @@ public class Controller {
             app.playEatingSound();
         }
         if (antHit()) {
-            // getGameScreen().setPlayerScore(gs.getScore());
-            if (gs.getPlayerCreature(getLocalPlayerId()).getLifePoints() <= 0f) {
-                gameOver();
-            }
             app.playAntHitSound();
         }
     }
@@ -262,7 +258,7 @@ public class Controller {
                     haveInteract = true;
                     eated.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
-                    gs.getPlayer(getLocalPlayerId()).addScore(aphid.getGivenPoints());
+                    gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
                     // System.out.println("Eating " + aphid);
                 }
             }
@@ -286,6 +282,13 @@ public class Controller {
                     if (ant.canHit()) {
                         haveInteract = true;
                         ant.hit(ladybug);
+                        if (ladybug.getLifePoints() < 0f) {
+                            ladybug.removeActor();
+                            gs.getLadybugs().remove(ladybug);
+                            if (gs.getLadybugs().size() == 0) {
+                                gameOver();
+                            }
+                        }
                     }
                     break;
                 }
@@ -304,7 +307,10 @@ public class Controller {
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        // boolean haveWin = gs.getScore() == gs.getMaxScore();
+        // if player play as ant, his score is 0 if he stop game before time is up.
+        if (gs.getPlayerCreature(getLocalPlayerId()) instanceof Ant && getGameScreen().isTimeUp()) {
+            gs.setScore(0);
+        }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         app.playEndGameSound(haveWin);
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);

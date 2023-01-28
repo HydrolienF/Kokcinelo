@@ -40,6 +40,7 @@ public abstract class Creature extends MapItem {
     // GET SET -------------------------------------------------------------------
     public int getGivenPoints() { return 0; }
     public float getVisionRadius() { return visionRadius; }
+    public void setVisionRadius(float visionRadius) { this.visionRadius = visionRadius; }
     public float getMaxRotationPerSecond() { return 90f; }
     public float getMovingSpeed() { return movingSpeed; }
     public float getWantedRotation() { return wantedRotation; }
@@ -47,10 +48,21 @@ public abstract class Creature extends MapItem {
     public float getLifePoints() { return lifePoints; }
     public void setLifePoints(float lifePoints) { this.lifePoints = lifePoints; }
     public float getHitPoints() { return hitPoints; }
+    public void setHitPoints(float hitPoints) { this.hitPoints = hitPoints; }
     public float getShootPoints() { return shootPoints; }
+    public void setShootPoints(float shootPoints) { this.shootPoints = shootPoints; }
 
     // FUNCTIONS -----------------------------------------------------------------
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
+    /**
+     * {@summary Boost the creature.}
+     */
+    public void boost() {
+        setHitPoints(getHitPoints() * 2);
+        setShootPoints(getShootPoints() * 2);
+        hitFrequency /= 3;
+        movingSpeed *= 1.3f;
+    }
     /**
      * {@summary Move in the facing direction at speed percentOfSpeed.}
      * If a wantedRotation have been set, go for it.

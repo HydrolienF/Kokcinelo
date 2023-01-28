@@ -20,7 +20,7 @@ public class Ant extends Creature {
         hitRadius = 50;
         hitPoints = 20;
         shootPoints = 25;
-        movingSpeed = 3f;
+        movingSpeed = 4.5f;
         maxLifePoints = 0;
         hitFrequency = 1000;
     }
@@ -35,11 +35,11 @@ public class Ant extends Creature {
         if (ladybug != null) {
             // Hunt move
             goTo(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
-            moveFront();
+            moveFront(0.6f);
         } else {
             // Normal move
             minorRandomRotation(0.02);
-            moveFront(0.8f);
+            moveFront(0.6f);
         }
         stayInMap(gs.getMapWidth(), gs.getMapHeight());
     }

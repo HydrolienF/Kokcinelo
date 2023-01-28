@@ -45,7 +45,7 @@ public class Ladybug extends Creature {
             } else {
                 // Normal move
                 minorRandomRotation(0.02);
-                moveFront(0.8f);
+                moveFront(0.6f);
             }
         }
         stayInMap(gs.getMapWidth(), gs.getMapHeight());

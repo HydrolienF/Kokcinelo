@@ -42,6 +42,7 @@ public class GameState {
     public int getMaxScore() { return maxScore; }
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
     public int getScore() { return getPlayer(getLocalPlayerId()).getScore(); }
+    public void setScore(int score) { getPlayer(getLocalPlayerId()).setScore(score); }
     public int getPercentScore() { return (getScore() * 100) / getMaxScore(); }
     public MapActor getMapActorFg() { return mapActorFg; }
     public MapActor getMapActor() { return mapActorBg; }
@@ -217,6 +218,11 @@ public class GameState {
                 p = new Player(gs.ladybugs.get(0));
                 break;
             }
+            if (level.getNumber() > 1) {
+                // boost player so that it can manage several enemies.
+                p.getPlayedCreature().boost();
+            }
+
             gs.players.add(p);
             gs.setLocalPlayerId(p.getId());
             addMapForeground();
