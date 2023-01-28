@@ -25,5 +25,8 @@ Hydrolien
 ## Noisemakers: 
 Hydrolien, [pikbest.com](https://fr.pikbest.com/)
 
+## Beta tester
+[Sevi](https://github.com/sevi2000), eureur7
+
 # License
 Full license available on LICENSE.md To make it shorter, it allowed you to use, or modify the game but you need to merge modification on this repository to have it on the game.
