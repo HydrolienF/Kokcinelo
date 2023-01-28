@@ -9,7 +9,10 @@ The aim of ladybugs is to eat as much aphid as possible when ant aim is to save 
 Ladybugs can instant eat aphid while ants need to bite or shoot acid severals times a ladybug to get ride of it.
 
 # Dev
-Game is done with Java using GUI library libgdx.
+Game is done with Java using GUI library [libgdx](https://github.com/libgdx/libgdx).
+
+To compile & run game, launch in command line ```./gradlew desktop:run```
+You need Java 17 to run game.
 
 # Team
 
