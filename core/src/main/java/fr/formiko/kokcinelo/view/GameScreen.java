@@ -117,6 +117,12 @@ public class GameScreen implements Screen {
                     getController().gameOver();
                 }
             }
+            if (getController().isAllLadybugGone()) {
+                if (!stopAtTheEnd) {
+                    getController().addScore((int) hud.getGameTime());
+                    getController().gameOver();
+                }
+            }
         }
         if (egm != null) {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);

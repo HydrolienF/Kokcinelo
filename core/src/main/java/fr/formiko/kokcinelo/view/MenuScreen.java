@@ -313,13 +313,13 @@ public class MenuScreen implements Screen {
         levelButtonTable.setBounds(0, 0, w, h);
         int buttonRadius = (int) levelButtonTable.getWidth() / 24;
         int buttonSize = buttonRadius * 2;
-        int len = 4;
+        int len = 5;
 
         int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
         int xSpaceBetweenButton = xFreeSpace / (len + 1);
 
         int yFreeSpace = (int) levelButtonTable.getHeight() - (3 * buttonSize);
-        int ySpaceBetweenButton = yFreeSpace / 4;
+        int ySpaceBetweenButton = yFreeSpace / len;
 
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 

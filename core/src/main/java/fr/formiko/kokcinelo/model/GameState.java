@@ -156,6 +156,7 @@ public class GameState {
     }
 
     public boolean isAllAphidGone() { return aphids.size() == 0; }
+    public boolean isAllLadybugGone() { return ladybugs.size() == 0; }
 
     // static
     public static GameStateBuilder builder() { return new GameStateBuilder(); }
@@ -222,6 +223,8 @@ public class GameState {
                 // boost player so that it can manage several enemies.
                 p.getPlayedCreature().boost();
             }
+            // TODO if other Ant or Ladibugs can see or be see by player (too close to player), move them away(try yo move them randomly 10
+            // times).
 
             gs.players.add(p);
             gs.setLocalPlayerId(p.getId());

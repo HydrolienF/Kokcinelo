@@ -63,6 +63,7 @@ public class Controller {
     public int getNumberOfAphids() { return gs.getAphids().size(); }
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
+    public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
 
     // FUNCTIONS -----------------------------------------------------------------
 
@@ -228,6 +229,7 @@ public class Controller {
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
+    public boolean isAllLadybugGone() { return gs.isAllLadybugGone(); }
     // public void removeActorFromStage(Actor actor) { actor.remove(); }
 
     /**
@@ -285,9 +287,9 @@ public class Controller {
                         if (ladybug.getLifePoints() < 0f) {
                             ladybug.removeActor();
                             gs.getLadybugs().remove(ladybug);
-                            if (gs.getLadybugs().size() == 0) {
-                                gameOver();
-                            }
+                            // if (gs.getLadybugs().size() == 0) {
+                            // gameOver();
+                            // }
                         }
                     }
                     break;
