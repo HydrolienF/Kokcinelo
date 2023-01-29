@@ -184,10 +184,7 @@ public class GameScreen implements Screen {
         if (camera.zoom < maxZoom) {
             camera.zoom = maxZoom;
         }
-        getController().movePlayer(Controller.getController().getLocalPlayerId());
-        getController().moveAICreature();
-        // controller.movePlayer(playerId, moveX, moveY);
-        getController().interact();
+        getController().playAFrame();
     }
     /***
      * {@summary Update all subpanels.}

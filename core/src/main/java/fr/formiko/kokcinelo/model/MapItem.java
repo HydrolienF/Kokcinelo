@@ -47,6 +47,8 @@ public abstract class MapItem {
     // Actor allowed getter / setter.
     public float getCenterX() { return getActor().getCenterX(); }
     public float getCenterY() { return getActor().getCenterY(); }
+    public void setCenterX(float x) { getActor().setCenterX(x); }
+    public void setCenterY(float y) { getActor().setCenterY(y); }
     public boolean moveIn(float maxX, float maxY) { return getActor().moveIn(maxX, maxY); }
     public float getRotation() { return getActor().getRotation(); }
     public void setRotation(float degrees) { getActor().setRotation(degrees); }

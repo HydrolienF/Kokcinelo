@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.AcidDrop;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
@@ -36,6 +37,7 @@ public class Controller {
     private App app;
     private boolean spectatorMode;
     private Level level;
+    private Set<Creature> toRemove;
 
     private static Controller controller;
 
@@ -48,6 +50,7 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
+        toRemove = new HashSet<Creature>();
         App.log(0, "constructor", "new Controller: " + toString());
     }
 
@@ -66,6 +69,18 @@ public class Controller {
     public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
 
     // FUNCTIONS -----------------------------------------------------------------
+
+    /**
+     * {@summary Call every function that need to be call every frame.}
+     * Some function may do nothing if they are not needed.
+     */
+    public void playAFrame() {
+        movePlayer(getLocalPlayerId());
+        moveAICreature();
+        interact();
+        gs.remove(toRemove);
+        toRemove.clear();
+    }
 
     public void startApp() { createNewMenuScreen(); }
 
@@ -154,24 +169,12 @@ public class Controller {
     }
 
     /**
-     * {@summary Move aphids.}
-     * Aphids first run away from the closest ladybug they can see if they can see one.
-     * Else they move slowly to a random direction &#38; some time change it.
-     * If they hit a wall, they change there wanted rotation angle for the nexts turns.
+     * {@summary Move all AI Creature.}
      */
     public void moveAICreature() {
         Creature playerCreature = gs.getPlayerCreature(getLocalPlayerId());
-        for (Aphid c : gs.getAphids()) {
-            if (!c.equals(playerCreature)) {
-                c.moveAI(gs);
-            }
-        }
-        for (Ladybug c : gs.getLadybugs()) {
-            if (!c.equals(playerCreature)) {
-                c.moveAI(gs);
-            }
-        }
-        for (Ant c : gs.getAnts()) {
+        // Iterate over all Creatures in one loop
+        for (Creature c : allCreatures()) {
             if (!c.equals(playerCreature)) {
                 c.moveAI(gs);
             }
@@ -199,21 +202,29 @@ public class Controller {
         Musics.setMusic("Waltz of the Night 1min");
         switch (getLevelId()) {
         case "1K":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(0).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
+                    .build();
             break;
         case "2K":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(3).setMapHeight(2000).setMapWidth(2000)
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setRedAntNumber(3).setMapHeight(2000).setMapWidth(2000)
                     .setLevel(getLevel()).build();
             break;
         case "2F":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setAntNumber(1).setMapHeight(2000).setMapWidth(2000)
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setRedAntNumber(1).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        case "3K":
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setGreenAntNumber(3).setMapHeight(2000).setMapWidth(2000)
+                    .setLevel(getLevel()).build();
+            break;
+        case "3F":
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setGreenAntNumber(1).setMapHeight(2000).setMapWidth(2000)
                     .setLevel(getLevel()).build();
             break;
         default:
             App.log(3, "levelId not found, use default levelId (1K)");
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setAntNumber(0).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
+                    .build();
             break;
         }
         app.setScreen(new GameScreen(app));
@@ -237,13 +248,17 @@ public class Controller {
      * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
      */
     public void interact() {
-        if (ladybugEat()) {
+        if (ladybugsEat()) {
             getGameScreen().setPlayerScore(gs.getScore());
             app.playEatingSound();
         }
-        if (antHit()) {
+        if (antsHit()) {
             app.playAntHitSound();
         }
+        if (antsShoot()) {
+            app.playAntShootSound();
+        }
+        acidDropsHit();
     }
 
     /**
@@ -251,22 +266,17 @@ public class Controller {
      * 
      * @return true if a ladybug have interact
      */
-    public boolean ladybugEat() {
+    public boolean ladybugsEat() {
         boolean haveInteract = false;
         for (Ladybug ladybug : gs.getLadybugs()) {
-            Set<Aphid> eated = new HashSet<Aphid>();
             for (Aphid aphid : gs.getAphids()) {
                 if (ladybug.hitBoxConnected(aphid)) {
                     haveInteract = true;
-                    eated.add(aphid);
+                    toRemove.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
                     // System.out.println("Eating " + aphid);
                 }
-            }
-            gs.getAphids().removeAll(eated);
-            for (Aphid aphid : eated) {
-                aphid.removeActor();
             }
         }
         return haveInteract;
@@ -276,7 +286,7 @@ public class Controller {
      * 
      * @return true if a ladybug have interact
      */
-    public boolean antHit() {
+    public boolean antsHit() {
         boolean haveInteract = false;
         for (Ant ant : gs.getAnts()) {
             for (Ladybug ladybug : gs.getLadybugs()) {
@@ -285,11 +295,7 @@ public class Controller {
                         haveInteract = true;
                         ant.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {
-                            ladybug.removeActor();
-                            gs.getLadybugs().remove(ladybug);
-                            // if (gs.getLadybugs().size() == 0) {
-                            // gameOver();
-                            // }
+                            toRemove.add(ladybug);
                         }
                     }
                     break;
@@ -298,6 +304,55 @@ public class Controller {
         }
         return haveInteract;
     }
+    /**
+     * {@summary Let ant shoot ladybug.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean antsShoot() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
+            if (target != null && ant.canShoot()) {
+                ant.shoot(target);
+                // Create new acid drop
+                AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.distanceTo(target),
+                        ant.getShootPoints());
+                gs.getAcidDrops().add(ad);
+                getGameScreen().getStage().addActor(ad.getActor());
+                haveInteract = true;
+            }
+        }
+        return haveInteract;
+    }
+
+    /**
+     * {@summary Let acid drops hit.}
+     * 
+     * @return true if an acide drops have interact
+     */
+    public boolean acidDropsHit() {
+        boolean haveInteract = false;
+        for (AcidDrop acidDrop : gs.getAcidDrops()) {
+            if (acidDrop.getDistanceBeforeHit() < 0) {
+                // TODO it should hit any living Creature (not only ladybug)
+                for (Ladybug ladybug : gs.getLadybugs()) {
+                    if (ladybug.hitBoxConnected(acidDrop)) {
+                        haveInteract = true;
+                        App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
+                        toRemove.add(acidDrop);
+                        acidDrop.hit(ladybug);
+                        if (ladybug.getLifePoints() < 0f) {
+                            toRemove.add(ladybug);
+                        }
+                        App.log(1, "lb have been hit " + ladybug);
+                    }
+                }
+            }
+        }
+        return haveInteract;
+    }
+
     /**
      * {@summary End game by launching sound &#38; end game menu.}
      */

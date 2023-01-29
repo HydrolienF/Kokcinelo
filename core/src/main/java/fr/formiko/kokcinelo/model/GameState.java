@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +21,7 @@ public class GameState {
     private List<Ant> ants;
     private List<Ladybug> ladybugs;
     private List<Player> players;
+    private List<AcidDrop> acidDrops;
     private MapActor mapActorBg;
     private MapActor mapActorFg;
     private int maxScore;
@@ -36,6 +38,7 @@ public class GameState {
         ants = new ArrayList<Ant>();
         ladybugs = new ArrayList<Ladybug>();
         players = new ArrayList<Player>();
+        acidDrops = new LinkedList<AcidDrop>();
     }
 
     // GET SET -------------------------------------------------------------------
@@ -49,6 +52,7 @@ public class GameState {
     public List<Aphid> getAphids() { return aphids; }
     public List<Ant> getAnts() { return ants; }
     public List<Ladybug> getLadybugs() { return ladybugs; }
+    public List<AcidDrop> getAcidDrops() { return acidDrops; }
     public int getLocalPlayerId() { return localPlayerId; }
     public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
     public Level getLevel() { return level; }
@@ -108,6 +112,7 @@ public class GameState {
         l.addAll(aphids);
         l.addAll(ants);
         l.addAll(ladybugs);
+        l.addAll(acidDrops);
         return l;
     }
     /**
@@ -158,6 +163,30 @@ public class GameState {
     public boolean isAllAphidGone() { return aphids.size() == 0; }
     public boolean isAllLadybugGone() { return ladybugs.size() == 0; }
 
+    /**
+     * @summary Remove a Creature from the list of Creature where class match & from the Stage.
+     */
+    public void remove(Creature c) {
+        if (c instanceof Aphid) {
+            aphids.remove(c);
+        } else if (c instanceof Ant) {
+            ants.remove(c);
+        } else if (c instanceof Ladybug) {
+            ladybugs.remove(c);
+        } else if (c instanceof AcidDrop) {
+            acidDrops.remove(c);
+        }
+        c.removeActor();
+    }
+    /**
+     * @summary Remove a collection of Creature from the list of Creature where class match & from the Stage.
+     */
+    public void remove(Collection<Creature> creatures) {
+        for (Creature c : creatures) {
+            remove(c);
+        }
+    }
+
     // static
     public static GameStateBuilder builder() { return new GameStateBuilder(); }
 
@@ -172,7 +201,8 @@ public class GameState {
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
-        private int antNumber;
+        private int greenAntNumber;
+        private int redAntNumber;
         private int aphidNumber;
         private int ladybugNumber;
         private GameState gs;
@@ -202,7 +232,7 @@ public class GameState {
 
             // initialize default game
             addMapBackground();
-            addCreatures(aphidNumber, ladybugNumber, antNumber);
+            addCreatures(aphidNumber, ladybugNumber, redAntNumber, greenAntNumber);
             Player p;
             switch (level.getLetter()) {
             case "K":
@@ -256,8 +286,17 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setAntNumber(int antNumber) {
-            this.antNumber = antNumber;
+        public GameStateBuilder setRedAntNumber(int antNumber) {
+            this.redAntNumber = antNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setGreenAntNumber(int antNumber) {
+            this.greenAntNumber = antNumber;
             return this;
         }
         /**
@@ -297,10 +336,11 @@ public class GameState {
          * @param ladybugsNumber number of ladybugs to play with
          * @param antsNumber     number of ants to play with
          */
-        private void addCreatures(int aphidsNumber, int ladybugsNumber, int antsNumber) {
+        private void addCreatures(int aphidsNumber, int ladybugsNumber, int redAntNumber, int greenAntNumber) {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
             addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
-            addC(antsNumber, 0.1f, 0.1f, true, true, Ant.class);
+            addC(redAntNumber, 0.1f, 0.1f, true, true, Ant.class);
+            addC(greenAntNumber, 0.1f, 0.1f, true, true, GreenAnt.class);
         }
 
         /**

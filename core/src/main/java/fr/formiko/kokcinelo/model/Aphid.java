@@ -33,6 +33,12 @@ public class Aphid extends Creature {
     public float getMaxRotationPerSecond() { return 500f; }
 
     // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Move aphids as AI.}
+     * Aphids first run away from the closest ladybug they can see if they can see one.
+     * Else they move slowly to a random direction &#38; some time change it.
+     * If they hit a wall, they change there wanted rotation angle for the nexts turns.
+     */
     public void moveAI(GameState gs) {
         Ladybug ladybug = (Ladybug) closestCreature(gs.getLadybugs());
         if (ladybug != null) {

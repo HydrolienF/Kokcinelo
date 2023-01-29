@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -29,6 +30,10 @@ public class Ladybug extends Creature {
     public int getGivenPoints() { return 10; }
     @Override
     public float getMaxRotationPerSecond() { return 140f; }
+    public void setLifePoints(float lifePoints) {
+        super.setLifePoints(lifePoints);
+        App.log(1, "Ladybug lifePoints : " + lifePoints);
+    }
     // FUNCTIONS -----------------------------------------------------------------
     public void moveAI(GameState gs) {
         Ant ant = (Ant) closestCreature(gs.getAnts());

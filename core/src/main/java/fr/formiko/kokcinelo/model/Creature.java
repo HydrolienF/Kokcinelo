@@ -24,7 +24,9 @@ public abstract class Creature extends MapItem {
     protected float movingSpeed;
     protected float wantedRotation;
     protected long lastHitTime;
+    protected long lastShootTime;
     protected int hitFrequency;
+    protected int shootFrequency;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -53,6 +55,13 @@ public abstract class Creature extends MapItem {
     public void setShootPoints(float shootPoints) { this.shootPoints = shootPoints; }
 
     // FUNCTIONS -----------------------------------------------------------------
+    public String toString() {
+        return this.getClass().getSimpleName() + " : " + super.toString() + "\n" + "lifePoints : " + lifePoints + "\n" + "maxLifePoints : "
+                + maxLifePoints + "\n" + "hitPoints : " + hitPoints + "\n" + "shootPoints : " + shootPoints + "\n" + "visionRadius : "
+                + visionRadius + "\n" + "color : " + color + "\n" + "movingSpeed : " + movingSpeed + "\n" + "wantedRotation : "
+                + wantedRotation + "\n" + "lastHitTime : " + lastHitTime + "\n" + "lastShootTime : " + lastShootTime + "\n"
+                + "hitFrequency : " + hitFrequency + "\n" + "shootFrequency : " + shootFrequency + "\n";
+    }
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
     /**
      * {@summary Boost the creature.}
@@ -187,6 +196,25 @@ public abstract class Creature extends MapItem {
     public void hit(Creature c) {
         c.setLifePoints(c.getLifePoints() - getHitPoints());
         lastHitTime = System.currentTimeMillis();
-        App.log(1, this + " hit " + c);
+        App.log(1,
+                this + " hit " + c + " with " + getHitPoints() + " hit points. Creature still have " + c.getLifePoints() + " life points.");
+    }
+    /**
+     * @return true if this can shoot other creatures
+     */
+    public boolean canShoot() {
+        if (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * {@summary Shoot a Creature.}
+     * 
+     * @param c creature to shoot
+     */
+    public void shoot(Creature c) {
+        lastShootTime = System.currentTimeMillis();
+        App.log(1, this + " shoot " + c);
     }
 }

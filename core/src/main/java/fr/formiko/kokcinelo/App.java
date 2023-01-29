@@ -151,6 +151,16 @@ public class App extends Game {
         antHitSound.play();
     }
     /**
+     * {@summary Play the ant shoot sound.}
+     * Sound can be play many times &#38; at same time.
+     */
+    public void playAntShootSound() {
+        if (antHitSound == null) {
+            antHitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
+        }
+        antHitSound.play();
+    }
+    /**
      * {@summary Play the end game sound.}
      * Sound can be play many times &#38; at same time.
      * 

@@ -19,7 +19,7 @@ public class Ant extends Creature {
         visionRadius = 500;
         hitRadius = 50;
         hitPoints = 20;
-        shootPoints = 25;
+        shootPoints = 0;
         movingSpeed = 4.5f;
         maxLifePoints = 0;
         hitFrequency = 1000;

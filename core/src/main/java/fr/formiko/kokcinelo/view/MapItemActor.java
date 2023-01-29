@@ -26,7 +26,7 @@ public class MapItemActor extends Group {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = false;
+    private static boolean showZone = true;
     private ShapeRenderer shapeRenderer;
     /**
      * {@summary Main constructor.}
