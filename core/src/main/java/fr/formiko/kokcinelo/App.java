@@ -6,6 +6,7 @@ import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.badlogic.gdx.Application;
@@ -27,8 +28,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class App extends Game {
     public SpriteBatch batch;
-    private Sound eatingSound;
-    private Sound antHitSound;
+    private static Map<String, Sound> soundMap = new HashMap<String, Sound>();
 
     private static Map<String, String> data;
 
@@ -130,35 +130,35 @@ public class App extends Game {
     public static boolean isPlayableLevel(String levelId) { return PLAYABLE_LEVELS.contains(levelId); }
 
     // music --------------------------------------------------------------------------------------
-    /**
+    /***
      * {@summary Play the eating sound.}
      * Sound can be play many times &#38; at same time.
      */
-    public void playEatingSound() {
-        if (eatingSound == null) {
-            eatingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crock.mp3"));
-        }
-        eatingSound.play();
-    }
-    /**
+    public void playEatingSound() { playSound("crock"); }
+    /***
      * {@summary Play the ant hit sound.}
      * Sound can be play many times &#38; at same time.
      */
-    public void playAntHitSound() {
-        if (antHitSound == null) {
-            antHitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
-        }
-        antHitSound.play();
-    }
-    /**
-     * {@summary Play the ant shoot sound.}
+    public void playAntHitSound() { playSound("hit"); }
+    /***
+     * {@summary Play the start ant shoot sound.}
      * Sound can be play many times &#38; at same time.
      */
-    public void playAntShootSound() {
-        if (antHitSound == null) {
-            antHitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
+    public void playAntShootSound() { playSound("shoot"); }
+    /***
+     * {@summary Play the end ant shoot sound.}
+     * Sound can be play many times &#38; at same time.
+     */
+    public void playAcidSplatch() { playSound("splatch"); }
+    /**
+     * {@summary Play the given sound.}
+     * Sound can be play many times &#38; at same time.
+     */
+    public void playSound(String fileName) {
+        if (soundMap.get(fileName) == null) {
+            soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
         }
-        antHitSound.play();
+        soundMap.get(fileName).play();
     }
     /**
      * {@summary Play the end game sound.}

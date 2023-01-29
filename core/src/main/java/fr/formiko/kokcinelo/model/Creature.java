@@ -49,6 +49,7 @@ public abstract class Creature extends MapItem {
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
     public float getLifePoints() { return lifePoints; }
     public void setLifePoints(float lifePoints) { this.lifePoints = lifePoints; }
+    public float getMaxLifePoints() { return maxLifePoints; }
     public float getHitPoints() { return hitPoints; }
     public void setHitPoints(float hitPoints) { this.hitPoints = hitPoints; }
     public float getShootPoints() { return shootPoints; }

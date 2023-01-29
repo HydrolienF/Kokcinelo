@@ -258,7 +258,9 @@ public class Controller {
         if (antsShoot()) {
             app.playAntShootSound();
         }
-        acidDropsHit();
+        if (acidDropsHit()) {
+            app.playAcidSplatch();
+        }
     }
 
     /**
@@ -339,14 +341,14 @@ public class Controller {
                 for (Ladybug ladybug : gs.getLadybugs()) {
                     if (ladybug.hitBoxConnected(acidDrop)) {
                         haveInteract = true;
-                        App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
-                        toRemove.add(acidDrop);
+                        // App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
                         acidDrop.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {
                             toRemove.add(ladybug);
                         }
-                        App.log(1, "lb have been hit " + ladybug);
+                        // App.log(1, "lb have been hit " + ladybug);
                     }
+                    toRemove.add(acidDrop);
                 }
             }
         }

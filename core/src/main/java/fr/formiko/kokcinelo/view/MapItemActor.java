@@ -7,6 +7,8 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * {@summary Actor that represent a MapItem.}
@@ -26,8 +29,9 @@ public class MapItemActor extends Group {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
-    private static boolean showZone = true;
+    private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
+    private ShapeDrawer shapeDrawer;
     /**
      * {@summary Main constructor.}
      * 
@@ -80,6 +84,33 @@ public class MapItemActor extends Group {
         if (!(this instanceof MapItemActorAnimate)) {
             batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
                     getRotation());
+        }
+        if (mapItem instanceof Creature) {
+            Creature c = (Creature) mapItem;
+            float lp = c.getLifePoints();
+            float mlp = c.getMaxLifePoints();
+            if (mlp > 0) {
+                if (shapeDrawer == null) {
+                    Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+                    pixmap.setColor(Color.WHITE);
+                    pixmap.drawPixel(0, 0);
+                    Texture texture = new Texture(pixmap);
+                    pixmap.dispose(); // dispose later
+                    TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
+                    shapeDrawer = new ShapeDrawer(batch, region);
+                }
+                float len = 100;
+                float heigth = len / 10;
+                float greenLen = len * lp / mlp;
+                float redLen = len - greenLen;
+                shapeDrawer.setColor(Color.RED);
+                shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + heigth, redLen,
+                        heigth);
+                shapeDrawer.setColor(Color.GREEN);
+                shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, greenLen, heigth);
+                shapeDrawer.setColor(Color.BLACK);
+                shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, len, heigth, 2);
+            }
         }
 
         if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
