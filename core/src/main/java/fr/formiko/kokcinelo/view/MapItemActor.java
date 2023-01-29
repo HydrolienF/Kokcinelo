@@ -99,7 +99,7 @@ public class MapItemActor extends Group {
                     TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
                     shapeDrawer = new ShapeDrawer(batch, region);
                 }
-                float len = 100;
+                float len = 100 * Gdx.graphics.getWidth() / 1920;
                 float heigth = len / 10;
                 float greenLen = len * lp / mlp;
                 float redLen = len - greenLen;
