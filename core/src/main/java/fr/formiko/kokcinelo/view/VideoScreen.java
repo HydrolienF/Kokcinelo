@@ -3,8 +3,8 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
-import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import com.badlogic.gdx.Gdx;
@@ -216,7 +216,6 @@ public class VideoScreen implements Screen {
         stage.dispose();
     }
 
-
     private MapItemActorAnimate loadAnimateLadybug() {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -232,7 +231,8 @@ public class VideoScreen implements Screen {
         float antennaRotation = 15f;
         float legRotation = -5f;
 
-        MapItem mi = new Ladybug();
+        Creature mi = new Ladybug();
+        mi.setMaxLifePoints(0f);
         MapItemActorAnimate ladybug = new MapItemActorAnimate("Creatures/ladybug flying side view body", mi);
 
 

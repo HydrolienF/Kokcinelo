@@ -22,7 +22,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@summary Actor that represent a MapItem.}
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.1
  */
 public class MapItemActor extends Group {
@@ -89,7 +89,7 @@ public class MapItemActor extends Group {
             Creature c = (Creature) mapItem;
             float lp = c.getLifePoints();
             float mlp = c.getMaxLifePoints();
-            if (mlp > 0) {
+            if (mlp > 0) { // if is a Creature witch life point matter
                 if (shapeDrawer == null) {
                     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
                     pixmap.setColor(Color.WHITE);
@@ -99,7 +99,8 @@ public class MapItemActor extends Group {
                     TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
                     shapeDrawer = new ShapeDrawer(batch, region);
                 }
-                float len = 100 * Gdx.graphics.getWidth() / 1920;
+                // Draw life bar
+                float len = mlp * 1.5f * Gdx.graphics.getWidth() / 1920f;
                 float heigth = len / 10;
                 float greenLen = len * lp / mlp;
                 float redLen = len - greenLen;

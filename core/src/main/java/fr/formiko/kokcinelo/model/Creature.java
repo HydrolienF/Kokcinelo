@@ -50,6 +50,7 @@ public abstract class Creature extends MapItem {
     public float getLifePoints() { return lifePoints; }
     public void setLifePoints(float lifePoints) { this.lifePoints = lifePoints; }
     public float getMaxLifePoints() { return maxLifePoints; }
+    public void setMaxLifePoints(float maxLifePoints) { this.maxLifePoints = maxLifePoints; }
     public float getHitPoints() { return hitPoints; }
     public void setHitPoints(float hitPoints) { this.hitPoints = hitPoints; }
     public float getShootPoints() { return shootPoints; }
