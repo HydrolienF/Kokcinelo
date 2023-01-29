@@ -7,18 +7,18 @@ bestScore: best score
 lastScore: last score
 descriptionLevelK: Devour as many aphids as you can in 1 minute!
 descriptionLevelF: Protect as many aphids as you can 1 minute!
-descriptionLevelA: Survive 1 minute!
-descriptionLevel1K: Lead your ladybug with mouse pointer & zoom with mouse scroll wheel.
+descriptionLevelA: Survive for 1 minute!
+descriptionLevel1K: Lead your ladybug with the mouse pointer & zoom with the mouse scroll wheel.
 descriptionLevel2K: The ants will do their best to stop you. Beware of their sharp mandibles!
-descriptionLevel2F: Ladybugs will try to devour as many as possible. To prevent that, you can use your mandibles. The faster you stop the ladybugs the more bunus points you will have.
+descriptionLevel2F: The ladybugs will try to devour as many aphids as possible. To prevent that, you can use your mandibles. The faster you stop the ladybugs the more bonus points you will have.
 descriptionLevel3K: The ants will do their best to stop you. Beware of their acid jets!
-descriptionLevel3F: Ladybugs will try to devour as many as possible. To prevent that, you can use your formic acid. The faster you stop the ladybugs the more bunus points you will have.
+descriptionLevel3F: Ladybugs will try to devour as many as possible. To prevent that, you can use your formic acid. The faster you stop the ladybugs the more bonus points you will have.
 descriptionLevel4K: Each devoured aphid will grant you a life, speed or bonus points.
-descriptionLevel4F: Your friends the aphids secrete honeydew that you love. Depending on the aphid species, honeydew will either make you faster or make your attacks more effective.
-descriptionLevel4A: You are the most beautiful of aphids. The future of the colony depends on your survival! Use the ants to protect yourself and if necessary let others be eaten for you. You can speed up a short time to escape (space).
-descriptionLevel5K: Some aphids fly. To catch them you must also fly (space). In flight you no longer catch aphids on the ground.
+descriptionLevel4F: Your friends the aphids secrete honeydew that you love. Depending on the species of aphids, the honeydew will either make you faster or make your attacks more effective.
+descriptionLevel4A: You are the most beautiful aphid. The future of the colony depends on your survival! Use the ants to protect yourself and if necessary let others be eaten for you. You can speed up a short time for escape (space).
+descriptionLevel5K: Some aphids fly. To catch them you must also fly (space). In flight you can no longer catch aphids on the ground.
 descriptionLevel5F: Ladybugs fly! When they fly you must rely only on your acid to stop them.
-descriptionLevel5A: You are the most appetizing of aphids, ladybugs will follow you to death! Use your wings and your allies the ants to get rid of them.
+descriptionLevel5A: You are the most appetizing aphid. The adybugs will hunt you to death! Use your wings and your allies the ants to get rid of them.
 comingSoon: Coming soon
 #Escape Menu
 restart: restart

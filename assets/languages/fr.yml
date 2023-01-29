@@ -16,10 +16,10 @@ descriptionLevel3F: Les coccinelles tenteront d'en dévorer autant que possible.
 descriptionLevel4K: Chaque puceron dévoré vous accordera un bonus de vie, de vitesse ou de point.
 descriptionLevel4F: Vos amis les pucerons sécrètent du miellat dont vous raffolez. En fonction de l'espèce de puceron, le miellat vous rendra plus rapide ou rendra vos attaques plus efficaces.
 descriptionLevel4A: Vous êtes le plus beau des pucerons. L'avenir de la colonie dépend de votre survie ! Servez-vous des fourmis pour vous protéger & si nécessaire laisser les autres se faire dévorer à votre place. Vous pouvez accélérer un cours instant (espace) pour vous échapper.
-descriptionLevel5K: Certains pucerons volent. Pour les attraper vous devez voler aussi (espace). En vol vous n'attraper plus les pucerons au sol.
+descriptionLevel5K: Certains pucerons volent. Pour les attraper vous devez voler aussi (espace). En vol vous n'attrapez plus les pucerons au sol.
 descriptionLevel5F: Les coccinelles volent ! Lorsqu'elles volent vous ne pouvez compter que sur votre acide pour les arrêter.
-descriptionLevel5A: Vous êtes le plus appétissant des pucerons, les coccinelles vous suivront jusqu'à la mort ! Faite usage de vos ailes & de vos alliées les fourmis pour vous en débarrasser.
-comingSoon: Bientôt disponible.
+descriptionLevel5A: Vous êtes le plus appétissant des pucerons. Les coccinelles vous chasserons jusqu'à la mort ! Faite usage de vos ailes & de vos alliées les fourmis pour vous en débarrasser.
+comingSoon: Bientôt disponible
 #Escape Menu
 restart: recommencer
 endPartie: finir la partie
