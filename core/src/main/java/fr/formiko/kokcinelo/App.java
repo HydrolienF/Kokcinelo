@@ -138,12 +138,19 @@ public class App extends Game {
      * @param volume   volume of the sound in [0, 1]
      * @param pan      left rigth ballance of the sound file in [-1, 1]
      */
-    public void playSound(String fileName, float volume, float pan) {
+    public static void playSound(String fileName, float volume, float pan) {
         if (soundMap.get(fileName) == null) {
             soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
         }
         soundMap.get(fileName).play(volume, 1f, pan);
     }
+    /**
+     * {@summary Play the given sound with default volume &#38; default pan.}
+     * Sound can be play many times &#38; at same time.
+     * 
+     * @param fileName name of the sound file
+     */
+    public static void playSound(String fileName) { playSound(fileName, 1f, 0f); }
     /**
      * {@summary Play the end game sound.}
      * Sound can be play many times &#38; at same time.

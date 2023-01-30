@@ -340,6 +340,7 @@ public class Controller {
                     if (ladybug.hitBoxConnected(acidDrop)) {
                         haveInteract = true;
                         playSound("splatch", ladybug);
+                        // playSound("takeDamage", ladybug);
                         // App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
                         acidDrop.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {

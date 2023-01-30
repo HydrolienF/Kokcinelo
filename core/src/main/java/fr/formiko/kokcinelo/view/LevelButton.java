@@ -83,10 +83,16 @@ class LevelButton extends Button {
                 if (!isDisabled()) {
                     ms.updateSelectedLevel(getId());
                     setChecked(true);
+                    App.playSound("clicOff");
                 }
             }
             @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) { ms.updateOveredLevel(getId()); }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                ms.updateOveredLevel(getId());
+                if (pointer == -1) {
+                    App.playSound("clicOn");
+                }
+            }
             /**
              * Reset overed level if mouse exit the button.
              */
@@ -94,6 +100,7 @@ class LevelButton extends Button {
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if (pointer == -1) {
                     ms.updateOveredLevel(getCheckedButton().getId());
+                    // App.playSound("clic");
                 }
             }
         });
