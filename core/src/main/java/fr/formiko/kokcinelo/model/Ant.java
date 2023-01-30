@@ -17,6 +17,7 @@ public class Ant extends Creature {
     public Ant() {
         super("ant");
         visionRadius = 500;
+        hearRadius = 1000;
         hitRadius = 50;
         hitPoints = 20;
         shootPoints = 0;

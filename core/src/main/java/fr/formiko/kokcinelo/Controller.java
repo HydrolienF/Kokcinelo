@@ -538,13 +538,52 @@ public class Controller {
         return unlockedLevels;
     }
 
+    /**
+     * {@summary Play a sound that soundSource have emit.}
+     * soundSource is used to calculate the volume and the pan of the sound from distance and angle data
+     * between soundSource and player Creature.
+     * 
+     * @param fileName    name of the sound file
+     * @param soundSource source of the sound
+     */
     public void playSound(String fileName, MapItem soundSource) {
         Creature soundTarget = getPlayerCreature();
-        float volume = Math.max(1f - soundTarget.distanceTo(soundSource) / soundTarget.getHearRadius(), 0f) / 2;
-        // float pan = (soundTarget.getActor().getX() - soundSource.getActor().getX()) / soundTarget.getHearRadius();
-        float pan = 0f;
-        App.log(1, "Sound " + fileName + " " + volume + " " + pan);
-        app.playSound(fileName, volume, 0f);
+        float volume = getSoundVolume(soundSource, soundTarget);
+        float pan = getSoundPan(soundSource, soundTarget);
+        App.log(0, "Sound " + fileName + " " + volume + " " + pan);
+        app.playSound(fileName, volume, pan);
+    }
+
+    /**
+     * {@summary Return the volume of a sound to emit.}
+     * 
+     * @param soundSource source of the sound
+     * @param soundTarget target of the sound
+     * @return the volume of a sound to emit
+     */
+    public static float getSoundVolume(MapItem soundSource, Creature soundTarget) {
+        return Math.max(1f - soundTarget.distanceTo(soundSource) / soundTarget.getHearRadius(), 0f);
+    }
+    /**
+     * {@summary Return the pan of a sound to emit.}
+     * 
+     * @param soundSource source of the sound
+     * @param soundTarget target of the sound
+     * @return the volume of a sound to emit
+     */
+    public static float getSoundPan(MapItem soundSource, Creature soundTarget) {
+        float distanceX = soundSource.getCenterX() - soundTarget.getCenterX();
+        float distanceY = soundSource.getCenterY() - soundTarget.getCenterY();
+        float distance = Math.abs(distanceX) + Math.abs(distanceY);
+        if (distance == 0) {
+            return 0f;
+        } else {
+            float pan = distanceX / distance;
+            if ((distanceX < 0 && pan > 0) || (distanceX > 0 && pan < 0)) {
+                pan = -pan;
+            }
+            return pan;
+        }
     }
 
 

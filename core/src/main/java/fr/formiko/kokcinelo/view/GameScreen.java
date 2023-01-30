@@ -93,6 +93,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        // App.log(1, "isPause: " + isPause);
         boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
         if (!isPause) {
@@ -102,10 +103,9 @@ public class GameScreen implements Screen {
                 App.log(1, "skip a delta to avoid lag.");
             }
         }
-        // ScreenUtils.clear(0.1f, 1f, 0f, 1);
         ScreenUtils.clear(0f, 0f, 0f, 1);
-        // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
         game.batch.setProjectionMatrix(camera.combined);
+
         getController().updateActorVisibility(Controller.getController().getLocalPlayerId());
         stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
         stage.draw();
@@ -124,11 +124,15 @@ public class GameScreen implements Screen {
                 }
             }
         }
+
         if (egm != null) {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
             egm.getStage().act(delta);
             egm.getStage().draw();
         }
+        // if (isPause && em == null) {
+        // createEscapeMenu();
+        // }
         if (em != null) {
             game.batch.setProjectionMatrix(em.getStage().getCamera().combined);
             em.getStage().act(delta);
@@ -161,26 +165,6 @@ public class GameScreen implements Screen {
         if (isPause) {
             return;
         }
-        // double moveY = 0;
-        // double moveX = 0;
-        // if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        // moveY += Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        // moveY -= Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        // moveX -= Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        // moveX += Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-        // camera.rotate(-rotationSpeed, 0, 0, 1);
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-        // camera.rotate(rotationSpeed, 0, 0, 1);
-        // }
         if (camera.zoom < maxZoom) {
             camera.zoom = maxZoom;
         }
@@ -211,8 +195,12 @@ public class GameScreen implements Screen {
      */
     @Override
     public void resume() {
-        if (isStop || em != null) {
+        if (isStop) {
             App.log(2, "Can't resume stop game.");
+            return;
+        }
+        if (em != null) {
+            App.log(2, "Can't resume escaped game.");
             return;
         }
         isPause = false;
@@ -222,7 +210,9 @@ public class GameScreen implements Screen {
      */
     public void stop() {
         isStop = true;
-        pause();
+        if (!isPause) {
+            pause();
+        }
     }
     /***
      * {@summary Definitivly stop current game after next draw.}

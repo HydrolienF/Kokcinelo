@@ -35,7 +35,7 @@ public class Musics {
         stop();
         if (music != null) {
             App.log(1, "Play current music");
-            // music.play(); //@a
+            music.play();
         }
     }
     /**
