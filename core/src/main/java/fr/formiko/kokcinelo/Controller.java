@@ -7,6 +7,7 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.GameScreen;
@@ -67,6 +68,7 @@ public class Controller {
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
     public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
+    public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
 
     // FUNCTIONS -----------------------------------------------------------------
 
@@ -172,7 +174,7 @@ public class Controller {
      * {@summary Move all AI Creature.}
      */
     public void moveAICreature() {
-        Creature playerCreature = gs.getPlayerCreature(getLocalPlayerId());
+        Creature playerCreature = getPlayerCreature();
         // Iterate over all Creatures in one loop
         for (Creature c : allCreatures()) {
             if (!c.equals(playerCreature)) {
@@ -267,7 +269,7 @@ public class Controller {
             for (Aphid aphid : gs.getAphids()) {
                 if (ladybug.hitBoxConnected(aphid)) {
                     haveInteract = true;
-                    app.playSound("crock", ladybug);
+                    playSound("crock", ladybug);
                     toRemove.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
@@ -289,7 +291,7 @@ public class Controller {
                 if (ant.hitBoxConnected(ladybug)) {
                     if (ant.canHit()) {
                         haveInteract = true;
-                        app.playSound("hit", ant);
+                        playSound("hit", ant);
                         ant.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {
                             toRemove.add(ladybug);
@@ -312,7 +314,7 @@ public class Controller {
             Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
             if (target != null && ant.canShoot()) {
                 ant.shoot(target);
-                app.playSound("shoot", ant);
+                playSound("shoot", ant);
                 // Create new acid drop
                 AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.distanceTo(target),
                         ant.getShootPoints());
@@ -337,7 +339,7 @@ public class Controller {
                 for (Ladybug ladybug : gs.getLadybugs()) {
                     if (ladybug.hitBoxConnected(acidDrop)) {
                         haveInteract = true;
-                        app.playSound("splatch", ladybug);
+                        playSound("splatch", ladybug);
                         // App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
                         acidDrop.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {
@@ -364,7 +366,7 @@ public class Controller {
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
         // if player play as ant, his score is 0 if he stop game before time is up.
-        if (gs.getPlayerCreature(getLocalPlayerId()) instanceof Ant && getGameScreen().isTimeUp()) {
+        if (getPlayerCreature() instanceof Ant && getGameScreen().isTimeUp()) {
             gs.setScore(0);
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
@@ -536,6 +538,15 @@ public class Controller {
         return unlockedLevels;
     }
 
+    public void playSound(String fileName, MapItem soundSource) {
+        Creature soundTarget = getPlayerCreature();
+        float volume = Math.max(1f - soundTarget.distanceTo(soundSource) / soundTarget.getHearRadius(), 0f) / 2;
+        // float pan = (soundTarget.getActor().getX() - soundSource.getActor().getX()) / soundTarget.getHearRadius();
+        float pan = 0f;
+        App.log(1, "Sound " + fileName + " " + volume + " " + pan);
+        app.playSound(fileName, volume, 0f);
+    }
+
 
     /**
      * {@summary Return current used camera.}
@@ -556,4 +567,5 @@ public class Controller {
     private Vector2 getVectorStageCoordinates(float x, float y) {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }
+
 }

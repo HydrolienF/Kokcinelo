@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
@@ -134,12 +133,16 @@ public class App extends Game {
     /**
      * {@summary Play the given sound.}
      * Sound can be play many times &#38; at same time.
+     * 
+     * @param fileName name of the sound file
+     * @param volume   volume of the sound in [0, 1]
+     * @param pan      left rigth ballance of the sound file in [-1, 1]
      */
-    public void playSound(String fileName, MapItem soundSource) {
+    public void playSound(String fileName, float volume, float pan) {
         if (soundMap.get(fileName) == null) {
             soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
         }
-        soundMap.get(fileName).play(1, 1, 0);
+        soundMap.get(fileName).play(volume, 1f, pan);
     }
     /**
      * {@summary Play the end game sound.}

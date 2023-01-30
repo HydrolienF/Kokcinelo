@@ -42,6 +42,7 @@ public abstract class Creature extends MapItem {
     public int getGivenPoints() { return 0; }
     public float getVisionRadius() { return visionRadius; }
     public void setVisionRadius(float visionRadius) { this.visionRadius = visionRadius; }
+    public float getHearRadius() { return visionRadius * 2; }
     public float getMaxRotationPerSecond() { return 90f; }
     public float getMovingSpeed() { return movingSpeed; }
     public float getWantedRotation() { return wantedRotation; }
