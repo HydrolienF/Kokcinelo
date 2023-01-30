@@ -552,7 +552,7 @@ public class Controller {
         float volume = getSoundVolume(soundSource, soundTarget);
         float pan = getSoundPan(soundSource, soundTarget);
         App.log(0, "Sound " + fileName + " " + volume + " " + pan);
-        app.playSound(fileName, volume, pan);
+        App.playSound(fileName, volume, pan);
     }
 
     /**
