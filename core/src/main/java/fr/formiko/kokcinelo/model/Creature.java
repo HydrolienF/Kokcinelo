@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo.model;
 
-import fr.formiko.kokcinelo.App;
 import java.util.Collection;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -198,8 +197,8 @@ public abstract class Creature extends MapItem {
     public void hit(Creature c) {
         c.setLifePoints(c.getLifePoints() - getHitPoints());
         lastHitTime = System.currentTimeMillis();
-        App.log(1,
-                this + " hit " + c + " with " + getHitPoints() + " hit points. Creature still have " + c.getLifePoints() + " life points.");
+        // App.log(1,this + " hit " + c + " with " + getHitPoints() + " hit points. Creature still have " + c.getLifePoints() + " life
+        // points.");
     }
     /**
      * @return true if this can shoot other creatures
@@ -217,6 +216,6 @@ public abstract class Creature extends MapItem {
      */
     public void shoot(Creature c) {
         lastShootTime = System.currentTimeMillis();
-        App.log(1, this + " shoot " + c);
+        // App.log(1, this + " shoot " + c);
     }
 }

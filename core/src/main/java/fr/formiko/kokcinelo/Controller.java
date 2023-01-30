@@ -250,17 +250,10 @@ public class Controller {
     public void interact() {
         if (ladybugsEat()) {
             getGameScreen().setPlayerScore(gs.getScore());
-            app.playEatingSound();
         }
-        if (antsHit()) {
-            app.playAntHitSound();
-        }
-        if (antsShoot()) {
-            app.playAntShootSound();
-        }
-        if (acidDropsHit()) {
-            app.playAcidSplatch();
-        }
+        antsHit();
+        antsShoot();
+        acidDropsHit();
     }
 
     /**
@@ -274,6 +267,7 @@ public class Controller {
             for (Aphid aphid : gs.getAphids()) {
                 if (ladybug.hitBoxConnected(aphid)) {
                     haveInteract = true;
+                    app.playSound("crock", ladybug);
                     toRemove.add(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
@@ -295,6 +289,7 @@ public class Controller {
                 if (ant.hitBoxConnected(ladybug)) {
                     if (ant.canHit()) {
                         haveInteract = true;
+                        app.playSound("hit", ant);
                         ant.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {
                             toRemove.add(ladybug);
@@ -317,6 +312,7 @@ public class Controller {
             Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
             if (target != null && ant.canShoot()) {
                 ant.shoot(target);
+                app.playSound("shoot", ant);
                 // Create new acid drop
                 AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.distanceTo(target),
                         ant.getShootPoints());
@@ -341,6 +337,7 @@ public class Controller {
                 for (Ladybug ladybug : gs.getLadybugs()) {
                     if (ladybug.hitBoxConnected(acidDrop)) {
                         haveInteract = true;
+                        app.playSound("splatch", ladybug);
                         // App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
                         acidDrop.hit(ladybug);
                         if (ladybug.getLifePoints() < 0f) {

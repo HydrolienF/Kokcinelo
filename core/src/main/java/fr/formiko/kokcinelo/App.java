@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
@@ -130,35 +131,15 @@ public class App extends Game {
     public static boolean isPlayableLevel(String levelId) { return PLAYABLE_LEVELS.contains(levelId); }
 
     // music --------------------------------------------------------------------------------------
-    /***
-     * {@summary Play the eating sound.}
-     * Sound can be play many times &#38; at same time.
-     */
-    public void playEatingSound() { playSound("crock"); }
-    /***
-     * {@summary Play the ant hit sound.}
-     * Sound can be play many times &#38; at same time.
-     */
-    public void playAntHitSound() { playSound("hit"); }
-    /***
-     * {@summary Play the start ant shoot sound.}
-     * Sound can be play many times &#38; at same time.
-     */
-    public void playAntShootSound() { playSound("shoot"); }
-    /***
-     * {@summary Play the end ant shoot sound.}
-     * Sound can be play many times &#38; at same time.
-     */
-    public void playAcidSplatch() { playSound("splatch"); }
     /**
      * {@summary Play the given sound.}
      * Sound can be play many times &#38; at same time.
      */
-    public void playSound(String fileName) {
+    public void playSound(String fileName, MapItem soundSource) {
         if (soundMap.get(fileName) == null) {
             soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
         }
-        soundMap.get(fileName).play();
+        soundMap.get(fileName).play(1, 1, 0);
     }
     /**
      * {@summary Play the end game sound.}
