@@ -229,6 +229,7 @@ public class Controller {
                     .build();
             break;
         }
+        gs.moveAIAwayFromPlayers();
         app.setScreen(new GameScreen(app));
         Musics.play();
         App.log(1, "start new Game");

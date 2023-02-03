@@ -3,7 +3,6 @@ package fr.formiko.kokcinelo;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.view.GameScreen;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 

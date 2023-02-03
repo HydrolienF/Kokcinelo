@@ -105,7 +105,11 @@ public class GameState {
     }
 
     /**
-     * @return All creatures: aphids + ants + ladybugs
+     * Return all Creatures.
+     * Removing item from this Iterable will have no impact on Collection where Creature are stored.
+     * Use controller.toRemove.add(c) if you need to remove a creature
+     * 
+     * @return All creatures: aphids + ants + ladybugs + acid drop
      */
     public Iterable<Creature> allCreatures() {
         List<Creature> l = new LinkedList<Creature>();
@@ -113,6 +117,19 @@ public class GameState {
         l.addAll(ants);
         l.addAll(ladybugs);
         l.addAll(acidDrops);
+        return l;
+    }
+    /**
+     * Return ants &#38; ladybugs
+     * Removing item from this Iterable will have no impact on Collection where Creature are stored.
+     * Use controller.toRemove.add(c) if you need to remove a creature
+     * 
+     * @return ants &#38; ladybugs
+     */
+    public Iterable<Creature> getAntsAndLadybugs() {
+        List<Creature> l = new LinkedList<Creature>();
+        l.addAll(ants);
+        l.addAll(ladybugs);
         return l;
     }
     /**
@@ -187,6 +204,28 @@ public class GameState {
         }
     }
 
+    /**
+     * {@summary Try to move some AI Creature (ladybugs &#38; Ants) away from player.}
+     * It is used to give a more fair start.
+     */
+    public void moveAIAwayFromPlayers() {
+        for (Player player : players) {
+            Creature pc = player.getPlayedCreature();
+            for (Creature c : getAntsAndLadybugs()) {
+                if (c.isAI()) {
+                    int k = 0;
+                    while (k < 20 && (pc.see(c) || c.see(pc))) {
+                        App.log(1, "Move out " + c.getId() + " to avoid player to see it");
+                        c.setRandomLoaction(getMapWidth(), getMapHeight());
+                    }
+                    if (pc.see(c) || c.see(pc)) {
+                        App.log(2, "Can't find a location for c in " + k + " try");
+                    }
+                }
+            }
+        }
+    }
+
     // static
     public static GameStateBuilder builder() { return new GameStateBuilder(); }
 
@@ -253,8 +292,6 @@ public class GameState {
                 // boost player so that it can manage several enemies.
                 p.getPlayedCreature().boost();
             }
-            // TODO if other Ant or Ladibugs can see or be see by player (too close to player), move them away(try yo move them randomly 10
-            // times).
 
             gs.players.add(p);
             gs.setLocalPlayerId(p.getId());
