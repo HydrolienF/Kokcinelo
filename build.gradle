@@ -113,6 +113,7 @@ project(":ios") {
 
 project(":core") {
     apply plugin: "java-library"
+    apply plugin: "jacoco"
 
 
     dependencies {
@@ -130,6 +131,22 @@ project(":core") {
 
         testLogging {
             events "passed", "skipped", "failed"
+        }
+
+        finalizedBy jacocoTestReport // report is always generated after tests run
+    }
+
+    jacoco {
+        toolVersion = "0.8.8"
+    }
+
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.enabled true
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
     }
 }
