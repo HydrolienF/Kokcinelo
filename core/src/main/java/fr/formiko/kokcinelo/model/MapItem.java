@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.view.MapItemActor;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@summary Abstact class that represent any thing on the map.}
@@ -89,10 +90,13 @@ public abstract class MapItem {
     public boolean isInRadius(MapItem mi2, double radius) { return distanceTo(mi2) < radius; }
 
     /**
-     * {@summary Return the distance between center point of this &#38; center point
-     * of an other MapItem.}
+     * {@summary Return the distance between center point of this &#38; center point of an other MapItem.}
      */
     public float distanceTo(MapItem mi2) {
         return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.getCenterX(), mi2.getCenterY());
     }
+    /***
+     * {@summary Return the distance between center point of this &#38; stage coordinate.}
+     */
+    public float distanceTo(Vector2 mi2) { return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.x, mi2.y); }
 }

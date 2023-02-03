@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.Controller;
 import java.util.Collection;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -27,6 +28,7 @@ public abstract class Creature extends MapItem {
     protected long lastShootTime;
     protected int hitFrequency;
     protected int shootFrequency;
+    protected int shootRadius;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -57,6 +59,8 @@ public abstract class Creature extends MapItem {
     public void setHitPoints(float hitPoints) { this.hitPoints = hitPoints; }
     public float getShootPoints() { return shootPoints; }
     public void setShootPoints(float shootPoints) { this.shootPoints = shootPoints; }
+    public int getShootRadius() { return shootRadius; }
+    public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
 
     // FUNCTIONS -----------------------------------------------------------------
     public String toString() {
@@ -214,11 +218,11 @@ public abstract class Creature extends MapItem {
     }
     /**
      * {@summary Shoot a Creature.}
-     * 
-     * @param c creature to shoot
      */
-    public void shoot(Creature c) {
+    public void shoot() {
         lastShootTime = System.currentTimeMillis();
         // App.log(1, this + " shoot " + c);
     }
+    /** Return true if is an AI. */
+    public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
 }

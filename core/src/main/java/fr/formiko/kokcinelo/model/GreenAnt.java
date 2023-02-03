@@ -17,5 +17,6 @@ public class GreenAnt extends Ant {
         hitPoints = 0;
         shootPoints = 25;
         shootFrequency = 2000;
+        shootRadius = (int) visionRadius + 200;
     }
 }

@@ -280,7 +280,7 @@ public class Controller {
         return haveInteract;
     }
     /**
-     * {@summary Let ant hit ladybug.}
+     * {@summary Let ants hit ladybug.}
      * 
      * @return true if a ladybug have interact
      */
@@ -304,26 +304,37 @@ public class Controller {
         return haveInteract;
     }
     /**
-     * {@summary Let ant shoot ladybug.}
+     * {@summary Let ants shoot ladybug.}
      * 
      * @return true if a ladybug have interact
      */
     public boolean antsShoot() {
         boolean haveInteract = false;
         for (Ant ant : gs.getAnts()) {
-            Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
-            if (target != null && ant.canShoot()) {
-                ant.shoot(target);
-                playSound("shoot", ant);
-                // Create new acid drop
-                AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.distanceTo(target),
-                        ant.getShootPoints());
-                gs.getAcidDrops().add(ad);
-                getGameScreen().getStage().addActor(ad.getActor());
-                haveInteract = true;
+            if (ant.isAI()) {
+                Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
+                if (target != null) {
+                    antShoot(ant); // ant.distanceTo(target)
+                    haveInteract = true;
+                }
             }
         }
         return haveInteract;
+    }
+    /**
+     * {@summary Let an ant shoot.}
+     */
+    public void antShoot(Ant ant) {
+        if (!ant.canShoot()) {
+            return;
+        }
+        ant.shoot();
+        playSound("shoot", ant);
+        // Create new acid drop
+        AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.getShootRadius(), ant.getShootPoints());
+        App.log(0, "New acid drop with distance before hit: " + ad.getDistanceBeforeHit());
+        gs.getAcidDrops().add(ad);
+        getGameScreen().getStage().addActor(ad.getActor());
     }
 
     /**
@@ -334,21 +345,22 @@ public class Controller {
     public boolean acidDropsHit() {
         boolean haveInteract = false;
         for (AcidDrop acidDrop : gs.getAcidDrops()) {
-            if (acidDrop.getDistanceBeforeHit() < 0) {
-                // TODO it should hit any living Creature (not only ladybug)
-                for (Ladybug ladybug : gs.getLadybugs()) {
-                    if (ladybug.hitBoxConnected(acidDrop)) {
-                        haveInteract = true;
-                        playSound("splatch", ladybug);
-                        // playSound("takeDamage", ladybug);
-                        // App.log(1, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
-                        acidDrop.hit(ladybug);
-                        if (ladybug.getLifePoints() < 0f) {
-                            toRemove.add(ladybug);
-                        }
-                        // App.log(1, "lb have been hit " + ladybug);
+            // TODO ? Maybe it should hit any living Creature (not only ladybug) ?
+            for (Ladybug ladybug : gs.getLadybugs()) {
+                if (ladybug.hitBoxConnected(acidDrop)) {
+                    haveInteract = true;
+                    playSound("splatch", ladybug);
+                    // playSound("takeDamage", ladybug);
+                    App.log(0, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
+                    acidDrop.hit(ladybug);
+                    if (ladybug.getLifePoints() < 0f) {
+                        toRemove.add(ladybug);
                     }
+                    // App.log(1, "lb have been hit " + ladybug);
+                }
+                if (haveInteract || acidDrop.getDistanceBeforeHit() < 0) {
                     toRemove.add(acidDrop);
+                    break;
                 }
             }
         }
@@ -604,7 +616,7 @@ public class Controller {
      * @param y y screen coordinate
      * @return Vector of coordinate from screen x, y to stage x, y
      */
-    private Vector2 getVectorStageCoordinates(float x, float y) {
+    public Vector2 getVectorStageCoordinates(float x, float y) {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }
 
