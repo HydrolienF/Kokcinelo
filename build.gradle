@@ -32,6 +32,7 @@ allprojects {
         junitVersion = '5.9.1'
         usualVersion = '0.2.117'
         shapedrawerVersion = '2.5.0'
+        spineVersion = '4.1.0'
     }
 
     repositories {
@@ -112,6 +113,7 @@ project(":ios") {
 // }
 
 project(":core") {
+    apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "jacoco"
 
@@ -124,6 +126,7 @@ project(":core") {
         implementation 'org.yaml:snakeyaml:1.21'
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
+        implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
     }
 
     test {
