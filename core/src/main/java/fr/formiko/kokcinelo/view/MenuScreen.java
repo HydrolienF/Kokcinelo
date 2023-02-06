@@ -3,9 +3,11 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
+import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -57,6 +59,7 @@ public class MenuScreen implements Screen {
     private final Chrono chrono;
     private final int topSpace;
     private static final boolean backgroundLabelColored = true;
+    private static Map<String, String> languageName;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -72,6 +75,10 @@ public class MenuScreen implements Screen {
         }
         if (skinTitle == null) {
             skinTitle = getDefautSkin(40);
+        }
+        if (languageName == null) {
+            languageName = Files.loadMapFromCSVFile("languages/languageList.csv", true);
+            App.log(1, "" + languageName);
         }
         batch = new SpriteBatch();
 
@@ -258,6 +265,9 @@ public class MenuScreen implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
+        // TODO load char from assets/bin/language.yml
+        // TODO save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
+        // TODO If bin/language.yml don't exist, caculate it.
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ" + " ";
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -404,6 +414,7 @@ public class MenuScreen implements Screen {
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
+        // TODO replace by list of languages names in language/data.yml
         Image flag = getClickableLink(App.getLanguage(), null, size, false);
         flag.addListener(new ClickListener() {
             @Override

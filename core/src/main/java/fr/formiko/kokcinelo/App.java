@@ -38,6 +38,7 @@ public class App extends Game {
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F", "3K", "3F");
     // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
+    // TODO caculate from assets/languages/** the list of SUPPORTED_LANGUAGE
     public static final List<String> SUPPORTED_LANGUAGE = List.of("en", "fr", "eo");
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);

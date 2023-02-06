@@ -469,7 +469,7 @@ public class Controller {
     public Map<String, String> loadData() {
         Map<String, String> map;
         try {
-            map = Files.loadFromFile("data.yml");
+            map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
             map = new HashMap<String, String>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");

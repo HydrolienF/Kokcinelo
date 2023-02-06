@@ -76,7 +76,37 @@ public class Files {
      * @param fileName name of the file to load data from
      * @return the data loaded from file
      */
-    public static HashMap<String, String> loadFromFile(String fileName) {
-        return getYaml().load(Gdx.files.absolute(getDataPath() + fileName).read());
+    public static HashMap<String, String> loadFromFile(String fileName, boolean internal) {
+        FileHandle file;
+        if (internal) {
+            file = Gdx.files.internal(fileName);
+        } else {
+            file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        }
+        return getYaml().load(file.read());
+    }
+    /**
+     * Load a map from a file.
+     * 
+     * @param fileName name of the file to load data from
+     * @return the data loaded from file
+     */
+    public static HashMap<String, String> loadMapFromCSVFile(String fileName, boolean internal) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        FileHandle file;
+        if (internal) {
+            file = Gdx.files.internal(fileName);
+        } else {
+            file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        }
+        for (String line : file.readString().strip().split("\\r?\\n")) {
+            if (!line.isEmpty()) {
+                String t[] = line.split(",");
+                if (t.length == 2) {
+                    map.put(t[0], t[1]);
+                }
+            }
+        }
+        return map;
     }
 }
