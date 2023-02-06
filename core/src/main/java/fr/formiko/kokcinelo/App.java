@@ -4,7 +4,9 @@ import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +40,7 @@ public class App extends Game {
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F", "3K", "3F");
     // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
-    // TODO caculate from assets/languages/** the list of SUPPORTED_LANGUAGE
-    public static final List<String> SUPPORTED_LANGUAGE = List.of("en", "fr", "eo");
+    public static List<String> SUPPORTED_LANGUAGE;
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
@@ -81,6 +82,19 @@ public class App extends Game {
     public void create() {
         setOptionsFromArgs();
         Controller.setController(new Controller(this));
+        SUPPORTED_LANGUAGE = new ArrayList<String>();
+        File file = Gdx.files.internal("languages/").file();
+        if (file.exists() && file.isDirectory()) {
+            for (File subFile : file.listFiles()) {
+                String fileName = subFile.getName();
+                String t[] = fileName.split("\\.");
+                if (t.length == 2 && (t[0].length() == 2 || t[0].length() == 3)) {
+                    SUPPORTED_LANGUAGE.add(t[0]);
+                }
+            }
+        } else {
+            SUPPORTED_LANGUAGE.add("en");
+        }
         data = Controller.getController().loadData();
         updateLanguage();
         // // full screen
