@@ -59,6 +59,19 @@ public class Files {
             return new HashMap<String, String>();
         }
     }
+    /**
+     * @return The list of not null keys.
+     */
+    public static int getNumberOfText(String languageCode) {
+        Map<String, String> map = getText(languageCode);
+        int cpt = 0;
+        for (Object key : map.keySet()) {
+            if (map.get(key) != null) {
+                cpt++;
+            }
+        }
+        return cpt;
+    }
 
     /**
      * Save a map in a file.
@@ -99,14 +112,30 @@ public class Files {
         } else {
             file = Gdx.files.absolute(Files.getDataPath() + fileName);
         }
-        for (String line : file.readString().strip().split("\\r?\\n")) {
-            if (!line.isEmpty()) {
-                String t[] = line.split(",");
-                if (t.length == 2) {
-                    map.put(t[0], t[1]);
+        if (file.exists()) {
+            for (String line : file.readString().strip().split("\\r?\\n")) {
+                if (!line.isEmpty()) {
+                    String t[] = line.split(",");
+                    if (t.length == 2) {
+                        map.put(t[0], t[1]);
+                    }
                 }
             }
         }
         return map;
+    }
+    /**
+     * Save a map from a file.
+     * 
+     * @param fileName name of the file to load data from
+     * @param map      the map to save
+     */
+    public static void saveMapToCSVFile(String fileName, Map<String, ?> map) {
+        String s = "";
+        for (String key : map.keySet()) {
+            s += key + "," + map.get(key) + "\n";
+        }
+        FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
+        file.writeString(s, false);
     }
 }

@@ -3,11 +3,9 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Level;
-import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
-import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -57,7 +55,6 @@ public class MenuScreen implements Screen {
     private final Chrono chrono;
     private final int topSpace;
     private static final boolean backgroundLabelColored = true;
-    private static Map<String, String> languageName;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -73,10 +70,6 @@ public class MenuScreen implements Screen {
         }
         if (skinTitle == null) {
             skinTitle = getDefautSkin(40);
-        }
-        if (languageName == null) {
-            languageName = Files.loadMapFromCSVFile("languages/languageList.csv", true);
-            App.log(1, "" + languageName);
         }
         batch = new SpriteBatch();
 
@@ -413,8 +406,18 @@ public class MenuScreen implements Screen {
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
         Table langTable = new Table();
-        for (String languageCode : App.SUPPORTED_LANGUAGE) {
-            Label languageLabel = new Label(languageName.get(languageCode), skin);
+        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        for (String languageCode : App.SUPPORTED_LANGUAGES) {
+            String languageName = App.LANGUAGES_NAMES.get(languageCode);
+            int percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
+            if (percent != 100) {
+                languageName += " (" + App.LANGUAGES_PERCENTAGES.get(languageCode) + "%)";
+            }
+            // ls.fontColor = App.getColorFromPercent(percent);
+            LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
+            style.background = ls.background;
+            skin.add("" + percent, style);
+            Label languageLabel = new Label(languageName, skin, "" + percent);
             languageLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {

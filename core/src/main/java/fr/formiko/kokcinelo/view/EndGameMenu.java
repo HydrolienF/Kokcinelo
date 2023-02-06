@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -70,8 +69,7 @@ public class EndGameMenu implements Disposable {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().createNewMenuScreen(); }
         });
-        skin.add("scoreLabelStyle",
-                new Label.LabelStyle(skin.getFont("default"), getColorFromPercent((double) (score) / (double) (maxScore))));
+        skin.add("scoreLabelStyle", new Label.LabelStyle(skin.getFont("default"), App.getColorFromPercent(score * 100 / maxScore)));
         scoreLabel = new Label(score * 100 / maxScore + "%", skin, "scoreLabelStyle");
 
 
@@ -93,17 +91,4 @@ public class EndGameMenu implements Disposable {
     public void dispose() { stage.dispose(); }
 
     // FUNCTIONS -----------------------------------------------------------------
-    /**
-     * {@summary Return color depending of haveWin or percent of score.}
-     * 
-     * @param percent score percent [0;1]
-     * @return color
-     */
-    private Color getColorFromPercent(double percent) {
-        if (haveWin) {
-            return Color.GREEN;
-        } else {
-            return new Color(1f, (float) percent, 0f, 1f);
-        }
-    }
 }

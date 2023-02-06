@@ -7,7 +7,6 @@ import fr.formiko.usual.g;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +40,10 @@ public class App extends Game {
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F", "3K", "3F");
     // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
-    public static List<String> SUPPORTED_LANGUAGE;
+    public static List<String> SUPPORTED_LANGUAGES;
+    public static Map<String, String> LANGUAGES_NAMES;
+    public static Map<String, Integer> LANGUAGES_PERCENTAGES;
+
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
@@ -91,20 +93,7 @@ public class App extends Game {
     public void create() {
         setOptionsFromArgs();
         Controller.setController(new Controller(this));
-        SUPPORTED_LANGUAGE = new ArrayList<String>();
-        File file = Gdx.files.internal("languages/").file();
-        if (file.exists() && file.isDirectory()) {
-            for (File subFile : file.listFiles()) {
-                String fileName = subFile.getName();
-                String t[] = fileName.split("\\.");
-                if (t.length == 2 && (t[0].length() == 2 || t[0].length() == 3)) {
-                    SUPPORTED_LANGUAGE.add(t[0]);
-                }
-            }
-            Collections.sort(SUPPORTED_LANGUAGE);
-        } else {
-            SUPPORTED_LANGUAGE.add("en");
-        }
+        loadLanguagesData();
         data = Controller.getController().loadData();
         updateLanguage();
         // // full screen
@@ -359,4 +348,77 @@ public class App extends Game {
             }
         }
     }
+    /**
+     * {@summary Load languages data from files.}
+     */
+    private static void loadLanguagesData() {
+        App.log(1, "Start loadLanguagesData()");
+        LANGUAGES_NAMES = Files.loadMapFromCSVFile("languages/languagesList.csv", true);
+        // App.log(1, "" + App.LANGUAGES_NAMES);
+        loadListOfSupportedLanguages();
+        App.log(1, "End loadLanguagesData()");
+    }
+    /**
+     * @return The list of supported languages
+     */
+    private static void loadListOfSupportedLanguages() {
+        SUPPORTED_LANGUAGES = new ArrayList<String>();
+        Map<String, String> tempMap = Files.loadMapFromCSVFile("languages/languagesPercents.csv", true);
+        if (tempMap.isEmpty()) {
+            // calculateLanguagesPercentages();
+            saveLanguagePercentages();
+        } else { // if it exist in a single file
+            for (String key : tempMap.keySet()) {
+                LANGUAGES_PERCENTAGES.put(key, Integer.parseInt(tempMap.get(key)));
+            }
+        }
+        for (String key : LANGUAGES_PERCENTAGES.keySet()) {
+            SUPPORTED_LANGUAGES.add(key);
+        }
+        SUPPORTED_LANGUAGES.sort((String s1, String s2) -> LANGUAGES_PERCENTAGES.get(s2).compareTo(LANGUAGES_PERCENTAGES.get(s1)));
+    }
+
+    /**
+     * {@summary Calculate languages percentages from all translations maps.}
+     */
+    private static void calculateLanguagesPercentages() {
+        LANGUAGES_PERCENTAGES = new HashMap<String, Integer>();
+        int defaultLanguageKeys = Files.getNumberOfText("en");
+        File file = Gdx.files.internal("languages/").file();
+        if (file.exists() && file.isDirectory()) {
+            for (File subFile : file.listFiles()) {
+                String fileName = subFile.getName();
+                String t[] = fileName.split("\\.");
+                if (LANGUAGES_NAMES.containsKey(t[0])) { // if is a referenced language.
+                    int languageKeys = Files.getNumberOfText(t[0]);
+                    float percent = (float) languageKeys / (float) defaultLanguageKeys * 100;
+                    LANGUAGES_PERCENTAGES.put(t[0], (int) (percent));
+                }
+            }
+        } else {
+            LANGUAGES_PERCENTAGES.put("en", 100);
+        }
+    }
+
+    private static void saveLanguagePercentages() {
+        if (LANGUAGES_PERCENTAGES == null) {
+            calculateLanguagesPercentages();
+        }
+        Files.saveMapToCSVFile("languages/languagesPercents.csv", LANGUAGES_PERCENTAGES);
+    }
+
+    /**
+     * {@summary Return color depending of percent.}
+     * 
+     * @param percent score percent [0;100]
+     * @return color
+     */
+    public static Color getColorFromPercent(int percent) {
+        if (percent == 100) {
+            return Color.GREEN;
+        } else {
+            return new Color(1f, percent / 100f, 0f, 1f);
+        }
+    }
+
 }

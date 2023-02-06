@@ -474,7 +474,7 @@ public class Controller {
             map = new HashMap<String, String>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
-            if (!App.SUPPORTED_LANGUAGE.contains(l)) {
+            if (!App.SUPPORTED_LANGUAGES.contains(l)) {
                 l = "en";
             }
             map.put("language", l);
