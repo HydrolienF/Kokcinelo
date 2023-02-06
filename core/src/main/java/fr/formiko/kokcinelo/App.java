@@ -364,9 +364,9 @@ public class App extends Game {
     private static void loadListOfSupportedLanguages() {
         SUPPORTED_LANGUAGES = new ArrayList<String>();
         Map<String, String> tempMap = Files.loadMapFromCSVFile("languages/languagesPercents.csv", true);
+        // It may be useful for performance issues, some day, to load languages percents from a single file include in packaged jar
         if (tempMap.isEmpty()) {
-            // calculateLanguagesPercentages();
-            saveLanguagePercentages();
+            calculateLanguagesPercentages();
         } else { // if it exist in a single file
             for (String key : tempMap.keySet()) {
                 LANGUAGES_PERCENTAGES.put(key, Integer.parseInt(tempMap.get(key)));
@@ -400,12 +400,12 @@ public class App extends Game {
         }
     }
 
-    private static void saveLanguagePercentages() {
-        if (LANGUAGES_PERCENTAGES == null) {
-            calculateLanguagesPercentages();
-        }
-        Files.saveMapToCSVFile("languages/languagesPercents.csv", LANGUAGES_PERCENTAGES);
-    }
+    // private static void saveLanguagePercentages() {
+    // if (LANGUAGES_PERCENTAGES == null) {
+    // calculateLanguagesPercentages();
+    // }
+    // Files.saveMapToCSVFile("languages/languagesPercents.csv", LANGUAGES_PERCENTAGES, true);
+    // }
 
     /**
      * {@summary Return color depending of percent.}
