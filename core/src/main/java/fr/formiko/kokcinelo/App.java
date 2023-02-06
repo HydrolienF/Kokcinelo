@@ -66,7 +66,15 @@ public class App extends Game {
      * {@summary Update translation list.}
      */
     private static void updateLanguage() {
-        g.setMap(Files.getText(getLanguage()));
+        HashMap<String, String> defaultMap = Files.getText("en");
+        HashMap<String, String> userLanguage = Files.getText(getLanguage());
+        for (String key : userLanguage.keySet()) {
+            if (userLanguage.get(key) != null) {
+                defaultMap.put(key, userLanguage.get(key));
+            }
+        }
+        // App.log(1, "map: " + userLanguage);
+        g.setMap(defaultMap);
         App.log(1, "Current language: " + getLanguage());
     }
 
