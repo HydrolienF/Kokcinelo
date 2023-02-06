@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
@@ -55,6 +56,7 @@ public class MenuScreen implements Screen {
     private final Chrono chrono;
     private final int topSpace;
     private static final boolean backgroundLabelColored = true;
+    private static String DEFAULT_CHARS;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -256,10 +258,10 @@ public class MenuScreen implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
-        // TODO load char from assets/bin/language.yml
-        // TODO save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
-        // TODO If bin/language.yml don't exist, caculate it.
-        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ" + " ";
+        if (DEFAULT_CHARS == null) {
+            DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
+        }
+        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ" + " ";
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -393,6 +395,7 @@ public class MenuScreen implements Screen {
     // Private -------------------------------------------------------------------------------------
     /**
      * {@summary Return a table of web site link button.}
+     * It also have a swap language button.
      * 
      * @return A table of web site link button
      */
@@ -407,17 +410,24 @@ public class MenuScreen implements Screen {
 
         Table langTable = new Table();
         Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        int perRow = 1;
+        if (App.SUPPORTED_LANGUAGES.size() > 10) {
+            perRow = 4;
+        }
+        int k = 0;
         for (String languageCode : App.SUPPORTED_LANGUAGES) {
             String languageName = App.LANGUAGES_NAMES.get(languageCode);
-            int percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
-            if (percent != 100) {
-                languageName += " (" + App.LANGUAGES_PERCENTAGES.get(languageCode) + "%)";
+            Integer percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
+            if (percent == null) {
+                continue;
             }
-            // ls.fontColor = App.getColorFromPercent(percent);
+            if (percent != 100) {
+                languageName += " (" + percent + "%)";
+            }
             LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
             style.background = ls.background;
-            skin.add("" + percent, style);
-            Label languageLabel = new Label(languageName, skin, "" + percent);
+            skin.add("s" + percent, style);
+            Label languageLabel = new Label(languageName, skin, "s" + percent);
             languageLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -427,7 +437,10 @@ public class MenuScreen implements Screen {
                 }
             });
             langTable.add(languageLabel);
-            langTable.row();
+            k++;
+            if (k % perRow == 0) {
+                langTable.row();
+            }
         }
         langTable.pack();
         langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);

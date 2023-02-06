@@ -2,12 +2,16 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.usual.Os;
+import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.yaml.snakeyaml.Yaml;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 /**
  * {@summary Tool class to manage files.}
@@ -137,5 +141,44 @@ public class Files {
         }
         FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
         file.writeString(s, false);
+    }
+
+    /**
+     * Load all existing char in the translation files. (And subsubfiles, and subsubsubfiles, etc.)
+     * It is used to know which char are used in the translation files to create the BitmapFont.
+     * 
+     * @return all char that may be displayed from translation files.
+     */
+    public static String loadUniqueCharFromTranslationFiles() {
+        // TODO PERF save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
+        Set<Character> set = new HashSet<Character>();
+        String s = loadContentOfFile(Gdx.files.internal("languages/").file());
+        s += FreeTypeFontGenerator.DEFAULT_CHARS;
+        s += "\0";
+        for (char c : s.toCharArray()) {
+            set.add(c);
+        }
+        String r = "";
+        for (Character c : set) {
+            r += c;
+        }
+        return r;
+    }
+    /**
+     * Load the content of a file and all its subfiles. (And subsubfiles, and subsubsubfiles, etc.)
+     * 
+     * @param file the file were to search.
+     * @return all content of the file and its subfiles.
+     */
+    public static String loadContentOfFile(File file) {
+        if (file.isDirectory()) {
+            String s = "";
+            for (File f : file.listFiles()) {
+                s += loadContentOfFile(f);
+            }
+            return s;
+        } else {
+            return Gdx.files.absolute(file.getAbsolutePath()).readString();
+        }
     }
 }
