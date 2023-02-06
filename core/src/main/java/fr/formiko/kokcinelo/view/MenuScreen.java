@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -33,7 +32,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -414,17 +412,29 @@ public class MenuScreen implements Screen {
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
-        // TODO replace by list of languages names in language/data.yml
-        Image flag = getClickableLink(App.getLanguage(), null, size, false);
+        Table langTable = new Table();
+        for (String languageCode : App.SUPPORTED_LANGUAGE) {
+            Label languageLabel = new Label(languageName.get(languageCode), skin);
+            languageLabel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    langTable.remove();
+                    App.setLanguage(languageCode);
+                    updateSelectedLevel(getLevelId());
+                }
+            });
+            langTable.add(languageLabel);
+            langTable.row();
+        }
+        langTable.pack();
+        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);
+        Image flag = getClickableLink("basic/language", null, size, false);
         flag.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String lang = App.getLanguage();
-                int nextId = (App.SUPPORTED_LANGUAGE.indexOf(lang) + 1) % App.SUPPORTED_LANGUAGE.size();
-                App.setLanguage(App.SUPPORTED_LANGUAGE.get(nextId));
-                updateSelectedLevel(getLevelId());
-                Texture texture = resizeTexture("images/icons/" + App.getLanguage() + ".png", size, false);
-                flag.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
+                if (!langTable.remove()) {
+                    stage.addActor(langTable);
+                }
             }
         });
         table.add(flag);
