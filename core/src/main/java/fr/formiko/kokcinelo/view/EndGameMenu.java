@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * {@summary Menu for the end of the game}
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.1
  */
 public class EndGameMenu implements Disposable {
@@ -34,7 +34,7 @@ public class EndGameMenu implements Disposable {
     private Label scoreLabel;
     private Image replayButton;
     private Button mainMenuButton;
-    private boolean haveWin;
+    // private boolean haveWin;
     private static Skin skin;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -47,7 +47,7 @@ public class EndGameMenu implements Disposable {
      * @param haveWin  true if player have win the game
      */
     public EndGameMenu(SpriteBatch sb, int score, int maxScore, boolean haveWin) {
-        this.haveWin = haveWin;
+        // this.haveWin = haveWin;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         // viewport = new FitViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, new OrthographicCamera());
         // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2,

@@ -40,7 +40,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.2
  */
 public class MenuScreen implements Screen {
