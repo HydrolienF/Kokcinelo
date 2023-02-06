@@ -7,6 +7,7 @@ import fr.formiko.usual.g;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +101,7 @@ public class App extends Game {
                     SUPPORTED_LANGUAGE.add(t[0]);
                 }
             }
+            Collections.sort(SUPPORTED_LANGUAGE);
         } else {
             SUPPORTED_LANGUAGE.add("en");
         }
