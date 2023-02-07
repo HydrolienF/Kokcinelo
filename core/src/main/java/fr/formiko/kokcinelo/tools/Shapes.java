@@ -95,10 +95,14 @@ public class Shapes {
 
         // resize image
         Pixmap texturePixmapSized = new Pixmap((int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom), Pixmap.Format.RGBA8888);
+        // texturePixmapSized.setFilter(Pixmap.Filter.NearestNeighbour); // worst than bilinear (the default & only other option)
         texturePixmapSized.drawPixmap(squarePixmap, 0, 0, squarePixmap.getWidth(), squarePixmap.getHeight(), 0, 0,
                 (int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom));
         // Pixmap texturePixmapSized = resize(squarePixmap, (int) (squarePixmap.getWidth() * zoom), (int) (squarePixmap.getHeight() * zoom),
         // true);
+
+        // draw black outline
+        texturePixmapSized = outLine(texturePixmapSized);
 
         // draw center circle of the image
         int xCenter = (int) (pixmap.getWidth() / 2);

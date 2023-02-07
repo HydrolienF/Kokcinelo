@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
@@ -88,7 +89,7 @@ public class MenuScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        final Image playButton = new Image(new Texture(Gdx.files.internal("images/icons/basic/play.png")));
+        final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class MenuScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand().fill();
 
-        Image ladybug = new Image(new Texture(Gdx.files.internal("images/Creatures/ladybug flying.png")));
+        final Image ladybug = new Image(new KTexture(Gdx.files.internal("images/Creatures/ladybug flying.png")));
         ladybug.setScaling(Scaling.contain); // Do not distort the image
         ladybug.setBounds(w / 3, h - topSpace, w / 3, topSpace);
 

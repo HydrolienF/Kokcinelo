@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.KTexture;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
@@ -46,7 +47,7 @@ public class MapItemActor extends Group {
         }
         if (!textureRegionMap.containsKey(textureName)) {
             if (Gdx.files != null && textureName != null) {
-                textureRegionMap.put(textureName, new TextureRegion(new Texture(Gdx.files.internal("images/" + textureName + ".png"))));
+                textureRegionMap.put(textureName, new TextureRegion(new KTexture(Gdx.files.internal("images/" + textureName + ".png"))));
             }
         }
         if (getTextureRegion() != null) {
