@@ -42,10 +42,6 @@ public class MathTest extends Assertions {
         assertEquals(2., Math.between(1.9, 10., 2.));
     }
     @Test
-    public void testMath() {
-        new Math(); // no error;
-    }
-    @Test
     public void testBetweenByte() {
         assertEquals(5, Math.between((byte) 1, (byte) 10, (byte) 5));
         assertEquals(1, Math.between((byte) 1, (byte) 10, (byte) 0));
