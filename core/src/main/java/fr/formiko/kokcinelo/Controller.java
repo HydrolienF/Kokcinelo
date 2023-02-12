@@ -397,10 +397,8 @@ public class Controller {
         if (getGameScreen().isPause()) {
             removeEscapeMenu();
             getGameScreen().resume();
-            Musics.play();
         } else {
             getGameScreen().pause();
-            Musics.pause();
             getGameScreen().createEscapeMenu();
         }
     }

@@ -39,6 +39,15 @@ public class Musics {
         }
     }
     /**
+     * Resume the current music.
+     */
+    public static void resume() {
+        if (music != null) {
+            App.log(1, "Play current music");
+            music.play();
+        }
+    }
+    /**
      * Set the current music and play it.
      * 
      * @param fileName name of the music file to load from musics/. It must be a mp3 file.

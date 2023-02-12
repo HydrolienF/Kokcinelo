@@ -183,12 +183,19 @@ public class GameScreen implements Screen {
      * @see com.badlogic.gdx.Screen#resize(int, int)
      */
     @Override
-    public void resize(int width, int height) { viewport.update(width, height); }
+    public void resize(int width, int height) {
+        if (width != 0 && height != 0) { // To avoid an issue on Windows were resize(0,0) is call on tab.
+            viewport.update(width, height);
+        }
+    }
     /***
      * {@summary Temporary pause current game.}
      */
     @Override
-    public void pause() { isPause = true; }
+    public void pause() {
+        isPause = true;
+        Musics.pause();
+    }
     /**
      * {@summary Resume current Game.}
      * Current game, may not be resumable if it have been stop.
@@ -204,6 +211,7 @@ public class GameScreen implements Screen {
             return;
         }
         isPause = false;
+        Musics.resume();
     }
     /**
      * {@summary Definitivly stop current game.}

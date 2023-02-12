@@ -193,10 +193,16 @@ public class VideoScreen implements Screen {
     public void resize(int width, int height) {}
 
     @Override
-    public void pause() {}
+    public void pause() {
+        // TODO pause the animation
+        Musics.pause();
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        // TODO resume the animation
+        Musics.resume();
+    }
 
     @Override
     public void hide() {}

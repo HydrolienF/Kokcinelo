@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.KTexture;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
@@ -192,10 +193,10 @@ public class MenuScreen implements Screen {
     public void resize(int width, int height) {}
 
     @Override
-    public void pause() {}
+    public void pause() { Musics.pause(); }
 
     @Override
-    public void resume() {}
+    public void resume() { Musics.resume(); }
 
     @Override
     public void hide() {}
