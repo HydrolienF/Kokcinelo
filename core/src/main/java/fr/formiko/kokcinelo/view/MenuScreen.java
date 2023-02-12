@@ -81,6 +81,7 @@ public class MenuScreen implements Screen {
 
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
+        App.log(1, "MenuScreen have size: " + w + "x" + h);
         topSpace = h * 40 / 100;
         int bottomSpace = h * 50 / 100;
         int bottomLinksSpace = h * 5 / 100;

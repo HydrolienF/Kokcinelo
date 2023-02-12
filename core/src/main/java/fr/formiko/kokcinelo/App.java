@@ -107,8 +107,6 @@ public class App extends Game {
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
-        // set full screen
-        // Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         startNewGame();
     }
     /**
