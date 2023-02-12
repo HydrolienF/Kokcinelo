@@ -386,6 +386,7 @@ public class Controller {
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
         saveScoreInFile();
+        gs.getMapActorFg().setVisible(!isSpectatorMode());
     }
     /**
      * {@summary Play the end game sound.}
