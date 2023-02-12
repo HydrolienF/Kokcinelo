@@ -134,6 +134,10 @@ project(":core") {
 
         testLogging {
             events "passed", "skipped", "failed"
+            //cf https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLogging.html
+            // maxGranularity 3
+            // minGranularity 2
+            // showStackTraces true
         }
 
         finalizedBy jacocoTestReport // report is always generated after tests run
