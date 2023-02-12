@@ -141,6 +141,7 @@ public class GameScreen implements Screen {
         if (stopAtTheEnd) {
             stopAfterNextDrawBool = false;
             stop();
+            Controller.getController().playEndGameSound();
         }
     }
 

@@ -380,13 +380,19 @@ public class Controller {
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
         // if player play as ant, his score is 0 if he stop game before time is up.
-        if (getPlayerCreature() instanceof Ant && getGameScreen().isTimeUp()) {
+        if (getPlayerCreature() instanceof Ant && !getGameScreen().isTimeUp()) {
             gs.setScore(0);
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
-        app.playEndGameSound(haveWin);
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
         saveScoreInFile();
+    }
+    /**
+     * {@summary Play the end game sound.}
+     */
+    public void playEndGameSound() {
+        boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
+        app.playEndGameSound(haveWin);
     }
 
     /**
