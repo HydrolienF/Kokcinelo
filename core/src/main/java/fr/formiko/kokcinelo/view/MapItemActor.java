@@ -101,7 +101,7 @@ public class MapItemActor extends Group {
                     shapeDrawer = new ShapeDrawer(batch, region);
                 }
                 // Draw life bar
-                float len = mlp * 1.5f * Gdx.graphics.getWidth() / 1920f;
+                float len = mlp * 1.5f; // * Gdx.graphics.getWidth() / 1920f;
                 float heigth = len / 10;
                 float greenLen = len * lp / mlp;
                 float redLen = len - greenLen;

@@ -35,7 +35,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -52,13 +53,14 @@ public class MenuScreen implements Screen {
     private static Skin skin;
     private static Skin skinTitle;
     private InputMultiplexer inputMultiplexer;
-    private final Label scoresLabel;
-    private final Label levelNameLabel;
-    private final Label levelDescription;
+    private Label scoresLabel;
+    private Label levelNameLabel;
+    private Label levelDescription;
     private final Chrono chrono;
-    private final int topSpace;
+    private int topSpace;
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
+    private final Viewport viewport;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -77,11 +79,67 @@ public class MenuScreen implements Screen {
         }
         batch = new SpriteBatch();
 
-        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+        // Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+        viewport = new ScreenViewport(new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
+        chrono = new Chrono();
+        chrono.start();
+        App.log(0, "constructor", "new MenuScreen: " + toString());
+
+    }
+
+    // GET SET -------------------------------------------------------------------
+    public Controller getController() { return Controller.getController(); }
+    public Stage getStage() { return stage; }
+    public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
+    public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
+    public Level getLevel() { return LevelButton.getCheckedButton().getLevel(); }
+    // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Render the screen.}
+     */
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(Color.BLACK);
+
+        // draw blue sky gradient
+        float secToCycle = 3 * 60 + 54;
+        // float secToCycle = 10;
+        chrono.updateDuree();
+        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+        if (ligth < 0.5f) {
+            ligth = 1f - ligth;
+        }
+        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
+
+        stage.act(delta);
+        stage.draw();
+    }
+
+    /**
+     * {@summary Dispose all variable that need to be dispose to save memory.}
+     * 
+     * @see com.badlogic.gdx.Game#dispose()
+     */
+    @Override
+    public void dispose() {
+        App.log(0, "destructor", "dispose MenuScreen: " + toString());
+        stage.dispose();
+    }
+
+    // TODO Auto-generated method stub
+    @Override
+    public void show() {}
+
+    @Override
+    public void resize(int width, int height) {
+        if (width == 0 && height == 0)
+            return;
+        stage.clear();
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
+        viewport.update(w, h, true);
         App.log(1, "MenuScreen have size: " + w + "x" + h);
         topSpace = h * 40 / 100;
         int bottomSpace = h * 50 / 100;
@@ -140,57 +198,7 @@ public class MenuScreen implements Screen {
         // stage.setDebugAll(true);
         addProcessor(stage);
 
-        chrono = new Chrono();
-        chrono.start();
-        App.log(0, "constructor", "new MenuScreen: " + toString());
-
     }
-
-    // GET SET -------------------------------------------------------------------
-    public Controller getController() { return Controller.getController(); }
-    public Stage getStage() { return stage; }
-    public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
-    public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
-    public Level getLevel() { return LevelButton.getCheckedButton().getLevel(); }
-    // FUNCTIONS -----------------------------------------------------------------
-    /**
-     * {@summary Render the screen.}
-     */
-    @Override
-    public void render(float delta) {
-        // ScreenUtils.clear(App.BLUE_BACKGROUND);
-
-        // draw blue sky gradient
-        float secToCycle = 3 * 60 + 54;
-        // float secToCycle = 10;
-        chrono.updateDuree();
-        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-        if (ligth < 0.5f) {
-            ligth = 1f - ligth;
-        }
-        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
-
-        stage.act(delta);
-        stage.draw();
-    }
-
-    /**
-     * {@summary Dispose all variable that need to be dispose to save memory.}
-     * 
-     * @see com.badlogic.gdx.Game#dispose()
-     */
-    @Override
-    public void dispose() {
-        App.log(0, "destructor", "dispose MenuScreen: " + toString());
-        stage.dispose();
-    }
-
-    // TODO Auto-generated method stub
-    @Override
-    public void show() {}
-
-    @Override
-    public void resize(int width, int height) {}
 
     @Override
     public void pause() { Musics.pause(); }
