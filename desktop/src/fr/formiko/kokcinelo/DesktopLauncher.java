@@ -17,7 +17,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
  * @since 0.1
  */
 public class DesktopLauncher {
-	private static int displayMode = 2;
+	private static int displayMode = 0;
 
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].replaceAll("-", "").equalsIgnoreCase("version")) {
@@ -35,8 +35,6 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		switch (displayMode) {
 		case 0: // Real fullscreen
-			config.setResizable(false);
-			config.setDecorated(true);
 			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 			break;
 		case 1: // windowed fullscreen
