@@ -10,6 +10,7 @@ import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
@@ -39,6 +40,7 @@ public class Controller {
     private boolean spectatorMode;
     private Level level;
     private Set<Creature> toRemove;
+    private Assets assets;
     private static Controller controller;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -51,6 +53,7 @@ public class Controller {
         this.app = app;
         controller = this;
         toRemove = new HashSet<Creature>();
+        assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
 
@@ -68,6 +71,8 @@ public class Controller {
     public String getLevelId() { return level.getId(); }
     public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
     public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
+    public Assets getAssets() { return assets; }
+
 
     // FUNCTIONS -----------------------------------------------------------------
 

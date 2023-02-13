@@ -9,9 +9,10 @@ import java.util.List;
  * This class should be remove/rework when Spine will be used
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.2
  */
+@Deprecated
 public class MapItemActorAnimate extends MapItemActor {
     private List<MemberActor> listMia;
     private MapItem mapItem;
@@ -35,7 +36,7 @@ public class MapItemActorAnimate extends MapItemActor {
     }
 
     public void addMember(MemberActor actor) {
-        addActor(actor);
+        // addActor(actor);
         listMia.add(actor);
     }
 

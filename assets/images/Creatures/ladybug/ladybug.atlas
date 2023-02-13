@@ -1,0 +1,42 @@
+ladybug.png
+size:674,490
+filter:Linear,Linear
+pma:true
+anthena l
+bounds:609,411,50,77
+offsets:313,621,800,800
+anthena r
+bounds:609,332,50,77
+offsets:437,621,800,800
+body
+bounds:2,4,484,506
+offsets:158,142,800,800
+rotate:90
+leg 1 l
+bounds:510,134,132,72
+offsets:124,526,800,800
+rotate:90
+leg 1 r
+bounds:584,134,132,72
+offsets:544,526,800,800
+rotate:90
+leg 2 l
+bounds:510,68,149,64
+offsets:31,429,800,800
+leg 2 r
+bounds:510,2,149,64
+offsets:620,429,800,800
+leg 3 l
+bounds:510,379,97,109
+offsets:75,221,800,800
+leg 3 r
+bounds:510,268,97,109
+offsets:628,221,800,800
+mandible l
+bounds:609,308,22,63
+offsets:377,627,800,800
+rotate:90
+mandible r
+bounds:609,284,22,63
+offsets:401,627,800,800
+rotate:90

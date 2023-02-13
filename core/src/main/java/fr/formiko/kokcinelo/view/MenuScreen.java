@@ -61,6 +61,7 @@ public class MenuScreen implements Screen {
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
+    public static OrthographicCamera camera;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -79,8 +80,8 @@ public class MenuScreen implements Screen {
         }
         batch = new SpriteBatch();
 
-        // Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-        viewport = new ScreenViewport(new OrthographicCamera());
+        camera = new OrthographicCamera();
+        viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
         chrono = new Chrono();

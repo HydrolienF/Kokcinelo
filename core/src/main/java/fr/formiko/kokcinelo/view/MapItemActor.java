@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.KTexture;
@@ -15,8 +16,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ObjectFloatMap;
+import com.esotericsoftware.spine.Animation;
+import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.utils.SkeletonActor;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -26,7 +33,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * @version 1.0
  * @since 0.1
  */
-public class MapItemActor extends Group {
+public class MapItemActor extends SkeletonActor {
     private static Map<String, TextureRegion> textureRegionMap;
     private String textureName;
     private MapItem mapItem;
@@ -54,6 +61,24 @@ public class MapItemActor extends Group {
             setSize(getTextureRegion().getRegionWidth(), getTextureRegion().getRegionHeight());
             setOrigin(Align.center);
         }
+
+        if (textureName.equals("ladybug")) {
+            Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
+
+            skeleton.setPosition(getWidth() / 2, getHeight() / 2);
+            SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
+            skeletonRenderer.setPremultipliedAlpha(true);
+
+            AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData("ladybug"));
+
+            AnimationState animationState = new AnimationState(stateData);
+            animationState.addAnimation(0, "walk", true, 0);
+            animationState.addAnimation(1, "default", true, 0);
+
+            setRenderer(skeletonRenderer);
+            setSkeleton(skeleton);
+            setAnimationState(animationState);
+        }
     }
     /**
      * {@summary Secondary constructor with a null texture but a fix size.}
@@ -76,16 +101,37 @@ public class MapItemActor extends Group {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+        // super.draw(batch, parentAlpha);
         if (getTextureRegion() == null) {
             return;
         }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        if (!(this instanceof MapItemActorAnimate)) {
-            batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
-                    getRotation());
+
+
+        if (getSkeleton() != null) {
+            int blendSrc = batch.getBlendSrcFunc(), blendDst = batch.getBlendDstFunc();
+            int blendSrcAlpha = batch.getBlendSrcFuncAlpha(), blendDstAlpha = batch.getBlendDstFuncAlpha();
+
+            float oldAlpha = getSkeleton().getColor().a;
+            getSkeleton().getColor().a *= parentAlpha;
+
+            getSkeleton().setPosition(getCenterX(), getCenterY());
+            getSkeleton().updateWorldTransform();
+            getRenderer().draw(batch, getSkeleton());
+
+            if (getResetBlendFunction())
+                batch.setBlendFunctionSeparate(blendSrc, blendDst, blendSrcAlpha, blendDstAlpha);
+
+            color.a = oldAlpha;
+        } else {
+            if (!(this instanceof MapItemActorAnimate)) {
+                batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
+                        getScaleY(), getRotation());
+            }
         }
+
+
         if (mapItem instanceof Creature) {
             Creature c = (Creature) mapItem;
             float lp = c.getLifePoints();
@@ -134,6 +180,24 @@ public class MapItemActor extends Group {
             }
             Gdx.gl.glDisable(GL30.GL_BLEND);
             batch.begin();
+        }
+    }
+
+    /**
+     * {@summary Update this actor.}
+     * It update skeleton to the same rotation and scale than the actor.
+     * 
+     * @param delta time since last update
+     */
+    @Override
+    public void act(float delta) {
+        if (getSkeleton() != null) {
+            getSkeleton().findBone("root").setRotation(getRotation());
+            getSkeleton().setScale(getScaleX(), getScaleY());
+            if (mapItem instanceof Creature) {
+                getAnimationState().setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.5f);
+            }
+            super.act(delta);
         }
     }
     /**
@@ -206,6 +270,15 @@ public class MapItemActor extends Group {
             haveMove = true;
         }
         return haveMove;
+    }
+
+    /** Stores information needed by the view for a character state. */
+    public static class StateView {
+        Animation animation;
+        boolean loop;
+        // Controls the start frame when changing from another animation to this animation.
+        ObjectFloatMap<Animation> startTimes = new ObjectFloatMap<Animation>();
+        float defaultStartTime;
     }
 
     // private -----------------------------------------------------------------

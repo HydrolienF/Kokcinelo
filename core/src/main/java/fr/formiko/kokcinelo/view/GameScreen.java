@@ -107,7 +107,9 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         getController().updateActorVisibility(Controller.getController().getLocalPlayerId());
-        stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        if (!isPause) {
+            stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        }
         stage.draw();
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();

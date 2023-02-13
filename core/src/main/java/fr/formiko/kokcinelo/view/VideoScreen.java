@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -32,7 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.2
  */
 public class VideoScreen implements Screen {
@@ -175,17 +174,19 @@ public class VideoScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(App.BLUE_BACKGROUND);
-        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1f);
-        stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
-        stage.draw();
-        if (camera.zoom < targetZoom) {
-            camera.zoom = Math.min(camera.zoom * 1.08f, targetZoom);
-        } else if (camera.zoom > targetZoom) {
-            camera.zoom = Math.max(camera.zoom / 1.08f, targetZoom);
-        }
-        camera.position.x = ladybug.getCenterX();
-        camera.position.y = ladybug.getCenterY();
+        // TODO remove when it will work again.
+        Controller.getController().endVideoScreen();
+        // ScreenUtils.clear(App.BLUE_BACKGROUND);
+        // Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1f);
+        // stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        // stage.draw();
+        // if (camera.zoom < targetZoom) {
+        // camera.zoom = Math.min(camera.zoom * 1.08f, targetZoom);
+        // } else if (camera.zoom > targetZoom) {
+        // camera.zoom = Math.max(camera.zoom / 1.08f, targetZoom);
+        // }
+        // camera.position.x = ladybug.getCenterX();
+        // camera.position.y = ladybug.getCenterY();
     }
 
     // TODO Auto-generated method stub

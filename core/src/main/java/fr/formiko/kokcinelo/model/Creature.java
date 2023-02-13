@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector2;
  */
 public abstract class Creature extends MapItem {
     protected boolean fliing;
-    protected float lifePoints;
     protected float maxLifePoints;
     protected float hitPoints;
     protected float shootPoints;
@@ -29,6 +28,9 @@ public abstract class Creature extends MapItem {
     protected int hitFrequency;
     protected int shootFrequency;
     protected int shootRadius;
+
+    protected float lifePoints;
+    protected float currentSpeed;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -49,6 +51,7 @@ public abstract class Creature extends MapItem {
     public void setHearRadius(float hearRadius) { this.hearRadius = hearRadius; }
     public float getMaxRotationPerSecond() { return 90f; }
     public float getMovingSpeed() { return movingSpeed; }
+    public float getCurrentSpeed() { return currentSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
     public float getLifePoints() { return lifePoints; }
@@ -88,7 +91,8 @@ public abstract class Creature extends MapItem {
      */
     public void moveFront(float percentOfSpeed) {
         rotateAStep();
-        getActor().moveFront(getMovingSpeed() * percentOfSpeed);
+        currentSpeed = getMovingSpeed() * percentOfSpeed;
+        getActor().moveFront(currentSpeed);
     }
     /***
      * {@summary Move in the facing direction at max speed.}
