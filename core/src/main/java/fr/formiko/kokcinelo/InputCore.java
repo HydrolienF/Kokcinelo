@@ -51,7 +51,8 @@ public class InputCore implements InputProcessor {
         if (keycode == Input.Keys.S) {
             Controller.getController().gameOver();
         }
-        if ((keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) && screen.isStop()) {
+        // space key have been remove because player migth want to use it to shoot & end game screen by mistake.
+        if (keycode == Input.Keys.ENTER && screen.isStop()) {
             // Controller.getController().endGameScreen();
             Controller.getController().createNewMenuScreen();
         } else if (keycode == Input.Keys.SPACE) {
