@@ -70,8 +70,12 @@ public class MapItemActor extends SkeletonActor {
             skeletonRenderer.setPremultipliedAlpha(true);
 
             AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData("ladybug"));
+            // It do a mix between walk and default animation
+            // stateData.setMix("walk", "default", 5f);
+            // stateData.setMix("default", "walk", 2f);
 
             AnimationState animationState = new AnimationState(stateData);
+            // different track index = animation are play at the same time, same track index = animation are play one after the other
             animationState.addAnimation(0, "walk", true, 0);
             animationState.addAnimation(1, "default", true, 0);
 

@@ -27,16 +27,20 @@ public class Assets implements Disposable {
 
     public SkeletonData getSkeletonData(String assetName) { return skeletonDataMap.get(assetName); }
 
-
+    /**
+     * Load assets for a given asset name.
+     * 
+     * @param assetName asset name
+     */
     public void loadAssets(String assetName) {
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("images/Creatures/" + assetName + "/" + assetName + ".atlas"));
         texturesAtlasSet.add(textureAtlas);
 
         SkeletonJson json = new SkeletonJson(textureAtlas);
-        // json.setScale(ladybug.height / ladybug.heightSource);
         SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("images/Creatures/" + assetName + "/skeleton.json"));
 
         AnimationStateData animationData = new AnimationStateData(skeletonData);
+        // Define default time between 2 animations
         animationData.setDefaultMix(0.1f);
 
         // setupState(ladybugStates, MapItem.State.run, skeletonData, "run", true);
@@ -53,7 +57,10 @@ public class Assets implements Disposable {
     // return stateView;
     // }
 
-
+    /**
+     * {@summary Dispose all thing that need to be disposed.}
+     */
+    @Override
     public void dispose() {
         for (TextureAtlas textureAtlas : texturesAtlasSet) {
             textureAtlas.dispose();
