@@ -22,7 +22,7 @@ public class Assets implements Disposable {
     private Map<String, SkeletonData> skeletonDataMap = new HashMap<String, SkeletonData>();
     private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
 
-    public Assets() { loadAssets("ladybug"); }
+    public Assets() { loadAsset("ladybug"); }
 
 
     public SkeletonData getSkeletonData(String assetName) { return skeletonDataMap.get(assetName); }
@@ -32,7 +32,7 @@ public class Assets implements Disposable {
      * 
      * @param assetName asset name
      */
-    public void loadAssets(String assetName) {
+    public void loadAsset(String assetName) {
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("images/Creatures/" + assetName + "/" + assetName + ".atlas"));
         texturesAtlasSet.add(textureAtlas);
 
