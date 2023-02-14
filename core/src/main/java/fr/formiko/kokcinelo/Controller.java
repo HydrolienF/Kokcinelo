@@ -72,6 +72,7 @@ public class Controller {
     public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
     public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
+    public void addToRemove(Creature c) { toRemove.add(c); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -275,7 +276,7 @@ public class Controller {
                 if (ladybug.hitBoxConnected(aphid)) {
                     haveInteract = true;
                     playSound("crock", ladybug);
-                    toRemove.add(aphid);
+                    ladybug.hit(aphid);
                     // ladybug.addScorePoints(aphid.getGivenPoints());
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
                     // System.out.println("Eating " + aphid);
@@ -298,9 +299,6 @@ public class Controller {
                         haveInteract = true;
                         playSound("hit", ant);
                         ant.hit(ladybug);
-                        if (ladybug.getLifePoints() < 0f) {
-                            toRemove.add(ladybug);
-                        }
                     }
                     break;
                 }
@@ -350,7 +348,7 @@ public class Controller {
     public boolean acidDropsHit() {
         boolean haveInteract = false;
         for (AcidDrop acidDrop : gs.getAcidDrops()) {
-            // TODO ? Maybe it should hit any living Creature (not only ladybug) ?
+            // TODO ? Maybe it should hit any living Creature (execpt the shooter+) (not only ladybug) ?
             for (Ladybug ladybug : gs.getLadybugs()) {
                 if (ladybug.hitBoxConnected(acidDrop)) {
                     haveInteract = true;
@@ -358,9 +356,6 @@ public class Controller {
                     // playSound("takeDamage", ladybug);
                     App.log(0, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
                     acidDrop.hit(ladybug);
-                    if (ladybug.getLifePoints() < 0f) {
-                        toRemove.add(ladybug);
-                    }
                     // App.log(1, "lb have been hit " + ladybug);
                 }
                 if (haveInteract || acidDrop.getDistanceBeforeHit() < 0) {

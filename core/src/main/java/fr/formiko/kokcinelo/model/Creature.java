@@ -210,6 +210,17 @@ public abstract class Creature extends MapItem {
         lastHitTime = System.currentTimeMillis();
         // App.log(1,this + " hit " + c + " with " + getHitPoints() + " hit points. Creature still have " + c.getLifePoints() + " life
         // points.");
+        getActor().animate("hit", 5);
+        if (c.getLifePoints() <= 0) {
+            c.die();
+        }
+    }
+    /**
+     * {@summary Die, remove from controller & play diing animation.}
+     */
+    public void die() {
+        getActor().animate("die", 6);
+        Controller.getController().addToRemove(this);
     }
     /**
      * @return true if this can shoot other creatures

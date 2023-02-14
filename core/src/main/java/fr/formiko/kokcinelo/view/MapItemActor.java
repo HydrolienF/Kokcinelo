@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
@@ -129,10 +130,10 @@ public class MapItemActor extends SkeletonActor {
 
             color.a = oldAlpha;
         } else {
-            if (!(this instanceof MapItemActorAnimate)) {
-                batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
-                        getScaleY(), getRotation());
-            }
+            // if (!(this instanceof MapItemActorAnimate)) {
+            batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
+                    getRotation());
+            // }
         }
 
 
@@ -276,13 +277,21 @@ public class MapItemActor extends SkeletonActor {
         return haveMove;
     }
 
-    /** Stores information needed by the view for a character state. */
-    public static class StateView {
-        Animation animation;
-        boolean loop;
-        // Controls the start frame when changing from another animation to this animation.
-        ObjectFloatMap<Animation> startTimes = new ObjectFloatMap<Animation>();
-        float defaultStartTime;
+    /**
+     * {@summary Animate the creature.}
+     * 
+     * @param animationName Name of the animation
+     * @param animationId   Id of the animation. It can be the same as an other animation that need to stop before starting this one.
+     */
+    public void animate(String animationName, int animationId) {
+        if (getAnimationState() != null) {
+            App.log(1, "animate " + mapItem.getId() + " with " + animationName + " " + animationId);
+            try {
+                getAnimationState().addAnimation(animationId, animationName, false, 0);
+            } catch (IllegalArgumentException e) {
+                // Some animation may not be available for some creatures
+            }
+        }
     }
 
     // private -----------------------------------------------------------------
@@ -294,4 +303,13 @@ public class MapItemActor extends SkeletonActor {
     // pixmap.fillRectangle(0, 0, width, height);
     // return pixmap;
     // }
+
+    /** Stores information needed by the view for a character state. */
+    public static class StateView {
+        Animation animation;
+        boolean loop;
+        // Controls the start frame when changing from another animation to this animation.
+        ObjectFloatMap<Animation> startTimes = new ObjectFloatMap<Animation>();
+        float defaultStartTime;
+    }
 }
