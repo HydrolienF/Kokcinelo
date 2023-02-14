@@ -47,10 +47,14 @@ public class App extends Game {
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
+    private final Native nativ;
 
 
-    public App(String[] args) { this.args = args; }
-    public App() { this(null); }
+    public App(String[] args, Native nativ) {
+        this.args = args;
+        this.nativ = nativ;
+    }
+    public App() { this(null, new NullNative()); }
 
     public static Map<String, String> getDataMap() { return data; }
     public static String getLanguage() { return data.get("language"); }
@@ -93,6 +97,11 @@ public class App extends Game {
     public void create() {
         setOptionsFromArgs();
         Controller.setController(new Controller(this));
+
+        // if (Os.getOs().isWindows()) {
+        // nativ.toFront(); //not working better.
+        // }
+
         loadLanguagesData();
         data = Controller.getController().loadData();
         updateLanguage();

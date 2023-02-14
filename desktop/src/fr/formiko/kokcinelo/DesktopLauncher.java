@@ -5,8 +5,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 /**
@@ -50,7 +53,15 @@ public class DesktopLauncher {
 		config.useVsync(true);
 		config.setTitle("Kokcinelo");
 		config.setWindowIcon("images/icons/appIcon.png");
-		App game = new App(args);
+		App game = new App(args, new DesktopNative());
 		new Lwjgl3Application(game, config);
+	}
+}
+
+class DesktopNative implements Native {
+	@Override
+	public void toFront() {
+		Lwjgl3Window window = ((Lwjgl3Graphics) Gdx.graphics).getWindow();
+		window.focusWindow();
 	}
 }
