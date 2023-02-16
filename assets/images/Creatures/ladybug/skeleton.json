@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "T7zCTGrWDYE",
+	"hash": "NWJZGjcT9no",
 	"spine": "4.1.19",
 	"x": -409.8,
 	"y": -409.8,
@@ -194,6 +194,24 @@
 						"curve": [ 0.889, 20, 1.111, 23 ]
 					},
 					{ "time": 1.3333, "value": 23 }
+				]
+			}
+		}
+	},
+	"hit": {
+		"bones": {
+			"mandible l": {
+				"rotate": [
+					{ "value": 50 },
+					{ "time": 0.3333 },
+					{ "time": 0.6667, "value": 30 }
+				]
+			},
+			"mandible r": {
+				"rotate": [
+					{ "value": -50 },
+					{ "time": 0.3333 },
+					{ "time": 0.6667, "value": -30 }
 				]
 			}
 		}

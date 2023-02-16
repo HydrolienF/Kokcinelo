@@ -74,6 +74,7 @@ public class MapItemActor extends SkeletonActor {
             // It do a mix between walk and default animation
             // stateData.setMix("walk", "default", 5f);
             // stateData.setMix("default", "walk", 2f);
+            // stateData.setMix("hit", "hit", 1f);
 
             AnimationState animationState = new AnimationState(stateData);
             // different track index = animation are play at the same time, same track index = animation are play one after the other
