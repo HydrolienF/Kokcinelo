@@ -51,6 +51,7 @@ public abstract class Creature extends MapItem {
     public void setHearRadius(float hearRadius) { this.hearRadius = hearRadius; }
     public float getMaxRotationPerSecond() { return 90f; }
     public float getMovingSpeed() { return movingSpeed; }
+    public void setMovingSpeed(float movingSpeed) { this.movingSpeed = movingSpeed; }
     public float getCurrentSpeed() { return currentSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }

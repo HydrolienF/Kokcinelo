@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationState.TrackEntry;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
@@ -201,7 +202,7 @@ public class MapItemActor extends SkeletonActor {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
             if (mapItem instanceof Creature) {
-                getAnimationState().setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.5f);
+                getAnimationState().getCurrent(0).setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.5f);
             }
             super.act(delta);
         }
@@ -286,9 +287,20 @@ public class MapItemActor extends SkeletonActor {
      */
     public void animate(String animationName, int animationId) {
         if (getAnimationState() != null) {
-            App.log(1, "animate " + mapItem.getId() + " with " + animationName + " " + animationId);
+            App.log(0, "animate " + mapItem.getId() + " with " + animationName + " " + animationId);
             try {
-                getAnimationState().addAnimation(animationId, animationName, false, 0);
+                // If there is not a same animation already queued
+                if (getAnimationState().getCurrent(animationId) == null || getAnimationState().getCurrent(animationId).getNext() == null) {
+                    // Add new animation
+                    TrackEntry te = getAnimationState().addAnimation(animationId, animationName, false, 0);
+                    switch (animationName) {
+                    case "hit":
+                        te.setTimeScale(2f);
+                        break;
+                    }
+                } else {
+                    App.log(0, "Don't animate because there is already a queued event.");
+                }
             } catch (IllegalArgumentException e) {
                 // Some animation may not be available for some creatures
             }
