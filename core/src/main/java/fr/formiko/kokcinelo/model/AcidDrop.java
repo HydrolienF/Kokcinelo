@@ -9,7 +9,7 @@ public class AcidDrop extends Creature {
         setCenterX(centerX);
         setCenterY(centerY);
         this.distanceBeforeHit = distanceBeforeHit;
-        movingSpeed = 10f;
+        movingSpeed = 13f;
         getActor().setZoom(0.05f);
         this.hitPoints = hitPoints;
         hitRadius = 10;

@@ -147,6 +147,8 @@ public abstract class Creature extends MapItem {
      */
     public void runAwayFrom(Vector2 v) { goTo(v, 180f); }
 
+    // TODO #140 a way to fix it is to be able to run away from multiple enemis
+
     /**
      * {@summary Return the closest Creature from the collection.}
      * 
@@ -186,6 +188,11 @@ public abstract class Creature extends MapItem {
             }
         }
     }
+    /**
+     * {@summary Sometime, rotate a bit, randomly.}
+     * 
+     * @param frequency double in [0,1]. Next to 0 it hapend only fiew time. Next to 1 almost all time.
+     */
     public void minorRandomRotation(double frequency) {
         double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
         if (r < frequency) { // randomize rotation

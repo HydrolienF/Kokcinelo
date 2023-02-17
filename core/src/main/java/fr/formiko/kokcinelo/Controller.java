@@ -180,10 +180,9 @@ public class Controller {
      * {@summary Move all AI Creature.}
      */
     public void moveAICreature() {
-        Creature playerCreature = getPlayerCreature();
         // Iterate over all Creatures in one loop
         for (Creature c : allCreatures()) {
-            if (!c.equals(playerCreature)) {
+            if (c.isAI()) {
                 c.moveAI(gs);
             }
         }
