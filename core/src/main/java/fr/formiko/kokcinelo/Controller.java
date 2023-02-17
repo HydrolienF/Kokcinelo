@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
+import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
@@ -207,26 +208,22 @@ public class Controller {
         int gameTime = 60;
         setSpectatorMode(false);
         Musics.setMusic("Waltz of the Night 1min");
+        GameStateBuilder gsb = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         switch (getLevelId()) {
         case "1K":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
-                    .build();
+            gsb.setLadybugNumber(1);
             break;
         case "2K":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setRedAntNumber(3).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gsb.setLadybugNumber(1).setRedAntNumber(3);
             break;
         case "2F":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setRedAntNumber(1).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gsb.setLadybugNumber(2).setRedAntNumber(1);
             break;
         case "3K":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setGreenAntNumber(3).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gsb.setLadybugNumber(1).setGreenAntNumber(3);
             break;
         case "3F":
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(2).setGreenAntNumber(1).setMapHeight(2000).setMapWidth(2000)
-                    .setLevel(getLevel()).build();
+            gsb.setLadybugNumber(2).setGreenAntNumber(1);
             break;
         default:
             App.log(3, "levelId not found, use default levelId (1K)");
@@ -234,6 +231,7 @@ public class Controller {
                     .build();
             break;
         }
+        gs = gsb.build();
         gs.moveAIAwayFromPlayers();
         app.setScreen(new GameScreen(app));
         Musics.play();
