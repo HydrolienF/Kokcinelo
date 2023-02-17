@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
@@ -37,7 +38,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  */
 public class MapItemActor extends SkeletonActor {
     private static Map<String, TextureRegion> textureRegionMap;
-    private String textureName;
+    private @Null String textureName;
     private MapItem mapItem;
     private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
