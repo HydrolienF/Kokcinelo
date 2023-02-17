@@ -127,6 +127,7 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
         implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
+        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 
     test {
