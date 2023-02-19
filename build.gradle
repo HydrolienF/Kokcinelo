@@ -14,11 +14,14 @@ buildscript {
         classpath 'org.gretty:gretty:3.0.7'
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
+        classpath 'com.diffplug.spotless:spotless-lib:2.35.0'
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.15.0'
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: "com.diffplug.spotless"
 
     ext {
         appName = "Kokcinelo"
@@ -33,6 +36,8 @@ allprojects {
         usualVersion = '0.2.117'
         shapedrawerVersion = '2.5.0'
         spineVersion = '4.1.0'
+        // spotlessLibVersion = '2.35.0'
+        // spotlessVersion = '6.15.0'
     }
 
     repositories {
@@ -43,6 +48,22 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
+    }
+
+    spotless {
+        java {
+            target fileTree('.') {
+                include '**/*.java'
+                exclude '**/build/**', '**/build-*/**'
+            }
+            toggleOffOn()
+            // palantirJavaFormat()
+            // removeUnusedImports()
+            // trimTrailingWhitespace()
+            // endWithNewline()
+            removeUnusedImports()
+            eclipse('4.10.0').configFile new File(rootProject.projectDir.absolutePath, 'eclipse-formatter.xml')
+        }
     }
 }
 
@@ -159,3 +180,11 @@ project(":core") {
     }
 }
 
+// dependencies {
+//     // implementation("com.diffplug.spotless:spotless-lib:$spotlessLibVersion")
+//     // implementation("com.diffplug.spotless:spotless-plugin-gradle:$spotlessVersion")
+//     // spotlessLibVersion = '2.35.0'
+//     //     spotlessVersion = '6.15.0'
+//     implementation "com.diffplug.spotless:spotless-lib:2.35.0"
+//     implementation "com.diffplug.spotless:spotless-plugin-gradle:6.15.0"
+// }
