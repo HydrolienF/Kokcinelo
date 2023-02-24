@@ -233,7 +233,7 @@ class LevelButton extends Button {
             // TODO return a texture depending of the level id.
             switch (getId()) {
             case "1K": {
-                texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/aphid.png")), 0.6f);
+                texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/Creatures/aphid.png")), 0.6f);
                 break;
             }
             default: {

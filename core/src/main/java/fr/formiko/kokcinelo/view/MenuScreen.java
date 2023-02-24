@@ -9,6 +9,8 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
+import java.util.ArrayList;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -62,6 +64,7 @@ public class MenuScreen implements Screen {
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
     public static OrthographicCamera camera;
+    private static List<Image> creatureImages;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -104,15 +107,26 @@ public class MenuScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
 
-        // draw blue sky gradient
-        float secToCycle = 3 * 60 + 54;
-        // float secToCycle = 10;
-        chrono.updateDuree();
-        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-        if (ligth < 0.5f) {
-            ligth = 1f - ligth;
+        switch (getLevel().getLetter()) {
+        case "K":
+            // draw blue sky gradient
+            float secToCycle = 3 * 60 + 54;
+            // float secToCycle = 10;
+            chrono.updateDuree();
+            float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+            if (ligth < 0.5f) {
+                ligth = 1f - ligth;
+            }
+            Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
+            break;
+        case "F":
+            Shapes.drawUnderground(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.6f, 0.4f);
+            break;
         }
-        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
+
+        for (Image creature : creatureImages) { // Only show the creature of the current level.
+            creature.setVisible(getLevel().getLetter().equals(creature.getName()));
+        }
 
         stage.act(delta);
         stage.draw();
@@ -159,9 +173,31 @@ public class MenuScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand().fill();
 
-        final Image ladybug = new Image(new KTexture(Gdx.files.internal("images/Creatures/ladybug flying.png")));
-        ladybug.setScaling(Scaling.contain); // Do not distort the image
-        ladybug.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+        creatureImages = new ArrayList<Image>();
+        for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
+            final Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));
+            creature.setScaling(Scaling.contain); // Do not distort the image
+            creature.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+            switch (imageName) {
+            case "ladybug flying": {
+                creature.setName("K");
+                break;
+            }
+            case "ant": {
+                creature.setName("F");
+                creature.setOrigin(Align.center);
+                creature.setRotation(-90);
+                break;
+            }
+            case "aphid": {
+                creature.setName("A");
+                creature.setOrigin(Align.center);
+                creature.setRotation(-90);
+                break;
+            }
+            }
+            creatureImages.add(creature);
+        }
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -195,7 +231,10 @@ public class MenuScreen implements Screen {
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        stage.addActor(ladybug);
+        for (Image creature : creatureImages) {
+            stage.addActor(creature);
+        }
+
         // stage.setDebugAll(true);
         addProcessor(stage);
 

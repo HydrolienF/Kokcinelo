@@ -57,7 +57,8 @@ public class MapItemActor extends SkeletonActor {
         }
         if (!textureRegionMap.containsKey(textureName)) {
             if (Gdx.files != null && textureName != null) {
-                textureRegionMap.put(textureName, new TextureRegion(new KTexture(Gdx.files.internal("images/" + textureName + ".png"))));
+                textureRegionMap.put(textureName,
+                        new TextureRegion(new KTexture(Gdx.files.internal("images/Creatures/" + textureName + ".png"))));
             }
         }
         if (getTextureRegion() != null) {
