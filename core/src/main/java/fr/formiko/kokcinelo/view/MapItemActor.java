@@ -52,6 +52,11 @@ public class MapItemActor extends SkeletonActor {
     public MapItemActor(String textureName, MapItem mapItem) {
         this.textureName = textureName;
         this.mapItem = mapItem;
+
+        if (textureName == null) {
+            return;
+        }
+
         if (textureRegionMap == null) {
             textureRegionMap = new HashMap<String, TextureRegion>();
         }
