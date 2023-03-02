@@ -1,6 +1,9 @@
 package fr.formiko.kokcinelo.model;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.spine.Slot;
 
 /**
  * {@summary Ants are creatures that figth ladybugs to protect aphids.}
@@ -12,9 +15,11 @@ import com.badlogic.gdx.math.Vector2;
 public class Ant extends Creature {
     // CONSTRUCTORS --------------------------------------------------------------
     /**
-     * {@summary Create new Ants.}
+     * {@summary Create new Ant.}
+     * 
+     * @param thoraxColor color of the thorax.
      */
-    public Ant() {
+    public Ant(Color thoraxColor) {
         super("ant");
         visionRadius = 500;
         hearRadius = 1000;
@@ -24,7 +29,14 @@ public class Ant extends Creature {
         movingSpeed = 4.5f;
         maxLifePoints = 0;
         hitFrequency = 1000;
+
+        Slot colorSlot = getActor().getSkeleton().findSlot("thorax color");
+        colorSlot.getColor().set(thoraxColor);
     }
+    /***
+     * {@summary Create new red Ant.}
+     */
+    public Ant() { this(new Color(MathUtils.random(0.8f, 1), MathUtils.random(0f, 0.2f), MathUtils.random(0f, 0.2f), 1)); }
 
     // GET SET -------------------------------------------------------------------
     @Override
