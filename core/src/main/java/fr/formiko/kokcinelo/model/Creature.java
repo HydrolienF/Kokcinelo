@@ -53,6 +53,7 @@ public abstract class Creature extends MapItem {
     public float getMovingSpeed() { return movingSpeed; }
     public void setMovingSpeed(float movingSpeed) { this.movingSpeed = movingSpeed; }
     public float getCurrentSpeed() { return currentSpeed; }
+    public void setCurrentSpeed(float currentSpeed) { this.currentSpeed = currentSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
     public float getLifePoints() { return lifePoints; }

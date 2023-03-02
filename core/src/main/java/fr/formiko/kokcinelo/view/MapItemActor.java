@@ -214,6 +214,21 @@ public class MapItemActor extends SkeletonActor {
             super.act(delta);
         }
     }
+    // Override setter Is not enoth to update rotation and scale as it is done in act()
+    // @Override
+    // public void setRotation(float degrees) {
+    // super.setRotation(degrees);
+    // if (getSkeleton() != null) {
+    // getSkeleton().findBone("root").setRotation(degrees);
+    // }
+    // }
+    // @Override
+    // public void setScale(float scaleX, float scaleY) {
+    // super.setScale(getScaleX(), getScaleY());
+    // if (getSkeleton() != null) {
+    // getSkeleton().setScale(getScaleX(), getScaleY());
+    // }
+    // }
     /**
      * {@summary Standard toString that return important vars as String.}
      */

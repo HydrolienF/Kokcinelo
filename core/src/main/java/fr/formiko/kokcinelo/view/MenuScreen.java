@@ -2,6 +2,9 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Ant;
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.KTexture;
@@ -25,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -64,7 +68,9 @@ public class MenuScreen implements Screen {
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
     public static OrthographicCamera camera;
-    private static List<Image> creatureImages;
+    private static List<Actor> creatureImages;
+    private int width;
+    private int heigth;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -124,7 +130,7 @@ public class MenuScreen implements Screen {
             break;
         }
 
-        for (Image creature : creatureImages) { // Only show the creature of the current level.
+        for (Actor creature : creatureImages) { // Only show the creature of the current level.
             creature.setVisible(getLevel().getLetter().equals(creature.getName()));
         }
 
@@ -149,8 +155,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        if (width == 0 && height == 0)
+        if ((width == 0 && height == 0) || (width == this.width && height == this.heigth))
             return;
+        this.width = width;
+        this.heigth = height;
         stage.clear();
         final int w = Gdx.graphics.getWidth();
         final int h = Gdx.graphics.getHeight();
@@ -173,9 +181,9 @@ public class MenuScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand();
 
-        creatureImages = new ArrayList<Image>();
+        creatureImages = new ArrayList<Actor>();
         for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
-            final Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));
+            Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));
             creature.setScaling(Scaling.contain); // Do not distort the image
             creature.setBounds(w / 3, h - topSpace, w / 3, topSpace);
             switch (imageName) {
@@ -183,14 +191,7 @@ public class MenuScreen implements Screen {
                 creature.setName("K");
                 break;
             }
-            case "ant": {
-                creature.setName("F");
-                creature.setSize(creature.getHeight(), creature.getWidth());
-                // creature.setOrigin(Align.center); //Don't work well with rotation of not square image.
-                creature.setPosition(w / 3, h);
-                creature.setRotation(-90);
-                break;
-            }
+
             case "aphid": {
                 creature.setName("A");
                 creature.setSize(creature.getHeight(), creature.getWidth());
@@ -200,6 +201,36 @@ public class MenuScreen implements Screen {
             }
             }
             creatureImages.add(creature);
+        }
+        for (String imageName : List.of("ant")) {
+            Creature c;
+            int imageWidth;
+            int imageHeigth;
+            switch (imageName) {
+            case "ant": {
+                c = new Ant();
+                imageWidth = 3600;
+                imageHeigth = 4800;
+                break;
+            }
+            default: {
+                c = new Ladybug();
+                imageWidth = 0;
+                imageHeigth = 0;
+                break;
+            }
+            }
+            MapItemActor cActor = c.getActor();
+            cActor.setName("F");
+            cActor.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+            // cActor.unzoomToFitIn(w / 3, topSpace);
+            cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
+            cActor.setRotation(-90);
+            // revert width a heigth because of rotation
+            c.setZoom(Math.min(cActor.getWidth() / imageHeigth, cActor.getHeight() / imageWidth));
+            c.setCurrentSpeed(c.getMovingSpeed());
+
+            creatureImages.add(cActor);
         }
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
@@ -233,7 +264,7 @@ public class MenuScreen implements Screen {
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        for (Image creature : creatureImages) {
+        for (Actor creature : creatureImages) {
             stage.addActor(creature);
         }
         stage.addActor(centerTable);
