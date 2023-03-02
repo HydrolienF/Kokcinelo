@@ -40,7 +40,7 @@ public class MapItemActor extends SkeletonActor {
     private static Map<String, TextureRegion> textureRegionMap;
     private @Null String textureName;
     private MapItem mapItem;
-    private static boolean showZone = false;
+    private static boolean showZone = true;
     private ShapeRenderer shapeRenderer;
     private ShapeDrawer shapeDrawer;
     /**
@@ -71,14 +71,14 @@ public class MapItemActor extends SkeletonActor {
             setOrigin(Align.center);
         }
 
-        if (textureName.equals("ladybug")) {
+        if (Controller.getController().getAssets().getSkeletonData(textureName) != null) {
             Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
 
             skeleton.setPosition(getWidth() / 2, getHeight() / 2);
             SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
             skeletonRenderer.setPremultipliedAlpha(true);
 
-            AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData("ladybug"));
+            AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData(textureName));
             // It do a mix between walk and default animation
             // stateData.setMix("walk", "default", 5f);
             // stateData.setMix("default", "walk", 2f);

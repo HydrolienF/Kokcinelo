@@ -22,7 +22,10 @@ public class Assets implements Disposable {
     private Map<String, SkeletonData> skeletonDataMap = new HashMap<String, SkeletonData>();
     private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
 
-    public Assets() { loadAsset("ladybug"); }
+    public Assets() {
+        loadAsset("ladybug");
+        loadAsset("ant");
+    }
 
 
     public SkeletonData getSkeletonData(String assetName) { return skeletonDataMap.get(assetName); }

@@ -105,6 +105,7 @@ public class Controller {
      * Current screen is supposed to be a MenuScreen. Other wise it will do nothing.
      */
     public synchronized void endMenuScreen() {
+        App.log(1, "end menu screen");
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
             level = ((MenuScreen) (getScreen())).getLevel();
