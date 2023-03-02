@@ -40,7 +40,7 @@ public class MapItemActor extends SkeletonActor {
     private static Map<String, TextureRegion> textureRegionMap;
     private @Null String textureName;
     private MapItem mapItem;
-    private static boolean showZone = true;
+    // private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
     private ShapeDrawer shapeDrawer;
     /**
@@ -175,7 +175,7 @@ public class MapItemActor extends SkeletonActor {
             }
         }
 
-        if (mapItem instanceof Creature && showZone && ((Creature) mapItem).getVisionRadius() > 0) {
+        if (mapItem instanceof Creature && getDebug() && ((Creature) mapItem).getVisionRadius() > 0) {
             batch.end();
             Creature c = (Creature) mapItem;
             Gdx.gl.glEnable(GL30.GL_BLEND);
