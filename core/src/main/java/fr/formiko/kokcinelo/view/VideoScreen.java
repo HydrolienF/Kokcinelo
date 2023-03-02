@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -29,7 +30,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @version 1.0
  * @since 0.2
  */
-public class VideoScreen implements Screen {
+public class VideoScreen extends KScreen implements Screen {
     private Stage stage;
     private static OrthographicCamera camera;
     private Viewport viewport;
@@ -188,7 +189,10 @@ public class VideoScreen implements Screen {
 
     // TODO Auto-generated method stub
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        if (!needResize(width, height))
+            return;
+    }
 
     @Override
     public void pause() {

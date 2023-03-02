@@ -7,6 +7,7 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
@@ -53,7 +54,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @version 1.0
  * @since 0.2
  */
-public class MenuScreen implements Screen {
+public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private static Skin skin;
@@ -69,8 +70,6 @@ public class MenuScreen implements Screen {
     private final Viewport viewport;
     public static OrthographicCamera camera;
     private static List<Actor> creatureImages;
-    private int width;
-    private int heigth;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -155,13 +154,12 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        if ((width == 0 && height == 0) || (width == this.width && height == this.heigth))
+        if (!needResize(width, height))
             return;
-        this.width = width;
-        this.heigth = height;
+
         stage.clear();
-        final int w = Gdx.graphics.getWidth();
-        final int h = Gdx.graphics.getHeight();
+        final int w = width; // = Gdx.graphics.getWidth();
+        final int h = height; // = Gdx.graphics.getHeight();
         viewport.update(w, h, true);
         App.log(1, "MenuScreen have size: " + w + "x" + h);
         topSpace = h * 40 / 100;

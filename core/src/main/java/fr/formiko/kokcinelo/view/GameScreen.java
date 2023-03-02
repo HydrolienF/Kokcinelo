@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
+import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -25,7 +26,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @version 1.0
  * @since 0.1
  */
-public class GameScreen implements Screen {
+public class GameScreen extends KScreen implements Screen {
     private final App game;
     private Viewport viewport;
     private Stage stage;
@@ -187,9 +188,9 @@ public class GameScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
-        if (width != 0 && height != 0) { // To avoid an issue on Windows were resize(0,0) is call on tab.
-            viewport.update(width, height);
-        }
+        if (!needResize(width, height))
+            return;
+        viewport.update(width, height);
     }
     /***
      * {@summary Temporary pause current game.}
