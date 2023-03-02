@@ -171,7 +171,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
         });
         playButton.setScaling(Scaling.fillY);
-        centerTable.add(playButton).expand().fill();
+        centerTable.add(playButton).expand();
 
         creatureImages = new ArrayList<Image>();
         for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
@@ -185,13 +185,16 @@ public class MenuScreen implements Screen {
             }
             case "ant": {
                 creature.setName("F");
-                creature.setOrigin(Align.center);
+                creature.setSize(creature.getHeight(), creature.getWidth());
+                // creature.setOrigin(Align.center); //Don't work well with rotation of not square image.
+                creature.setPosition(w / 3, h);
                 creature.setRotation(-90);
                 break;
             }
             case "aphid": {
                 creature.setName("A");
-                creature.setOrigin(Align.center);
+                creature.setSize(creature.getHeight(), creature.getWidth());
+                creature.setPosition(w / 3, h);
                 creature.setRotation(-90);
                 break;
             }
@@ -227,13 +230,13 @@ public class MenuScreen implements Screen {
 
 
         stage.addActor(btable);
-        stage.addActor(centerTable);
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
         for (Image creature : creatureImages) {
             stage.addActor(creature);
         }
+        stage.addActor(centerTable);
 
         // stage.setDebugAll(true);
         addProcessor(stage);
