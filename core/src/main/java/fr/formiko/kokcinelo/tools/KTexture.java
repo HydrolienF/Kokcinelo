@@ -8,6 +8,6 @@ public class KTexture extends Texture {
         // super(file, true);
         // setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Nearest);
         super(file);
-        setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Nearest);
+        setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 }
