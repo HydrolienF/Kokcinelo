@@ -2,10 +2,10 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
-import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
@@ -206,7 +206,8 @@ public class MenuScreen extends KScreen implements Screen {
             int imageHeigth;
             switch (imageName) {
             case "ant": {
-                c = new Ant();
+                // be able to have green ant when the level is A & green ant is selected
+                c = new RedAnt();
                 imageWidth = 3600;
                 imageHeigth = 4800;
                 break;

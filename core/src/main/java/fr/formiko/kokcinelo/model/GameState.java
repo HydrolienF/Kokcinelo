@@ -377,7 +377,7 @@ public class GameState {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
             addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
             float antSize = 0.05f;
-            addC(redAntNumber, antSize, antSize, true, true, Ant.class);
+            addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);
             addC(greenAntNumber, antSize, antSize, true, true, GreenAnt.class);
         }
 

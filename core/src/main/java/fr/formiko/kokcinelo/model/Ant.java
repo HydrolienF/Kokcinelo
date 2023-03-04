@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.Slot;
 
@@ -36,7 +35,7 @@ public class Ant extends Creature {
     /***
      * {@summary Create new red Ant.}
      */
-    public Ant() { this(new Color(MathUtils.random(0.8f, 1), MathUtils.random(0f, 0.2f), MathUtils.random(0f, 0.2f), 1)); }
+    public Ant() { this(new Color(0, 0, 0, 0)); }
 
     // GET SET -------------------------------------------------------------------
     @Override
