@@ -2,7 +2,10 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Ant;
+import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
@@ -130,7 +133,9 @@ public class MenuScreen extends KScreen implements Screen {
         }
 
         for (Actor creature : creatureImages) { // Only show the creature of the current level.
-            creature.setVisible(getLevel().getLetter().equals(creature.getName()));
+            creature.setVisible(creature.getName() != null
+                    && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
+                            && creature.getName().contains("" + getLevel().getNumber()))));
         }
 
         stage.act(delta);
@@ -200,27 +205,38 @@ public class MenuScreen extends KScreen implements Screen {
             }
             creatureImages.add(creature);
         }
-        for (String imageName : List.of("ant")) {
-            Creature c;
-            int imageWidth;
-            int imageHeigth;
-            switch (imageName) {
-            case "ant": {
-                // be able to have green ant when the level is A & green ant is selected
-                c = new RedAnt();
-                imageWidth = 3600;
-                imageHeigth = 4800;
-                break;
-            }
-            default: {
-                c = new Ladybug();
-                imageWidth = 0;
-                imageHeigth = 0;
-                break;
-            }
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class)) {
+            Creature c = null;
+            try {
+                c = creatureClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                App.log(3, "MenuScreen", "Error while creating creature: " + e);
             }
             MapItemActor cActor = c.getActor();
-            cActor.setName("F");
+            int imageWidth;
+            int imageHeigth;
+            if (c instanceof Ant) {
+                imageWidth = 3600;
+                imageHeigth = 4800;
+                if (c instanceof RedAnt) {
+                    cActor.setName("F2");
+                } else if (c instanceof GreenAnt) {
+                    cActor.setName("F3");
+                }
+            } else if (c instanceof Ladybug) {
+                // TODO set imageWidth & imageHeigth
+                imageWidth = 10;
+                imageHeigth = 10;
+                cActor.setName("K");
+            } else if (c instanceof Aphid) {
+                // TODO set imageWidth & imageHeigth
+                imageWidth = 10;
+                imageHeigth = 10;
+                cActor.setName("A");
+            } else {
+                imageWidth = 10;
+                imageHeigth = 10;
+            }
             cActor.setBounds(w / 3, h - topSpace, w / 3, topSpace);
             // cActor.unzoomToFitIn(w / 3, topSpace);
             cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
