@@ -1,51 +1,49 @@
 ant.png
-size:1959,1630
+size:1992,1632
 filter:Linear,Linear
 pma:true
 abdomen
-bounds:2,836,792,1080
+bounds:2,550,792,1080
 offsets:1404,1200,3600,4800
-rotate:90
 funiculus r
-bounds:2,24,94,627
+bounds:1780,1003,94,627
 offsets:2192,1457,3200,3200
-rotate:90
 head
-bounds:1036,300,557,513
+bounds:2,35,557,513
 offsets:1521,3437,3600,4800
 leg coxa r
-bounds:1800,1425,203,157
+bounds:1810,551,203,157
 offsets:1846,2520,3600,4800
 rotate:90
 leg femur r
-bounds:817,2,296,485
+bounds:1512,495,296,485
 offsets:1981,2105,3600,4800
-rotate:90
 leg tarsus r
-bounds:1304,32,266,648
+bounds:1512,982,266,648
 offsets:2476,1212,3600,4800
-rotate:90
 leg tibia r
-bounds:1595,427,341,386
+bounds:1512,107,341,386
 offsets:2212,1777,3600,4800
 mandible r
-bounds:1595,324,165,101
+bounds:1512,4,165,101
 offsets:1802,3914,3600,4800
+mandible red r
+bounds:1810,756,159,245
+offsets:1801,3905,3600,4800
 petiol
-bounds:817,613,217,221
+bounds:561,56,217,221
 offsets:1691,2366,3600,4800
 postpetiole
-bounds:817,342,269,197
+bounds:561,279,269,197
 offsets:1667,2192,3600,4800
 rotate:90
 scape r
-bounds:1800,822,601,114
+bounds:1876,1029,601,114
 offsets:1676,1398,3200,3200
 rotate:90
 thorax
-bounds:2,120,714,813
+bounds:796,2,714,813
 offsets:2643,3021,6000,6500
-rotate:90
 thorax color
-bounds:1084,815,714,813
+bounds:796,817,714,813
 offsets:2643,3021,6000,6500

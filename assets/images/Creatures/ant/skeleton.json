@@ -1,43 +1,292 @@
 {
-"skeleton": { "hash": "p72yY+McXkY", "spine": "4.1.19", "x": -3226.23, "y": -3427.28, "width": 6452.46, "height": 6051.65 },
+"skeleton": {
+	"hash": "yh8X+r0UYzU",
+	"spine": "4.1.19",
+	"x": -3226.23,
+	"y": -3427.28,
+	"width": 6452.46,
+	"height": 6051.65,
+	"images": "../file.pdn/Creature/Ant/morceaux ouvrière/",
+	"audio": "C:/Users/hydro/Pictures/image mega/spine"
+},
 "bones": [
-	{ "name": "root", "y": 4.29 },
-	{ "name": "head", "parent": "root", "length": 400, "rotation": 90, "y": 335.1 },
-	{ "name": "mandible r", "parent": "head", "length": 155.35, "rotation": 60, "x": 466.17, "y": -136.26 },
-	{ "name": "petiol", "parent": "root", "length": 200, "rotation": -90, "y": -112.43 },
-	{ "name": "postpetiole", "parent": "petiol", "length": 200, "x": 146.49 },
-	{ "name": "abdomen", "parent": "postpetiole", "length": 1000, "x": 164.41 },
-	{ "name": "antenna r", "parent": "head", "length": 583.7, "rotation": -84, "x": 379.57, "y": -83.98 },
-	{ "name": "funiculus r", "parent": "antenna r", "length": 604.17, "rotation": 94.28, "x": 580.63, "y": 5.05 },
-	{ "name": "leg r 3", "parent": "postpetiole", "x": -258.92 },
-	{ "name": "leg coxa r 3", "parent": "leg r 3", "length": 124.63, "rotation": 58.28, "x": 379.99, "y": 99.96 },
-	{ "name": "leg femur r 3", "parent": "leg coxa r 3", "length": 474.8, "rotation": -27.23, "x": 122.26, "y": 0.68 },
-	{ "name": "leg tibia r 3", "parent": "leg femur r 3", "length": 413.1, "rotation": 11.25, "x": 469.04, "y": -0.3 },
-	{ "name": "leg tarsus r 3", "parent": "leg tibia r 3", "length": 644.25, "rotation": -19.57, "x": 407.92, "y": 0.51 },
-	{ "name": "leg coxa r 1", "parent": "root", "length": 124.63, "rotation": 25.88, "x": 84.24, "y": 29.87 },
-	{ "name": "leg femur r 1", "parent": "leg coxa r 1", "length": 474.8, "rotation": -27.23, "x": 122.26, "y": 0.68 },
-	{ "name": "leg tibia r 1", "parent": "leg femur r 1", "length": 413.1, "rotation": 11.25, "x": 469.04, "y": -0.3 },
-	{ "name": "leg tarsus r 1", "parent": "leg tibia r 1", "length": 644.25, "rotation": -19.57, "x": 407.92, "y": 0.51 },
-	{ "name": "leg coxa r 2", "parent": "petiol", "length": 124.63, "rotation": 88.43, "x": 87.19, "y": 54.02 },
-	{ "name": "leg femur r 2", "parent": "leg coxa r 2", "length": 474.8, "rotation": -27.23, "x": 122.26, "y": 0.68 },
-	{ "name": "leg tibia r 2", "parent": "leg femur r 2", "length": 413.1, "rotation": 11.25, "x": 469.04, "y": -0.3 },
-	{ "name": "leg tarsus r 2", "parent": "leg tibia r 2", "length": 644.25, "rotation": -19.57, "x": 407.92, "y": 0.51 },
-	{ "name": "mandible l", "parent": "head", "length": 155.35, "rotation": -60, "x": 466.17, "y": 136.26 },
-	{ "name": "antenna l", "parent": "head", "length": 583.7, "rotation": 84.1, "x": 379.57, "y": 83.98 },
-	{ "name": "funiculus l", "parent": "antenna l", "length": 604.17, "rotation": -94.1, "x": 580.62, "y": -6.06 },
-	{ "name": "leg l 3", "parent": "postpetiole", "x": -258.92 },
-	{ "name": "leg coxa l 3", "parent": "leg l 3", "length": 124.63, "rotation": -58.28, "x": 379.99, "y": -99.96 },
-	{ "name": "leg femur l 3", "parent": "leg coxa l 3", "length": 474.8, "rotation": 27.23, "x": 122.26, "y": -0.68 },
-	{ "name": "leg tibia l 3", "parent": "leg femur l 3", "length": 413.1, "rotation": -11.25, "x": 469.04, "y": 0.3 },
-	{ "name": "leg tarsus l 3", "parent": "leg tibia l 3", "length": 644.25, "rotation": 19.58, "x": 407.92, "y": -0.51 },
-	{ "name": "leg coxa l 1", "parent": "root", "length": 124.63, "rotation": 154.12, "x": -84.24, "y": 29.87 },
-	{ "name": "leg femur l 1", "parent": "leg coxa l 1", "length": 474.8, "rotation": 27.23, "x": 122.26, "y": -0.68 },
-	{ "name": "leg tibia l 1", "parent": "leg femur l 1", "length": 413.1, "rotation": -11.25, "x": 469.04, "y": 0.3 },
-	{ "name": "leg tarsus l 1", "parent": "leg tibia l 1", "length": 644.25, "rotation": 19.58, "x": 407.92, "y": -0.51 },
-	{ "name": "leg coxa l 2", "parent": "petiol", "length": 124.63, "rotation": -88.43, "x": 87.19, "y": -54.02 },
-	{ "name": "leg femur l 2", "parent": "leg coxa l 2", "length": 474.8, "rotation": 27.23, "x": 122.26, "y": -0.68 },
-	{ "name": "leg tibia l 2", "parent": "leg femur l 2", "length": 413.1, "rotation": -11.25, "x": 469.04, "y": 0.3 },
-	{ "name": "leg tarsus l 2", "parent": "leg tibia l 2", "length": 644.25, "rotation": 19.58, "x": 407.92, "y": -0.51 }
+	{ "name": "root", "y": 4.29, "color": "0003ffff" },
+	{ "name": "head", "parent": "root", "length": 400, "rotation": 90, "y": 335.1, "color": "0003ffff" },
+	{
+		"name": "mandible r",
+		"parent": "head",
+		"length": 155.35,
+		"rotation": 50,
+		"x": 466.17,
+		"y": -136.26,
+		"color": "00ff95ff"
+	},
+	{ "name": "petiol", "parent": "root", "length": 200, "rotation": -90, "y": -112.43, "color": "0003ffff" },
+	{ "name": "postpetiole", "parent": "petiol", "length": 200, "x": 146.49, "color": "0003ffff" },
+	{ "name": "abdomen", "parent": "postpetiole", "length": 1000, "x": 164.41, "color": "0003ffff" },
+	{
+		"name": "antenna r",
+		"parent": "head",
+		"length": 583.7,
+		"rotation": -84,
+		"x": 379.57,
+		"y": -83.98,
+		"color": "0070ffff"
+	},
+	{
+		"name": "funiculus r",
+		"parent": "antenna r",
+		"length": 604.17,
+		"rotation": 94.28,
+		"x": 580.63,
+		"y": 5.05,
+		"color": "0070ffff"
+	},
+	{ "name": "leg r 3", "parent": "postpetiole", "x": -258.92, "color": "0dff00ff" },
+	{
+		"name": "leg coxa r 3",
+		"parent": "leg r 3",
+		"length": 124.63,
+		"rotation": 58.28,
+		"x": 379.99,
+		"y": 99.96,
+		"color": "0dff00ff"
+	},
+	{
+		"name": "leg femur r 3",
+		"parent": "leg coxa r 3",
+		"length": 474.8,
+		"rotation": -27.23,
+		"x": 122.26,
+		"y": 0.68,
+		"color": "0dff00ff"
+	},
+	{
+		"name": "leg tibia r 3",
+		"parent": "leg femur r 3",
+		"length": 413.1,
+		"rotation": 11.25,
+		"x": 469.04,
+		"y": -0.3,
+		"color": "0dff00ff"
+	},
+	{
+		"name": "leg tarsus r 3",
+		"parent": "leg tibia r 3",
+		"length": 644.25,
+		"rotation": -19.57,
+		"x": 407.92,
+		"y": 0.51,
+		"color": "0dff00ff"
+	},
+	{
+		"name": "leg coxa r 1",
+		"parent": "root",
+		"length": 124.63,
+		"rotation": 25.88,
+		"x": 84.24,
+		"y": 29.87,
+		"color": "fff600ff"
+	},
+	{
+		"name": "leg femur r 1",
+		"parent": "leg coxa r 1",
+		"length": 474.8,
+		"rotation": -27.23,
+		"x": 122.26,
+		"y": 0.68,
+		"color": "fff600ff"
+	},
+	{
+		"name": "leg tibia r 1",
+		"parent": "leg femur r 1",
+		"length": 413.1,
+		"rotation": 11.25,
+		"x": 469.04,
+		"y": -0.3,
+		"color": "fff600ff"
+	},
+	{
+		"name": "leg tarsus r 1",
+		"parent": "leg tibia r 1",
+		"length": 644.25,
+		"rotation": -19.57,
+		"x": 407.92,
+		"y": 0.51,
+		"color": "fff600ff"
+	},
+	{
+		"name": "leg coxa r 2",
+		"parent": "petiol",
+		"length": 124.63,
+		"rotation": 88.43,
+		"x": 87.19,
+		"y": 54.02,
+		"color": "b6ff00ff"
+	},
+	{
+		"name": "leg femur r 2",
+		"parent": "leg coxa r 2",
+		"length": 474.8,
+		"rotation": -27.23,
+		"x": 122.26,
+		"y": 0.68,
+		"color": "b6ff00ff"
+	},
+	{
+		"name": "leg tibia r 2",
+		"parent": "leg femur r 2",
+		"length": 413.1,
+		"rotation": 11.25,
+		"x": 469.04,
+		"y": -0.3,
+		"color": "b6ff00ff"
+	},
+	{
+		"name": "leg tarsus r 2",
+		"parent": "leg tibia r 2",
+		"length": 644.25,
+		"rotation": -19.57,
+		"x": 407.92,
+		"y": 0.51,
+		"color": "b6ff00ff"
+	},
+	{
+		"name": "mandible l",
+		"parent": "head",
+		"length": 155.35,
+		"rotation": -50,
+		"x": 466.17,
+		"y": 136.26,
+		"color": "00ff95ff"
+	},
+	{
+		"name": "antenna l",
+		"parent": "head",
+		"length": 583.7,
+		"rotation": 84.1,
+		"x": 379.57,
+		"y": 83.98,
+		"color": "0070ffff"
+	},
+	{
+		"name": "funiculus l",
+		"parent": "antenna l",
+		"length": 604.17,
+		"rotation": -94.1,
+		"x": 580.62,
+		"y": -6.06,
+		"color": "0070ffff"
+	},
+	{ "name": "leg l 3", "parent": "postpetiole", "x": -258.92, "color": "ff3400ff" },
+	{
+		"name": "leg coxa l 3",
+		"parent": "leg l 3",
+		"length": 124.63,
+		"rotation": -58.28,
+		"x": 379.99,
+		"y": -99.96,
+		"color": "ff3400ff"
+	},
+	{
+		"name": "leg femur l 3",
+		"parent": "leg coxa l 3",
+		"length": 474.8,
+		"rotation": 27.23,
+		"x": 122.26,
+		"y": -0.68,
+		"color": "ff3400ff"
+	},
+	{
+		"name": "leg tibia l 3",
+		"parent": "leg femur l 3",
+		"length": 413.1,
+		"rotation": -11.25,
+		"x": 469.04,
+		"y": 0.3,
+		"color": "ff3400ff"
+	},
+	{
+		"name": "leg tarsus l 3",
+		"parent": "leg tibia l 3",
+		"length": 644.25,
+		"rotation": 19.58,
+		"x": 407.92,
+		"y": -0.51,
+		"color": "ff3400ff"
+	},
+	{
+		"name": "leg coxa l 1",
+		"parent": "root",
+		"length": 124.63,
+		"rotation": 154.12,
+		"x": -84.24,
+		"y": 29.87,
+		"color": "ff7100ff"
+	},
+	{
+		"name": "leg femur l 1",
+		"parent": "leg coxa l 1",
+		"length": 474.8,
+		"rotation": 27.23,
+		"x": 122.26,
+		"y": -0.68,
+		"color": "ff7100ff"
+	},
+	{
+		"name": "leg tibia l 1",
+		"parent": "leg femur l 1",
+		"length": 413.1,
+		"rotation": -11.25,
+		"x": 469.04,
+		"y": 0.3,
+		"color": "ff7100ff"
+	},
+	{
+		"name": "leg tarsus l 1",
+		"parent": "leg tibia l 1",
+		"length": 644.25,
+		"rotation": 19.58,
+		"x": 407.92,
+		"y": -0.51,
+		"color": "ff7100ff"
+	},
+	{
+		"name": "leg coxa l 2",
+		"parent": "petiol",
+		"length": 124.63,
+		"rotation": -88.43,
+		"x": 87.19,
+		"y": -54.02,
+		"color": "ff7f00ff"
+	},
+	{
+		"name": "leg femur l 2",
+		"parent": "leg coxa l 2",
+		"length": 474.8,
+		"rotation": 27.23,
+		"x": 122.26,
+		"y": -0.68,
+		"color": "ff7f00ff"
+	},
+	{
+		"name": "leg tibia l 2",
+		"parent": "leg femur l 2",
+		"length": 413.1,
+		"rotation": -11.25,
+		"x": 469.04,
+		"y": 0.3,
+		"color": "ff7f00ff"
+	},
+	{
+		"name": "leg tarsus l 2",
+		"parent": "leg tibia l 2",
+		"length": 644.25,
+		"rotation": 19.58,
+		"x": 407.92,
+		"y": -0.51,
+		"color": "ff7f00ff"
+	}
 ],
 "slots": [
 	{ "name": "leg tarsus r 3", "bone": "leg tarsus r 3", "attachment": "leg tarsus r" },
@@ -67,8 +316,8 @@
 	{ "name": "petiol", "bone": "petiol", "attachment": "petiol" },
 	{ "name": "thorax", "bone": "root", "attachment": "thorax" },
 	{ "name": "thorax color", "bone": "root", "attachment": "thorax color" },
-	{ "name": "mandible r", "bone": "mandible r", "attachment": "mandible r" },
-	{ "name": "mandible l", "bone": "mandible l", "attachment": "mandible r" },
+	{ "name": "mandible r", "bone": "mandible r", "attachment": "mandible" },
+	{ "name": "mandible l", "bone": "mandible l", "attachment": "mandible" },
 	{ "name": "head", "bone": "head", "attachment": "head" },
 	{ "name": "postpetiole", "bone": "postpetiole", "attachment": "postpetiole" },
 	{ "name": "abdomen", "bone": "abdomen", "attachment": "abdomen" },
@@ -165,12 +414,6 @@
 			"leg tibia r 3": {
 				"leg tibia r": { "x": -483.99, "y": -156.37, "rotation": 49.27, "width": 3600, "height": 4800 }
 			},
-			"mandible l": {
-				"mandible r": { "x": -640.59, "y": -1399.45, "scaleX": -1, "rotation": -29.67, "width": 3600, "height": 4800 }
-			},
-			"mandible r": {
-				"mandible r": { "x": -655.65, "y": 1390.76, "rotation": -149.67, "width": 3600, "height": 4800 }
-			},
 			"petiol": {
 				"petiol": { "x": 131.61, "scaleX": 1.1, "scaleY": 1.1, "rotation": 90, "width": 3600, "height": 4800 }
 			},
@@ -190,10 +433,90 @@
 				"thorax color": { "scaleX": 0.6, "scaleY": 0.6, "width": 6000, "height": 6500 }
 			}
 		}
+	},
+	{
+		"name": "green",
+		"attachments": {
+			"mandible l": {
+				"mandible": {
+					"name": "mandible r",
+					"x": -648.12,
+					"y": -1395.1,
+					"scaleX": -1,
+					"rotation": -30,
+					"width": 3600,
+					"height": 4800
+				}
+			},
+			"mandible r": {
+				"mandible": { "name": "mandible r", "x": -648.12, "y": 1395.1, "rotation": -150, "width": 3600, "height": 4800 }
+			}
+		}
+	},
+	{
+		"name": "red",
+		"attachments": {
+			"mandible l": {
+				"mandible": {
+					"name": "mandible red r",
+					"x": -657.39,
+					"y": -1411.15,
+					"scaleX": -1,
+					"rotation": -30,
+					"width": 3600,
+					"height": 4800
+				}
+			},
+			"mandible r": {
+				"mandible": { "name": "mandible red r", "x": -664.92, "y": 1406.8, "rotation": -149.67, "width": 3600, "height": 4800 }
+			}
+		}
 	}
 ],
 "animations": {
 	"default": {},
+	"hit": {
+		"bones": {
+			"mandible l": {
+				"rotate": [
+					{
+						"curve": [ 0.033, 6.67, 0.067, 20 ]
+					},
+					{
+						"time": 0.1,
+						"value": 20,
+						"curve": [ 0.178, 20, 0.256, -10 ]
+					},
+					{ "time": 0.3333, "value": -10, "curve": "stepped" },
+					{
+						"time": 0.5,
+						"value": -10,
+						"curve": [ 0.556, -10, 0.611, -3.33 ]
+					},
+					{ "time": 0.6667 }
+				]
+			},
+			"mandible r": {
+				"rotate": [
+					{
+						"curve": [ 0.033, -6.67, 0.067, -20 ]
+					},
+					{
+						"time": 0.1,
+						"value": -20,
+						"curve": [ 0.178, -20, 0.256, 10 ]
+					},
+					{ "time": 0.3333, "value": 10, "curve": "stepped" },
+					{
+						"time": 0.5,
+						"value": 10,
+						"curve": [ 0.556, 10, 0.611, 3.33 ]
+					},
+					{ "time": 0.6667 }
+				]
+			}
+		}
+	},
 	"walk": {
 		"bones": {
 			"leg coxa r 1": {
