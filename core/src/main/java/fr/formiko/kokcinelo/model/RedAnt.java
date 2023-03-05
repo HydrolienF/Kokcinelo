@@ -12,6 +12,8 @@ public class RedAnt extends Ant {
         getActor().getSkeleton().findBone("antenna r").setScale(antennaSize);
         getActor().getSkeleton().findBone("antenna l").setScale(antennaSize);
         // TODO add big mandibles.
+        getActor().getSkeleton().setSkin("red");
+        hitPoints = 20;
     }
 
 }

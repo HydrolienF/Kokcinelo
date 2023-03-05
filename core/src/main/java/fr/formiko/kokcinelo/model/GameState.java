@@ -114,8 +114,8 @@ public class GameState {
     public Iterable<Creature> allCreatures() {
         List<Creature> l = new LinkedList<Creature>();
         l.addAll(aphids);
-        l.addAll(ants);
         l.addAll(ladybugs);
+        l.addAll(ants);
         l.addAll(acidDrops);
         return l;
     }

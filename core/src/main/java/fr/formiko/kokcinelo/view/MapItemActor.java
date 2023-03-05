@@ -315,7 +315,7 @@ public class MapItemActor extends SkeletonActor {
                 if (getAnimationState().getCurrent(animationId) == null || getAnimationState().getCurrent(animationId).getNext() == null) {
                     // Add new animation
                     TrackEntry te = getAnimationState().addAnimation(animationId, animationName, false, 0);
-                    switch (animationName) {
+                    switch (animationName) { // Diferent speeds for some animations
                     case "hit":
                         te.setTimeScale(2f);
                         break;

@@ -17,9 +17,9 @@ public class GreenAnt extends Ant {
      */
     public GreenAnt() {
         super(new Color(MathUtils.random(0f, 0.2f), MathUtils.random(0.8f, 1), MathUtils.random(0f, 0.2f), 1));
-        hitPoints = 0;
         shootPoints = 25;
         shootFrequency = 2000;
         shootRadius = (int) visionRadius + 200;
+        getActor().getSkeleton().setSkin("green");
     }
 }
