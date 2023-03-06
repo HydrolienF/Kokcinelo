@@ -32,7 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.1
  * @since 0.1
  */
 public class Controller {
@@ -532,21 +532,24 @@ public class Controller {
     }
     /**
      * {@summary Load the unlocked levels.}
+     * Unlocked levels are 1K + the one with a score + the next levels of a 50% score level.
      */
     public Set<String> loadUnlockedLevels() {
         HashSet<String> unlockedLevels = new HashSet<String>();
         String scores = readStringInFile(getScoresFileName());
-        if (scores == null) {
-            unlockedLevels.add("1K");
-        } else {
+        unlockedLevels.add("1K");
+        if (scores != null) {
             for (String line : scores.split("\n")) {
                 String[] data = line.split(",");
                 String levelId = data[0];
+                int score = Integer.parseInt(data[1]);
                 unlockedLevels.add(levelId);
-                int num = Integer.parseInt(levelId.substring(0, 1));
-                unlockedLevels.add((num + 1) + levelId.substring(1, 2));
-                if (num == 1) {
-                    unlockedLevels.add((num + 1) + "F");
+                if (score >= 50) { // unlock next levels
+                    int num = Integer.parseInt(levelId.substring(0, 1));
+                    unlockedLevels.add((num + 1) + levelId.substring(1, 2));
+                    if (num == 1) {
+                        unlockedLevels.add((num + 1) + "F");
+                    }
                 }
             }
         }
