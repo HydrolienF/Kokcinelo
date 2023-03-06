@@ -207,7 +207,7 @@ public class Controller {
         App.log(0, "Need to start new Game");
         int gameTime = 60;
         setSpectatorMode(false);
-        Musics.setMusic("Waltz of the Night 1min");
+        Musics.setLevelMusic(getLevelId());
         GameStateBuilder gsb = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         switch (getLevelId()) {
         case "1K":
