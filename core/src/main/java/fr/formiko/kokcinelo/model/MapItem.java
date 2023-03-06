@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.view.MapItemActor;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@summary Abstact class that represent any thing on the map.}
@@ -47,6 +48,8 @@ public abstract class MapItem {
     // Actor allowed getter / setter.
     public float getCenterX() { return getActor().getCenterX(); }
     public float getCenterY() { return getActor().getCenterY(); }
+    public void setCenterX(float x) { getActor().setCenterX(x); }
+    public void setCenterY(float y) { getActor().setCenterY(y); }
     public boolean moveIn(float maxX, float maxY) { return getActor().moveIn(maxX, maxY); }
     public float getRotation() { return getActor().getRotation(); }
     public void setRotation(float degrees) { getActor().setRotation(degrees); }
@@ -87,10 +90,20 @@ public abstract class MapItem {
     public boolean isInRadius(MapItem mi2, double radius) { return distanceTo(mi2) < radius; }
 
     /**
-     * {@summary Return the distance between center point of this &#38; center point
-     * of an other MapItem.}
+     * {@summary Return the distance between center point of this &#38; center point of an other MapItem.}
      */
     public float distanceTo(MapItem mi2) {
         return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.getCenterX(), mi2.getCenterY());
     }
+    /***
+     * {@summary Return the distance between center point of this &#38; stage coordinate.}
+     */
+    public float distanceTo(Vector2 mi2) { return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.x, mi2.y); }
+
+    // /**
+    // * {@summary List of possible state for MapItem.}
+    // */
+    // public enum State {
+    // idle, walk, fly, death
+    // }
 }

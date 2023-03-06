@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
+import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -22,10 +23,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.1
  */
-public class GameScreen implements Screen {
+public class GameScreen extends KScreen implements Screen {
     private final App game;
     private Viewport viewport;
     private Stage stage;
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
         for (Actor a : Controller.getController().allActors()) {
             stage.addActor(a);
         }
+        // stage.setDebugAll(true);
 
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
@@ -93,6 +95,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        // App.log(1, "isPause: " + isPause);
         boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
         if (!isPause) {
@@ -102,12 +105,13 @@ public class GameScreen implements Screen {
                 App.log(1, "skip a delta to avoid lag.");
             }
         }
-        // ScreenUtils.clear(0.1f, 1f, 0f, 1);
         ScreenUtils.clear(0f, 0f, 0f, 1);
-        // ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
         game.batch.setProjectionMatrix(camera.combined);
+
         getController().updateActorVisibility(Controller.getController().getLocalPlayerId());
-        stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        if (!isPause) {
+            stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+        }
         stage.draw();
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
@@ -117,12 +121,22 @@ public class GameScreen implements Screen {
                     getController().gameOver();
                 }
             }
+            if (getController().isAllLadybugGone()) {
+                if (!stopAtTheEnd) {
+                    getController().addScore((int) hud.getGameTime());
+                    getController().gameOver();
+                }
+            }
         }
+
         if (egm != null) {
             game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
             egm.getStage().act(delta);
             egm.getStage().draw();
         }
+        // if (isPause && em == null) {
+        // createEscapeMenu();
+        // }
         if (em != null) {
             game.batch.setProjectionMatrix(em.getStage().getCamera().combined);
             em.getStage().act(delta);
@@ -131,6 +145,7 @@ public class GameScreen implements Screen {
         if (stopAtTheEnd) {
             stopAfterNextDrawBool = false;
             stop();
+            Controller.getController().playEndGameSound();
         }
     }
 
@@ -155,33 +170,10 @@ public class GameScreen implements Screen {
         if (isPause) {
             return;
         }
-        // double moveY = 0;
-        // double moveX = 0;
-        // if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        // moveY += Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        // moveY -= Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        // moveX -= Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        // moveX += Gdx.graphics.getDeltaTime();
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-        // camera.rotate(-rotationSpeed, 0, 0, 1);
-        // }
-        // if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-        // camera.rotate(rotationSpeed, 0, 0, 1);
-        // }
         if (camera.zoom < maxZoom) {
             camera.zoom = maxZoom;
         }
-        getController().movePlayer(Controller.getController().getLocalPlayerId());
-        getController().moveAphids();
-        // controller.movePlayer(playerId, moveX, moveY);
-        getController().interact();
+        getController().playAFrame();
     }
     /***
      * {@summary Update all subpanels.}
@@ -196,30 +188,44 @@ public class GameScreen implements Screen {
      * @see com.badlogic.gdx.Screen#resize(int, int)
      */
     @Override
-    public void resize(int width, int height) { viewport.update(width, height); }
+    public void resize(int width, int height) {
+        if (!needResize(width, height))
+            return;
+        viewport.update(width, height);
+    }
     /***
      * {@summary Temporary pause current game.}
      */
     @Override
-    public void pause() { isPause = true; }
+    public void pause() {
+        isPause = true;
+        Musics.pause();
+    }
     /**
      * {@summary Resume current Game.}
      * Current game, may not be resumable if it have been stop.
      */
     @Override
     public void resume() {
-        if (isStop || em != null) {
+        if (isStop) {
             App.log(2, "Can't resume stop game.");
             return;
         }
+        if (em != null) {
+            App.log(2, "Can't resume escaped game.");
+            return;
+        }
         isPause = false;
+        Musics.resume();
     }
     /**
      * {@summary Definitivly stop current game.}
      */
     public void stop() {
         isStop = true;
-        pause();
+        if (!isPause) {
+            pause();
+        }
     }
     /***
      * {@summary Definitivly stop current game after next draw.}

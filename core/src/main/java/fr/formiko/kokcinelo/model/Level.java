@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public class Level {
     private final String id;
-    private static final Set<Level> levelList = Set.of(newLevel("1K"), newLevel("2K"), newLevel("3K"), newLevel("4K"), newLevel("2F"),
-            newLevel("3F"), newLevel("4F"), newLevel("3A"), newLevel("4A"));
+    private static final Set<Level> levelList = Set.of(newLevel("1K"), newLevel("2K"), newLevel("3K"), newLevel("4K"), newLevel("5K"),
+            newLevel("2F"), newLevel("3F"), newLevel("4F"), newLevel("5F"), newLevel("4A"), newLevel("5A"));
     private List<Level> nextLevels;
 
     private Level(String id) { this.id = id; }

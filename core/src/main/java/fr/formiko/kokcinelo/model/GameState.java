@@ -3,10 +3,9 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -14,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * {@summary Class that containts all data about current game.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.0
  * @since 0.1
  */
 public class GameState {
@@ -22,14 +21,15 @@ public class GameState {
     private List<Ant> ants;
     private List<Ladybug> ladybugs;
     private List<Player> players;
+    private List<AcidDrop> acidDrops;
     private MapActor mapActorBg;
     private MapActor mapActorFg;
     private int maxScore;
     private int localPlayerId;
-    private String levelId;
+    private Level level;
 
     // CONSTRUCTORS --------------------------------------------------------------
-    /***
+    /**
      * {@summary Private main constructor.}
      * Use GameState.builder() to create a new GameState.
      */
@@ -38,22 +38,26 @@ public class GameState {
         ants = new ArrayList<Ant>();
         ladybugs = new ArrayList<Ladybug>();
         players = new ArrayList<Player>();
+        acidDrops = new LinkedList<AcidDrop>();
     }
 
     // GET SET -------------------------------------------------------------------
     public int getMaxScore() { return maxScore; }
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
     public int getScore() { return getPlayer(getLocalPlayerId()).getScore(); }
+    public void setScore(int score) { getPlayer(getLocalPlayerId()).setScore(score); }
     public int getPercentScore() { return (getScore() * 100) / getMaxScore(); }
     public MapActor getMapActorFg() { return mapActorFg; }
     public MapActor getMapActor() { return mapActorBg; }
     public List<Aphid> getAphids() { return aphids; }
     public List<Ant> getAnts() { return ants; }
     public List<Ladybug> getLadybugs() { return ladybugs; }
+    public List<AcidDrop> getAcidDrops() { return acidDrops; }
     public int getLocalPlayerId() { return localPlayerId; }
     public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
-    public String getLevelId() { return levelId; }
-    private void setLevelId(String levelId) { this.levelId = levelId; }
+    public Level getLevel() { return level; }
+    public String getLevelId() { return getLevel().getId(); }
+    private void setLevel(Level level) { this.level = level; }
     /**
      * {@summary Return player from the list of player or null if not found.}
      * 
@@ -99,38 +103,31 @@ public class GameState {
             ladybugs.add((Ladybug) c);
         }
     }
-    /**
-     * {@summary Let ladybugs eat aphids.}
-     * 
-     * @return true if a ladybug have interact
-     */
-    public boolean ladybugEat() {
-        boolean haveInteract = false;
-        for (Ladybug ladybug : ladybugs) {
-            Set<Aphid> eated = new HashSet<Aphid>();
-            for (Aphid aphid : aphids) {
-                if (ladybug.hitBoxConnected(aphid)) {
-                    haveInteract = true;
-                    eated.add(aphid);
-                    // ladybug.addScorePoints(aphid.getGivenPoints());
-                    getPlayer(getLocalPlayerId()).addScore(aphid.getGivenPoints());
-                    // System.out.println("Eating " + aphid);
-                }
-            }
-            aphids.removeAll(eated);
-            for (Aphid aphid : eated) {
-                aphid.removeActor();
-            }
-        }
-        return haveInteract;
-    }
 
     /**
-     * @return All creatures: aphids + ants + ladybugs
+     * Return all Creatures.
+     * Removing item from this Iterable will have no impact on Collection where Creature are stored.
+     * Use controller.toRemove.add(c) if you need to remove a creature
+     * 
+     * @return All creatures: aphids + ants + ladybugs + acid drop
      */
     public Iterable<Creature> allCreatures() {
         List<Creature> l = new LinkedList<Creature>();
         l.addAll(aphids);
+        l.addAll(ladybugs);
+        l.addAll(ants);
+        l.addAll(acidDrops);
+        return l;
+    }
+    /**
+     * Return ants &#38; ladybugs
+     * Removing item from this Iterable will have no impact on Collection where Creature are stored.
+     * Use controller.toRemove.add(c) if you need to remove a creature
+     * 
+     * @return ants &#38; ladybugs
+     */
+    public Iterable<Creature> getAntsAndLadybugs() {
+        List<Creature> l = new LinkedList<Creature>();
         l.addAll(ants);
         l.addAll(ladybugs);
         return l;
@@ -181,6 +178,53 @@ public class GameState {
     }
 
     public boolean isAllAphidGone() { return aphids.size() == 0; }
+    public boolean isAllLadybugGone() { return ladybugs.size() == 0; }
+
+    /**
+     * @summary Remove a Creature from the list of Creature where class match & from the Stage.
+     */
+    public void remove(Creature c) {
+        if (c instanceof Aphid) {
+            aphids.remove(c);
+        } else if (c instanceof Ant) {
+            ants.remove(c);
+        } else if (c instanceof Ladybug) {
+            ladybugs.remove(c);
+        } else if (c instanceof AcidDrop) {
+            acidDrops.remove(c);
+        }
+        c.removeActor();
+    }
+    /**
+     * @summary Remove a collection of Creature from the list of Creature where class match & from the Stage.
+     */
+    public void remove(Collection<Creature> creatures) {
+        for (Creature c : creatures) {
+            remove(c);
+        }
+    }
+
+    /**
+     * {@summary Try to move some AI Creature (ladybugs &#38; Ants) away from player.}
+     * It is used to give a more fair start.
+     */
+    public void moveAIAwayFromPlayers() {
+        for (Player player : players) {
+            Creature pc = player.getPlayedCreature();
+            for (Creature c : getAntsAndLadybugs()) {
+                if (c.isAI()) {
+                    int k = 0;
+                    while (k < 20 && (pc.see(c) || c.see(pc))) {
+                        App.log(1, "Move out " + c.getId() + " to avoid player to see it");
+                        c.setRandomLoaction(getMapWidth(), getMapHeight());
+                    }
+                    if (pc.see(c) || c.see(pc)) {
+                        App.log(2, "Can't find a location for c in " + k + " try");
+                    }
+                }
+            }
+        }
+    }
 
     // static
     public static GameStateBuilder builder() { return new GameStateBuilder(); }
@@ -196,9 +240,12 @@ public class GameState {
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
-        private int maxScore;
+        private int greenAntNumber;
+        private int redAntNumber;
+        private int aphidNumber;
+        private int ladybugNumber;
         private GameState gs;
-        private String levelId;
+        private Level level;
 
         private GameStateBuilder() {}
 
@@ -212,21 +259,40 @@ public class GameState {
         public GameState build() {
             gs = new GameState();
 
-            if (maxScore < 1) {
-                maxScore = 1;
+            if (aphidNumber < 1) {
+                aphidNumber = 1;
             }
-            gs.setMaxScore(maxScore);
+            gs.setMaxScore(aphidNumber);
 
-            if (levelId == null) {
-                levelId = "1K";
+            if (level == null) {
+                level = Level.getLevel("1K");
             }
-            gs.setLevelId(levelId);
+            gs.setLevel(level);
 
             // initialize default game
             addMapBackground();
-            // TODO move to the builder parameter
-            addCreatures(maxScore, 1, 0);
-            Player p = new Player(gs.ladybugs.get(0));
+            addCreatures(aphidNumber, ladybugNumber, redAntNumber, greenAntNumber);
+            Player p;
+            switch (level.getLetter()) {
+            case "K":
+                p = new Player(gs.ladybugs.get(0));
+                break;
+            case "F":
+                p = new Player(gs.ants.get(0));
+                break;
+            case "A":
+                p = new Player(gs.aphids.get(0));
+                break;
+            default:
+                App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
+                p = new Player(gs.ladybugs.get(0));
+                break;
+            }
+            if (level.getNumber() > 1) {
+                // boost player so that it can manage several enemies.
+                p.getPlayedCreature().boost();
+            }
+
             gs.players.add(p);
             gs.setLocalPlayerId(p.getId());
             addMapForeground();
@@ -257,8 +323,8 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setMaxScore(int maxScore) {
-            this.maxScore = maxScore;
+        public GameStateBuilder setRedAntNumber(int antNumber) {
+            this.redAntNumber = antNumber;
             return this;
         }
         /**
@@ -266,8 +332,35 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setLevelId(String levelId) {
-            this.levelId = levelId;
+        public GameStateBuilder setGreenAntNumber(int antNumber) {
+            this.greenAntNumber = antNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setAphidNumber(int aphidNumber) {
+            this.aphidNumber = aphidNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setLadybugNumber(int ladybugNumber) {
+            this.ladybugNumber = ladybugNumber;
+            return this;
+        }
+        /**
+         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
+         * 
+         * @return current GameStateBuilder
+         */
+        public GameStateBuilder setLevel(Level level) {
+            this.level = level;
             return this;
         }
 
@@ -280,10 +373,12 @@ public class GameState {
          * @param ladybugsNumber number of ladybugs to play with
          * @param antsNumber     number of ants to play with
          */
-        private void addCreatures(int aphidsNumber, int ladybugsNumber, int antsNumber) {
+        private void addCreatures(int aphidsNumber, int ladybugsNumber, int redAntNumber, int greenAntNumber) {
             addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
-            addC(ladybugsNumber, 0.4f, 0.4f, true, false, Ladybug.class);
-            addC(antsNumber, 0.3f, 0.35f, true, true, Ant.class);
+            addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
+            float antSize = 0.05f;
+            addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);
+            addC(greenAntNumber, antSize, antSize, true, true, GreenAnt.class);
         }
 
         /**
@@ -300,16 +395,16 @@ public class GameState {
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
-                    // Creature c = creatureClass.getDeclaredConstructor().newInstance(); //HTML INCOMPATIBLE
+                    Creature c = creatureClass.getDeclaredConstructor().newInstance(); // HTML INCOMPATIBLE
                     // version to replace last line that work in html
-                    Creature c = null;
-                    if (creatureClass.toString().endsWith("Aphid")) {
-                        c = new Aphid();
-                    } else if (creatureClass.toString().endsWith("Ant")) {
-                        c = new Ant();
-                    } else if (creatureClass.toString().endsWith("Ladybug")) {
-                        c = new Ladybug();
-                    }
+                    // Creature c = null;
+                    // if (creatureClass.toString().endsWith("Aphid")) {
+                    // c = new Aphid();
+                    // } else if (creatureClass.toString().endsWith("Ant")) {
+                    // c = new Ant();
+                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
+                    // c = new Ladybug();
+                    // }
                     if (randomLocaction) {
                         c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }

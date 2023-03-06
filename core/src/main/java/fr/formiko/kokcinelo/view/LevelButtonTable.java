@@ -47,9 +47,9 @@ public class LevelButtonTable extends Table {
             pixmap.dispose();
             TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
             sr = new ShapeDrawer(batch, region);
-            texture.dispose();
+            sr.setColor(Color.BLACK);
+            texture.dispose(); // Color can't be change after this line.
         }
-        sr.setColor(Color.BLACK);
         for (LevelButton levelButton : LevelButton.getList()) {
             int x1 = (int) levelButton.getCenterX();
             int y1 = (int) levelButton.getCenterY();

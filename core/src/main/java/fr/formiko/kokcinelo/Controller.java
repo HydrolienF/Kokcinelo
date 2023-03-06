@@ -1,11 +1,17 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.AcidDrop;
+import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
+import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
@@ -26,15 +32,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.1
  */
 public class Controller {
     private GameState gs;
     private App app;
     private boolean spectatorMode;
-    private String levelId;
-
+    private Level level;
+    private Set<Creature> toRemove;
+    private Assets assets;
     private static Controller controller;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -46,6 +53,8 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
+        toRemove = new HashSet<Creature>();
+        assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
 
@@ -59,12 +68,31 @@ public class Controller {
     public boolean isSpectatorMode() { return spectatorMode; }
     public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
     public int getNumberOfAphids() { return gs.getAphids().size(); }
+    public Level getLevel() { return level; }
+    public String getLevelId() { return level.getId(); }
+    public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
+    public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
+    public Assets getAssets() { return assets; }
+    public void addToRemove(Creature c) { toRemove.add(c); }
+
 
     // FUNCTIONS -----------------------------------------------------------------
 
+    /**
+     * {@summary Call every function that need to be call every frame.}
+     * Some function may do nothing if they are not needed.
+     */
+    public void playAFrame() {
+        movePlayer(getLocalPlayerId());
+        moveAICreature();
+        interact();
+        gs.remove(toRemove);
+        toRemove.clear();
+    }
+
     public void startApp() { createNewMenuScreen(); }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen(levelId)); }
+    private void createNewVideoScreen() { setScreen(new VideoScreen(getLevelId())); }
     /**
      * {@summary Create a new Menu Screen &#38; start music.}
      */
@@ -77,9 +105,10 @@ public class Controller {
      * Current screen is supposed to be a MenuScreen. Other wise it will do nothing.
      */
     public synchronized void endMenuScreen() {
+        App.log(1, "end menu screen");
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
             Screen toDispose = getScreen();
-            levelId = ((MenuScreen) (getScreen())).getLevelId();
+            level = ((MenuScreen) (getScreen())).getLevel();
             createNewVideoScreen();
             toDispose.dispose();
         } else {
@@ -149,31 +178,13 @@ public class Controller {
     }
 
     /**
-     * {@summary Move aphids.}
-     * Aphids first run away from the closest ladybug they can see if they can see one.
-     * Else they move slowly to a random direction &#38; some time change it.
-     * If they hit a wall, they change there wanted rotation angle for the nexts turns.
+     * {@summary Move all AI Creature.}
      */
-    public void moveAphids() {
-        for (Aphid aphid : gs.getAphids()) {
-            Ladybug ladybug = aphid.closestLadybug(gs.getLadybugs());
-            if (ladybug != null) {
-                // Run away move
-                aphid.runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
-                aphid.moveFront();
-            } else {
-                // Normal move
-                double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
-                if (r < 0.02) { // randomize rotation
-                    aphid.setWantedRotation((float) (Math.random() * 40) - 20f);
-                }
-                aphid.moveFront(0.3f);
-            }
-            // if have been move to avoid wall
-            if (aphid.moveIn(gs.getMapWidth(), gs.getMapHeight())) {
-                if (aphid.getWantedRotation() == 0f) { // if have not already choose a new angle to get out.
-                    aphid.setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
-                }
+    public void moveAICreature() {
+        // Iterate over all Creatures in one loop
+        for (Creature c : allCreatures()) {
+            if (c.isAI()) {
+                c.moveAI(gs);
             }
         }
     }
@@ -196,8 +207,32 @@ public class Controller {
         App.log(0, "Need to start new Game");
         int gameTime = 60;
         setSpectatorMode(false);
-        Musics.setMusic("Waltz of the Night 1min");
-        gs = GameState.builder().setMaxScore(100).setMapHeight(2000).setMapWidth(2000).setLevelId(levelId).build();
+        Musics.setLevelMusic(getLevelId());
+        GameStateBuilder gsb = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
+        switch (getLevelId()) {
+        case "1K":
+            gsb.setLadybugNumber(1);
+            break;
+        case "2K":
+            gsb.setLadybugNumber(1).setRedAntNumber(3);
+            break;
+        case "2F":
+            gsb.setLadybugNumber(2).setRedAntNumber(1);
+            break;
+        case "3K":
+            gsb.setLadybugNumber(1).setGreenAntNumber(3);
+            break;
+        case "3F":
+            gsb.setLadybugNumber(2).setGreenAntNumber(1);
+            break;
+        default:
+            App.log(3, "levelId not found, use default levelId (1K)");
+            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
+                    .build();
+            break;
+        }
+        gs = gsb.build();
+        gs.moveAIAwayFromPlayers();
         app.setScreen(new GameScreen(app));
         Musics.play();
         App.log(1, "start new Game");
@@ -211,6 +246,7 @@ public class Controller {
     public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
+    public boolean isAllLadybugGone() { return gs.isAllLadybugGone(); }
     // public void removeActorFromStage(Actor actor) { actor.remove(); }
 
     /**
@@ -218,11 +254,117 @@ public class Controller {
      * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
      */
     public void interact() {
-        if (gs.ladybugEat()) {
+        if (ladybugsEat()) {
             getGameScreen().setPlayerScore(gs.getScore());
-            app.playEatingSound();
         }
+        antsHit();
+        antsShoot();
+        acidDropsHit();
     }
+
+    /**
+     * {@summary Let ladybugs eat aphids.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean ladybugsEat() {
+        boolean haveInteract = false;
+        for (Ladybug ladybug : gs.getLadybugs()) {
+            for (Aphid aphid : gs.getAphids()) {
+                if (ladybug.hitBoxConnected(aphid)) {
+                    haveInteract = true;
+                    playSound("crock", ladybug);
+                    ladybug.hit(aphid);
+                    // ladybug.addScorePoints(aphid.getGivenPoints());
+                    gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
+                    // System.out.println("Eating " + aphid);
+                }
+            }
+        }
+        return haveInteract;
+    }
+    /**
+     * {@summary Let ants hit ladybug.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean antsHit() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            for (Ladybug ladybug : gs.getLadybugs()) {
+                if (ant.hitBoxConnected(ladybug)) {
+                    if (ant.canHit()) {
+                        haveInteract = true;
+                        playSound("hit", ant);
+                        ant.hit(ladybug);
+                    }
+                    break;
+                }
+            }
+        }
+        return haveInteract;
+    }
+    /**
+     * {@summary Let ants shoot ladybug.}
+     * 
+     * @return true if a ladybug have interact
+     */
+    public boolean antsShoot() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            if (ant.isAI()) {
+                Ladybug target = (Ladybug) ant.closestCreature(gs.getLadybugs());
+                if (target != null) {
+                    antShoot(ant); // ant.distanceTo(target)
+                    haveInteract = true;
+                }
+            }
+        }
+        return haveInteract;
+    }
+    /**
+     * {@summary Let an ant shoot.}
+     */
+    public void antShoot(Ant ant) {
+        if (!ant.canShoot()) {
+            return;
+        }
+        ant.shoot();
+        playSound("shoot", ant);
+        // Create new acid drop
+        AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.getShootRadius(), ant.getShootPoints());
+        App.log(0, "New acid drop with distance before hit: " + ad.getDistanceBeforeHit());
+        gs.getAcidDrops().add(ad);
+        getGameScreen().getStage().addActor(ad.getActor());
+    }
+
+    /**
+     * {@summary Let acid drops hit.}
+     * 
+     * @return true if an acide drops have interact
+     */
+    public boolean acidDropsHit() {
+        boolean haveInteract = false;
+        for (AcidDrop acidDrop : gs.getAcidDrops()) {
+            // TODO ? Maybe it should hit any living Creature (execpt the shooter+) (not only ladybug) ?
+            for (Ladybug ladybug : gs.getLadybugs()) {
+                if (ladybug.hitBoxConnected(acidDrop)) {
+                    haveInteract = true;
+                    playSound("splatch", ladybug);
+                    // playSound("takeDamage", ladybug);
+                    App.log(0, "Acid drop " + acidDrop.getId() + " hit ladybug " + ladybug.getId());
+                    acidDrop.hit(ladybug);
+                    // App.log(1, "lb have been hit " + ladybug);
+                }
+                if (haveInteract || acidDrop.getDistanceBeforeHit() < 0) {
+                    toRemove.add(acidDrop);
+                    break;
+                }
+            }
+        }
+        return haveInteract;
+    }
+
     /**
      * {@summary End game by launching sound &#38; end game menu.}
      */
@@ -234,11 +376,21 @@ public class Controller {
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        boolean haveWin = gs.getScore() == gs.getMaxScore();
-        // boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
-        app.playEndGameSound(haveWin);
+        // if player play as ant, his score is 0 if he stop game before time is up.
+        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && gs.getLadybugs().size() != 0)) {
+            gs.setScore(0);
+        }
+        boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
         saveScoreInFile();
+        gs.getMapActorFg().setVisible(!isSpectatorMode());
+    }
+    /**
+     * {@summary Play the end game sound.}
+     */
+    public void playEndGameSound() {
+        boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
+        app.playEndGameSound(haveWin);
     }
 
     /**
@@ -249,10 +401,8 @@ public class Controller {
         if (getGameScreen().isPause()) {
             removeEscapeMenu();
             getGameScreen().resume();
-            Musics.play();
         } else {
             getGameScreen().pause();
-            Musics.pause();
             getGameScreen().createEscapeMenu();
         }
     }
@@ -321,12 +471,12 @@ public class Controller {
     public Map<String, String> loadData() {
         Map<String, String> map;
         try {
-            map = Files.loadFromFile("data.yml");
+            map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
             map = new HashMap<String, String>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
-            if (!App.SUPPORTED_LANGUAGE.contains(l)) {
+            if (!App.SUPPORTED_LANGUAGES.contains(l)) {
                 l = "en";
             }
             map.put("language", l);
@@ -404,6 +554,54 @@ public class Controller {
         return unlockedLevels;
     }
 
+    /**
+     * {@summary Play a sound that soundSource have emit.}
+     * soundSource is used to calculate the volume and the pan of the sound from distance and angle data
+     * between soundSource and player Creature.
+     * 
+     * @param fileName    name of the sound file
+     * @param soundSource source of the sound
+     */
+    public void playSound(String fileName, MapItem soundSource) {
+        Creature soundTarget = getPlayerCreature();
+        float volume = getSoundVolume(soundSource, soundTarget);
+        float pan = getSoundPan(soundSource, soundTarget);
+        App.log(0, "Sound " + fileName + " " + volume + " " + pan);
+        App.playSound(fileName, volume, pan);
+    }
+
+    /**
+     * {@summary Return the volume of a sound to emit.}
+     * 
+     * @param soundSource source of the sound
+     * @param soundTarget target of the sound
+     * @return the volume of a sound to emit
+     */
+    public static float getSoundVolume(MapItem soundSource, Creature soundTarget) {
+        return Math.max(1f - soundTarget.distanceTo(soundSource) / soundTarget.getHearRadius(), 0f);
+    }
+    /**
+     * {@summary Return the pan of a sound to emit.}
+     * 
+     * @param soundSource source of the sound
+     * @param soundTarget target of the sound
+     * @return the volume of a sound to emit
+     */
+    public static float getSoundPan(MapItem soundSource, Creature soundTarget) {
+        float distanceX = soundSource.getCenterX() - soundTarget.getCenterX();
+        float distanceY = soundSource.getCenterY() - soundTarget.getCenterY();
+        float distance = Math.abs(distanceX) + Math.abs(distanceY);
+        if (distance == 0) {
+            return 0f;
+        } else {
+            float pan = distanceX / distance;
+            if ((distanceX < 0 && pan > 0) || (distanceX > 0 && pan < 0)) {
+                pan = -pan;
+            }
+            return pan;
+        }
+    }
+
 
     /**
      * {@summary Return current used camera.}
@@ -421,7 +619,8 @@ public class Controller {
      * @param y y screen coordinate
      * @return Vector of coordinate from screen x, y to stage x, y
      */
-    private Vector2 getVectorStageCoordinates(float x, float y) {
+    public Vector2 getVectorStageCoordinates(float x, float y) {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }
+
 }

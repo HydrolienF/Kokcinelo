@@ -1,13 +1,13 @@
 package fr.formiko.kokcinelo.model;
 
-import java.util.Collection;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@summary Aphids are Creatures eated by ladybugs.}
  * Ant always try to protect them.
  * 
  * @author Hydrolien
- * @since 0.1
+ * @since 1.0
  * @version 0.1
  */
 public class Aphid extends Creature {
@@ -18,7 +18,7 @@ public class Aphid extends Creature {
      */
     public Aphid() {
         super("aphid");
-        lifePoints = 1;
+        maxLifePoints = 0;
         hitPoints = 0;
         shootPoints = 0;
         visionRadius = 120;
@@ -34,20 +34,22 @@ public class Aphid extends Creature {
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
-     * {@summary Return the closest laydbug from the collection.}
-     * 
-     * @param coll Collection to iterate over
-     * @return the closest laydbug from the collection
+     * {@summary Move aphids as AI.}
+     * Aphids first run away from the closest ladybug they can see if they can see one.
+     * Else they move slowly to a random direction &#38; some time change it.
+     * If they hit a wall, they change there wanted rotation angle for the nexts turns.
      */
-    public Ladybug closestLadybug(Collection<Ladybug> coll) {
-        Ladybug closest = null;
-        for (Ladybug ladybug : coll) {
-            if (isInRadius(ladybug, ladybug.getHitRadius() + getVisionRadius())) {
-                if (closest == null || distanceTo(ladybug) < distanceTo(closest)) {
-                    closest = ladybug;
-                }
-            }
+    public void moveAI(GameState gs) {
+        Ladybug ladybug = (Ladybug) closestCreature(gs.getLadybugs());
+        if (ladybug != null) {
+            // Run away move
+            runAwayFrom(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
+            moveFront();
+        } else {
+            // Normal move
+            minorRandomRotation(0.02);
+            moveFront(0.3f);
         }
-        return closest;
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
     }
 }

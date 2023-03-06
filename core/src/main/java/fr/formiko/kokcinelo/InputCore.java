@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.Ant;
+import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.view.GameScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -49,9 +51,16 @@ public class InputCore implements InputProcessor {
         if (keycode == Input.Keys.S) {
             Controller.getController().gameOver();
         }
-        if ((keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) && screen.isStop()) {
+        // space key have been remove because player migth want to use it to shoot & end game screen by mistake.
+        if (keycode == Input.Keys.ENTER && screen.isStop()) {
             // Controller.getController().endGameScreen();
             Controller.getController().createNewMenuScreen();
+        } else if (keycode == Input.Keys.SPACE) {
+            Creature c = Controller.getController().getPlayerCreature();
+            if (c instanceof Ant) {
+                // float distance = c.distanceTo(Controller.getController().getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
+                Controller.getController().antShoot((Ant) c);
+            }
         }
 
         return true;

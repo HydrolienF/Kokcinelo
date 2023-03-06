@@ -2,10 +2,22 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Ant;
+import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.GreenAnt;
+import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.model.RedAnt;
+import fr.formiko.kokcinelo.tools.Files;
+import fr.formiko.kokcinelo.tools.KScreen;
+import fr.formiko.kokcinelo.tools.KTexture;
+import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
+import java.util.ArrayList;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -18,9 +30,9 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -31,10 +43,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -42,21 +54,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.2
  */
-public class MenuScreen implements Screen {
+public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private static Skin skin;
     private static Skin skinTitle;
     private InputMultiplexer inputMultiplexer;
-    private final Label scoresLabel;
-    private final Label levelNameLabel;
-    private final Label levelDescription;
+    private Label scoresLabel;
+    private Label levelNameLabel;
+    private Label levelDescription;
     private final Chrono chrono;
-    private final int topSpace;
+    private int topSpace;
     private static final boolean backgroundLabelColored = true;
+    private static String DEFAULT_CHARS;
+    private final Viewport viewport;
+    public static OrthographicCamera camera;
+    private static List<Actor> creatureImages;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -75,11 +91,82 @@ public class MenuScreen implements Screen {
         }
         batch = new SpriteBatch();
 
-        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+        camera = new OrthographicCamera();
+        viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
-        final int w = Gdx.graphics.getWidth();
-        final int h = Gdx.graphics.getHeight();
+        chrono = new Chrono();
+        chrono.start();
+        App.log(0, "constructor", "new MenuScreen: " + toString());
+
+    }
+
+    // GET SET -------------------------------------------------------------------
+    public Controller getController() { return Controller.getController(); }
+    public Stage getStage() { return stage; }
+    public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
+    public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
+    public Level getLevel() { return LevelButton.getCheckedButton().getLevel(); }
+    // FUNCTIONS -----------------------------------------------------------------
+    /**
+     * {@summary Render the screen.}
+     */
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(Color.BLACK);
+
+        switch (getLevel().getLetter()) {
+        case "K":
+            // draw blue sky gradient
+            float secToCycle = 3 * 60 + 54;
+            // float secToCycle = 10;
+            chrono.updateDuree();
+            float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+            if (ligth < 0.5f) {
+                ligth = 1f - ligth;
+            }
+            Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
+            break;
+        case "F":
+            Shapes.drawUnderground(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.6f, 0.4f);
+            break;
+        }
+
+        for (Actor creature : creatureImages) { // Only show the creature of the current level.
+            creature.setVisible(creature.getName() != null
+                    && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
+                            && creature.getName().contains("" + getLevel().getNumber()))));
+        }
+
+        stage.act(delta);
+        stage.draw();
+    }
+
+    /**
+     * {@summary Dispose all variable that need to be dispose to save memory.}
+     * 
+     * @see com.badlogic.gdx.Game#dispose()
+     */
+    @Override
+    public void dispose() {
+        App.log(0, "destructor", "dispose MenuScreen: " + toString());
+        stage.dispose();
+    }
+
+    // TODO Auto-generated method stub
+    @Override
+    public void show() {}
+
+    @Override
+    public void resize(int width, int height) {
+        if (!needResize(width, height))
+            return;
+
+        stage.clear();
+        final int w = width; // = Gdx.graphics.getWidth();
+        final int h = height; // = Gdx.graphics.getHeight();
+        viewport.update(w, h, true);
+        App.log(1, "MenuScreen have size: " + w + "x" + h);
         topSpace = h * 40 / 100;
         int bottomSpace = h * 50 / 100;
         int bottomLinksSpace = h * 5 / 100;
@@ -88,18 +175,78 @@ public class MenuScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        final Image playButton = new Image(new Texture(Gdx.files.internal("images/icons/basic/play.png")));
+        final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
         });
         playButton.setScaling(Scaling.fillY);
-        centerTable.add(playButton).expand().fill();
+        centerTable.add(playButton).expand();
 
-        Image ladybug = new Image(new Texture(Gdx.files.internal("images/Creatures/ladybug flying.png")));
-        ladybug.setScaling(Scaling.contain); // Do not distort the image
-        ladybug.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+        creatureImages = new ArrayList<Actor>();
+        for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
+            Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));
+            creature.setScaling(Scaling.contain); // Do not distort the image
+            creature.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+            switch (imageName) {
+            case "ladybug flying": {
+                creature.setName("K");
+                break;
+            }
+
+            case "aphid": {
+                creature.setName("A");
+                creature.setSize(creature.getHeight(), creature.getWidth());
+                creature.setPosition(w / 3, h);
+                creature.setRotation(-90);
+                break;
+            }
+            }
+            creatureImages.add(creature);
+        }
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class)) {
+            Creature c = null;
+            try {
+                c = creatureClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                App.log(3, "MenuScreen", "Error while creating creature: " + e);
+            }
+            MapItemActor cActor = c.getActor();
+            int imageWidth;
+            int imageHeigth;
+            if (c instanceof Ant) {
+                imageWidth = 3600;
+                imageHeigth = 4800;
+                if (c instanceof RedAnt) {
+                    cActor.setName("F2");
+                } else if (c instanceof GreenAnt) {
+                    cActor.setName("F3");
+                }
+            } else if (c instanceof Ladybug) {
+                // TODO set imageWidth & imageHeigth
+                imageWidth = 10;
+                imageHeigth = 10;
+                cActor.setName("K");
+            } else if (c instanceof Aphid) {
+                // TODO set imageWidth & imageHeigth
+                imageWidth = 10;
+                imageHeigth = 10;
+                cActor.setName("A");
+            } else {
+                imageWidth = 10;
+                imageHeigth = 10;
+            }
+            cActor.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+            // cActor.unzoomToFitIn(w / 3, topSpace);
+            cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
+            cActor.setRotation(-90);
+            // revert width a heigth because of rotation
+            c.setZoom(Math.min(cActor.getWidth() / imageHeigth, cActor.getHeight() / imageWidth));
+            c.setCurrentSpeed(c.getMovingSpeed());
+
+            creatureImages.add(cActor);
+        }
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -129,70 +276,24 @@ public class MenuScreen implements Screen {
 
 
         stage.addActor(btable);
-        stage.addActor(centerTable);
         stage.addActor(levelNameLabel);
         stage.addActor(scoresLabel);
         stage.addActor(levelDescription);
-        stage.addActor(ladybug);
+        for (Actor creature : creatureImages) {
+            stage.addActor(creature);
+        }
+        stage.addActor(centerTable);
+
         // stage.setDebugAll(true);
         addProcessor(stage);
 
-        chrono = new Chrono();
-        chrono.start();
-        App.log(0, "constructor", "new MenuScreen: " + toString());
-
     }
 
-    // GET SET -------------------------------------------------------------------
-    public Controller getController() { return Controller.getController(); }
-    public Stage getStage() { return stage; }
-    public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
-    public String getLevelId() { return LevelButton.getCheckedButton().getId(); }
-    // FUNCTIONS -----------------------------------------------------------------
-    /**
-     * {@summary Render the screen.}
-     */
     @Override
-    public void render(float delta) {
-        // ScreenUtils.clear(App.BLUE_BACKGROUND);
-
-        // draw blue sky gradient
-        float secToCycle = 3 * 60 + 54;
-        // float secToCycle = 10;
-        chrono.updateDuree();
-        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-        if (ligth < 0.5f) {
-            ligth = 1f - ligth;
-        }
-        Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
-
-        stage.act(delta);
-        stage.draw();
-    }
-
-    /**
-     * {@summary Dispose all variable that need to be dispose to save memory.}
-     * 
-     * @see com.badlogic.gdx.Game#dispose()
-     */
-    @Override
-    public void dispose() {
-        App.log(0, "destructor", "dispose MenuScreen: " + toString());
-        stage.dispose();
-    }
-
-    // TODO Auto-generated method stub
-    @Override
-    public void show() {}
+    public void pause() { Musics.pause(); }
 
     @Override
-    public void resize(int width, int height) {}
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
+    public void resume() { Musics.resume(); }
 
     @Override
     public void hide() {}
@@ -257,7 +358,10 @@ public class MenuScreen implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
-        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ";
+        if (DEFAULT_CHARS == null) {
+            DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
+        }
+        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ" + " ";
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
@@ -312,16 +416,17 @@ public class MenuScreen implements Screen {
         levelButtonTable.setBounds(0, 0, w, h);
         int buttonRadius = (int) levelButtonTable.getWidth() / 24;
         int buttonSize = buttonRadius * 2;
-        int len = 4;
+        int len = 5;
 
         int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
         int xSpaceBetweenButton = xFreeSpace / (len + 1);
 
         int yFreeSpace = (int) levelButtonTable.getHeight() - (3 * buttonSize);
-        int ySpaceBetweenButton = yFreeSpace / 4;
+        int ySpaceBetweenButton = yFreeSpace / len;
 
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
+        LevelButton.resetUnlockedLevels();
         for (Level level : Level.getLevelList()) {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
@@ -390,6 +495,7 @@ public class MenuScreen implements Screen {
     // Private -------------------------------------------------------------------------------------
     /**
      * {@summary Return a table of web site link button.}
+     * It also have a swap language button.
      * 
      * @return A table of web site link button
      */
@@ -402,16 +508,49 @@ public class MenuScreen implements Screen {
         // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
-        Image flag = getClickableLink(App.getLanguage(), null, size, false);
+        Table langTable = new Table();
+        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        int perRow = 1;
+        if (App.SUPPORTED_LANGUAGES.size() > 10) {
+            perRow = 4;
+        }
+        int k = 0;
+        for (String languageCode : App.SUPPORTED_LANGUAGES) {
+            String languageName = App.LANGUAGES_NAMES.get(languageCode);
+            Integer percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
+            if (percent == null) {
+                continue;
+            }
+            if (percent != 100) {
+                languageName += " (" + percent + "%)";
+            }
+            LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
+            style.background = ls.background;
+            skin.add("s" + percent, style);
+            Label languageLabel = new Label(languageName, skin, "s" + percent);
+            languageLabel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    langTable.remove();
+                    App.setLanguage(languageCode);
+                    updateSelectedLevel(getLevelId());
+                }
+            });
+            langTable.add(languageLabel);
+            k++;
+            if (k % perRow == 0) {
+                langTable.row();
+            }
+        }
+        langTable.pack();
+        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);
+        Image flag = getClickableLink("basic/language", null, size, false);
         flag.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String lang = App.getLanguage();
-                int nextId = (App.SUPPORTED_LANGUAGE.indexOf(lang) + 1) % App.SUPPORTED_LANGUAGE.size();
-                App.setLanguage(App.SUPPORTED_LANGUAGE.get(nextId));
-                updateSelectedLevel(getLevelId());
-                Texture texture = resizeTexture("images/icons/" + App.getLanguage() + ".png", size, false);
-                flag.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
+                if (!langTable.remove()) {
+                    stage.addActor(langTable);
+                }
             }
         });
         table.add(flag);

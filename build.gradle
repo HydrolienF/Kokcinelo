@@ -14,11 +14,14 @@ buildscript {
         classpath 'org.gretty:gretty:3.0.7'
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
+        classpath 'com.diffplug.spotless:spotless-lib:2.35.0'
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.15.0'
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: "com.diffplug.spotless"
 
     ext {
         appName = "Kokcinelo"
@@ -32,6 +35,9 @@ allprojects {
         junitVersion = '5.9.1'
         usualVersion = '0.2.117'
         shapedrawerVersion = '2.5.0'
+        spineVersion = '4.1.0'
+        // spotlessLibVersion = '2.35.0'
+        // spotlessVersion = '6.15.0'
     }
 
     repositories {
@@ -42,6 +48,22 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
+    }
+
+    spotless {
+        java {
+            target fileTree('.') {
+                include '**/*.java'
+                exclude '**/build/**', '**/build-*/**'
+            }
+            toggleOffOn()
+            // palantirJavaFormat()
+            // removeUnusedImports()
+            // trimTrailingWhitespace()
+            // endWithNewline()
+            removeUnusedImports()
+            eclipse('4.10.0').configFile new File(rootProject.projectDir.absolutePath, 'eclipse-formatter.xml')
+        }
     }
 }
 
@@ -112,7 +134,9 @@ project(":ios") {
 // }
 
 project(":core") {
+    apply plugin: "java"
     apply plugin: "java-library"
+    apply plugin: "jacoco"
 
 
     dependencies {
@@ -123,6 +147,8 @@ project(":core") {
         implementation 'org.yaml:snakeyaml:1.21'
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
+        implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
+        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 
     test {
@@ -130,7 +156,35 @@ project(":core") {
 
         testLogging {
             events "passed", "skipped", "failed"
+            //cf https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLogging.html
+            // maxGranularity 3
+            // minGranularity 2
+            // showStackTraces true
+        }
+
+        finalizedBy jacocoTestReport // report is always generated after tests run
+    }
+
+    jacoco {
+        toolVersion = "0.8.8"
+    }
+
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.enabled true
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
     }
 }
 
+// dependencies {
+//     // implementation("com.diffplug.spotless:spotless-lib:$spotlessLibVersion")
+//     // implementation("com.diffplug.spotless:spotless-plugin-gradle:$spotlessVersion")
+//     // spotlessLibVersion = '2.35.0'
+//     //     spotlessVersion = '6.15.0'
+//     implementation "com.diffplug.spotless:spotless-lib:2.35.0"
+//     implementation "com.diffplug.spotless:spotless-plugin-gradle:6.15.0"
+// }

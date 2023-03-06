@@ -8,6 +8,7 @@ package fr.formiko.kokcinelo.tools;
  * @since 0.1
  */
 public class Math {
+    private Math() {}
 
     // FUNCTIONS -----------------------------------------------------------------
     /**

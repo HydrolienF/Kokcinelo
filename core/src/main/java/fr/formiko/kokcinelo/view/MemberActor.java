@@ -17,9 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
  * This class should be remove/rework when Spine will be used
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.0
  * @since 0.2
  */
+@Deprecated
 public class MemberActor extends MapItemActor {
     private List<Action> listAction;
     private List<MemberActor> listMia;
@@ -36,7 +37,7 @@ public class MemberActor extends MapItemActor {
     public void setAngleChangeBySpeed(float angleChangeBySpeed) { this.angleChangeBySpeed = angleChangeBySpeed; }
     public void addAvailableAction(Action action) { listAction.add(action); }
     public void addMember(MemberActor actor) {
-        addActor(actor);
+        // addActor(actor);
         listMia.add(actor);
     }
 
@@ -63,7 +64,7 @@ public class MemberActor extends MapItemActor {
             MapItemActor parent = this;
             float xParent = 0;
             float yParent = 0;
-            parent = (MapItemActor) parent.getParent();
+            // parent = (MapItemActor) parent.getParent();
             xParent += parent.getCenterX();
             yParent += parent.getCenterY();
             // while (parent.getParent() != null && parent.getParent() instanceof MapItemActor) {

@@ -9,14 +9,16 @@ descriptionLevelK: Manĝu tiom da afidojn kiom vi povas en 1 minuto!
 descriptionLevelF: Protektu tiom da afidojn kiom vi povas en 1 minuto!
 descriptionLevelA: Postvivu 1 minuton!
 descriptionLevel1K: Direktu vian kokcinelinon per via musa montrilo & zomu per via musa rulrado.
-descriptionLevel2K: La formikoj faros sian eblon por haltigi vin. Gardu vin kontraŭ iliaj akraj mandibloj & acidaj jetoj!
-descriptionLevel2F: Kocineloj provos vori kiel eble plej multajn. Por malhelpi tion, vi povas uzi viajn mandiblojn aŭ vian formikan acidon.
-descriptionLevel3K: Ĉiu vorita afido donos al vi vivon, rapidecon aŭ poentan gratifikon.
-descriptionLevel3F: Viaj amikaj afidoj sekrecias mielroso, kiun vi ŝatas. Depende de la afida specio, mielroso aŭ plirapidigos vin aŭ faros viajn atakojn pli efikaj.
-descriptionLevel3A: Vi estas la plej bela el afidoj. La estonteco de la kolonio dependas de via supervivo! Uzu la formikojn por protekti vin kaj se necese lasu aliajn manĝi por vi. Vi povas akceli mallongan tempon por eskapi (spaco).
-descriptionLevel4K: Kelkaj afidoj flugas. Por kapti ilin vi devas ankaŭ flugi (spaco). Dumfluge oni ne plu kaptas afidojn surgrunde.
-descriptionLevel4F: Kocineloj flugas! Kiam ili flugas, vi devas fidi nur je via acido por haltigi ilin.
-descriptionLevel4A: Vi estas la plej apetitiga el afidoj, kokcineloj sekvos vin ĝismorte! Uzu viajn flugilojn kaj viajn aliancanojn la formikojn por forigi ilin.
+descriptionLevel2K: La formikoj faros sian eblon por haltigi vin. Gardu vin kontraŭ iliaj akraj mandibloj!
+descriptionLevel2F: Kocineloj provos vori kiel eble plej multajn. Por malhelpi tion, vi povas uzi viajn mandiblojn. Pli rapide vi haltigos la kokcinelojn, pli bonusajn punktojn vi havos.
+descriptionLevel3K: La formikoj faros sian eblon por haltigi vin. Gardu vin kontraŭ iliaj acidaj jetoj!
+descriptionLevel3F: Kocineloj provos vori kiel eble plej multajn. Por malhelpi tion, vi povas uzi vian formikan acidon (spaco). Pli rapide vi haltigos la kokcinelojn, pli bonusajn punktojn vi havos.
+descriptionLevel4K: Ĉiu vorita afido donos al vi vivon, rapidecon aŭ poentan gratifikon.
+descriptionLevel4F: Viaj amikaj afidoj sekrecias mielroso, kiun vi ŝatas. Depende de la afida specio, mielroso aŭ plirapidigos vin aŭ faros viajn atakojn pli efikaj.
+descriptionLevel4A: Vi estas la plej bela el afidoj. La estonteco de la kolonio dependas de via supervivo! Uzu la formikojn por protekti vin kaj se necese lasu aliajn manĝi por vi. Vi povas akceli mallongan tempon por eskapi (spaco).
+descriptionLevel5K: Kelkaj afidoj flugas. Por kapti ilin vi devas ankaŭ flugi (spaco). Dumfluge oni ne plu kaptas afidojn surgrunde.
+descriptionLevel5F: Kocineloj flugas! Kiam ili flugas, vi devas fidi nur je via acido por haltigi ilin.
+descriptionLevel5A: Vi estas la plej apetitiga el afidoj. Kokcineloj ĉasos vin ĝismorte! Uzu viajn flugilojn kaj viajn aliancanojn la formikojn por forigi ilin.
 comingSoon: Baldaŭ venos
 #Escape Menu
 restart: rekomenci

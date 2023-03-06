@@ -18,24 +18,48 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
-    /**
-     * {@summary Draw a sky gradient.}
-     * 
-     * @param width  width of the sky rectangle
-     * @param heigth height of the sky rectangle
-     * @param ligth  ligth of the sky bewteen 0 and 1
-     */
-    public static void drawSky(int width, int heigth, float ligth) {
+
+    private static ShapeRenderer getShapeRenderer() {
         if (shapeRenderer == null) {
             shapeRenderer = new ShapeRenderer();
             shapeRenderer.setAutoShapeType(true);
         }
+        return shapeRenderer;
+    }
+    /**
+     * {@summary Draw a sky gradient.}
+     * 
+     * @param width  width of the sky rectangle
+     * @param height height of the sky rectangle
+     * @param ligth  ligth of the sky bewteen 0 and 1
+     */
+    public static void drawSky(int width, int height, float ligth) {
+        shapeRenderer = getShapeRenderer();
         // draw blue sky gradient
         shapeRenderer.begin();
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         Color topColor = new Color(0, 0.4f * ligth, 1f * ligth, 1);
         Color bottomColor = new Color(0, 0.8f * ligth, 1f * ligth, 1);
-        shapeRenderer.rect(0, 0, width, heigth, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.end();
+    }
+    /**
+     * {@summary Draw an underground background.}
+     * 
+     * @param width  width of the sky rectangle
+     * @param height height of the sky rectangle
+     */
+    public static void drawUnderground(int width, int height, float pathStart, float pathLength) {
+        shapeRenderer = getShapeRenderer();
+
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        Color topColor = new Color(0.5f, 0.3f, 0.1f, 1);
+        Color bottomColor = new Color(0.35f, 0.15f, 0.05f, 1);
+        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        // Color pathColor = new Color(0.2f, 0.1f, 0.05f, 1);
+        // Color pathColor = new Color(0.8f, 0.5f, 0.3f, 1);
+        // shapeRenderer.rect(0, pathStart * height, width, pathLength * height, pathColor, pathColor, pathColor, pathColor);
         shapeRenderer.end();
     }
     /**
@@ -95,10 +119,14 @@ public class Shapes {
 
         // resize image
         Pixmap texturePixmapSized = new Pixmap((int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom), Pixmap.Format.RGBA8888);
+        // texturePixmapSized.setFilter(Pixmap.Filter.NearestNeighbour); // worst than bilinear (the default & only other option)
         texturePixmapSized.drawPixmap(squarePixmap, 0, 0, squarePixmap.getWidth(), squarePixmap.getHeight(), 0, 0,
                 (int) (pixmap.getWidth() * zoom), (int) (pixmap.getHeight() * zoom));
         // Pixmap texturePixmapSized = resize(squarePixmap, (int) (squarePixmap.getWidth() * zoom), (int) (squarePixmap.getHeight() * zoom),
         // true);
+
+        // draw black outline
+        texturePixmapSized = outLine(texturePixmapSized);
 
         // draw center circle of the image
         int xCenter = (int) (pixmap.getWidth() / 2);
@@ -155,23 +183,23 @@ public class Shapes {
      * 
      * @param in        texture to resize
      * @param outWidth  new width
-     * @param outHeigth new height
+     * @param outheight new height
      * @return resized texture
      */
-    public static Texture resize(Texture in, int outWidth, int outHeigth) {
-        return new Texture(resize(textureToPixmap(in), outWidth, outHeigth));
+    public static Texture resize(Texture in, int outWidth, int outheight) {
+        return new Texture(resize(textureToPixmap(in), outWidth, outheight));
     }
     /**
      * Resize a Pixmap.
      * 
      * @param in        Pixmap to resize
      * @param outWidth  new width
-     * @param outHeigth new height
+     * @param outheight new height
      * @return resized Pixmap
      */
-    public static Pixmap resize(Pixmap inPm, int outWidth, int outHeigth) {
-        Pixmap outPm = new Pixmap(outWidth, outHeigth, Pixmap.Format.RGBA8888);
-        outPm.drawPixmap(inPm, 0, 0, inPm.getWidth(), inPm.getHeight(), 0, 0, outWidth, outHeigth);
+    public static Pixmap resize(Pixmap inPm, int outWidth, int outheight) {
+        Pixmap outPm = new Pixmap(outWidth, outheight, Pixmap.Format.RGBA8888);
+        outPm.drawPixmap(inPm, 0, 0, inPm.getWidth(), inPm.getHeight(), 0, 0, outWidth, outheight);
         inPm.dispose();
         return outPm;
     }
