@@ -8,7 +8,7 @@ on:
 env:
   JAVA_VERSION: '18'
   JAVA_DISTRIBUTION: 'temurin'
-  JRE_VERSION: '18.0.8'
+  JRE_VERSION: '18.0.8f'
   GITHUB_TOKEN: ${{ github.token }}
   ARTIFACT_NAME: 'Kokcinelo'
   USER_NAME: 'HydrolienF'
@@ -69,6 +69,7 @@ jobs:
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.version }}
         launcher-extension: 'jar'
+        JRE_VERSION: ${{ env.JRE_VERSION }}
 
   WindowsArtifact:
     if: github.event.pull_request.merged == true
@@ -88,6 +89,7 @@ jobs:
         app-version: ${{ needs.releaseJob.outputs.version }}
         launcher-extension: 'exe'
         uuid: ${{ env.UUID }}
+        JRE_VERSION: ${{ env.JRE_VERSION }}
 
   LinuxArtifact:
     if: github.event.pull_request.merged == true
@@ -108,6 +110,7 @@ jobs:
         launcher-extension: 'deb'
         deb-maintainer-email: 'hydrolien.f@gmail.com'
         uuid: ${{ env.UUID }}
+        JRE_VERSION: ${{ env.JRE_VERSION }}
 
   MacArtifact:
     if: github.event.pull_request.merged == true
@@ -127,3 +130,4 @@ jobs:
         app-version: ${{ needs.releaseJob.outputs.version }}
         launcher-extension: 'dmg'
         uuid: ${{ env.UUID }}
+        JRE_VERSION: ${{ env.JRE_VERSION }}
