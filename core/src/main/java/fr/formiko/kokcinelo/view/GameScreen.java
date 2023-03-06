@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
+import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import com.badlogic.gdx.Gdx;
@@ -123,7 +124,10 @@ public class GameScreen extends KScreen implements Screen {
             }
             if (getController().isAllLadybugGone()) {
                 if (!stopAtTheEnd) {
-                    getController().addScore((int) hud.getGameTime());
+                    // if player is an ant or an aphid give it bonus score for time.
+                    if (!(getController().getPlayerCreature() instanceof Ladybug)) {
+                        getController().addScore((int) hud.getGameTime());
+                    }
                     getController().gameOver();
                 }
             }
