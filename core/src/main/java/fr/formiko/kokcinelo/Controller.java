@@ -408,6 +408,7 @@ public class Controller {
     }
     public void removeEscapeMenu() { getGameScreen().removeEscapeMenu(); }
 
+    public void exitApp() { dispose(); }
     public void dispose() { app.dispose(); }
 
 

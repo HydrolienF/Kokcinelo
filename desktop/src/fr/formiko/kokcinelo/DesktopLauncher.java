@@ -39,11 +39,13 @@ public class DesktopLauncher {
 		switch (displayMode) {
 		case 0: // Real fullscreen
 			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+			App.setWithCloseButton(true);
 			break;
 		case 1: // windowed fullscreen
 			config.setResizable(false);
 			config.setDecorated(false);
 			config.setMaximized(true); // create issues on linux. cf https://github.com/libgdx/libgdx/issues/7089
+			App.setWithCloseButton(true);
 			break;
 		case 2: // windowed
 			config.setMaximized(true);

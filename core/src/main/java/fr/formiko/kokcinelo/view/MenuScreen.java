@@ -184,6 +184,17 @@ public class MenuScreen extends KScreen implements Screen {
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand();
 
+        if (App.isWithCloseButton()) {
+            final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
+            closeButton.setSize(w / 40f, w / 40f);
+            closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
+            closeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) { getController().exitApp(); }
+            });
+            stage.addActor(closeButton);
+        }
+
         creatureImages = new ArrayList<Actor>();
         for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
             Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));

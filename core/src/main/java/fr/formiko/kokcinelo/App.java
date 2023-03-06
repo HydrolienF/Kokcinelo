@@ -43,6 +43,7 @@ public class App extends Game {
     public static List<String> SUPPORTED_LANGUAGES;
     public static Map<String, String> LANGUAGES_NAMES;
     public static Map<String, Integer> LANGUAGES_PERCENTAGES;
+    private static boolean withCloseButton;
 
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
@@ -56,6 +57,9 @@ public class App extends Game {
     }
     public App() { this(null, new NullNative()); }
 
+
+    public static boolean isWithCloseButton() { return withCloseButton; }
+    public static void setWithCloseButton(boolean withCloseButton) { App.withCloseButton = withCloseButton; }
     public static Map<String, String> getDataMap() { return data; }
     public static String getLanguage() { return data.get("language"); }
     /**
