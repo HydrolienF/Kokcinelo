@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "XybrCM+x/JE",
+	"hash": "X0IgWaDED0U",
 	"spine": "4.1.19",
 	"x": -3226.23,
 	"y": -3427.28,
@@ -315,7 +315,7 @@
 	{ "name": "leg coxa r 2", "bone": "leg coxa r 2", "attachment": "leg coxa r" },
 	{ "name": "petiol", "bone": "petiol", "attachment": "petiol" },
 	{ "name": "thorax", "bone": "root", "attachment": "thorax" },
-	{ "name": "thorax color", "bone": "root" },
+	{ "name": "thorax color", "bone": "root", "attachment": "thorax color" },
 	{ "name": "mandible r", "bone": "mandible r", "attachment": "mandible" },
 	{ "name": "mandible l", "bone": "mandible l", "attachment": "mandible" },
 	{ "name": "head", "bone": "head", "attachment": "head" },
