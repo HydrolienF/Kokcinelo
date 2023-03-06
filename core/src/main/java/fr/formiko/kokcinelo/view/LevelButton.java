@@ -178,7 +178,7 @@ class LevelButton extends Button {
      */
     public boolean isUnlocked() {
         if (needToRefreshUnlockedLevel) {
-            Controller.getController().loadUnlockedLevels();
+            Controller.loadUnlockedLevels();
             needToRefreshUnlockedLevel = false;
         }
         return level.isUnlocked();
