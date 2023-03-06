@@ -71,7 +71,7 @@ public class MapItemActor extends SkeletonActor {
             setOrigin(Align.center);
         }
 
-        if (Controller.getController().getAssets().getSkeletonData(textureName) != null) {
+        if (Controller.getController() != null && Controller.getController().getAssets().getSkeletonData(textureName) != null) {
             Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
 
             skeleton.setPosition(getWidth() / 2, getHeight() / 2);

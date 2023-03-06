@@ -27,8 +27,10 @@ public class Ant extends Creature {
         maxLifePoints = 0;
         hitFrequency = 1000;
 
-        Slot colorSlot = getActor().getSkeleton().findSlot("thorax color");
-        colorSlot.getColor().set(thoraxColor);
+        if (getActor() != null && getActor().getSkeleton() != null) {
+            Slot colorSlot = getActor().getSkeleton().findSlot("thorax color");
+            colorSlot.getColor().set(thoraxColor);
+        }
     }
     /***
      * {@summary Create new red Ant.}

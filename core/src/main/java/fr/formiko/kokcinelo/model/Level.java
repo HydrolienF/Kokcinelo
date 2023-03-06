@@ -14,6 +14,7 @@ import java.util.Set;
  */
 public class Level {
     private final String id;
+    private boolean unlocked;
     private static final Set<Level> levelList = Set.of(newLevel("1K"), newLevel("2K"), newLevel("3K"), newLevel("4K"), newLevel("5K"),
             newLevel("2F"), newLevel("3F"), newLevel("4F"), newLevel("5F"), newLevel("4A"), newLevel("5A"));
     private List<Level> nextLevels;
@@ -21,6 +22,8 @@ public class Level {
     private Level(String id) { this.id = id; }
     private static Level newLevel(String id) { return new Level(id); }
 
+    public boolean isUnlocked() { return unlocked; }
+    public void setUnlocked(boolean unlocked) { this.unlocked = unlocked; }
     public String getId() { return id; }
     public static Set<Level> getLevelList() { return levelList; }
     /**
