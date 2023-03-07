@@ -1,12 +1,12 @@
 {
 "skeleton": {
-	"hash": "X0IgWaDED0U",
+	"hash": "IIUhQJTiL5U",
 	"spine": "4.1.19",
 	"x": -3226.23,
 	"y": -3427.28,
 	"width": 6452.46,
 	"height": 6051.65,
-	"images": "../file.pdn/Creature/Ant/morceaux ouvrière/",
+	"images": "../file.pdn/Creature/Ant/morceaux ouvrière avec poiles/",
 	"audio": "C:/Users/hydro/Pictures/image mega/spine"
 },
 "bones": [
