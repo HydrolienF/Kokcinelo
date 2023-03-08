@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.spine.AnimationStateData;
@@ -15,7 +16,7 @@ import com.esotericsoftware.spine.SkeletonJson;
  * {@summary Centralized place to load and store assets.}
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public class Assets implements Disposable {
@@ -23,8 +24,11 @@ public class Assets implements Disposable {
     private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
 
     public Assets() {
-        loadAsset("ladybug");
-        loadAsset("ant");
+        for (FileHandle child : Gdx.files.internal("images/Creatures/").list()) {
+            if (child.isDirectory()) {
+                loadAsset(child.name());
+            }
+        }
     }
 
 
