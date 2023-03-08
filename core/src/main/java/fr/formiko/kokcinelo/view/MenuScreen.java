@@ -7,6 +7,7 @@ import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.Ladybug;
+import fr.formiko.kokcinelo.model.LadybugSideView;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.Files;
@@ -196,27 +197,8 @@ public class MenuScreen extends KScreen implements Screen {
         }
 
         creatureImages = new ArrayList<Actor>();
-        for (String imageName : List.of("ladybug flying", "ant", "aphid")) {
-            Image creature = new Image(new KTexture(Gdx.files.internal("images/Creatures/" + imageName + ".png")));
-            creature.setScaling(Scaling.contain); // Do not distort the image
-            creature.setBounds(w / 3, h - topSpace, w / 3, topSpace);
-            switch (imageName) {
-            case "ladybug flying": {
-                creature.setName("K");
-                break;
-            }
-
-            case "aphid": {
-                creature.setName("A");
-                creature.setSize(creature.getHeight(), creature.getWidth());
-                creature.setPosition(w / 3, h);
-                creature.setRotation(-90);
-                break;
-            }
-            }
-            creatureImages.add(creature);
-        }
-        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class)) {
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
+            boolean needToRotate = false;
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
@@ -227,6 +209,7 @@ public class MenuScreen extends KScreen implements Screen {
             int imageWidth;
             int imageHeigth;
             if (c instanceof Ant) {
+                needToRotate = true;
                 imageWidth = 3600;
                 imageHeigth = 4800;
                 if (c instanceof RedAnt) {
@@ -235,26 +218,32 @@ public class MenuScreen extends KScreen implements Screen {
                     cActor.setName("F3");
                 }
             } else if (c instanceof Ladybug) {
-                // TODO set imageWidth & imageHeigth
-                imageWidth = 10;
-                imageHeigth = 10;
+                if (c instanceof LadybugSideView) {
+                    imageWidth = 1484;
+                    imageHeigth = 926;
+                } else {
+                    imageWidth = 738;
+                    imageHeigth = 536;
+                }
                 cActor.setName("K");
             } else if (c instanceof Aphid) {
                 // TODO set imageWidth & imageHeigth
-                imageWidth = 10;
-                imageHeigth = 10;
+                imageWidth = 1000;
+                imageHeigth = 1000;
                 cActor.setName("A");
             } else {
-                imageWidth = 10;
-                imageHeigth = 10;
+                imageWidth = 1000;
+                imageHeigth = 1000;
             }
             cActor.setBounds(w / 3, h - topSpace, w / 3, topSpace);
-            // cActor.unzoomToFitIn(w / 3, topSpace);
-            cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
-            cActor.setRotation(-90);
-            // revert width a heigth because of rotation
+            if (needToRotate) {
+                cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
+                cActor.setRotation(-90);
+            }
             c.setZoom(Math.min(cActor.getWidth() / imageHeigth, cActor.getHeight() / imageWidth));
+
             c.setCurrentSpeed(c.getMovingSpeed());
+            c.setMaxLifePoints(0); // Don't show life bar
 
             creatureImages.add(cActor);
         }

@@ -15,8 +15,8 @@ public class Ladybug extends Creature {
     /**
      * {@summary Main constructor with default texture, high radius, low hit point &#38; high heal point.}
      */
-    public Ladybug() {
-        super("ladybug");
+    public Ladybug(String textureName) {
+        super(textureName);
         visionRadius = 600;
         hearRadius = 1200;
         hitRadius = 100;
@@ -24,6 +24,7 @@ public class Ladybug extends Creature {
         maxLifePoints = 100;
         lifePoints = maxLifePoints;
     }
+    public Ladybug() { this("ladybug"); }
 
     // GET SET -------------------------------------------------------------------
     @Override
