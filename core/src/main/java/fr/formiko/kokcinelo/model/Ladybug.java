@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import java.util.Collection;
+import java.util.Set;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -31,12 +33,18 @@ public class Ladybug extends Creature {
     public int getGivenPoints() { return 10; }
     @Override
     public float getMaxRotationPerSecond() { return 140f; }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Aphid.class); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(Ant.class); }
     // FUNCTIONS -----------------------------------------------------------------
     public void moveAI(GameState gs) {
-        Ant ant = (Ant) closestCreature(gs.getAnts());
-        if (ant != null) {
+        // TODO use getCreaturesHuntedBy & a filter insted of getAnts.
+        Collection<Creature> enemies = seeableCreatures(gs.getAnts());
+        if (!enemies.isEmpty()) {
             // Run away move
-            runAwayFrom(new Vector2(ant.getCenterX(), ant.getCenterY()));
+            // enemies.add(); //TODO add walls if needed.
+            runAwayFrom(enemies.stream().map(c -> new Vector2(c.getCenterX(), c.getCenterY())).toArray(Vector2[]::new));
             moveFront();
         } else {
             Aphid aphid = (Aphid) closestCreature(gs.getAphids());

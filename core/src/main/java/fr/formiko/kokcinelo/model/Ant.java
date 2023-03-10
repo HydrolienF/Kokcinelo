@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.Slot;
@@ -40,6 +41,7 @@ public class Ant extends Creature {
     // GET SET -------------------------------------------------------------------
     @Override
     public float getMaxRotationPerSecond() { return 200f; }
+    public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Ladybug.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
     public void moveAI(GameState gs) {

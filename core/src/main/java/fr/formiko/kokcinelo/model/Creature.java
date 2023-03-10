@@ -2,6 +2,8 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
@@ -66,6 +68,8 @@ public abstract class Creature extends MapItem {
     public void setShootPoints(float shootPoints) { this.shootPoints = shootPoints; }
     public int getShootRadius() { return shootRadius; }
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
+    public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
+    public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     public String toString() {
@@ -144,9 +148,25 @@ public abstract class Creature extends MapItem {
      * {@summary Set wanted rotation to run away from v.}
      * To run away from we calculate angle to go to, then add 180 degre to go to the oposite direction.
      * 
-     * @param v contains coordinate of Point to run away from
+     * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(Vector2 v) { goTo(v, 180f); }
+    public void runAwayFrom(Vector2... vectorList) {
+        if (vectorList.length == 0) {
+            return;
+        } else if (vectorList.length == 1) {
+            goTo(vectorList[0], 180f);
+        } else if (vectorList.length > 2) {
+            float x = 0;
+            float y = 0;
+            int cpt = 0;
+            for (Vector2 v2 : vectorList) {
+                x += v2.x;
+                y += v2.y;
+                cpt++;
+            }
+            runAwayFrom(new Vector2(x / cpt, y / cpt));
+        }
+    }
 
     // TODO #140 a way to fix it is to be able to run away from multiple enemis
 
@@ -166,6 +186,15 @@ public abstract class Creature extends MapItem {
             }
         }
         return closest;
+    }
+    public Collection<Creature> seeableCreatures(Collection<? extends Creature> coll) {
+        Set<Creature> set = new HashSet<Creature>();
+        for (Creature c : coll) {
+            if (isInRadius(c, c.getHitRadius() + getVisionRadius())) {
+                set.add(c);
+            }
+        }
+        return set;
     }
     /**
      * {@summary move as AI.}
