@@ -179,10 +179,8 @@ public abstract class Creature extends MapItem {
     public Creature closestCreature(Collection<? extends Creature> coll) {
         Creature closest = null;
         for (Creature c : coll) {
-            if (isInRadius(c, c.getHitRadius() + getVisionRadius())) {
-                if (closest == null || distanceTo(c) < distanceTo(closest)) {
-                    closest = c;
-                }
+            if ((isInRadius(c, c.getHitRadius() + getVisionRadius())) && (closest == null || distanceTo(c) < distanceTo(closest))) {
+                closest = c;
             }
         }
         return closest;
@@ -232,12 +230,7 @@ public abstract class Creature extends MapItem {
     /**
      * @return true if this can hit other creatures
      */
-    public boolean canHit() {
-        if (hitPoints > 0 && (System.currentTimeMillis() - lastHitTime) > hitFrequency) {
-            return true;
-        }
-        return false;
-    }
+    public boolean canHit() { return (hitPoints > 0 && (System.currentTimeMillis() - lastHitTime) > hitFrequency); }
     /**
      * {@summary Hit a Creature.}
      * 
@@ -263,12 +256,7 @@ public abstract class Creature extends MapItem {
     /**
      * @return true if this can shoot other creatures
      */
-    public boolean canShoot() {
-        if (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency) {
-            return true;
-        }
-        return false;
-    }
+    public boolean canShoot() { return (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency); }
     /**
      * {@summary Shoot a Creature.}
      */
