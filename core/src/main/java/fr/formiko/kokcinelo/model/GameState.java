@@ -17,11 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @since 0.1
  */
 public class GameState {
-    private List<Aphid> aphids;
-    private List<Ant> ants;
-    private List<Ladybug> ladybugs;
-    private List<Player> players;
-    private List<AcidDrop> acidDrops;
+    private final List<Aphid> aphids;
+    private final List<Ant> ants;
+    private final List<Ladybug> ladybugs;
+    private final List<Player> players;
+    private final List<AcidDrop> acidDrops;
     private MapActor mapActorBg;
     private MapActor mapActorFg;
     private int maxScore;
@@ -177,8 +177,8 @@ public class GameState {
                 + players + "]" + " " + mapActorBg + " " + mapActorFg;
     }
 
-    public boolean isAllAphidGone() { return aphids.size() == 0; }
-    public boolean isAllLadybugGone() { return ladybugs.size() == 0; }
+    public boolean isAllAphidGone() { return aphids.isEmpty(); }
+    public boolean isAllLadybugGone() { return ladybugs.isEmpty(); }
 
     /**
      * @summary Remove a Creature from the list of Creature where class match & from the Stage.

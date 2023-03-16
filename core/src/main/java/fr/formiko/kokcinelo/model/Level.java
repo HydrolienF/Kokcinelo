@@ -62,21 +62,21 @@ public final class Level {
         }
         return nextLevels;
     }
-    /** Add the next level  */
+    /** Add the next level on same line. */
     private void addNextLevelsFromLine() {
         Level next = getLevel((getNumber() + 1) + getLetter());
         if (next != null) {
             nextLevels.add(next);
         }
     }
+    /** Add the next levels from the other lines. */
     private void addNextLevelsFromOtherLine() {
         for (String letter : levelLetters) {
-            if (letter.equals("K")) {
-                continue;
-            }
-            Level next = getLevel(getNumber() + 1 + letter);
-            if (next != null && getLevel(getNumber() + letter) == null) {
-                nextLevels.add(next);
+            if (!letter.equals(getLetter())) { // not same letter
+                Level next = getLevel(getNumber() + 1 + letter);
+                if (next != null && getLevel(getNumber() + letter) == null) {
+                    nextLevels.add(next);
+                }
             }
         }
     }
