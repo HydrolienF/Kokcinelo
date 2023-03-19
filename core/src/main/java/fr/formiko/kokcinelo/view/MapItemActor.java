@@ -162,8 +162,8 @@ public class MapItemActor extends SkeletonActor {
                     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
                     pixmap.setColor(Color.WHITE);
                     pixmap.drawPixel(0, 0);
-                    Texture texture = new Texture(pixmap);
-                    pixmap.dispose(); // dispose later
+                    Texture texture = new Texture(pixmap); // remember to dispose of later
+                    pixmap.dispose();
                     TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
                     shapeDrawer = new ShapeDrawer(batch, region);
                 }
