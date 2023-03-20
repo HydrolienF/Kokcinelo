@@ -78,7 +78,7 @@ public class MapItemActor extends SkeletonActor {
             Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
 
             skeleton.setPosition(getWidth() / 2, getHeight() / 2);
-            SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
+            SkeletonRenderer skeletonRenderer = new SkeletonRenderer(); // TODO maybe we can use a static one
             skeletonRenderer.setPremultipliedAlpha(true);
 
             AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData(textureName));
