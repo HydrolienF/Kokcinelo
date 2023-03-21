@@ -32,7 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.1
  * @since 0.1
  */
 public class Controller {
@@ -54,7 +54,7 @@ public class Controller {
         this.app = app;
         controller = this;
         toRemove = new HashSet<Creature>();
-        assets = new Assets();
+        // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
 
@@ -74,6 +74,7 @@ public class Controller {
     public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
+    public void iniAssets() { assets = new Assets(); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -408,6 +409,7 @@ public class Controller {
     }
     public void removeEscapeMenu() { getGameScreen().removeEscapeMenu(); }
 
+    public void exitApp() { dispose(); }
     public void dispose() { app.dispose(); }
 
 
@@ -430,7 +432,7 @@ public class Controller {
      * @param fileName name of the file
      * @return content of the file
      */
-    public String readStringInFile(String fileName) {
+    public static String readStringInFile(String fileName) {
         App.log(0, "FILES", "Read the content of " + fileName);
         FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
         if (file.exists()) {
@@ -532,26 +534,37 @@ public class Controller {
     }
     /**
      * {@summary Load the unlocked levels.}
+     * Unlocked levels are 1K + the one with a score + the next levels of a 50% score level.
      */
-    public Set<String> loadUnlockedLevels() {
-        HashSet<String> unlockedLevels = new HashSet<String>();
-        String scores = readStringInFile(getScoresFileName());
-        if (scores == null) {
-            unlockedLevels.add("1K");
-        } else {
+    public static void loadUnlockedLevels() {
+        loadUnlockedLevels(readStringInFile(getScoresFileName()));
+        Level.getLevel("1K").setUnlocked(true);
+    }
+    /**
+     * {@summary Load the unlocked levels.}
+     * Unlocked levels are 1K + the one with a score + the next levels of a at least 1 star level.
+     */
+    public static void loadUnlockedLevels(String scores) {
+        for (Level level : Level.getLevelList()) {
+            level.setUnlocked(false);
+        }
+        Level.getLevel("1K").setUnlocked(true);
+        if (scores != null) {
             for (String line : scores.split("\n")) {
                 String[] data = line.split(",");
+                if (line.equals("") || data.length < 2)
+                    continue; // skip empty lines or incorrect lines
                 String levelId = data[0];
-                unlockedLevels.add(levelId);
-                int num = Integer.parseInt(levelId.substring(0, 1));
-                unlockedLevels.add((num + 1) + levelId.substring(1, 2));
-                if (num == 1) {
-                    unlockedLevels.add((num + 1) + "F");
+                int score = Integer.parseInt(data[1]);
+                Level lvl = Level.getLevel(levelId);
+                lvl.setUnlocked(true);
+                if (score >= App.STARS_SCORES.get(0)) { // unlock next levels if at least 1 star
+                    for (Level nextLvl : lvl.getNextLevels()) {
+                        nextLvl.setUnlocked(true);
+                    }
                 }
             }
         }
-        App.log(1, "FILES", "Unlocked levels: " + unlockedLevels);
-        return unlockedLevels;
     }
 
     /**

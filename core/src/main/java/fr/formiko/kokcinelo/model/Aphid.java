@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import java.util.Set;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -31,6 +32,8 @@ public class Aphid extends Creature {
     public int getGivenPoints() { return 1; }
     @Override
     public float getMaxRotationPerSecond() { return 500f; }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(Ladybug.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**

@@ -30,9 +30,9 @@ class LevelButton extends Button {
     private static Texture circleSelectedDisable;
     private static Texture lockedLevel;
     private static Texture star;
+    private static boolean needToRefreshUnlockedLevel;
     private Texture texture;
     private final Level level;
-    private static Set<String> unlockedLevels;
     private final int radius;
 
     /**
@@ -177,12 +177,13 @@ class LevelButton extends Button {
      * @return true if the level is unlocked.
      */
     public boolean isUnlocked() {
-        if (unlockedLevels == null) {
-            unlockedLevels = Controller.getController().loadUnlockedLevels();
+        if (needToRefreshUnlockedLevel) {
+            Controller.loadUnlockedLevels();
+            needToRefreshUnlockedLevel = false;
         }
-        return unlockedLevels.contains(getId());
+        return level.isUnlocked();
     }
-    public static void resetUnlockedLevels() { unlockedLevels = null; }
+    public static void resetUnlockedLevels() { needToRefreshUnlockedLevel = true; }
 
     // FUNCTIONS ---------------------------------------------------------------
     public static void clearList() { levelButtonList = null; }

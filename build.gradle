@@ -19,6 +19,24 @@ buildscript {
     }
 }
 
+task writeAllAssetsToFile {
+    doLast {
+        // projectfolder/assets
+        def assetsFolder = new File("${project.rootDir}/assets/")
+        // projectfolder/assets/assets.txt
+        def assetsFile = new File(assetsFolder, "assets.txt")
+        // delete that file in case we've already created it
+        assetsFile.delete()
+
+        // iterate through all files inside that folder
+        // convert it to a relative path
+        // and append it to assets.txt the file
+        fileTree(assetsFolder).collect {assetsFolder.relativePath(it) }.each {
+            assetsFile.append(it + "\n")
+        }
+    }
+}
+
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "com.diffplug.spotless"
@@ -100,20 +118,20 @@ project(":desktop") {
 //     }
 // }
 
-project(":ios") {
-    apply plugin: "java-library"
-    apply plugin: "robovm"
+// project(":ios") {
+//     apply plugin: "java-library"
+//     apply plugin: "robovm"
 
 
-    dependencies {
-        implementation project(":core")
-        api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
-        api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-    }
-}
+//     dependencies {
+//         implementation project(":core")
+//         api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+//         api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+//         api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+//         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+//         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+//     }
+// }
 
 // project(":html") {
 //     apply plugin: "java-library"
@@ -137,7 +155,7 @@ project(":core") {
     apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "jacoco"
-
+    compileJava.dependsOn writeAllAssetsToFile
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -159,7 +177,8 @@ project(":core") {
             //cf https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLogging.html
             // maxGranularity 3
             // minGranularity 2
-            // showStackTraces true
+            showStackTraces true
+            exceptionFormat "full"
         }
 
         finalizedBy jacocoTestReport // report is always generated after tests run

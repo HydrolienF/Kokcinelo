@@ -2,7 +2,6 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.usual.Os;
-import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -152,7 +151,7 @@ public class Files {
     public static String loadUniqueCharFromTranslationFiles() {
         // TODO PERF save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
         Set<Character> set = new HashSet<Character>();
-        String s = loadContentOfFile(Gdx.files.internal("languages/").file());
+        String s = loadContentOfFile(Gdx.files.internal("languages/"), true);
         s += FreeTypeFontGenerator.DEFAULT_CHARS;
         s += "\0";
         for (char c : s.toCharArray()) {
@@ -166,19 +165,70 @@ public class Files {
     }
     /**
      * Load the content of a file and all its subfiles. (And subsubfiles, and subsubsubfiles, etc.)
+     * Don't work for internal files.
      * 
      * @param file the file were to search.
      * @return all content of the file and its subfiles.
      */
-    public static String loadContentOfFile(File file) {
-        if (file.isDirectory()) {
+    public static String loadContentOfFile(FileHandle file, boolean fromAssets) {
+        if (fromAssets) {
             String s = "";
-            for (File f : file.listFiles()) {
-                s += loadContentOfFile(f);
+            for (FileHandle f : listSubFilesRecusvively(file.path())) {
+                s += f.readString();
             }
             return s;
         } else {
-            return Gdx.files.absolute(file.getAbsolutePath()).readString();
+            if (file.isDirectory()) {
+                String s = "";
+                for (FileHandle f : file.list()) {
+                    s += loadContentOfFile(f, fromAssets);
+                }
+                return s;
+            } else {
+                return file.readString();
+            }
         }
+    }
+
+    /**
+     * @param path the path of the directory to search
+     * @return all subfiles of a directory. (&#38; sub sub files, &38; sub sub sub files, etc.)
+     */
+    public static Set<String> listSubFilesPathsRecusvively(String path) {
+        Set<String> set = new HashSet<String>();
+        String[] AssetsNames = Gdx.files.internal("assets.txt").readString().split("\n");
+        for (String name : AssetsNames) {
+            if (name.startsWith(path)) {
+                set.add(name);
+            }
+        }
+        return set;
+    }
+    /**
+     * @param path the path of the directory to search
+     * @return all subfiles of a directory. (&#38; sub sub files, &38; sub sub sub files, etc.)
+     */
+    public static Set<FileHandle> listSubFilesRecusvively(String path) {
+        Set<FileHandle> set = new HashSet<FileHandle>();
+        for (String name : listSubFilesPathsRecusvively(path)) {
+            set.add(Gdx.files.internal(name));
+        }
+        return set;
+    }
+    /**
+     * @param path the path of the directory to search
+     * @return direct directory of a directory
+     */
+    public static Set<String> listSubDirectory(String path) {
+        Set<String> set = new HashSet<String>();
+        for (String name : listSubFilesPathsRecusvively(path)) {
+            if (name.contains("/")) {
+                String dirName = name.substring(0, name.lastIndexOf("/"));
+                if (dirName.length() > path.length()) { // avoid path or path+"/"
+                    set.add(dirName.substring(path.length()));
+                }
+            }
+        }
+        return set;
     }
 }

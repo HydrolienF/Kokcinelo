@@ -2,6 +2,8 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.Level;
+import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -173,6 +175,73 @@ public class ControllerTest extends Assertions {
         source.setCenterX(1000);
         source.setCenterY(100);
         assertTrue(almostEquals(0.91f, Controller.getSoundPan(source, target)));
+    }
+
+    @Test
+    public void testLoadUnlockedLevels() {
+        Controller.loadUnlockedLevels("");
+        onlyThisLevelAreUnlocked("1K");
+    }
+    @Test
+    public void testLoadUnlockedLevels2() {
+        Controller.loadUnlockedLevels(null);
+        onlyThisLevelAreUnlocked("1K");
+    }
+    @Test
+    public void testLoadUnlockedLevels3() {
+        Controller.loadUnlockedLevels("1K,0,1234567");
+        onlyThisLevelAreUnlocked("1K");
+    }
+    @Test
+    public void testLoadUnlockedLevels4() {
+        Controller.loadUnlockedLevels("1K,49,1234567");
+        onlyThisLevelAreUnlocked("1K");
+    }
+    @Test
+    public void testLoadUnlockedLevels5() {
+        Controller.loadUnlockedLevels("1K,50,1234567");
+        onlyThisLevelAreUnlocked("1K", "2K", "2F");
+    }
+    @Test
+    public void testLoadUnlockedLevels6() {
+        Controller.loadUnlockedLevels("1K,1,1234567\n2K,1,1234567");
+        onlyThisLevelAreUnlocked("1K", "2K");
+    }
+    @Test
+    public void testLoadUnlockedLevels7() {
+        Controller.loadUnlockedLevels("2K,1,1234567");
+        onlyThisLevelAreUnlocked("1K", "2K");
+    }
+    @Test
+    public void testLoadUnlockedLevels8() {
+        Controller.loadUnlockedLevels("2K,1,1234567\n\n\n\n\n");
+        onlyThisLevelAreUnlocked("1K", "2K");
+    }
+    @Test
+    public void testLoadUnlockedLevels9() {
+        Controller.loadUnlockedLevels("4K,1,1234567");
+        onlyThisLevelAreUnlocked("1K", "4K");
+    }
+    @Test
+    public void testLoadUnlockedLevels10() {
+        Controller.loadUnlockedLevels("4K,51,1234567");
+        onlyThisLevelAreUnlocked("1K", "4K", "5K");
+    }
+    @Test
+    public void testLoadUnlockedLevels11() {
+        Controller.loadUnlockedLevels("4K,51,1234567\n1K,51,1234567");
+        onlyThisLevelAreUnlocked("1K", "4K", "5K", "2K", "2F");
+    }
+
+    public void onlyThisLevelAreUnlocked(String... levelIds) {
+        Set<String> levelIdsSet = Set.of((levelIds));
+        for (Level level : Level.getLevelList()) {
+            if (levelIdsSet.contains(level.getId())) {
+                assertTrue(level.isUnlocked(), "levelId: " + level.getId());
+            } else {
+                assertFalse(level.isUnlocked(), "levelId: " + level.getId());
+            }
+        }
     }
 
 

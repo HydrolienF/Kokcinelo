@@ -16,8 +16,8 @@ public abstract class MapItem {
     /** Unique id for every MapItem */
     private final int id;
     private static int idCpt = 0;
-    private MapItemActor actor;
-    /** hit radius is used as an hitBox for interaction */
+    private final MapItemActor actor;
+    /** Hit radius is used as a hitBox for interaction */
     protected int hitRadius;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -59,7 +59,7 @@ public abstract class MapItem {
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override
-    public String toString() { return "" + id; }
+    public String toString() { return String.valueOf(id); }
     @Override
     public int hashCode() { return id; }
     /**
@@ -74,9 +74,7 @@ public abstract class MapItem {
         if (getClass() != obj.getClass())
             return false;
         MapItem other = (MapItem) obj;
-        if (id != other.id)
-            return false;
-        return true;
+        return id == other.id;
     }
 
     /***

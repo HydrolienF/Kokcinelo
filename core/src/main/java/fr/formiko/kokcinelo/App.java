@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +42,7 @@ public class App extends Game {
     public static List<String> SUPPORTED_LANGUAGES;
     public static Map<String, String> LANGUAGES_NAMES;
     public static Map<String, Integer> LANGUAGES_PERCENTAGES;
+    private static boolean withCloseButton;
 
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
@@ -56,6 +56,9 @@ public class App extends Game {
     }
     public App() { this(null, new NullNative()); }
 
+
+    public static boolean isWithCloseButton() { return withCloseButton; }
+    public static void setWithCloseButton(boolean withCloseButton) { App.withCloseButton = withCloseButton; }
     public static Map<String, String> getDataMap() { return data; }
     public static String getLanguage() { return data.get("language"); }
     /**
@@ -116,6 +119,7 @@ public class App extends Game {
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
+        Controller.getController().iniAssets();
         startNewGame();
     }
     /**
@@ -391,18 +395,16 @@ public class App extends Game {
     private static void calculateLanguagesPercentages() {
         LANGUAGES_PERCENTAGES = new HashMap<String, Integer>();
         int defaultLanguageKeys = Files.getNumberOfText("en");
-        File file = Gdx.files.internal("languages/").file();
-        if (file.exists() && file.isDirectory()) {
-            for (File subFile : file.listFiles()) {
-                String fileName = subFile.getName();
-                String t[] = fileName.split("\\.");
-                if (LANGUAGES_NAMES.containsKey(t[0])) { // if is a referenced language.
-                    int languageKeys = Files.getNumberOfText(t[0]);
-                    float percent = (float) languageKeys / (float) defaultLanguageKeys * 100;
-                    LANGUAGES_PERCENTAGES.put(t[0], (int) (percent));
-                }
+        for (FileHandle subFile : Files.listSubFilesRecusvively("languages/")) {
+            String fileName = subFile.name();
+            String t[] = fileName.split("\\.");
+            if (LANGUAGES_NAMES.containsKey(t[0])) { // if is a referenced language.
+                int languageKeys = Files.getNumberOfText(t[0]);
+                float percent = (float) languageKeys / (float) defaultLanguageKeys * 100;
+                LANGUAGES_PERCENTAGES.put(t[0], (int) (percent));
             }
-        } else {
+        }
+        if (!LANGUAGES_PERCENTAGES.containsKey("en")) {
             LANGUAGES_PERCENTAGES.put("en", 100);
         }
     }

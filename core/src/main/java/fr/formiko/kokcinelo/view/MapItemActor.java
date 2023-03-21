@@ -8,6 +8,7 @@ import fr.formiko.kokcinelo.tools.KTexture;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -62,8 +63,10 @@ public class MapItemActor extends SkeletonActor {
         }
         if (!textureRegionMap.containsKey(textureName)) {
             if (Gdx.files != null && textureName != null) {
-                textureRegionMap.put(textureName,
-                        new TextureRegion(new KTexture(Gdx.files.internal("images/Creatures/" + textureName + ".png"))));
+                FileHandle file = Gdx.files.internal("images/Creatures/" + textureName + ".png");
+                if (file.exists()) {
+                    textureRegionMap.put(textureName, new TextureRegion(new KTexture(file)));
+                }
             }
         }
         if (getTextureRegion() != null) {
@@ -71,11 +74,11 @@ public class MapItemActor extends SkeletonActor {
             setOrigin(Align.center);
         }
 
-        if (Controller.getController().getAssets().getSkeletonData(textureName) != null) {
+        if (Controller.getController() != null && Controller.getController().getAssets().getSkeletonData(textureName) != null) {
             Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
 
             skeleton.setPosition(getWidth() / 2, getHeight() / 2);
-            SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
+            SkeletonRenderer skeletonRenderer = new SkeletonRenderer(); // TODO maybe we can use a static one
             skeletonRenderer.setPremultipliedAlpha(true);
 
             AnimationStateData stateData = new AnimationStateData(Controller.getController().getAssets().getSkeletonData(textureName));
@@ -86,7 +89,11 @@ public class MapItemActor extends SkeletonActor {
 
             AnimationState animationState = new AnimationState(stateData);
             // different track index = animation are play at the same time, same track index = animation are play one after the other
-            animationState.addAnimation(0, "walk", true, 0);
+            try {
+                animationState.addAnimation(0, "walk", true, 0);
+            } catch (IllegalArgumentException e) {
+                animationState.addAnimation(0, "fly", true, 0);
+            }
             animationState.addAnimation(1, "default", true, 0);
 
             setRenderer(skeletonRenderer);
@@ -116,7 +123,7 @@ public class MapItemActor extends SkeletonActor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         // super.draw(batch, parentAlpha);
-        if (getTextureRegion() == null) {
+        if (getTextureRegion() == null && getSkeleton() == null) {
             return;
         }
         Color color = getColor();
@@ -155,8 +162,8 @@ public class MapItemActor extends SkeletonActor {
                     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
                     pixmap.setColor(Color.WHITE);
                     pixmap.drawPixel(0, 0);
-                    Texture texture = new Texture(pixmap);
-                    pixmap.dispose(); // dispose later
+                    Texture texture = new Texture(pixmap); // remember to dispose of later
+                    pixmap.dispose();
                     TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
                     shapeDrawer = new ShapeDrawer(batch, region);
                 }
