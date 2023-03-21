@@ -2,7 +2,6 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.usual.Os;
-import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -152,7 +151,7 @@ public class Files {
     public static String loadUniqueCharFromTranslationFiles() {
         // TODO PERF save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
         Set<Character> set = new HashSet<Character>();
-        String s = loadContentOfFile(Gdx.files.internal("languages/").file());
+        String s = loadContentOfFile(Gdx.files.internal("languages/"));
         s += FreeTypeFontGenerator.DEFAULT_CHARS;
         s += "\0";
         for (char c : s.toCharArray()) {
@@ -170,15 +169,15 @@ public class Files {
      * @param file the file were to search.
      * @return all content of the file and its subfiles.
      */
-    public static String loadContentOfFile(File file) {
+    public static String loadContentOfFile(FileHandle file) {
         if (file.isDirectory()) {
             String s = "";
-            for (File f : file.listFiles()) {
+            for (FileHandle f : file.list()) {
                 s += loadContentOfFile(f);
             }
             return s;
         } else {
-            return Gdx.files.absolute(file.getAbsolutePath()).readString();
+            return file.readString();
         }
     }
 }
