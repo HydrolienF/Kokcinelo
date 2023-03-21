@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,6 +119,7 @@ public class App extends Game {
         Gdx.app.setLogLevel(logLevel);
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
+        Controller.getController().iniAssets();
         startNewGame();
     }
     /**
@@ -395,18 +395,16 @@ public class App extends Game {
     private static void calculateLanguagesPercentages() {
         LANGUAGES_PERCENTAGES = new HashMap<String, Integer>();
         int defaultLanguageKeys = Files.getNumberOfText("en");
-        File file = Gdx.files.internal("languages/").file();
-        if (file.exists() && file.isDirectory()) {
-            for (File subFile : file.listFiles()) {
-                String fileName = subFile.getName();
-                String t[] = fileName.split("\\.");
-                if (LANGUAGES_NAMES.containsKey(t[0])) { // if is a referenced language.
-                    int languageKeys = Files.getNumberOfText(t[0]);
-                    float percent = (float) languageKeys / (float) defaultLanguageKeys * 100;
-                    LANGUAGES_PERCENTAGES.put(t[0], (int) (percent));
-                }
+        for (FileHandle subFile : Files.listSubFilesRecusvively("languages/")) {
+            String fileName = subFile.name();
+            String t[] = fileName.split("\\.");
+            if (LANGUAGES_NAMES.containsKey(t[0])) { // if is a referenced language.
+                int languageKeys = Files.getNumberOfText(t[0]);
+                float percent = (float) languageKeys / (float) defaultLanguageKeys * 100;
+                LANGUAGES_PERCENTAGES.put(t[0], (int) (percent));
             }
-        } else {
+        }
+        if (!LANGUAGES_PERCENTAGES.containsKey("en")) {
             LANGUAGES_PERCENTAGES.put("en", 100);
         }
     }

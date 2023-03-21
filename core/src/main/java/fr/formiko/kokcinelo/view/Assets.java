@@ -1,11 +1,12 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.tools.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.spine.AnimationStateData;
@@ -22,12 +23,12 @@ import com.esotericsoftware.spine.SkeletonJson;
 public class Assets implements Disposable {
     private Map<String, SkeletonData> skeletonDataMap = new HashMap<String, SkeletonData>();
     private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
+    private static final String DIRECTORY = "images/Creatures/";
 
     public Assets() {
-        for (FileHandle child : Gdx.files.internal("images/Creatures/").list()) {
-            if (child.isDirectory()) {
-                loadAsset(child.name());
-            }
+        for (String childName : Files.listSubDirectory(DIRECTORY)) {
+            App.log(1, "Load asset " + childName);
+            loadAsset(childName);
         }
     }
 
@@ -40,11 +41,11 @@ public class Assets implements Disposable {
      * @param assetName asset name
      */
     public void loadAsset(String assetName) {
-        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("images/Creatures/" + assetName + "/" + assetName + ".atlas"));
+        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal(DIRECTORY + assetName + "/" + assetName + ".atlas"));
         texturesAtlasSet.add(textureAtlas);
 
         SkeletonJson json = new SkeletonJson(textureAtlas);
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("images/Creatures/" + assetName + "/skeleton.json"));
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(DIRECTORY + assetName + "/skeleton.json"));
 
         AnimationStateData animationData = new AnimationStateData(skeletonData);
         // Define default time between 2 animations

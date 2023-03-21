@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -20,6 +21,10 @@ public class GreenAnt extends Ant {
         shootPoints = 25;
         shootFrequency = 2000;
         shootRadius = (int) visionRadius + 200;
-        getActor().getSkeleton().setSkin("green");
+        if (getActor() != null && getActor().getSkeleton() != null) {
+            getActor().getSkeleton().setSkin("green");
+        } else {
+            App.log(3, "GreenAnt skeleton is null");
+        }
     }
 }

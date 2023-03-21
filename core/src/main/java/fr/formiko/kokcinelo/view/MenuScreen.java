@@ -203,6 +203,7 @@ public class MenuScreen extends KScreen implements Screen {
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
+                // TODO there is an error with .jar
                 App.log(3, "MenuScreen", "Error while creating creature: " + e);
             }
             MapItemActor cActor = c.getActor();

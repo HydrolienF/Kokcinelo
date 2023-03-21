@@ -54,7 +54,7 @@ public class Controller {
         this.app = app;
         controller = this;
         toRemove = new HashSet<Creature>();
-        assets = new Assets();
+        // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
 
@@ -74,6 +74,7 @@ public class Controller {
     public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
+    public void iniAssets() { assets = new Assets(); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
