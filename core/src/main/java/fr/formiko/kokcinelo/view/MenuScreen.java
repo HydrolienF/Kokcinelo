@@ -285,7 +285,7 @@ public class MenuScreen extends KScreen implements Screen {
         }
         stage.addActor(centerTable);
 
-        // stage.setDebugAll(true);
+        stage.setDebugAll(Controller.isDebug());
         addProcessor(stage);
 
     }

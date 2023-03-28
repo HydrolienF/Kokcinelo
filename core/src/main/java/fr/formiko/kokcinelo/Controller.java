@@ -15,6 +15,7 @@ import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
 import fr.formiko.kokcinelo.view.VideoScreen;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -43,6 +44,7 @@ public class Controller {
     private Set<Creature> toRemove;
     private Assets assets;
     private static Controller controller;
+    private static boolean isDebug;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -53,6 +55,7 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
+        // isDebug = true; //@a
         toRemove = new HashSet<Creature>();
         // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
@@ -75,6 +78,11 @@ public class Controller {
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
     public void iniAssets() { assets = new Assets(); }
+    public static boolean isDebug() { return isDebug; }
+    public static void setDebug(boolean isDebug) { Controller.isDebug = isDebug; }
+    // public only for tests
+    public GameState getGameState() { return gs; }
+    public void setGameState(GameState gs) { this.gs = gs; }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -213,6 +221,7 @@ public class Controller {
         switch (getLevelId()) {
         case "1K":
             gsb.setLadybugNumber(1);
+            // gsb.setLadybugNumber(2).setRedAntNumber(5); // @a
             break;
         case "2K":
             gsb.setLadybugNumber(1).setRedAntNumber(3);
@@ -244,7 +253,7 @@ public class Controller {
     }
     public void restartGame() { createNewGame(); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
-    public Iterable<Creature> allCreatures() { return gs.allCreatures(); }
+    public Collection<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
     public boolean isAllLadybugGone() { return gs.isAllLadybugGone(); }

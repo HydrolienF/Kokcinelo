@@ -64,7 +64,7 @@ public class GameScreen extends KScreen implements Screen {
         for (Actor a : Controller.getController().allActors()) {
             stage.addActor(a);
         }
-        // stage.setDebugAll(true);
+        stage.setDebugAll(Controller.isDebug());
 
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;

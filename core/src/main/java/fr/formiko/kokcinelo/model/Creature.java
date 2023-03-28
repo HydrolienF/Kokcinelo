@@ -33,6 +33,7 @@ public abstract class Creature extends MapItem {
 
     protected float lifePoints;
     protected float currentSpeed;
+    protected float defaultMoveFrontSpeed;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -43,6 +44,7 @@ public abstract class Creature extends MapItem {
     public Creature(String textureName) {
         super(textureName);
         wantedRotation = 0f;
+        defaultMoveFrontSpeed = 0.6f;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -70,6 +72,36 @@ public abstract class Creature extends MapItem {
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
+    /**
+     * Creature witch hunt this &#38; this can see it.
+     */
+    public Set<Creature> getVisibleCreatureHuntedBy() {
+        if (getCreaturesHuntedBy().isEmpty()) {
+            return Set.of();
+        }
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                .filter(c -> c.isInstanceOf(getCreaturesHuntedBy()))
+                .filter(c -> see(c))
+                .collect(HashSet::new, Set::add, Set::addAll);
+        // @formatter:on
+    }
+    /**
+     * Creature witch are hunted by this &#38; this can see it.
+     */
+    public Creature getClosestVisibleCreatureToHunt() {
+        if (getCreaturesToHunt().isEmpty()) {
+            return null;
+        }
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                .filter(c -> c.isInstanceOf(getCreaturesToHunt()))
+                .filter(c -> see(c))
+                // Compare distance to this.
+                .min((c1, c2) -> Float.compare(distanceTo(c1), distanceTo(c2)))
+                .orElse(null);
+        // @formatter:on
+    }
 
     // FUNCTIONS -----------------------------------------------------------------
     public String toString() {
@@ -144,9 +176,11 @@ public abstract class Creature extends MapItem {
      * @param v contains coordinate of Point to got to
      */
     public void goTo(Vector2 v) { goTo(v, 0f); }
+    public void goTo(MapItem mi) { goTo(mi.getCenter()); }
     /***
      * {@summary Set wanted rotation to run away from v.}
-     * To run away from we calculate angle to go to, then add 180 degre to go to the oposite direction.
+     * To run away from we calculate angle to go to the center of the enemies,
+     * then add 180 degre to go to the oposite direction.
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
@@ -199,7 +233,32 @@ public abstract class Creature extends MapItem {
      * 
      * @param gs GameState to use
      */
-    public abstract void moveAI(GameState gs);
+    public int moveAI(GameState gs) {
+        int moveStatus;
+        Collection<Creature> enemies = getVisibleCreatureHuntedBy();
+        if (!enemies.isEmpty()) {
+            // Run away move
+            // enemies.add(); //TODO add walls if needed.
+            runAwayFrom(enemies.stream().map(c -> new Vector2(c.getCenterX(), c.getCenterY())).toArray(Vector2[]::new));
+            moveFront();
+            moveStatus = 2;
+        } else {
+            Creature target = getClosestVisibleCreatureToHunt();
+            if (target != null) {
+                // Hunt move
+                goTo(target);
+                moveFront();
+                moveStatus = 1;
+            } else {
+                // Normal move
+                minorRandomRotation(0.02);
+                moveFront(defaultMoveFrontSpeed);
+                moveStatus = 0;
+            }
+        }
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
+        return moveStatus;
+    }
 
     /**
      * {@summary Check if the Creature is in the map &#38; move inside if needed.}
@@ -267,4 +326,13 @@ public abstract class Creature extends MapItem {
     }
     /** Return true if is an AI. */
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
+
+    private boolean isInstanceOf(Collection<Class<? extends Creature>> coll) {
+        for (Class<? extends Creature> clss : coll) {
+            if (clss.isInstance(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

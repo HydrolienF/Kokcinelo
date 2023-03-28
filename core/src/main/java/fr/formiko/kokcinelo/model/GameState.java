@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -111,7 +112,7 @@ public class GameState {
      * 
      * @return All creatures: aphids + ants + ladybugs + acid drop
      */
-    public Iterable<Creature> allCreatures() {
+    public Collection<Creature> allCreatures() {
         List<Creature> l = new LinkedList<Creature>();
         l.addAll(aphids);
         l.addAll(ladybugs);
@@ -126,7 +127,7 @@ public class GameState {
      * 
      * @return ants &#38; ladybugs
      */
-    public Iterable<Creature> getAntsAndLadybugs() {
+    public Collection<Creature> getAntsAndLadybugs() {
         List<Creature> l = new LinkedList<Creature>();
         l.addAll(ants);
         l.addAll(ladybugs);
@@ -138,7 +139,7 @@ public class GameState {
      * 
      * @return all actors to draw
      */
-    public Iterable<Actor> allActors() {
+    public Collection<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
         if (mapActorBg != null) {
             l.add(mapActorBg);
@@ -217,6 +218,7 @@ public class GameState {
                     while (k < 20 && (pc.see(c) || c.see(pc))) {
                         App.log(1, "Move out " + c.getId() + " to avoid player to see it");
                         c.setRandomLoaction(getMapWidth(), getMapHeight());
+                        k++;
                     }
                     if (pc.see(c) || c.see(pc)) {
                         App.log(2, "Can't find a location for c in " + k + " try");
@@ -287,6 +289,9 @@ public class GameState {
                 App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
                 p = new Player(gs.ladybugs.get(0));
                 break;
+            }
+            if (Controller.isDebug()) {
+                p.getPlayedCreature().setVisionRadius(mapWidth);
             }
             if (level.getNumber() > 1) {
                 // boost player so that it can manage several enemies.
@@ -424,7 +429,7 @@ public class GameState {
                     // | NoSuchMethodException | SecurityException e) {
                 } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    App.log(3, "", "Fail to add a new Creature", e);
+                    App.log(3, "Fail to add a new Creature " + e);
                     e.printStackTrace();
                 }
             }
