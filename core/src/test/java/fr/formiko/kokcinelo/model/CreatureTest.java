@@ -197,16 +197,18 @@ public class CreatureTest extends Assertions {
         assertNull(a.getClosestVisibleCreatureToHunt());
     }
 
+    // Test for runAwayFrom are mostly graphics test
 
-    // @Test
-    // void testRunAwayFromSeveralEnemies() {
-    // Creature c = new CreatureX();
-    // c.setMovingSpeed(5f);
-    // c.setCenter(0, 0);
-    // c.setRotation(0);
-    // c.runAwayFrom(new Vector2(1, 1), new Vector2(-1, 1));
-    // almostEquals(180, c.getWantedRotation()); // isn't it a bug ? It should be 180° not 0°
-    // }
+
+    @Test
+    void testRunAwayFromSeveralEnemies() {
+        Creature c = new CreatureX();
+        c.setMovingSpeed(5f);
+        c.setCenter(0, 0);
+        c.setRotation(0);
+        c.runAwayFrom(new Vector2(1, 1), new Vector2(-1, 1));
+        almostEquals(0, c.getWantedRotation());
+    }
 
 
     class CreatureX extends Creature {

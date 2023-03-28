@@ -329,18 +329,14 @@ public class App extends Game {
                 arg = arg.substring(1);
             }
             switch (arg) {
-            // case "version", "v": { //HTML INCOMPATIBLE
-            case "version":
-            case "v": {
+            case "version", "v": { // HTML INCOMPATIBLE
                 FileHandle versionFile = Gdx.files.internal("version.md");
                 System.out.println(versionFile.readString());
                 // System.exit(0); //HTML INCOMPATIBLE
                 Gdx.app.exit();
                 break;
             }
-            // case "quiet", "q": { //HTML INCOMPATIBLE
-            case "quiet":
-            case "q": {
+            case "quiet", "q": {
                 logLevel = Application.LOG_NONE;
                 break;
             }
@@ -351,6 +347,10 @@ public class App extends Game {
             case "launchFromLauncher": {
                 launchFromLauncher = true;
                 logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
+                break;
+            }
+            case "graphicsTest", "gt": {
+                Controller.setGraphicsTest(true);
                 break;
             }
             default: {

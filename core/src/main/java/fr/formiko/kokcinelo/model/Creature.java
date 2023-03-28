@@ -1,8 +1,10 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -163,11 +165,20 @@ public abstract class Creature extends MapItem {
      * @param degdif Degre difference to go to
      */
     public void goTo(Vector2 v, float degdif) {
-        // Update wantedRotation
+        // // Update wantedRotation
+        // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        // float previousRotation = getRotation() % 360;
+        // float newRotation = v2.angleDeg() - 90;
+        // float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        // setWantedRotation(wantedRotation);
         Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
-        float previousRotation = getRotation() % 360;
         float newRotation = v2.angleDeg() - 90;
-        float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        goTo(newRotation - degdif);
+    }
+    public void goTo(float newRotation) {
+        // Update wantedRotation
+        float previousRotation = getRotation() % 360;
+        float wantedRotation = (previousRotation - newRotation + 360) % 360;
         setWantedRotation(wantedRotation);
     }
     /***
@@ -184,25 +195,52 @@ public abstract class Creature extends MapItem {
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(Vector2... vectorList) {
+    public void runAwayFrom(Set<Vector2> forbiddenAngles, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
         } else if (vectorList.length == 1) {
             goTo(vectorList[0], 180f);
         } else if (vectorList.length > 2) {
-            float x = 0;
-            float y = 0;
-            int cpt = 0;
-            for (Vector2 v2 : vectorList) {
-                x += v2.x;
-                y += v2.y;
-                cpt++;
+
+            // v1 run from the center of the enemis
+            // float x = 0;
+            // float y = 0;
+            // int cpt = 0;
+            // for (Vector2 v2 : vectorList) {
+            // x += v2.x;
+            // y += v2.y;
+            // cpt++;
+            // }
+            // runAwayFrom(new Vector2(x / cpt, y / cpt));
+
+            // v2 run by the biggest angle
+            // TODO also avoid wall by checking if the angle is in forbiddenAngles
+            List<Float> angles = new ArrayList<Float>();
+            for (Vector2 v : vectorList) {
+                Vector2 vAngle = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+                angles.add(vAngle.angleDeg());
             }
-            runAwayFrom(new Vector2(x / cpt, y / cpt));
+            angles.sort((a1, a2) -> Float.compare(a1, a2));
+            // App.log(2, "angles : " + angles);
+
+            float maxAngleDif = 0;
+            float direction = 0;
+            List<Float> anglesDif = new ArrayList<Float>();
+            float lastAngle = angles.get(angles.size() - 1);
+            for (float angle : angles) {
+                float angleDif = (angle - lastAngle + 360) % 360;
+                if (angleDif > maxAngleDif) {
+                    maxAngleDif = angleDif;
+                    direction = angle - angleDif / 2;
+                }
+                anglesDif.add(angleDif);
+                lastAngle = angle;
+            }
+            // App.log(2, "anglesDif : " + anglesDif);
+            // App.log(2, "direction:" + direction);
+            goTo(direction - 90);
         }
     }
-
-    // TODO #140 a way to fix it is to be able to run away from multiple enemis
 
     /**
      * {@summary Return the closest Creature from the collection.}
@@ -238,8 +276,8 @@ public abstract class Creature extends MapItem {
         Collection<Creature> enemies = getVisibleCreatureHuntedBy();
         if (!enemies.isEmpty()) {
             // Run away move
-            // enemies.add(); //TODO add walls if needed.
-            runAwayFrom(enemies.stream().map(c -> new Vector2(c.getCenterX(), c.getCenterY())).toArray(Vector2[]::new));
+            Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
+            runAwayFrom(getSetOfWallAngle(), vectors);
             moveFront();
             moveStatus = 2;
         } else {
@@ -258,6 +296,11 @@ public abstract class Creature extends MapItem {
         }
         stayInMap(gs.getMapWidth(), gs.getMapHeight());
         return moveStatus;
+    }
+    public Set<Vector2> getSetOfWallAngle() {
+        Set<Vector2> set = new HashSet<Vector2>();
+        // TODO get a set (max 2 value) of wall angle to avoid
+        return set;
     }
 
     /**

@@ -45,6 +45,8 @@ public class Controller {
     private Assets assets;
     private static Controller controller;
     private static boolean isDebug;
+    private static boolean graphicsTest;
+
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -80,6 +82,8 @@ public class Controller {
     public void iniAssets() { assets = new Assets(); }
     public static boolean isDebug() { return isDebug; }
     public static void setDebug(boolean isDebug) { Controller.isDebug = isDebug; }
+    public static boolean isGraphicsTest() { return graphicsTest; }
+    public static void setGraphicsTest(boolean graphicsTest) { Controller.graphicsTest = graphicsTest; }
     // public only for tests
     public GameState getGameState() { return gs; }
     public void setGameState(GameState gs) { this.gs = gs; }
@@ -99,7 +103,15 @@ public class Controller {
         toRemove.clear();
     }
 
-    public void startApp() { createNewMenuScreen(); }
+    public void startApp() {
+        if (isGraphicsTest()) {
+            setDebug(true);
+            level = Level.getLevel("1K");
+            createNewGame();
+        } else {
+            createNewMenuScreen();
+        }
+    }
 
     private void createNewVideoScreen() { setScreen(new VideoScreen(getLevelId())); }
     /**
@@ -221,7 +233,6 @@ public class Controller {
         switch (getLevelId()) {
         case "1K":
             gsb.setLadybugNumber(1);
-            // gsb.setLadybugNumber(2).setRedAntNumber(5); // @a
             break;
         case "2K":
             gsb.setLadybugNumber(1).setRedAntNumber(3);
@@ -241,8 +252,31 @@ public class Controller {
                     .build();
             break;
         }
+        if (isGraphicsTest()) {
+            gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(5).setAphidNumber(10);
+        }
         gs = gsb.build();
         gs.moveAIAwayFromPlayers();
+        if (isGraphicsTest()) {
+            int dist = 250;
+            int center = 1000;
+
+            Creature playerCreature = gs.getPlayerCreature(getLocalPlayerId());
+            playerCreature.setCenter(center, center);
+            playerCreature.setMovingSpeed(0);
+            playerCreature.die();
+
+            gs.getLadybugs().get(1).setCenter(center, center);
+            // gs.getLadybugs().get(1).setRotation(90);
+            gs.getAnts().get(0).setCenter(center, center + dist);
+            gs.getAnts().get(1).setCenter(center + dist, center + dist);
+            gs.getAnts().get(2).setCenter(center + dist, center);
+            gs.getAnts().get(3).setCenter(center + dist, center - dist);
+            gs.getAnts().get(4).setCenter(center - dist, center);
+            for (Creature c : gs.allCreatures()) {
+                c.setMovingSpeed(0.05f);
+            }
+        }
         app.setScreen(new GameScreen(app));
         Musics.play();
         App.log(1, "start new Game");
