@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "uCY1iPxbEIs",
+	"hash": "MNc5MK1MUwE",
 	"spine": "4.1.19",
 	"x": -3226.23,
 	"y": -3427.28,
@@ -286,7 +286,9 @@
 		"x": 407.92,
 		"y": -0.51,
 		"color": "ff7f00ff"
-	}
+	},
+	{ "name": "abdomen shooting", "parent": "abdomen", "length": 1000, "color": "0003ffff" },
+	{ "name": "abdomen default", "parent": "abdomen", "length": 1000, "color": "0003ffff" }
 ],
 "slots": [
 	{ "name": "leg tarsus r 3", "bone": "leg tarsus r 3", "attachment": "leg tarsus r" },
@@ -320,7 +322,8 @@
 	{ "name": "mandible l", "bone": "mandible l", "attachment": "mandible" },
 	{ "name": "head", "bone": "head", "attachment": "head" },
 	{ "name": "postpetiole", "bone": "postpetiole", "attachment": "postpetiole" },
-	{ "name": "abdomen", "bone": "abdomen", "attachment": "abdomen" },
+	{ "name": "abdomen", "bone": "abdomen default", "attachment": "abdomen" },
+	{ "name": "abdomen shooting", "bone": "abdomen shooting" },
 	{ "name": "scape r", "bone": "antenna r", "attachment": "scape r" },
 	{ "name": "scape l", "bone": "antenna l", "attachment": "scape r" },
 	{ "name": "funiculus r", "bone": "funiculus r", "attachment": "funiculus r" },
@@ -332,6 +335,9 @@
 		"attachments": {
 			"abdomen": {
 				"abdomen": { "x": -132.8, "scaleX": 0.9, "scaleY": 0.9, "rotation": 90, "width": 3600, "height": 4800 }
+			},
+			"abdomen shooting": {
+				"abdomen shooting": { "x": -132.8, "rotation": 90, "width": 3600, "height": 4800 }
 			},
 			"funiculus l": {
 				"funiculus r": { "x": 174.96, "y": -651.96, "scaleX": -1, "rotation": -86, "width": 3200, "height": 3200 }
@@ -513,6 +519,53 @@
 						"curve": [ 0.556, 10, 0.611, 3.33 ]
 					},
 					{ "time": 0.6667 }
+				]
+			}
+		}
+	},
+	"shoot": {
+		"slots": {
+			"abdomen": {
+				"attachment": [
+					{ "time": 0.1 },
+					{ "time": 0.2667, "name": "abdomen" }
+				]
+			},
+			"abdomen shooting": {
+				"attachment": [
+					{ "time": 0.1, "name": "abdomen shooting" },
+					{ "time": 0.2667 }
+				]
+			}
+		},
+		"bones": {
+			"abdomen shooting": {
+				"scale": [
+					{
+						"time": 0.1,
+						"curve": [ 0.111, 0.967, 0.122, 0.9, 0.111, 1, 0.122, 1 ]
+					},
+					{ "time": 0.1333, "x": 0.9, "curve": "stepped" },
+					{
+						"time": 0.2,
+						"x": 0.9,
+						"curve": [ 0.211, 0.9, 0.222, 0.967, 0.211, 1, 0.222, 1 ]
+					},
+					{ "time": 0.2333 }
+				]
+			},
+			"abdomen default": {
+				"scale": [
+					{
+						"curve": [ 0.022, 1, 0.039, 0.916, 0.022, 1, 0.044, 1 ]
+					},
+					{ "time": 0.0667, "x": 0.9, "curve": "stepped" },
+					{
+						"time": 0.2667,
+						"x": 0.9,
+						"curve": [ 0.289, 0.9, 0.311, 1, 0.289, 1, 0.311, 1 ]
+					},
+					{ "time": 0.3333 }
 				]
 			}
 		}

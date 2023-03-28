@@ -262,6 +262,7 @@ public abstract class Creature extends MapItem {
      */
     public void shoot() {
         lastShootTime = System.currentTimeMillis();
+        getActor().animate("shoot", 6);
         // App.log(1, this + " shoot " + c);
     }
     /** Return true if is an AI. */

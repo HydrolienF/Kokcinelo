@@ -1,76 +1,84 @@
 ant.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 abdomen
-bounds:2,2,792,1080
+bounds:800,4,792,1080
 offsets:1404,1200,3600,4800
-funiculus r
-bounds:796,2,94,627
-offsets:2192,1457,3200,3200
+abdomen shooting
+bounds:4,4,784,690
+offsets:1408,1591,3600,4800
 
 ant_2.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
+funiculus r
+bounds:4,4,94,627
+offsets:2192,1457,3200,3200
 head
-bounds:2,2,557,513
+bounds:800,4,557,513
 offsets:1521,3437,3600,4800
-leg coxa r
-bounds:796,2,203,157
-offsets:1846,2520,3600,4800
 
 ant_3.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
+leg coxa r
+bounds:4,4,203,157
+offsets:1846,2520,3600,4800
 leg femur r
-bounds:2,2,296,485
+bounds:800,4,296,485
 offsets:1981,2105,3600,4800
-leg tarsus r
-bounds:796,2,266,648
-offsets:2476,1212,3600,4800
 
 ant_4.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
+leg tarsus r
+bounds:4,4,266,648
+offsets:2476,1212,3600,4800
 leg tibia r
-bounds:2,2,341,386
+bounds:800,4,341,386
 offsets:2212,1777,3600,4800
-mandible r
-bounds:796,2,165,101
-offsets:1802,3914,3600,4800
 
 ant_5.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
+mandible r
+bounds:4,4,165,101
+offsets:1802,3914,3600,4800
 mandible red r
-bounds:2,2,159,245
+bounds:800,4,159,245
 offsets:1801,3905,3600,4800
-petiol
-bounds:796,2,217,221
-offsets:1691,2366,3600,4800
 
 ant_6.png
-size:1590,1084
+size:1596,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
+petiol
+bounds:4,4,217,221
+offsets:1691,2366,3600,4800
 postpetiole
-bounds:2,2,269,197
+bounds:800,4,269,197
 offsets:1667,2192,3600,4800
-scape r
-bounds:796,2,601,114
-offsets:1676,1398,3200,3200
 
 ant_7.png
-size:1590,1084
+size:1596,1088
+filter:MipMapLinearLinear,MipMapLinearLinear
+pma:true
+scape r
+bounds:4,4,601,114
+offsets:1676,1398,3200,3200
+thorax color
+bounds:800,4,714,813
+offsets:2643,3021,6000,6500
+
+ant_8.png
+size:800,1088
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 thorax
-bounds:796,2,608,980
+bounds:4,4,608,980
 offsets:1496,2493,3600,4800
-thorax color
-bounds:2,2,714,813
-offsets:2643,3021,6000,6500
