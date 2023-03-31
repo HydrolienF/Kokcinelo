@@ -76,6 +76,7 @@ public class MenuScreen extends KScreen implements Screen {
     private static List<Actor> creatureImages;
     private boolean playingVideo = false;
     private long timePlayingVideo;
+    private int fullVideoTime = 10000;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -150,8 +151,8 @@ public class MenuScreen extends KScreen implements Screen {
                     actor.setY(actor.getY() + modifY);
                 }
             }
-            int sec = 1;
-            if (timePlayingVideo < System.currentTimeMillis() - 1000 * sec) {
+            // TODO last visible actor need to act while video is playing.
+            if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
                 Controller.getController().endMenuScreen();
             }
         }
