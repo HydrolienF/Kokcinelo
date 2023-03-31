@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,7 +114,8 @@ public abstract class Creature extends MapItem {
                 + wantedRotation + "\n" + "lastHitTime : " + lastHitTime + "\n" + "lastShootTime : " + lastShootTime + "\n"
                 + "hitFrequency : " + hitFrequency + "\n" + "shootFrequency : " + shootFrequency + "\n";
     }
-    public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
+    /** Do this see mi */
+    public boolean see(MapItem mi) { return isInRadius(mi, visionRadius + mi.getHitRadius()); }
     /**
      * {@summary Boost the creature.}
      */
@@ -165,15 +167,15 @@ public abstract class Creature extends MapItem {
      * @param degdif Degre difference to go to
      */
     public void goTo(Vector2 v, float degdif) {
-        // // Update wantedRotation
-        // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
-        // float previousRotation = getRotation() % 360;
-        // float newRotation = v2.angleDeg() - 90;
-        // float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
-        // setWantedRotation(wantedRotation);
+        // Update wantedRotation
         Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        float previousRotation = getRotation() % 360;
         float newRotation = v2.angleDeg() - 90;
-        goTo(newRotation - degdif);
+        float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        setWantedRotation(wantedRotation);
+        // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        // float newRotation = v2.angleDeg() - 90;
+        // goTo(newRotation - degdif);
     }
     public void goTo(float newRotation) {
         // Update wantedRotation
@@ -188,14 +190,14 @@ public abstract class Creature extends MapItem {
      */
     public void goTo(Vector2 v) { goTo(v, 0f); }
     public void goTo(MapItem mi) { goTo(mi.getCenter()); }
-    /***
+    /**
      * {@summary Set wanted rotation to run away from v.}
      * To run away from we calculate angle to go to the center of the enemies,
      * then add 180 degre to go to the oposite direction.
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(Set<Vector2> forbiddenAngles, Vector2... vectorList) {
+    public void runAwayFrom(float forbiddenAngleFrom, float forbiddenAngleTo, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
         } else if (vectorList.length == 1) {
@@ -275,9 +277,11 @@ public abstract class Creature extends MapItem {
         int moveStatus;
         Collection<Creature> enemies = getVisibleCreatureHuntedBy();
         if (!enemies.isEmpty()) {
+            App.log(2, "enemies : " + enemies);
             // Run away move
             Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
-            runAwayFrom(getSetOfWallAngle(), vectors);
+            Vector2 wallAngle = getWallAngle();
+            runAwayFrom(wallAngle.x, wallAngle.y, vectors);
             moveFront();
             moveStatus = 2;
         } else {
@@ -297,10 +301,9 @@ public abstract class Creature extends MapItem {
         stayInMap(gs.getMapWidth(), gs.getMapHeight());
         return moveStatus;
     }
-    public Set<Vector2> getSetOfWallAngle() {
-        Set<Vector2> set = new HashSet<Vector2>();
-        // TODO get a set (max 2 value) of wall angle to avoid
-        return set;
+    public Vector2 getWallAngle() {
+        // TODO return vector of wall angle to avoid
+        return new Vector2(0, 0);
     }
 
     /**

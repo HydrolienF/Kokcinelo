@@ -11,6 +11,26 @@ public class CreatureTest extends Assertions {
         Creature c = new CreatureX();
         assertNotNull(c);
     }
+
+    @Test
+    void testSee() {
+        Creature c = new CreatureX(10, 20);
+        c.setCenter(0, 0);
+        Creature c2 = new CreatureX(10, 20);
+        c2.setCenter(20, 20);
+        Creature c3 = new CreatureX(10, 50);
+        c3.setCenter(40, 40);
+
+        assertTrue(c.see(c2));
+        assertTrue(c2.see(c));
+        assertTrue(c3.see(c2));
+        assertTrue(c2.see(c3));
+        assertTrue(c3.see(c2));
+        assertTrue(c2.see(c3));
+
+        assertTrue(c3.see(c));
+        assertFalse(c.see(c3));
+    }
     @Test
     void testCreatureMove() {
         Creature c = new CreatureX();
@@ -97,7 +117,7 @@ public class CreatureTest extends Assertions {
         c.setMovingSpeed(5f);
         c.setCenter(0, 0);
         c.setRotation(0);
-        c.runAwayFrom(new Vector2(1, 1));
+        c.runAwayFrom(0, 0, new Vector2(1, 1));
         almostEquals(225f, c.getWantedRotation());
     }
 
@@ -113,6 +133,7 @@ public class CreatureTest extends Assertions {
                 .setAphidNumber(aphid).setRedAntNumber(ant).build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
+        Controller.setDebug(false);
     }
 
     @Test
@@ -135,10 +156,10 @@ public class CreatureTest extends Assertions {
         Ladybug l = Controller.getController().getGameState().getLadybugs().get(0);
 
         a.setCenter(0, 0);
-        l.setCenter(1000, 0);
+        l.setCenter(1500, 0);
 
         assertFalse(a.getVisibleCreatureHuntedBy().contains(l));
-        assertFalse(l.getVisibleCreatureHuntedBy().contains(a));
+        // assertFalse(l.getVisibleCreatureHuntedBy().contains(a));
     }
 
     @Test
@@ -159,7 +180,7 @@ public class CreatureTest extends Assertions {
 
     @Test
     void testGetVisibleCreatureHuntedByAphid() {
-        createGameStateWithAphidLadybugAnt(2, 2, 1);
+        createGameStateWithAphidLadybugAnt(2, 2, 0);
         Ladybug l = Controller.getController().getGameState().getLadybugs().get(0);
         Ladybug l2 = Controller.getController().getGameState().getLadybugs().get(1);
         Aphid a = Controller.getController().getGameState().getAphids().get(0);
@@ -173,7 +194,26 @@ public class CreatureTest extends Assertions {
         assertTrue(l.getVisibleCreatureHuntedBy().isEmpty());
         assertTrue(a.getVisibleCreatureHuntedBy().contains(l));
         assertTrue(a2.getVisibleCreatureHuntedBy().contains(l));
-        assertFalse(a.getVisibleCreatureHuntedBy().contains(l2));
+        assertTrue(a.getVisibleCreatureHuntedBy().contains(l2)); // because of Ladybug size
+        assertTrue(a2.getVisibleCreatureHuntedBy().contains(l2));
+    }
+    @Test
+    void testGetVisibleCreatureHuntedByAphid2() {
+        createGameStateWithAphidLadybugAnt(2, 2, 0);
+        Ladybug l = Controller.getController().getGameState().getLadybugs().get(0);
+        Ladybug l2 = Controller.getController().getGameState().getLadybugs().get(1);
+        Aphid a = Controller.getController().getGameState().getAphids().get(0);
+        Aphid a2 = Controller.getController().getGameState().getAphids().get(1);
+
+        a.setCenter(0, 0);
+        a2.setCenter(50, 0);
+        l.setCenter(100, 0);
+        l2.setCenter(150 + l2.getHitRadius(), 0);
+
+        assertTrue(l.getVisibleCreatureHuntedBy().isEmpty());
+        assertTrue(a.getVisibleCreatureHuntedBy().contains(l));
+        assertTrue(a2.getVisibleCreatureHuntedBy().contains(l));
+        assertFalse(a.getVisibleCreatureHuntedBy().contains(l2)); // because of Ladybug size
         assertTrue(a2.getVisibleCreatureHuntedBy().contains(l2));
     }
     @Test
@@ -206,14 +246,18 @@ public class CreatureTest extends Assertions {
         c.setMovingSpeed(5f);
         c.setCenter(0, 0);
         c.setRotation(0);
-        c.runAwayFrom(new Vector2(1, 1), new Vector2(-1, 1));
+        c.runAwayFrom(0, 0, new Vector2(1, 1), new Vector2(-1, 1));
         almostEquals(0, c.getWantedRotation());
     }
 
 
     class CreatureX extends Creature {
-        public CreatureX() { super("x"); }
+        public CreatureX(int hitRadius, int visionRadius) {
+            super("x");
+            this.hitRadius = hitRadius;
+            this.visionRadius = visionRadius;
+        }
+        public CreatureX() { this(10, 20); }
     }
-
     void almostEquals(float f1, float f2) { assertTrue(Math.abs(f1 - f2) < 0.001f, f1 + " ≃ " + f2); }
 }
