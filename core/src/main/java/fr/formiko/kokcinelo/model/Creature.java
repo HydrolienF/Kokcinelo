@@ -167,14 +167,14 @@ public abstract class Creature extends MapItem {
      */
     public void goTo(Vector2 v, float degdif) {
         // Update wantedRotation
-        Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
-        float previousRotation = getRotation() % 360;
-        float newRotation = v2.angleDeg() - 90;
-        float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
-        setWantedRotation(wantedRotation);
         // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        // float previousRotation = getRotation() % 360;
         // float newRotation = v2.angleDeg() - 90;
-        // goTo(newRotation - degdif);
+        // float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        // setWantedRotation(wantedRotation);
+        Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        float newRotation = v2.angleDeg() - 90;
+        goTo(newRotation - degdif);
     }
     public void goTo(float newRotation) {
         // Update wantedRotation
