@@ -196,7 +196,7 @@ public abstract class Creature extends MapItem {
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(float forbiddenAngleFrom, float forbiddenAngleTo, Vector2... vectorList) {
+    public void runAwayFrom(List<Float> forbidenAngles, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
         } else if (vectorList.length == 1) {
@@ -284,8 +284,7 @@ public abstract class Creature extends MapItem {
         if (!enemies.isEmpty()) {
             // Run away move
             Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
-            Vector2 wallAngle = getWallAngle();
-            runAwayFrom(wallAngle.x, wallAngle.y, vectors);
+            runAwayFrom(getWallsAngles(), vectors);
             moveFront();
             moveStatus = 2;
         } else {
@@ -311,9 +310,21 @@ public abstract class Creature extends MapItem {
      * 
      * @return the angle of wall
      */
-    public Vector2 getWallAngle() {
+    public List<Float> getWallsAngles() {
+        List<Float> wallList = new ArrayList<Float>();
         // TODO return vector of wall angle to avoid
-        return new Vector2(0, 0);
+        List<Vector2> wallCorner = new ArrayList<Vector2>();
+        wallCorner.add(new Vector2(0f, 0f));
+        wallCorner.add(new Vector2(0f, Controller.getController().getGameState().getMapHeight()));
+        wallCorner.add(new Vector2(Controller.getController().getGameState().getMapWidth(),
+                Controller.getController().getGameState().getMapHeight()));
+        wallCorner.add(new Vector2(Controller.getController().getGameState().getMapWidth(), 0f));
+
+        for (int i = 0; i < wallCorner.size(); i++) {
+            wallList.addAll(fr.formiko.kokcinelo.tools.Math.getSegmentIntersectionAngles(getCenter(), getVisionRadius(), wallCorner.get(i),
+                    wallCorner.get((i + 1) % wallCorner.size())));
+        }
+        return wallList;
     }
 
     /**

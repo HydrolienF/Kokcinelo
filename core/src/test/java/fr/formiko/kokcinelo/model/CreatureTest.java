@@ -1,8 +1,12 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.Controller;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import com.badlogic.gdx.math.Vector2;
 
 public class CreatureTest extends Assertions {
@@ -117,7 +121,7 @@ public class CreatureTest extends Assertions {
         c.setMovingSpeed(5f);
         c.setCenter(0, 0);
         c.setRotation(0);
-        c.runAwayFrom(0, 0, new Vector2(1, 1));
+        c.runAwayFrom(new LinkedList<Float>(), new Vector2(1, 1));
         almostEquals(225f, c.getWantedRotation());
     }
 
@@ -246,8 +250,31 @@ public class CreatureTest extends Assertions {
         c.setMovingSpeed(5f);
         c.setCenter(0, 0);
         c.setRotation(0);
-        c.runAwayFrom(0, 0, new Vector2(1, 1), new Vector2(-1, 1));
+        c.runAwayFrom(new LinkedList<Float>(), new Vector2(1, 1), new Vector2(-1, 1));
         almostEquals(0, c.getWantedRotation());
+    }
+
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        // 1 wall
+        "5, 100, 20, 14.47f, 165.52f",
+        "1, 100, 20, 2.85f, 177.13f",
+        "0, 100, 20, 0f, 180f",
+        "1999, 100, 20, 182.87f, 357.15f",
+        "2000, 100, 20, 0f, 180f",
+        // 2 walls
+        //TODO
+    })
+    // @formatter:on
+    public void testGetWallsAngles(float x, float y, int visionRadius, float angle1, float angle2) {
+        createGameStateWithAphidLadybugAnt(1, 1, 0);
+        Creature c = new CreatureX(10, visionRadius);
+        c.setCenter(x, y);
+        List<Float> wallsAngles = c.getWallsAngles();
+        assertEquals(2, wallsAngles.size());
+        almostEqualsAngle(angle1, wallsAngles.get(0));
+        almostEqualsAngle(angle2, wallsAngles.get(1));
     }
 
 
@@ -259,5 +286,15 @@ public class CreatureTest extends Assertions {
         }
         public CreatureX() { this(10, 20); }
     }
-    void almostEquals(float f1, float f2) { assertTrue(Math.abs(f1 - f2) < 0.001f, f1 + " ≃ " + f2); }
+    void almostEquals(float f1, float f2) { assertTrue(java.lang.Math.abs(f1 - f2) < 0.1f, f1 + " ≃ " + f2); }
+    void almostEqualsAngle(float f1, float f2) {
+        if (java.lang.Math.abs(f1 - f2) > 180) {
+            if (f1 > f2) {
+                f1 -= 360;
+            } else {
+                f2 -= 360;
+            }
+        }
+        almostEquals(f1, f2);
+    }
 }
