@@ -258,6 +258,12 @@ public abstract class Creature extends MapItem {
         }
         return closest;
     }
+    /**
+     * {@summary Return all the seeable Creature from the collection.}
+     * 
+     * @param coll Collection to iterate over
+     * @return the seeable creatures
+     */
     public Collection<Creature> seeableCreatures(Collection<? extends Creature> coll) {
         Set<Creature> set = new HashSet<Creature>();
         for (Creature c : coll) {
@@ -299,6 +305,12 @@ public abstract class Creature extends MapItem {
         stayInMap(gs.getMapWidth(), gs.getMapHeight());
         return moveStatus;
     }
+    /**
+     * {@summary Return the angle of wall.}
+     * It is used to avoid wall when running away.
+     * 
+     * @return the angle of wall
+     */
     public Vector2 getWallAngle() {
         // TODO return vector of wall angle to avoid
         return new Vector2(0, 0);
@@ -371,6 +383,12 @@ public abstract class Creature extends MapItem {
     /** Return true if is an AI. */
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
 
+    /**
+     * {@summary Return true if is instance of one of the class.}
+     * 
+     * @param coll Collection to iterate over
+     * @return true if is instance of one of the class
+     */
     private boolean isInstanceOf(Collection<Class<? extends Creature>> coll) {
         for (Class<? extends Creature> clss : coll) {
             if (clss.isInstance(this)) {
