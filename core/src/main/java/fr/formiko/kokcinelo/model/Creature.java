@@ -1,6 +1,5 @@
 package fr.formiko.kokcinelo.model;
 
-import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -277,7 +276,6 @@ public abstract class Creature extends MapItem {
         int moveStatus;
         Collection<Creature> enemies = getVisibleCreatureHuntedBy();
         if (!enemies.isEmpty()) {
-            App.log(2, "enemies : " + enemies);
             // Run away move
             Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
             Vector2 wallAngle = getWallAngle();
