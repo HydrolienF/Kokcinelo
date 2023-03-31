@@ -148,10 +148,8 @@ public class MapItemActor extends SkeletonActor {
 
             color.a = oldAlpha;
         } else {
-            // if (!(this instanceof MapItemActorAnimate)) {
             batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
                     getRotation());
-            // }
         }
 
 
@@ -342,6 +340,7 @@ public class MapItemActor extends SkeletonActor {
                 }
             } catch (IllegalArgumentException e) {
                 // Some animation may not be available for some creatures
+                App.log(0, "Animation " + animationName + " not available for " + mapItem.getId());
             }
         }
     }

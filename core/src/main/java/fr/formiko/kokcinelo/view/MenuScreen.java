@@ -74,6 +74,8 @@ public class MenuScreen extends KScreen implements Screen {
     private final Viewport viewport;
     public static OrthographicCamera camera;
     private static List<Actor> creatureImages;
+    private boolean playingVideo = false;
+    private long timePlayingVideo;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -132,11 +134,26 @@ public class MenuScreen extends KScreen implements Screen {
             Shapes.drawUnderground(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.6f, 0.4f);
             break;
         }
-
         for (Actor creature : creatureImages) { // Only show the creature of the current level.
             creature.setVisible(creature.getName() != null
                     && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
                             && creature.getName().contains("" + getLevel().getNumber()))));
+        }
+
+        if (playingVideo) {
+            for (Actor actor : stage.getActors()) {
+                if (!creatureImages.contains(actor)) {
+                    float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
+                    if (actor.getY() < Gdx.graphics.getHeight() / 2) {
+                        modifY *= -1;
+                    }
+                    actor.setY(actor.getY() + modifY);
+                }
+            }
+            int sec = 1;
+            if (timePlayingVideo < System.currentTimeMillis() - 1000 * sec) {
+                Controller.getController().endMenuScreen();
+            }
         }
 
         stage.act(delta);
@@ -180,7 +197,13 @@ public class MenuScreen extends KScreen implements Screen {
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
+            public void clicked(InputEvent event, float x, float y) {
+                if (playingVideo) {
+                    getController().endMenuScreen();
+                } else {
+                    startPlayingVideo();
+                }
+            }
         });
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand();
@@ -315,7 +338,11 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
-                    Controller.getController().endMenuScreen();
+                    if (playingVideo) {
+                        getController().endMenuScreen();
+                    } else {
+                        startPlayingVideo();
+                    }
                 }
                 return true;
             }
@@ -324,7 +351,14 @@ public class MenuScreen extends KScreen implements Screen {
             public boolean keyTyped(char character) { return false; }
 
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) { return false; }
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (playingVideo) {
+                    getController().endMenuScreen();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
@@ -475,6 +509,14 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
     }
+
+    public void startPlayingVideo() {
+        playingVideo = true;
+        timePlayingVideo = System.currentTimeMillis();
+    }
+
+    // Private -------------------------------------------------------------------------------------
+
     /**
      * Update the labels location &#38; size.
      */
@@ -493,7 +535,6 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
 
-    // Private -------------------------------------------------------------------------------------
     /**
      * {@summary Return a table of web site link button.}
      * It also have a swap language button.
