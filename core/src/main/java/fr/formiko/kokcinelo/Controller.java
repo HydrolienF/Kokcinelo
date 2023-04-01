@@ -46,7 +46,7 @@ public class Controller {
     private static Controller controller;
     private static boolean isDebug;
     private static boolean graphicsTest;
-
+    private long timeStartPause;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -473,8 +473,12 @@ public class Controller {
     public void pauseResume() {
         if (getGameScreen().isPause()) {
             removeEscapeMenu();
+            for (Creature creature : gs.allCreatures()) {
+                creature.addTime(System.currentTimeMillis() - timeStartPause);
+            }
             getGameScreen().resume();
         } else {
+            timeStartPause = System.currentTimeMillis();
             getGameScreen().pause();
             getGameScreen().createEscapeMenu();
         }

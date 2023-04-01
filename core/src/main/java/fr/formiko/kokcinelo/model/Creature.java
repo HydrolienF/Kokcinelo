@@ -415,6 +415,17 @@ public abstract class Creature extends MapItem {
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
 
     /**
+     * {@summary Add time to lastHitTime & lastShootTime.}
+     * It is used when the game is resume to avoid that creature can hit &#38; shoot again even if game time have'nt run.
+     * 
+     * @param timePaused time that have run bewteen pause &#38; resume
+     */
+    public void addTime(long timePaused) {
+        lastHitTime += timePaused;
+        lastShootTime += timePaused;
+    }
+
+    /**
      * {@summary Return true if is instance of one of the class.}
      * 
      * @param coll Collection to iterate over
