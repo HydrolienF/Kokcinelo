@@ -197,10 +197,10 @@ public abstract class Creature extends MapItem {
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(List<Float> forbidenAngles, Vector2... vectorList) {
+    public void runAwayFrom(List<Float> forbiddenAngles, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
-        } else if (vectorList.length == 1 && forbidenAngles.isEmpty()) {
+        } else if (vectorList.length == 1 && forbiddenAngles.isEmpty()) {
             goTo(vectorList[0], 180f);
         } else {
             // Run by the biggest angle between 2 enemies.
@@ -210,12 +210,12 @@ public abstract class Creature extends MapItem {
                 angles.add(vAngle.angleDeg());
             }
             // Also avoid wall by conciderning walls as enemies.
-            if (forbidenAngles.size() > 0) {
-                angles.add(forbidenAngles.get(0));
-                if (forbidenAngles.size() > 1) {
-                    float a0 = forbidenAngles.get(0);
-                    float a1 = forbidenAngles.get(1);
-                    if (forbidenAngles.get(0) == 0 && forbidenAngles.get(1) == 270) { // patch for the angle 270 to 0.
+            if (forbiddenAngles.size() > 0) {
+                angles.add(forbiddenAngles.get(0));
+                if (forbiddenAngles.size() > 1) {
+                    float a0 = forbiddenAngles.get(0);
+                    float a1 = forbiddenAngles.get(1);
+                    if (forbiddenAngles.get(0) == 0 && forbiddenAngles.get(1) == 270) { // patch for the angle 270 to 0.
                         a0 = 270;
                         a1 = 360;
                     }
@@ -242,11 +242,11 @@ public abstract class Creature extends MapItem {
                 anglesDif.add(angleDif);
                 lastAngle = angle;
             }
-            App.log(2, "forbiddenAngles : " + forbidenAngles);
-            App.log(2, "angles : " + angles);
-            App.log(2, "anglesDif : " + anglesDif);
-            App.log(2, "maxanglesDif : " + maxAngleDif);
-            App.log(2, "direction:" + direction);
+            App.log(0, "forbiddenAngles : " + forbiddenAngles);
+            App.log(0, "angles : " + angles);
+            App.log(0, "anglesDif : " + anglesDif);
+            App.log(0, "maxanglesDif : " + maxAngleDif);
+            App.log(0, "direction:" + direction);
             goTo(direction - 90);
         }
     }
