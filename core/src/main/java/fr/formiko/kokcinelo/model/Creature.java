@@ -321,15 +321,15 @@ public abstract class Creature extends MapItem {
     public List<Float> getWallsAngles() {
         List<Float> wallList = new ArrayList<Float>();
         float distanceToWall = getVisionRadius() / 2;
-        // // @formatter:off
-        // // If there is a really close wall, seach for a second one a bit further.
-        // if(getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()
-        //         || getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()
-        //         || getCenterX() - distanceToWall < 0
-        //         || getCenterY() - distanceToWall < 0){
-        //     distanceToWall = getVisionRadius();
-        // }
-        // // @formatter:on
+        // @formatter:off
+        // If there is a really close wall, seach for a second one a bit further.
+        if(getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()
+                || getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()
+                || getCenterX() - distanceToWall < 0
+                || getCenterY() - distanceToWall < 0){
+            distanceToWall = getVisionRadius();
+        }
+        // @formatter:on
 
         if (getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()) {
             wallList.add(0f);
