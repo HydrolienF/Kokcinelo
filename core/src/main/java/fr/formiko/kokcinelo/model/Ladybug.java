@@ -30,7 +30,7 @@ public class Ladybug extends Creature {
     @Override
     public int getGivenPoints() { return 10; }
     @Override
-    public float getMaxRotationPerSecond() { return 140f; }
+    public float getMaxRotationPerSecond() { return 1400f; }
     @Override
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Aphid.class); }
     @Override

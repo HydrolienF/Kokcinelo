@@ -251,20 +251,29 @@ public class CreatureTest extends Assertions {
         c.setCenter(0, 0);
         c.setRotation(0);
         c.runAwayFrom(new LinkedList<Float>(), new Vector2(1, 1), new Vector2(-1, 1));
-        almostEquals(0, c.getWantedRotation());
+        almostEquals(180, c.getWantedRotation());
     }
 
     @ParameterizedTest
     // @formatter:off
     @CsvSource({
+        // 0 wall
+        "100, 100, 20, -1, -1",
         // 1 wall
-        "5, 100, 20, 14.47f, 165.52f",
-        "1, 100, 20, 2.85f, 177.13f",
-        "0, 100, 20, 0f, 180f",
-        "1999, 100, 20, 182.87f, 357.15f",
-        "2000, 100, 20, 0f, 180f",
+        "5, 100, 20, 180f, -1",
+        "15, 100, 40, 180f, -1",
+        "19, 100, 40, 180f, -1",
+        "1, 100, 20, 180f, -1",
+        "0, 100, 20, 180f, -1",
+        "1999, 100, 20, 0f, -1",
+        "2000, 100, 20, 0f, -1",
+        "100, 5, 20, 270, -1",
+        "100, 15, 40, 270, -1",
+        "100, 19, 40, 270, -1",
         // 2 walls
-        //TODO
+        "5, 5, 20, 180, 270", // with common part
+        "19, 19, 40, 180, 270", // without common part
+        "1994, 1992, 20, 0f, 90f",
     })
     // @formatter:on
     public void testGetWallsAngles(float x, float y, int visionRadius, float angle1, float angle2) {
@@ -272,9 +281,16 @@ public class CreatureTest extends Assertions {
         Creature c = new CreatureX(10, visionRadius);
         c.setCenter(x, y);
         List<Float> wallsAngles = c.getWallsAngles();
-        assertEquals(2, wallsAngles.size());
-        almostEqualsAngle(angle1, wallsAngles.get(0));
-        almostEqualsAngle(angle2, wallsAngles.get(1));
+        int angleNumber = 0;
+        if (angle1 != -1) {
+            assertEquals(angle1, wallsAngles.get(0));
+            angleNumber++;
+        }
+        if (angle2 != -1) {
+            assertEquals(angle2, wallsAngles.get(1));
+            angleNumber++;
+        }
+        assertEquals(angleNumber, wallsAngles.size());
     }
 
 

@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -199,30 +200,34 @@ public abstract class Creature extends MapItem {
     public void runAwayFrom(List<Float> forbidenAngles, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
-        } else if (vectorList.length == 1) {
+        } else if (vectorList.length == 1 && forbidenAngles.isEmpty()) {
             goTo(vectorList[0], 180f);
-        } else if (vectorList.length > 2) {
-
-            // v1 run from the center of the enemis
-            // float x = 0;
-            // float y = 0;
-            // int cpt = 0;
-            // for (Vector2 v2 : vectorList) {
-            // x += v2.x;
-            // y += v2.y;
-            // cpt++;
-            // }
-            // runAwayFrom(new Vector2(x / cpt, y / cpt));
-
-            // v2 run by the biggest angle
-            // TODO also avoid wall by checking if the angle is in forbiddenAngles
+        } else {
+            // Run by the biggest angle between 2 enemies.
             List<Float> angles = new ArrayList<Float>();
             for (Vector2 v : vectorList) {
                 Vector2 vAngle = new Vector2(v.x - getCenterX(), v.y - getCenterY());
                 angles.add(vAngle.angleDeg());
             }
+            // Also avoid wall by conciderning walls as enemies.
+            if (forbidenAngles.size() > 0) {
+                angles.add(forbidenAngles.get(0));
+                if (forbidenAngles.size() > 1) {
+                    float a0 = forbidenAngles.get(0);
+                    float a1 = forbidenAngles.get(1);
+                    if (forbidenAngles.get(0) == 0 && forbidenAngles.get(1) == 270) { // patch for the angle 270 to 0.
+                        a0 = 270;
+                        a1 = 360;
+                    }
+                    // Add more enemies angle between the 2 forbidden angles to avoid to go into the corner.
+                    // (Add 7, one for each 10° should be enoth.)
+                    for (float i = a0 + 10; i < a1; i += 10) {
+                        angles.add(i);
+                    }
+                }
+            }
+
             angles.sort((a1, a2) -> Float.compare(a1, a2));
-            // App.log(2, "angles : " + angles);
 
             float maxAngleDif = 0;
             float direction = 0;
@@ -237,8 +242,11 @@ public abstract class Creature extends MapItem {
                 anglesDif.add(angleDif);
                 lastAngle = angle;
             }
-            // App.log(2, "anglesDif : " + anglesDif);
-            // App.log(2, "direction:" + direction);
+            App.log(2, "forbiddenAngles : " + forbidenAngles);
+            App.log(2, "angles : " + angles);
+            App.log(2, "anglesDif : " + anglesDif);
+            App.log(2, "maxanglesDif : " + maxAngleDif);
+            App.log(2, "direction:" + direction);
             goTo(direction - 90);
         }
     }
@@ -306,24 +314,36 @@ public abstract class Creature extends MapItem {
     }
     /**
      * {@summary Return the angle of wall.}
-     * It is used to avoid wall when running away.
+     * It is used to avoid wall when running away by adding them as enemies.
      * 
-     * @return the angle of wall
+     * @return the angle of wall (sorted)
      */
     public List<Float> getWallsAngles() {
         List<Float> wallList = new ArrayList<Float>();
-        // TODO return vector of wall angle to avoid
-        List<Vector2> wallCorner = new ArrayList<Vector2>();
-        wallCorner.add(new Vector2(0f, 0f));
-        wallCorner.add(new Vector2(0f, Controller.getController().getGameState().getMapHeight()));
-        wallCorner.add(new Vector2(Controller.getController().getGameState().getMapWidth(),
-                Controller.getController().getGameState().getMapHeight()));
-        wallCorner.add(new Vector2(Controller.getController().getGameState().getMapWidth(), 0f));
+        float distanceToWall = getVisionRadius() / 2;
+        // // @formatter:off
+        // // If there is a really close wall, seach for a second one a bit further.
+        // if(getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()
+        //         || getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()
+        //         || getCenterX() - distanceToWall < 0
+        //         || getCenterY() - distanceToWall < 0){
+        //     distanceToWall = getVisionRadius();
+        // }
+        // // @formatter:on
 
-        for (int i = 0; i < wallCorner.size(); i++) {
-            wallList.addAll(fr.formiko.kokcinelo.tools.Math.getSegmentIntersectionAngles(getCenter(), getVisionRadius(), wallCorner.get(i),
-                    wallCorner.get((i + 1) % wallCorner.size())));
+        if (getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()) {
+            wallList.add(0f);
         }
+        if (getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()) {
+            wallList.add(90f);
+        }
+        if (getCenterX() - distanceToWall < 0) {
+            wallList.add(180f);
+        }
+        if (getCenterY() - distanceToWall < 0) {
+            wallList.add(270f);
+        }
+
         return wallList;
     }
 

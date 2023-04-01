@@ -57,7 +57,7 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
-        // isDebug = true; // @a
+        isDebug = true; // @a
         toRemove = new HashSet<Creature>();
         // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
@@ -253,29 +253,58 @@ public class Controller {
             break;
         }
         if (isGraphicsTest()) {
-            gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(5).setAphidNumber(10);
+            int antNumber = 50;
+            gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(antNumber).setAphidNumber(10);
         }
         gs = gsb.build();
         gs.moveAIAwayFromPlayers();
         if (isGraphicsTest()) {
             int dist = 250;
-            int center = 1000;
+            int centerX = 300;
+            int centerY = 1700;
+            // 300 1700 bad
+            // 1700 1700 bad
 
             Creature playerCreature = gs.getPlayerCreature(getLocalPlayerId());
-            playerCreature.setCenter(center, center);
+            playerCreature.setCenter(centerX, centerY);
             playerCreature.setMovingSpeed(0);
             playerCreature.die();
-
-            gs.getLadybugs().get(1).setCenter(center, center);
-            // gs.getLadybugs().get(1).setRotation(90);
-            gs.getAnts().get(0).setCenter(center, center + dist);
-            gs.getAnts().get(1).setCenter(center + dist, center + dist);
-            gs.getAnts().get(2).setCenter(center + dist, center);
-            gs.getAnts().get(3).setCenter(center + dist, center - dist);
-            gs.getAnts().get(4).setCenter(center - dist, center);
+            for (Ant ant : gs.getAnts()) {
+                ant.setCenter(2000, 2000);
+            }
             for (Creature c : gs.allCreatures()) {
                 c.setMovingSpeed(0.05f);
             }
+
+            gs.getLadybugs().get(1).setCenter(centerX, centerY);
+            // gs.getLadybugs().get(1).setRotation(90);
+
+            // gs.getAnts().get(0).setCenter(centerX, centerY + dist);
+            // gs.getAnts().get(1).setCenter(centerX + dist, centerY + dist);
+            // gs.getAnts().get(2).setCenter(centerX + dist, centerY);
+            // gs.getAnts().get(3).setCenter(centerX + dist, centerY - dist);
+            // gs.getAnts().get(4).setCenter(centerX - dist, centerY + 1);
+
+            // gs.getAnts().get(0).setCenter(centerX, centerY + dist);
+            // gs.getAnts().get(1).setCenter(centerX - dist, centerY);
+            // gs.getAnts().get(2).setCenter(centerX, centerY - dist);
+
+            // gs.getAnts().get(0).setCenter(centerX + dist / 2, centerY + dist);
+            // gs.getAnts().get(2).setCenter(centerX + dist / 2, centerY - dist);
+
+            // gs.getAnts().get(0).setCenter(centerX + dist, centerY + dist);
+            // gs.getAnts().get(2).setCenter(centerX + dist, centerY - dist);
+
+            gs.getAnts().get(1).setCenter(centerX + dist, centerY);
+            gs.getAnts().get(3).setCenter(centerX + dist, centerY + dist + 1);
+            gs.getAnts().get(4).setCenter(centerX + dist, centerY - dist);
+
+            // gs.getAnts().get(1).setCenter(centerX - dist, centerY);
+            // gs.getAnts().get(3).setCenter(centerX - dist, centerY + dist + 1);
+            // gs.getAnts().get(4).setCenter(centerX - dist, centerY - dist);
+
+            // gs.getAnts().get(1).setCenter(centerX, centerY + dist);
+            // gs.getAnts().get(3).setCenter(centerX - dist, centerY + dist);
         }
         app.setScreen(new GameScreen(app));
         Musics.play();
