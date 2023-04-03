@@ -47,6 +47,7 @@ public class App extends Game {
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
+    public static final Color SKY_BLUE = new Color(0f, 0.4f, 1f, 1f);
     private final Native nativ;
 
 

@@ -76,6 +76,8 @@ public class MenuScreen extends KScreen implements Screen {
     private boolean playingVideo = false;
     private long timePlayingVideo;
     private int fullVideoTime = 10000;
+    private float BACKGROUND_SPEED = 100;
+    private OrthographicCamera cameraBc;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -98,10 +100,10 @@ public class MenuScreen extends KScreen implements Screen {
         viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
-        OrthographicCamera cameraBc = new OrthographicCamera();
+        cameraBc = new OrthographicCamera();
         Viewport viewportBc = new ScreenViewport(cameraBc);
         backgroundStage = new Stage(viewportBc, batch);
-        backgroundStage.addActor(new EnvironmentMenuScreen(this));
+        backgroundStage.addActor(new EnvironmentMenuScreen(this, cameraBc));
 
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
@@ -121,10 +123,19 @@ public class MenuScreen extends KScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
 
+        cameraBc.position.x += delta * BACKGROUND_SPEED;
+        if (getLevel().getLetter().equals("K")) {
+            Actor environement = backgroundStage.getRoot().findActor("environement");
+            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2;
+        } else {
+            cameraBc.zoom = 0.5f;
+            cameraBc.position.y = Gdx.graphics.getHeight() / 2;
+        }
+        batch.setProjectionMatrix(cameraBc.combined);
         backgroundStage.act(delta);
         backgroundStage.draw();
 
-
+        batch.setProjectionMatrix(camera.combined);
         for (Actor creature : creatureImages) { // Only show the creature of the current level.
             creature.setVisible(creature.getName() != null
                     && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
