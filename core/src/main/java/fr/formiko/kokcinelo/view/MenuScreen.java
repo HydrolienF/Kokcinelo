@@ -23,7 +23,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -99,7 +98,7 @@ public class MenuScreen extends KScreen implements Screen {
         viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
-        Camera cameraBc = new OrthographicCamera();
+        OrthographicCamera cameraBc = new OrthographicCamera();
         Viewport viewportBc = new ScreenViewport(cameraBc);
         backgroundStage = new Stage(viewportBc, batch);
         backgroundStage.addActor(new EnvironmentMenuScreen(this));

@@ -62,6 +62,15 @@ public class Shapes {
         // shapeRenderer.rect(0, pathStart * height, width, pathLength * height, pathColor, pathColor, pathColor, pathColor);
         shapeRenderer.end();
     }
+    public static void drawGrass(float x, float y, float width, float height, float ligth) {
+        shapeRenderer = getShapeRenderer();
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        Color topColor = new Color(App.GREEN.r, App.GREEN.g - 40f / 255 * (1 - ligth), App.GREEN.b, 1);
+        Color bottomColor = new Color(App.GREEN.r, App.GREEN.g * 0.4f + 20f / 255 * ligth, App.GREEN.b, 1);
+        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.end();
+    }
     /**
      * {@summary Return a circle with a thik border.}
      * 

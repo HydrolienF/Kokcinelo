@@ -10,16 +10,24 @@ public class EnvironmentMenuScreen extends Table {
     private MenuScreen menuScreen;
     private final Chrono chrono;
     private float skyPercent = 0.5f;
+    private boolean withGrass;
 
     public EnvironmentMenuScreen(MenuScreen menuScreen) {
         this.menuScreen = menuScreen;
         // this.setFillParent(true);
         chrono = new Chrono();
         chrono.start();
+        setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // setZoom(2f);
     }
+
+    public void setZoom(float zoom) { setScale(zoom, zoom); }
+    public boolean isWithGrass() { return withGrass; }
+    public void setWithGrass(boolean withGrass) { this.withGrass = withGrass; }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        setWithGrass(!menuScreen.getLevel().getLetter().equals("F"));
         // switch (menuScreen.getLevel().getLetter()) {
         // case "K":
         // // draw blue sky gradient
@@ -44,8 +52,12 @@ public class EnvironmentMenuScreen extends Table {
         if (ligth < 0.5f) {
             ligth = 1f - ligth;
         }
-        Shapes.drawSky(0, Gdx.graphics.getHeight() * (1 - skyPercent), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() * skyPercent,
-                ligth);
-        Shapes.drawUnderground(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() * (1 - skyPercent), 0.6f, 0.4f);
+        Shapes.drawSky(getX(), getY() + getHeight() * (1 - skyPercent), getWidth(), getHeight() * skyPercent, ligth);
+        if (withGrass) {
+            Shapes.drawGrass(getX(), getY(), getWidth(), getHeight() * (1 - skyPercent), ligth);
+        } else {
+            Shapes.drawUnderground(getX(), getY(), getWidth(), getHeight() * (1 - skyPercent), 0.6f, 0.4f);
+        }
     }
+
 }
