@@ -33,14 +33,14 @@ public class Shapes {
      * @param height height of the sky rectangle
      * @param ligth  ligth of the sky bewteen 0 and 1
      */
-    public static void drawSky(int width, int height, float ligth) {
+    public static void drawSky(float x, float y, float width, float height, float ligth) {
         shapeRenderer = getShapeRenderer();
         // draw blue sky gradient
         shapeRenderer.begin();
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         Color topColor = new Color(0, 0.4f * ligth, 1f * ligth, 1);
         Color bottomColor = new Color(0, 0.8f * ligth, 1f * ligth, 1);
-        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.rect(x, y, width, height, bottomColor, bottomColor, topColor, topColor);
         shapeRenderer.end();
     }
     /**
@@ -49,7 +49,7 @@ public class Shapes {
      * @param width  width of the sky rectangle
      * @param height height of the sky rectangle
      */
-    public static void drawUnderground(int width, int height, float pathStart, float pathLength) {
+    public static void drawUnderground(float x, float y, float width, float height, float pathStart, float pathLength) {
         shapeRenderer = getShapeRenderer();
 
         shapeRenderer.begin();

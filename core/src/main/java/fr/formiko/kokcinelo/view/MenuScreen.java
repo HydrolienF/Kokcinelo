@@ -15,7 +15,6 @@ import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
-import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -60,6 +60,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
+    private Stage backgroundStage;
     private SpriteBatch batch;
     private static Skin skin;
     private static Skin skinTitle;
@@ -67,7 +68,6 @@ public class MenuScreen extends KScreen implements Screen {
     private Label scoresLabel;
     private Label levelNameLabel;
     private Label levelDescription;
-    private final Chrono chrono;
     private int topSpace;
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
@@ -99,8 +99,11 @@ public class MenuScreen extends KScreen implements Screen {
         viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
-        chrono = new Chrono();
-        chrono.start();
+        Camera cameraBc = new OrthographicCamera();
+        Viewport viewportBc = new ScreenViewport(cameraBc);
+        backgroundStage = new Stage(viewportBc, batch);
+        backgroundStage.addActor(new EnvironmentMenuScreen(this));
+
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
     }
@@ -119,22 +122,10 @@ public class MenuScreen extends KScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
 
-        switch (getLevel().getLetter()) {
-        case "K":
-            // draw blue sky gradient
-            float secToCycle = 3 * 60 + 54;
-            // float secToCycle = 10;
-            chrono.updateDuree();
-            float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-            if (ligth < 0.5f) {
-                ligth = 1f - ligth;
-            }
-            Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
-            break;
-        case "F":
-            Shapes.drawUnderground(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.6f, 0.4f);
-            break;
-        }
+        backgroundStage.act(delta);
+        backgroundStage.draw();
+
+
         for (Actor creature : creatureImages) { // Only show the creature of the current level.
             creature.setVisible(creature.getName() != null
                     && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
