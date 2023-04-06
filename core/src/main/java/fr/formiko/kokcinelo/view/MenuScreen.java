@@ -75,7 +75,7 @@ public class MenuScreen extends KScreen implements Screen {
     private static List<Actor> creatureImages;
     private boolean playingVideo = false;
     private long timePlayingVideo;
-    private int fullVideoTime = 10000;
+    private int fullVideoTime = 1000;
     private float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
 

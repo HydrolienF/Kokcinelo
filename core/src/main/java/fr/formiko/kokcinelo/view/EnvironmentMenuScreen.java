@@ -1,12 +1,14 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.Chrono;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class EnvironmentMenuScreen extends Group {
     private MenuScreen menuScreen;
@@ -16,6 +18,7 @@ public class EnvironmentMenuScreen extends Group {
     private MapActor grass;
     private MapActor sky;
     private OrthographicCamera camera;
+    private ShapeDrawer shapeDrawer;
 
     public EnvironmentMenuScreen(MenuScreen menuScreen, OrthographicCamera camera) {
         this.menuScreen = menuScreen;
@@ -33,7 +36,6 @@ public class EnvironmentMenuScreen extends Group {
         addActor(sky);
         setZoom(maxUnzoom());
 
-        // App.log(2, "maxX : " + maxX());
         setName("environement");
     }
 
@@ -42,43 +44,28 @@ public class EnvironmentMenuScreen extends Group {
     public void setWithGrass(boolean withGrass) { this.withGrass = withGrass; }
 
     public float maxUnzoom() { return 1f / Math.min(getWidth() / Gdx.graphics.getWidth(), getHeight() / Gdx.graphics.getHeight()); }
-    // width - displayWidth
-    // public float maxX() { return getWidth() - getWidth() / getScaleX(); }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
-        // if (camera.position.x / getScaleX() > maxX()) { // not working well.
-        // camera.position.x = 0;
-        // }
-        // camera.lookAt(0, 0, 0);
-        // setPosition(getX() - delta * SPEED, getY());
-        // App.log(2, "x : " + camera.position.x / getScaleX() + " maxX : " + maxX());
-        // if (-getX() > maxX()) {
-        // App.log(2, "loop");
-        // setPosition(0, getY());
-        // }
-    }
+    public void act(float delta) { super.act(delta); }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         // setWithGrass(!menuScreen.getLevel().getLetter().equals("F"));
-        grass.setVisible(isWithGrass());
+        // grass.setVisible(isWithGrass());
         super.draw(batch, parentAlpha);
 
 
-        // float secToCycle = 3 * 60 + 54;
-        // chrono.updateDuree();
-        // float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-        // if (ligth < 0.5f) {
-        // ligth = 1f - ligth;
-        // }
-        // Shapes.drawSky(getX(), getY() + getHeight() * (1 - skyPercent), getWidth(), getHeight() * skyPercent, ligth);
-        // if (withGrass) {
-        // Shapes.drawGrass(getX(), getY(), getWidth(), getHeight() * (1 - skyPercent), ligth);
-        // } else {
-        // Shapes.drawUnderground(getX(), getY(), getWidth(), getHeight() * (1 - skyPercent), 0.6f, 0.4f);
-        // }
+        float secToCycle = 3 * 60 + 54;
+        chrono.updateDuree();
+        float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
+        if (ligth < 0.5f) {
+            ligth = 1f - ligth;
+        }
+        if (shapeDrawer == null) {
+            shapeDrawer = Shapes.createShapeDrawer(batch);
+        }
+        shapeDrawer.setColor(0, 0, 0, 1f - ligth);
+        shapeDrawer.filledRectangle(getX(), getY(), getWidth(), getHeight());
     }
 
 }
