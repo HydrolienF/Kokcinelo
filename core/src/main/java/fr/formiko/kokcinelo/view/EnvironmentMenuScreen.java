@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.usual.Chrono;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -23,9 +24,10 @@ public class EnvironmentMenuScreen extends Group {
         chrono.start();
         withGrass = true;
         setSize(10000, 4000);
-        grass = new MapActor(getWidth(), getHeight() * (1 - skyPercent), App.GREEN, true, 200, 80);
+        grass = new MapActor(getWidth(), getHeight() * (1 - skyPercent),
+                new Color(App.GREEN.r * 0.8f, App.GREEN.g * 0.8f, App.GREEN.b * 0.8f, 1), true, 200, 80, App.GREEN);
         grass.setPosition(0, 0);
-        sky = new MapActor(getWidth(), getHeight() * skyPercent, App.SKY_BLUE, false, 0, 0);
+        sky = new MapActor(getWidth(), getHeight() * skyPercent, App.SKY_BLUE_2, false, 0, 0, App.SKY_BLUE_1);
         sky.setPosition(0, grass.getHeight());
         addActor(grass);
         addActor(sky);

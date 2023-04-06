@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
@@ -69,6 +70,13 @@ public class Shapes {
         Color topColor = new Color(App.GREEN.r, App.GREEN.g - 40f / 255 * (1 - ligth), App.GREEN.b, 1);
         Color bottomColor = new Color(App.GREEN.r, App.GREEN.g * 0.4f + 20f / 255 * ligth, App.GREEN.b, 1);
         shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.end();
+    }
+    public static void drawGradientOnPixmap(Pixmap toDraw, Color topColor, Color bottomColor) {
+        shapeRenderer = getShapeRenderer();
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.rect(0, 0, toDraw.getWidth(), toDraw.getHeight(), bottomColor, bottomColor, topColor, topColor);
         shapeRenderer.end();
     }
     /**
@@ -255,6 +263,31 @@ public class Shapes {
             inPm.drawPixel((int) vector2.x, (int) vector2.y, color);
         }
         return inPm;
+    }
+
+    /**
+     * {@summary Create a pixmap with a single color.}
+     * 
+     * @param width  width of pixmap
+     * @param height heigth of pixmap
+     * @param color  color of pixmap
+     * @param color2 2a color of pixmap for gradient (optional)
+     */
+    public static Pixmap createPixmap(int width, int height, Color color, @Null Color color2) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        if (color2 != null) {
+            for (int y = 0; y < height; y++) { // draw line with mixed color.
+                pixmap.setColor(new Color(color.r * ((float) y / height) + color2.r * (1 - ((float) y / height)),
+                        color.g * ((float) y / height) + color2.g * (1 - ((float) y / height)),
+                        color.b * ((float) y / height) + color2.b * (1 - ((float) y / height)),
+                        color.a * ((float) y / height) + color2.a * (1 - ((float) y / height))));
+                pixmap.drawLine(0, y, width, y);
+            }
+        } else {
+            pixmap.setColor(color);
+            pixmap.fillRectangle(0, 0, width, height);
+        }
+        return pixmap;
     }
 
     /**

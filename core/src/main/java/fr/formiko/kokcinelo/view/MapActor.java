@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.tools.Math;
+import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
@@ -10,11 +11,11 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Represent the map &#38; overlay actor}
@@ -27,40 +28,43 @@ public class MapActor extends Actor {
     private Texture texture;
     private Texture textureWithDark;
     private Set<Circle> toExcude;
-    private ShapeRenderer shapeRenderer;
     private static final float MAX_ROCK_RADIUS = 50f;
     private static final float MIN_ROCK_RADIUS = 10f;
 
     /**
      * {@summary Main constructor.}
      * 
-     * @param width  width of this
-     * @param height heigth of this
-     * @param color  color of this
+     * @param width       width of this
+     * @param height      heigth of this
+     * @param color       color of this
+     * @param withDetails if true, add some details to the map.
+     * @param stones      number of stones to add to the map.
+     * @param sticks      number of sticks to add to the map.
+     * @param color2      color of the gradient.
      */
-    public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks) {
+    public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks, @Null Color color2) {
         toExcude = new HashSet<Circle>();
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
         try {
-            createTexture((int) width, (int) height, color, withDetails, stones, sticks);
+            createTexture((int) width, (int) height, color, withDetails, stones, sticks, color2);
         } catch (Throwable e) {
             App.log(3, "constructor", "Error while creating texture: " + e.getMessage());
         }
         setOrigin(Align.center);
         setVisible(true);
 
-        try {
-            shapeRenderer = new ShapeRenderer();
-            shapeRenderer.setAutoShapeType(true);
-        } catch (Throwable e) {
-            App.log(3, "constructor", "Error while creating shapeRenderer: " + e.getMessage());
-        }
         App.log(0, "constructor", "new MapActor: " + toString());
     }
 
+    public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks) {
+        this(width, height, color, withDetails, stones, sticks, null);
+    }
+
     public MapActor(float width, float height, Color color, boolean withDetails) { this(width, height, color, withDetails, 10, 20); }
+
+    public MapActor(float width, float height, Color color, Color color2) { this(width, height, color, false, 0, 0, color2); }
 
     /**
      * {@summary Draw the texture that represent this.}
@@ -114,8 +118,8 @@ public class MapActor extends Actor {
      * @param color  color of texture
      * @param stones number of stones to add
      */
-    private void createTexture(int width, int height, Color color, boolean withDetails, int stones, int sticks) {
-        Pixmap pixmap = createPixmap(width, height, color);
+    private void createTexture(int width, int height, Color color, boolean withDetails, int stones, int sticks, @Null Color color2) {
+        Pixmap pixmap = Shapes.createPixmap(width, height, color, color2);
         if (withDetails) {
             drawStones(pixmap, width, height, stones);
             drawSticks(pixmap, width, height, sticks);
@@ -125,19 +129,7 @@ public class MapActor extends Actor {
         texture = new Texture(pixmap);
         pixmap.dispose();
     }
-    /**
-     * {@summary Create a pixmap with a single color.}
-     * 
-     * @param width  width of pixmap
-     * @param height heigth of pixmap
-     * @param color  color of pixmap
-     */
-    private Pixmap createPixmap(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fillRectangle(0, 0, width, height);
-        return pixmap;
-    }
+
 
     public void clearToExclude() { toExcude.clear(); }
 
