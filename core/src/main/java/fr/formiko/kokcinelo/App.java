@@ -421,11 +421,11 @@ public class App extends Game {
     /**
      * {@summary Return color depending of percent.}
      * 
-     * @param percent score percent [0;100]
+     * @param percent score percent [0;100+]
      * @return color
      */
     public static Color getColorFromPercent(int percent) {
-        if (percent == 100) {
+        if (percent >= 100) {
             return Color.GREEN;
         } else {
             return new Color(1f, percent / 100f, 0f, 1f);
