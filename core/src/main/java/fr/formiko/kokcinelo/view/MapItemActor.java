@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectFloatMap;
@@ -74,7 +75,8 @@ public class MapItemActor extends SkeletonActor {
             setOrigin(Align.center);
         }
 
-        if (Controller.getController() != null && Controller.getController().getAssets().getSkeletonData(textureName) != null) {
+        if (Controller.getController() != null && Controller.getController().getAssets() != null
+                && Controller.getController().getAssets().getSkeletonData(textureName) != null) {
             Skeleton skeleton = new Skeleton(Controller.getController().getAssets().getSkeletonData(textureName));
 
             skeleton.setPosition(getWidth() / 2, getHeight() / 2);
@@ -146,10 +148,8 @@ public class MapItemActor extends SkeletonActor {
 
             color.a = oldAlpha;
         } else {
-            // if (!(this instanceof MapItemActorAnimate)) {
             batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
                     getRotation());
-            // }
         }
 
 
@@ -260,8 +260,16 @@ public class MapItemActor extends SkeletonActor {
     }
     public float getCenterX() { return getX() + getWidth() / 2; }
     public float getCenterY() { return getY() + getHeight() / 2; }
+    public Vector2 getCenter() { return new Vector2(getCenterX(), getCenterY()); }
     public void setCenterX(float x) { setX(x - getWidth() / 2); }
     public void setCenterY(float y) { setY(y - getHeight() / 2); }
+    /**
+     * {@summary Set center location.}
+     */
+    public void setCenter(float x, float y) {
+        setCenterX(x);
+        setCenterY(y);
+    }
     /**
      * {@summary Move in x &#38; y}
      * 
@@ -332,6 +340,7 @@ public class MapItemActor extends SkeletonActor {
                 }
             } catch (IllegalArgumentException e) {
                 // Some animation may not be available for some creatures
+                App.log(0, "Animation " + animationName + " not available for " + mapItem.getId());
             }
         }
     }

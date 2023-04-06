@@ -58,7 +58,7 @@ public class LevelButtonTable extends Table {
                 if (levelButton2 != null) {
                     int x2 = (int) levelButton2.getCenterX();
                     int y2 = (int) levelButton2.getCenterY();
-                    sr.line(x1, y1, x2, y2, lineWidth);
+                    sr.line(getX() + x1, getY() + y1, getX() + x2, getY() + y2, lineWidth);
                 }
             }
         }

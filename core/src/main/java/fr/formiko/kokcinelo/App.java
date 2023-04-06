@@ -47,6 +47,7 @@ public class App extends Game {
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
+    public static final Color SKY_BLUE = new Color(0f, 0.4f, 1f, 1f);
     private final Native nativ;
 
 
@@ -329,18 +330,14 @@ public class App extends Game {
                 arg = arg.substring(1);
             }
             switch (arg) {
-            // case "version", "v": { //HTML INCOMPATIBLE
-            case "version":
-            case "v": {
+            case "version", "v": { // HTML INCOMPATIBLE
                 FileHandle versionFile = Gdx.files.internal("version.md");
                 System.out.println(versionFile.readString());
                 // System.exit(0); //HTML INCOMPATIBLE
                 Gdx.app.exit();
                 break;
             }
-            // case "quiet", "q": { //HTML INCOMPATIBLE
-            case "quiet":
-            case "q": {
+            case "quiet", "q": {
                 logLevel = Application.LOG_NONE;
                 break;
             }
@@ -351,6 +348,10 @@ public class App extends Game {
             case "launchFromLauncher": {
                 launchFromLauncher = true;
                 logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
+                break;
+            }
+            case "graphicsTest", "gt": {
+                Controller.setGraphicsTest(true);
                 break;
             }
             default: {

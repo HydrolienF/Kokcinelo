@@ -15,7 +15,6 @@ import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
-import fr.formiko.usual.Chrono;
 import fr.formiko.usual.g;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +59,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
+    private Stage backgroundStage;
     private SpriteBatch batch;
     private static Skin skin;
     private static Skin skinTitle;
@@ -67,13 +67,17 @@ public class MenuScreen extends KScreen implements Screen {
     private Label scoresLabel;
     private Label levelNameLabel;
     private Label levelDescription;
-    private final Chrono chrono;
     private int topSpace;
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
     public static OrthographicCamera camera;
     private static List<Actor> creatureImages;
+    private boolean playingVideo = false;
+    private long timePlayingVideo;
+    private int fullVideoTime = 10000;
+    private float BACKGROUND_SPEED = 100;
+    private OrthographicCamera cameraBc;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -96,8 +100,11 @@ public class MenuScreen extends KScreen implements Screen {
         viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, batch);
 
-        chrono = new Chrono();
-        chrono.start();
+        cameraBc = new OrthographicCamera();
+        Viewport viewportBc = new ScreenViewport(cameraBc);
+        backgroundStage = new Stage(viewportBc, batch);
+        backgroundStage.addActor(new EnvironmentMenuScreen(this, cameraBc));
+
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
     }
@@ -116,27 +123,39 @@ public class MenuScreen extends KScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
 
-        switch (getLevel().getLetter()) {
-        case "K":
-            // draw blue sky gradient
-            float secToCycle = 3 * 60 + 54;
-            // float secToCycle = 10;
-            chrono.updateDuree();
-            float ligth = 1 - ((chrono.getDuree() % (secToCycle * 1000) / (secToCycle * 1000f))); // [0.5 ; 1]
-            if (ligth < 0.5f) {
-                ligth = 1f - ligth;
-            }
-            Shapes.drawSky(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), ligth);
-            break;
-        case "F":
-            Shapes.drawUnderground(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.6f, 0.4f);
-            break;
+        cameraBc.position.x += delta * BACKGROUND_SPEED;
+        if (getLevel().getLetter().equals("K")) {
+            Actor environement = backgroundStage.getRoot().findActor("environement");
+            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2;
+        } else {
+            cameraBc.zoom = 0.5f;
+            cameraBc.position.y = Gdx.graphics.getHeight() / 2;
         }
+        batch.setProjectionMatrix(cameraBc.combined);
+        backgroundStage.act(delta);
+        backgroundStage.draw();
 
+        batch.setProjectionMatrix(camera.combined);
         for (Actor creature : creatureImages) { // Only show the creature of the current level.
             creature.setVisible(creature.getName() != null
                     && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
                             && creature.getName().contains("" + getLevel().getNumber()))));
+        }
+
+        if (playingVideo) {
+            for (Actor actor : stage.getActors()) {
+                if (!creatureImages.contains(actor)) {
+                    float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
+                    if (actor.getY() < Gdx.graphics.getHeight() / 2) {
+                        modifY *= -1;
+                    }
+                    actor.setY(actor.getY() + modifY);
+                }
+            }
+            // TODO last visible actor need to act while video is playing.
+            if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
+                Controller.getController().endMenuScreen();
+            }
         }
 
         stage.act(delta);
@@ -180,7 +199,13 @@ public class MenuScreen extends KScreen implements Screen {
         playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
         playButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) { getController().endMenuScreen(); }
+            public void clicked(InputEvent event, float x, float y) {
+                if (playingVideo) {
+                    getController().endMenuScreen();
+                } else {
+                    startPlayingVideo();
+                }
+            }
         });
         playButton.setScaling(Scaling.fillY);
         centerTable.add(playButton).expand();
@@ -285,7 +310,7 @@ public class MenuScreen extends KScreen implements Screen {
         }
         stage.addActor(centerTable);
 
-        // stage.setDebugAll(true);
+        stage.setDebugAll(Controller.isDebug());
         addProcessor(stage);
 
     }
@@ -315,7 +340,11 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
-                    Controller.getController().endMenuScreen();
+                    if (playingVideo) {
+                        getController().endMenuScreen();
+                    } else {
+                        startPlayingVideo();
+                    }
                 }
                 return true;
             }
@@ -324,7 +353,14 @@ public class MenuScreen extends KScreen implements Screen {
             public boolean keyTyped(char character) { return false; }
 
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) { return false; }
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (playingVideo) {
+                    getController().endMenuScreen();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) { return false; }
@@ -475,6 +511,14 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
     }
+
+    public void startPlayingVideo() {
+        playingVideo = true;
+        timePlayingVideo = System.currentTimeMillis();
+    }
+
+    // Private -------------------------------------------------------------------------------------
+
     /**
      * Update the labels location &#38; size.
      */
@@ -493,7 +537,6 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
 
-    // Private -------------------------------------------------------------------------------------
     /**
      * {@summary Return a table of web site link button.}
      * It also have a swap language button.

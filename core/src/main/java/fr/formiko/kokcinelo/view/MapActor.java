@@ -43,12 +43,20 @@ public class MapActor extends Actor {
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);
-        createTexture((int) width, (int) height, color, withDetails, stones, sticks);
+        try {
+            createTexture((int) width, (int) height, color, withDetails, stones, sticks);
+        } catch (Throwable e) {
+            App.log(3, "constructor", "Error while creating texture: " + e.getMessage());
+        }
         setOrigin(Align.center);
         setVisible(true);
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
+        try {
+            shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setAutoShapeType(true);
+        } catch (Throwable e) {
+            App.log(3, "constructor", "Error while creating shapeRenderer: " + e.getMessage());
+        }
         App.log(0, "constructor", "new MapActor: " + toString());
     }
 
@@ -90,7 +98,10 @@ public class MapActor extends Actor {
                     c = circle;
                     break;
                 }
+                long time = System.currentTimeMillis();
                 textureWithDark = new Texture(getMaskPixmap((int) c.radius));
+                // TODO try to call only once or reduce time to create texture.
+                App.log(1, System.currentTimeMillis() - time + "ms to create textureWithDark");
             }
             return textureWithDark;
         }

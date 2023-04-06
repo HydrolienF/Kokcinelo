@@ -2,7 +2,6 @@ package fr.formiko.kokcinelo.model;
 
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.Slot;
 
 /**
@@ -44,17 +43,4 @@ public class Ant extends Creature {
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Ladybug.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
-    public void moveAI(GameState gs) {
-        Ladybug ladybug = (Ladybug) closestCreature(gs.getLadybugs());
-        if (ladybug != null) {
-            // Hunt move
-            goTo(new Vector2(ladybug.getCenterX(), ladybug.getCenterY()));
-            moveFront(0.6f);
-        } else {
-            // Normal move
-            minorRandomRotation(0.02);
-            moveFront(0.6f);
-        }
-        stayInMap(gs.getMapWidth(), gs.getMapHeight());
-    }
 }

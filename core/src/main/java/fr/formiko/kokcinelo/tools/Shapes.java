@@ -33,14 +33,14 @@ public class Shapes {
      * @param height height of the sky rectangle
      * @param ligth  ligth of the sky bewteen 0 and 1
      */
-    public static void drawSky(int width, int height, float ligth) {
+    public static void drawSky(float x, float y, float width, float height, float ligth) {
         shapeRenderer = getShapeRenderer();
         // draw blue sky gradient
         shapeRenderer.begin();
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         Color topColor = new Color(0, 0.4f * ligth, 1f * ligth, 1);
         Color bottomColor = new Color(0, 0.8f * ligth, 1f * ligth, 1);
-        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
+        shapeRenderer.rect(x, y, width, height, bottomColor, bottomColor, topColor, topColor);
         shapeRenderer.end();
     }
     /**
@@ -49,7 +49,7 @@ public class Shapes {
      * @param width  width of the sky rectangle
      * @param height height of the sky rectangle
      */
-    public static void drawUnderground(int width, int height, float pathStart, float pathLength) {
+    public static void drawUnderground(float x, float y, float width, float height, float pathStart, float pathLength) {
         shapeRenderer = getShapeRenderer();
 
         shapeRenderer.begin();
@@ -60,6 +60,15 @@ public class Shapes {
         // Color pathColor = new Color(0.2f, 0.1f, 0.05f, 1);
         // Color pathColor = new Color(0.8f, 0.5f, 0.3f, 1);
         // shapeRenderer.rect(0, pathStart * height, width, pathLength * height, pathColor, pathColor, pathColor, pathColor);
+        shapeRenderer.end();
+    }
+    public static void drawGrass(float x, float y, float width, float height, float ligth) {
+        shapeRenderer = getShapeRenderer();
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        Color topColor = new Color(App.GREEN.r, App.GREEN.g - 40f / 255 * (1 - ligth), App.GREEN.b, 1);
+        Color bottomColor = new Color(App.GREEN.r, App.GREEN.g * 0.4f + 20f / 255 * ligth, App.GREEN.b, 1);
+        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
         shapeRenderer.end();
     }
     /**

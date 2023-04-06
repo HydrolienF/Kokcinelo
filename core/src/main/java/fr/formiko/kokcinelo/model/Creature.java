@@ -1,8 +1,11 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -33,6 +36,7 @@ public abstract class Creature extends MapItem {
 
     protected float lifePoints;
     protected float currentSpeed;
+    protected float defaultMoveFrontSpeed;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -43,6 +47,7 @@ public abstract class Creature extends MapItem {
     public Creature(String textureName) {
         super(textureName);
         wantedRotation = 0f;
+        defaultMoveFrontSpeed = 0.6f;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -70,6 +75,36 @@ public abstract class Creature extends MapItem {
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
+    /**
+     * Creature witch hunt this &#38; this can see it.
+     */
+    public Set<Creature> getVisibleCreatureHuntedBy() {
+        if (getCreaturesHuntedBy().isEmpty()) {
+            return Set.of();
+        }
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                .filter(c -> c.isInstanceOf(getCreaturesHuntedBy()))
+                .filter(c -> see(c))
+                .collect(HashSet::new, Set::add, Set::addAll);
+        // @formatter:on
+    }
+    /**
+     * Creature witch are hunted by this &#38; this can see it.
+     */
+    public Creature getClosestVisibleCreatureToHunt() {
+        if (getCreaturesToHunt().isEmpty()) {
+            return null;
+        }
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                .filter(c -> c.isInstanceOf(getCreaturesToHunt()))
+                .filter(c -> see(c))
+                // Compare distance to this.
+                .min((c1, c2) -> Float.compare(distanceTo(c1), distanceTo(c2)))
+                .orElse(null);
+        // @formatter:on
+    }
 
     // FUNCTIONS -----------------------------------------------------------------
     public String toString() {
@@ -79,7 +114,8 @@ public abstract class Creature extends MapItem {
                 + wantedRotation + "\n" + "lastHitTime : " + lastHitTime + "\n" + "lastShootTime : " + lastShootTime + "\n"
                 + "hitFrequency : " + hitFrequency + "\n" + "shootFrequency : " + shootFrequency + "\n";
     }
-    public boolean see(MapItem mi) { return isInRadius(mi, visionRadius); }
+    /** Do this see mi */
+    public boolean see(MapItem mi) { return isInRadius(mi, visionRadius + mi.getHitRadius()); }
     /**
      * {@summary Boost the creature.}
      */
@@ -132,10 +168,19 @@ public abstract class Creature extends MapItem {
      */
     public void goTo(Vector2 v, float degdif) {
         // Update wantedRotation
+        // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+        // float previousRotation = getRotation() % 360;
+        // float newRotation = v2.angleDeg() - 90;
+        // float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        // setWantedRotation(wantedRotation);
         Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
-        float previousRotation = getRotation() % 360;
         float newRotation = v2.angleDeg() - 90;
-        float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
+        goTo(newRotation - degdif);
+    }
+    public void goTo(float newRotation) {
+        // Update wantedRotation
+        float previousRotation = getRotation() % 360;
+        float wantedRotation = (previousRotation - newRotation + 360) % 360;
         setWantedRotation(wantedRotation);
     }
     /***
@@ -144,31 +189,67 @@ public abstract class Creature extends MapItem {
      * @param v contains coordinate of Point to got to
      */
     public void goTo(Vector2 v) { goTo(v, 0f); }
-    /***
+    public void goTo(MapItem mi) { goTo(mi.getCenter()); }
+    /**
      * {@summary Set wanted rotation to run away from v.}
-     * To run away from we calculate angle to go to, then add 180 degre to go to the oposite direction.
+     * To run away from we calculate angle to go to the center of the enemies,
+     * then add 180 degre to go to the oposite direction.
      * 
      * @param vectorList contains coordinate of Points to run away from
      */
-    public void runAwayFrom(Vector2... vectorList) {
+    public void runAwayFrom(List<Float> forbiddenAngles, Vector2... vectorList) {
         if (vectorList.length == 0) {
             return;
-        } else if (vectorList.length == 1) {
+        } else if (vectorList.length == 1 && forbiddenAngles.isEmpty()) {
             goTo(vectorList[0], 180f);
-        } else if (vectorList.length > 2) {
-            float x = 0;
-            float y = 0;
-            int cpt = 0;
-            for (Vector2 v2 : vectorList) {
-                x += v2.x;
-                y += v2.y;
-                cpt++;
+        } else {
+            // Run by the biggest angle between 2 enemies.
+            List<Float> angles = new ArrayList<Float>();
+            for (Vector2 v : vectorList) {
+                Vector2 vAngle = new Vector2(v.x - getCenterX(), v.y - getCenterY());
+                angles.add(vAngle.angleDeg());
             }
-            runAwayFrom(new Vector2(x / cpt, y / cpt));
+            // Also avoid wall by conciderning walls as enemies.
+            if (forbiddenAngles.size() > 0) {
+                angles.add(forbiddenAngles.get(0));
+                if (forbiddenAngles.size() > 1) {
+                    float a0 = forbiddenAngles.get(0);
+                    float a1 = forbiddenAngles.get(1);
+                    if (forbiddenAngles.get(0) == 0 && forbiddenAngles.get(1) == 270) { // patch for the angle 270 to 0.
+                        a0 = 270;
+                        a1 = 360;
+                    }
+                    // Add more enemies angle between the 2 forbidden angles to avoid to go into the corner.
+                    // (Add 7, one for each 10° should be enoth.)
+                    for (float i = a0 + 10; i < a1; i += 10) {
+                        angles.add(i);
+                    }
+                }
+            }
+
+            angles.sort((a1, a2) -> Float.compare(a1, a2));
+
+            float maxAngleDif = 0;
+            float direction = 0;
+            List<Float> anglesDif = new ArrayList<Float>();
+            float lastAngle = angles.get(angles.size() - 1);
+            for (float angle : angles) {
+                float angleDif = (angle - lastAngle + 360) % 360;
+                if (angleDif > maxAngleDif) {
+                    maxAngleDif = angleDif;
+                    direction = angle - angleDif / 2;
+                }
+                anglesDif.add(angleDif);
+                lastAngle = angle;
+            }
+            App.log(0, "forbiddenAngles : " + forbiddenAngles);
+            App.log(0, "angles : " + angles);
+            App.log(0, "anglesDif : " + anglesDif);
+            App.log(0, "maxanglesDif : " + maxAngleDif);
+            App.log(0, "direction:" + direction);
+            goTo(direction - 90);
         }
     }
-
-    // TODO #140 a way to fix it is to be able to run away from multiple enemis
 
     /**
      * {@summary Return the closest Creature from the collection.}
@@ -185,6 +266,12 @@ public abstract class Creature extends MapItem {
         }
         return closest;
     }
+    /**
+     * {@summary Return all the seeable Creature from the collection.}
+     * 
+     * @param coll Collection to iterate over
+     * @return the seeable creatures
+     */
     public Collection<Creature> seeableCreatures(Collection<? extends Creature> coll) {
         Set<Creature> set = new HashSet<Creature>();
         for (Creature c : coll) {
@@ -199,7 +286,66 @@ public abstract class Creature extends MapItem {
      * 
      * @param gs GameState to use
      */
-    public abstract void moveAI(GameState gs);
+    public int moveAI(GameState gs) {
+        int moveStatus;
+        Collection<Creature> enemies = getVisibleCreatureHuntedBy();
+        if (!enemies.isEmpty()) {
+            // Run away move
+            Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
+            runAwayFrom(getWallsAngles(), vectors);
+            moveFront();
+            moveStatus = 2;
+        } else {
+            Creature target = getClosestVisibleCreatureToHunt();
+            if (target != null) {
+                // Hunt move
+                goTo(target);
+                moveFront();
+                moveStatus = 1;
+            } else {
+                // Normal move
+                minorRandomRotation(0.02);
+                moveFront(defaultMoveFrontSpeed);
+                moveStatus = 0;
+            }
+        }
+        stayInMap(gs.getMapWidth(), gs.getMapHeight());
+        return moveStatus;
+    }
+    /**
+     * {@summary Return the angle of wall.}
+     * It is used to avoid wall when running away by adding them as enemies.
+     * 
+     * @return the angle of wall (sorted)
+     */
+    public List<Float> getWallsAngles() {
+        List<Float> wallList = new ArrayList<Float>();
+        float distanceToWall = getVisionRadius() / 2;
+        // @formatter:off
+        // If there is a really close wall, seach for a second one a bit further.
+        if(getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()
+                || getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()
+                || getCenterX() - distanceToWall < 0
+                || getCenterY() - distanceToWall < 0){
+            distanceToWall = getVisionRadius();
+        }
+        // @formatter:on
+
+        if (getCenterX() + distanceToWall > Controller.getController().getGameState().getMapWidth()) {
+            wallList.add(0f);
+        }
+        if (getCenterY() + distanceToWall > Controller.getController().getGameState().getMapHeight()) {
+            wallList.add(90f);
+        }
+        if (getCenterX() - distanceToWall < 0) {
+            wallList.add(180f);
+        }
+        if (getCenterY() - distanceToWall < 0) {
+            wallList.add(270f);
+        }
+
+        return wallList;
+    }
 
     /**
      * {@summary Check if the Creature is in the map &#38; move inside if needed.}
@@ -262,8 +408,35 @@ public abstract class Creature extends MapItem {
      */
     public void shoot() {
         lastShootTime = System.currentTimeMillis();
+        getActor().animate("shoot", 6);
         // App.log(1, this + " shoot " + c);
     }
     /** Return true if is an AI. */
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
+
+    /**
+     * {@summary Add time to lastHitTime & lastShootTime.}
+     * It is used when the game is resume to avoid that creature can hit &#38; shoot again even if game time have'nt run.
+     * 
+     * @param timePaused time that have run bewteen pause &#38; resume
+     */
+    public void addTime(long timePaused) {
+        lastHitTime += timePaused;
+        lastShootTime += timePaused;
+    }
+
+    /**
+     * {@summary Return true if is instance of one of the class.}
+     * 
+     * @param coll Collection to iterate over
+     * @return true if is instance of one of the class
+     */
+    private boolean isInstanceOf(Collection<Class<? extends Creature>> coll) {
+        for (Class<? extends Creature> clss : coll) {
+            if (clss.isInstance(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

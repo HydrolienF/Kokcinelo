@@ -31,6 +31,8 @@ Game is done with Java using GUI library [libgdx](https://github.com/libgdx/libg
 To compile & run game, launch in command line ```./gradlew desktop:run```
 You need Java 17 to run game.
 
+You can find the javadoc [here](https://formiko.fr/Kokcinelo/javadoc/)
+
 # Team
 
 ## Developers: 

@@ -1,5 +1,11 @@
 package fr.formiko.kokcinelo.tools;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * {@summary Math tools class with usefull static functions.}
  * 
@@ -142,5 +148,43 @@ public class Math {
             return max;
         }
         return val;
+    }
+
+    public static List<Float> getSegmentIntersectionAngles(Vector2 circleCenter, float circleRadius, Vector2 pointA, Vector2 pointB) {
+        return getCircleLineIntersectionPoint(pointA, pointB, circleCenter, circleRadius).stream()
+                .map(intersection -> (intersection.sub(circleCenter).angleDeg() - 90f + 360f) % 360f).sorted().collect(Collectors.toList());
+    }
+
+    // cf https://stackoverflow.com/questions/13053061/circle-line-intersection-points
+    public static List<Vector2> getCircleLineIntersectionPoint(Vector2 pointA, Vector2 pointB, Vector2 center, float radius) {
+        float baX = pointB.x - pointA.x;
+        float baY = pointB.y - pointA.y;
+        float caX = center.x - pointA.x;
+        float caY = center.y - pointA.y;
+
+        float a = baX * baX + baY * baY;
+        float bBy2 = baX * caX + baY * caY;
+        float c = caX * caX + caY * caY - radius * radius;
+
+        float pBy2 = bBy2 / a;
+        float q = c / a;
+
+        float disc = pBy2 * pBy2 - q;
+        if (disc < 0) {
+            return Collections.emptyList();
+        }
+        // if disc == 0 ... dealt with later
+        float tmpSqrt = (float) java.lang.Math.sqrt(disc);
+        float abScalingFactor1 = -pBy2 + tmpSqrt;
+        float abScalingFactor2 = -pBy2 - tmpSqrt;
+
+        Vector2 p1 = new Vector2(pointA.x - baX * abScalingFactor1, pointA.y - baY * abScalingFactor1);
+        Vector2 p2;
+        if (disc == 0) { // abScalingFactor1 == abScalingFactor2
+            p2 = p1;
+        } else {
+            p2 = new Vector2(pointA.x - baX * abScalingFactor2, pointA.y - baY * abScalingFactor2);
+        }
+        return Arrays.asList(p1, p2);
     }
 }
