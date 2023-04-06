@@ -76,7 +76,7 @@ public class MenuScreen extends KScreen implements Screen {
     private boolean playingVideo = false;
     private long timePlayingVideo;
     private int fullVideoTime = 10000;
-    private float BACKGROUND_SPEED = 100;
+    private float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -127,9 +127,10 @@ public class MenuScreen extends KScreen implements Screen {
         if (getLevel().getLetter().equals("K")) {
             Actor environement = backgroundStage.getRoot().findActor("environement");
             cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2;
+            cameraBc.zoom = 1;
         } else {
-            cameraBc.zoom = 0.5f;
-            cameraBc.position.y = Gdx.graphics.getHeight() / 2;
+            cameraBc.zoom = 0.3f;
+            cameraBc.position.y = Gdx.graphics.getHeight() / 2 * cameraBc.zoom;
         }
         batch.setProjectionMatrix(cameraBc.combined);
         backgroundStage.act(delta);
