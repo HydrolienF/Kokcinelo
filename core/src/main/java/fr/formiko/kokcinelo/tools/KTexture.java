@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.tools;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 
 public class KTexture extends Texture {
@@ -9,5 +10,9 @@ public class KTexture extends Texture {
         setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         // super(file);
         // setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+    }
+    public KTexture(Pixmap pixmap) {
+        super(pixmap, true);
+        setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
     }
 }

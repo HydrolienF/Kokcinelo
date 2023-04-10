@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
@@ -126,7 +127,7 @@ public class MapActor extends Actor {
             // To save the pixmap to a file, uncomment the following line:
             // PixmapIO.writePNG(new FileHandle("screenshotX.png"), pixmap);// save pixmap to file
         }
-        texture = new Texture(pixmap);
+        texture = new KTexture(pixmap);
         pixmap.dispose();
     }
 
