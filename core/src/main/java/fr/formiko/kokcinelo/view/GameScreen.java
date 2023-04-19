@@ -6,6 +6,9 @@ import fr.formiko.kokcinelo.InputCore;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
+import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -41,6 +44,7 @@ public class GameScreen extends KScreen implements Screen {
     private boolean isStop;
     private boolean stopAfterNextDrawBool;
     private InputMultiplexer inputMultiplexer;
+    private List<Integer> times = new ArrayList<Integer>();
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -96,6 +100,7 @@ public class GameScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        long time = System.currentTimeMillis();
         // App.log(1, "isPause: " + isPause);
         boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
@@ -151,6 +156,7 @@ public class GameScreen extends KScreen implements Screen {
             stop();
             Controller.getController().playEndGameSound();
         }
+        times.add((int) (System.currentTimeMillis() - time));
     }
 
     /**
@@ -230,6 +236,8 @@ public class GameScreen extends KScreen implements Screen {
         if (!isPause) {
             pause();
         }
+        IntSummaryStatistics stats = times.stream().mapToInt(Integer::intValue).summaryStatistics();
+        App.log(1, "Performance of GameScreen frames draw: " + stats.getAverage() + " ms in average. (max: " + stats.getMax() + " ms)");
     }
     /***
      * {@summary Definitivly stop current game after next draw.}
