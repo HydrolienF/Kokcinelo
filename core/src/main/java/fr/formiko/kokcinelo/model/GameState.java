@@ -142,6 +142,7 @@ public class GameState {
     public Collection<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
         if (mapActorBg != null) {
+            mapActorBg.setName("background");
             l.add(mapActorBg);
         }
         for (Creature creature : allCreatures()) {
@@ -150,6 +151,7 @@ public class GameState {
             }
         }
         if (mapActorFg != null) {
+            mapActorFg.setName("foreground");
             l.add(mapActorFg);
         }
         return l;
@@ -160,12 +162,12 @@ public class GameState {
      * @param playerId current player id
      */
     public void updateActorVisibility(int playerId, boolean spectatorMode) {
-        Creature playedCreature = getPlayerCreature(playerId);
-        if (playedCreature != null) {
-            for (Creature creature : allCreatures()) {
-                creature.getActor().setVisible(playedCreature.see(creature) || spectatorMode);
-            }
-        }
+        // Creature playedCreature = getPlayerCreature(playerId);
+        // if (playedCreature != null) {
+        // for (Creature creature : allCreatures()) {
+        // creature.getActor().setVisible(playedCreature.see(creature) || spectatorMode);
+        // }
+        // }
     }
     /**
      * {@summary Return most importants variables.}

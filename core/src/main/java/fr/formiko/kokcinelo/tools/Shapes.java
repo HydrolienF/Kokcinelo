@@ -23,7 +23,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
 
-    private static ShapeRenderer getShapeRenderer() {
+    public static ShapeRenderer getShapeRenderer() {
         if (shapeRenderer == null) {
             shapeRenderer = new ShapeRenderer();
             shapeRenderer.setAutoShapeType(true);
@@ -315,6 +315,34 @@ public class Shapes {
             in.getTextureData().prepare();
         }
         return in.getTextureData().consumePixmap();
+    }
+
+    /**
+     * {@summary Return pixmap without a centered circle of pixel.}
+     *
+     * @return pixmap without a centered circle of pixel
+     */
+    public static Pixmap getMaskPixmap(float radius, float width, float height) {
+        final int blackLevel = 255; // [0; 255]
+        final float egdeSize = 0.2f;
+
+        Pixmap darkedArea = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
+        int xCenter = (int) (darkedArea.getWidth() / 2);
+        int yCenter = (int) (darkedArea.getHeight() / 2);
+        float edgeLength = radius * egdeSize;
+
+        for (int x = 0; x < darkedArea.getWidth(); x++) {
+            for (int y = 0; y < darkedArea.getHeight(); y++) {
+                int distToCenter = (int) Math.getDistanceBetweenPoints(x, y, xCenter, yCenter);
+                if (distToCenter > radius) {
+                    darkedArea.drawPixel(x, y, blackLevel);
+                } else if (distToCenter > radius - edgeLength) {
+                    float nextToTheEdgess = 1f - (radius - distToCenter) / edgeLength;
+                    darkedArea.drawPixel(x, y, (int) (blackLevel * nextToTheEdgess));
+                }
+            }
+        }
+        return darkedArea;
     }
 
 }

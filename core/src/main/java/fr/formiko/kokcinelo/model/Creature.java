@@ -75,6 +75,7 @@ public abstract class Creature extends MapItem {
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
+    public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
     /**
      * Creature witch hunt this &#38; this can see it.
      */
@@ -103,6 +104,17 @@ public abstract class Creature extends MapItem {
                 // Compare distance to this.
                 .min((c1, c2) -> Float.compare(distanceTo(c1), distanceTo(c2)))
                 .orElse(null);
+        // @formatter:on
+    }
+    /**
+     * @return All Creature of the same type as this.
+     */
+    public Set<Creature> getAllFriendlyCreature() {
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                // TODO some aphid may be friend with ladybug & be added to this.
+                .filter(c -> c.isInstanceOf(getCreaturesFriendly()))
+                .collect(HashSet::new, Set::add, Set::addAll);
         // @formatter:on
     }
 

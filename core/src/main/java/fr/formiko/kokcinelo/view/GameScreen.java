@@ -3,16 +3,26 @@ package fr.formiko.kokcinelo.view;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
+import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -30,6 +40,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class GameScreen extends KScreen implements Screen {
     private final App game;
     private Viewport viewport;
+    private Stage backgroundStage;
+    private Stage foregroundStage;
     private Stage stage;
     private Hud hud;
     private EndGameMenu egm;
@@ -41,6 +53,12 @@ public class GameScreen extends KScreen implements Screen {
     private boolean isStop;
     private boolean stopAfterNextDrawBool;
     private InputMultiplexer inputMultiplexer;
+    private Texture mask;
+    private List<Integer> times;
+    /** Used to store reusable frame buffer */
+    private Map<Integer, FrameBuffer> frameBuffers;
+    /** Used to store reusable texture */
+    private Map<Integer, Texture> visibleCircleTextures;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -51,6 +69,9 @@ public class GameScreen extends KScreen implements Screen {
      */
     public GameScreen(final App game) {
         this.game = game;
+        times = new LinkedList<Integer>(); // LinkedList because many add and few get.
+        frameBuffers = new HashMap<Integer, FrameBuffer>();
+        visibleCircleTextures = new HashMap<Integer, Texture>();
 
         // Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
@@ -61,10 +82,25 @@ public class GameScreen extends KScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         stage = new Stage(viewport);
+        backgroundStage = new Stage(viewport);
+        foregroundStage = new Stage(viewport);
         for (Actor a : Controller.getController().allActors()) {
-            stage.addActor(a);
+            String name = a.getName() == null ? "" : a.getName();
+            switch (name) {
+            case "background":
+                backgroundStage.addActor(a);
+                break;
+            case "foreground":
+                foregroundStage.addActor(a);
+                break;
+            default:
+                stage.addActor(a);
+                break;
+            }
         }
         stage.setDebugAll(Controller.isDebug());
+        backgroundStage.setDebugAll(Controller.isDebug());
+        foregroundStage.setDebugAll(Controller.isDebug());
 
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
@@ -96,6 +132,7 @@ public class GameScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        long time = System.currentTimeMillis();
         // App.log(1, "isPause: " + isPause);
         boolean stopAtTheEnd = stopAfterNextDrawBool;
         handleInput(); // Done before draw to avoid some GUI glitch
@@ -111,9 +148,18 @@ public class GameScreen extends KScreen implements Screen {
 
         getController().updateActorVisibility(Controller.getController().getLocalPlayerId());
         if (!isPause) {
-            stage.act(Gdx.graphics.getDeltaTime());// update actions are drawn here
+            stage.act(delta);// update actions are drawn here
+            backgroundStage.act(delta);
+            foregroundStage.act(delta);
         }
-        stage.draw();
+
+        backgroundStage.draw();
+
+        drawVisibleMapItem(delta);
+
+        foregroundStage.draw();
+
+
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
         if (!isPause) {
@@ -151,7 +197,82 @@ public class GameScreen extends KScreen implements Screen {
             stop();
             Controller.getController().playEndGameSound();
         }
+        times.add((int) (System.currentTimeMillis() - time));
     }
+
+    /**
+     * {@summary Draw all visible map item.}<br>
+     * Visible map item are all item that are in player creature vision range or friendly creature vision range.
+     * 
+     * @param delta time since last draw
+     */
+    private void drawVisibleMapItem(float delta) {
+        for (Creature ligthSource : getController().getLightSources()) {
+            // FrameBuffer frameBuffer = getFrameBuffers(2000);
+            // FrameBuffer frameBuffer = getFrameBuffers((int) ligthSource.getVisionRadius());
+            // frameBuffer.bind();
+            game.batch.begin();
+            // game.batch.setProjectionMatrix(stage.getCamera().combined);
+            drawVisibleAreaCreature(ligthSource);
+            drawVisibleAreaMask(ligthSource);
+            game.batch.end();
+            // frameBuffer.end();
+
+            // // draw frame buffer into screen.
+            // Texture texture = frameBuffer.getColorBufferTexture();
+            // Sprite sprite = new Sprite(texture);
+            // sprite.flip(false, true);
+            // // sprite.setScale(camera.zoom);
+            // // sprite.setPosition(Controller.getController().getGameState().getMapActor().getX(),
+            // // Controller.getController().getGameState().getMapActor().getY());
+            // sprite.setPosition(0, 0);
+            // // sprite.setCenter(ligthSource.getCenterX() * camera.zoom, ligthSource.getCenterY() * camera.zoom);
+            // // sprite.setScale(Map);
+            // game.batch.begin();
+            // // game.batch.setProjectionMatrix(camera.combined);
+            // sprite.draw(game.batch);
+            // game.batch.end();
+        }
+    }
+
+    /**
+     * Draw all creatures in the visible area.
+     */
+    private void drawVisibleAreaCreature(Creature ligthSource) {
+        game.batch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+        // ScreenUtils.clear(Color.CLEAR);
+        // TODO Draw only if in visible area may improve performance
+        // stage.getCamera().update();
+        stage.getRoot().draw(game.batch, 1);
+    }
+
+    /**
+     * Draw a mask over the visible area.
+     * Mask will remove some previously drawn pixels depending of visible circle texture.
+     * Colored part of the mask will be removed (with same alpha).
+     */
+    private void drawVisibleAreaMask(Creature ligthSource) {
+        game.batch.flush(); // flush need to be call before changing blend function
+        game.batch.setBlendFunctionSeparate(GL30.GL_ZERO, GL30.GL_ONE, GL30.GL_ZERO, GL30.GL_ONE_MINUS_SRC_ALPHA);
+        // game.batch.draw(getVisibleCircleTexture((int) ligthSource.getVisionRadius()), 0, 0);
+
+        game.batch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+
+    private FrameBuffer getFrameBuffers(int radius) {
+        if (!frameBuffers.containsKey(radius)) {
+            frameBuffers.put(radius, new FrameBuffer(Format.RGBA8888, radius * 2, radius * 2, false));
+        }
+        return frameBuffers.get(radius);
+    }
+    public Texture getVisibleCircleTexture(int radius) {
+        if (!visibleCircleTextures.containsKey(radius)) {
+            // visibleCircleTextures.put(radius, createVisibleCircleTexture(radius));
+        }
+        return visibleCircleTextures.get(radius);
+    }
+
 
     /**
      * {@summary Handle user input &#38; mostly move camera.}<br>
@@ -230,6 +351,8 @@ public class GameScreen extends KScreen implements Screen {
         if (!isPause) {
             pause();
         }
+        IntSummaryStatistics stats = times.stream().mapToInt(Integer::intValue).summaryStatistics();
+        App.log(2, "PERFORMANCES", stats.getAverage() + " ms in average. (max: " + stats.getMax() + " ms)");
     }
     /***
      * {@summary Definitivly stop current game after next draw.}

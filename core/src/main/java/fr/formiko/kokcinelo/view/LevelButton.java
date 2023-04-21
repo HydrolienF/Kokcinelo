@@ -237,6 +237,10 @@ class LevelButton extends Button {
                 texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/Creatures/aphid.png")), 0.6f);
                 break;
             }
+            case "2K":{
+                texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/Creatures/ant.png")), 1f);
+                break;
+            }
             default: {
                 texture = Shapes.getCircle(radius, App.GREEN);
             }
