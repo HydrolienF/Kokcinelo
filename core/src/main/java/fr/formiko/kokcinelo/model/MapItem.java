@@ -57,6 +57,7 @@ public abstract class MapItem {
     public void setRotation(float degrees) { getActor().setRotation(degrees); }
     public void setRandomLoaction(float maxX, float maxY) { getActor().setRandomLoaction(maxX, maxY); }
     public void setZoom(float zoom) { getActor().setZoom(zoom); }
+    public float getZoom() { return getActor().getZoom(); }
     public void removeActor() { getActor().remove(); }
 
     // FUNCTIONS -----------------------------------------------------------------

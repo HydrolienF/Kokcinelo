@@ -84,6 +84,7 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Main constructor.}
      */
     public MenuScreen() {
+        super();
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -121,6 +122,7 @@ public class MenuScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        long time = System.currentTimeMillis();
         ScreenUtils.clear(Color.BLACK);
 
         cameraBc.position.x += delta * BACKGROUND_SPEED;
@@ -161,6 +163,7 @@ public class MenuScreen extends KScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+        times.add((int) (System.currentTimeMillis() - time));
     }
 
     /**

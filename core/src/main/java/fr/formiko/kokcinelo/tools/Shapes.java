@@ -1,16 +1,25 @@
 package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.model.Creature;
 import java.util.HashSet;
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -22,6 +31,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
+    private static Texture outCircleTexture;
 
     public static ShapeRenderer getShapeRenderer() {
         if (shapeRenderer == null) {
@@ -343,6 +353,91 @@ public class Shapes {
             }
         }
         return darkedArea;
+    }
+
+    /**
+     * {@summary Return a sprite that fit into a circle.}
+     * 
+     * @param radius    radius of the circle
+     * @param color     color of the circle
+     * @param creatures list of creatures to draw
+     * @return a sprite that fit into a circle
+     */
+    public static Sprite getCircledSprite(int radius, Color color, Creature... creatures) {
+        SpriteBatch spriteBatch = new SpriteBatch();
+        Stage stage = new Stage(new ScreenViewport());
+        FrameBuffer frameBuffer = new FrameBuffer(Format.RGBA8888, radius * 2, radius * 2, false);
+
+        int k = 0;
+        for (Creature creature : creatures) {
+            stage.addActor(creature.getActor());
+            creature.setMovingSpeed(0);
+            if (creatures.length == 1) {
+                creature.setCenter(radius, radius);
+            } else {
+                if (k == 0) {
+                    creature.setRotation(-90);
+                } else {
+                    creature.setRotation(90);
+                }
+                creature.setCenter(radius * 2 * k, radius);
+            }
+            creature.setZoom(creature.getZoom() * (radius / 100f));
+            k++;
+        }
+
+        frameBuffer.bind();
+        spriteBatch.begin();
+        ScreenUtils.clear(color);
+        // draw masked
+        stage.act();
+        stage.draw();
+
+        // draw mask
+        spriteBatch.flush();
+        spriteBatch.setBlendFunctionSeparate(GL30.GL_ZERO, GL30.GL_ONE, GL30.GL_ZERO, GL30.GL_ONE_MINUS_SRC_ALPHA);
+        spriteBatch.draw(getOutCircleMask(radius), 0, 0);
+        spriteBatch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+
+        spriteBatch.end();
+        frameBuffer.end();
+
+        Texture texture = frameBuffer.getColorBufferTexture();
+        Sprite sprite = new Sprite(texture);
+        sprite.flip(false, true);
+        return sprite;
+    }
+    /**
+     * {@summary Return a mask of outside a circle.}
+     * It use a static texture to avoid to create a new texture each time.
+     * 
+     * @param radius radius of the circle
+     */
+    private static Texture getOutCircleMask(float radius) {
+        if (outCircleTexture == null || outCircleTexture.getWidth() != radius * 2) {
+            if (outCircleTexture != null)
+                outCircleTexture.dispose();
+            outCircleTexture = new Texture(getOutCirclePixmap(radius));
+        }
+        return outCircleTexture;
+    }
+    /**
+     * {@summary Return a mask of outside a circle as a Pixmap.}
+     * It will create a new pixmap each time.
+     * 
+     * @param radius radius of the circle
+     */
+    private static Pixmap getOutCirclePixmap(float radius) {
+        Pixmap pixmap = new Pixmap((int) (radius * 2), (int) (radius * 2), Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        for (int i = 0; i < pixmap.getWidth(); i++) {
+            for (int j = 0; j < pixmap.getHeight(); j++) {
+                if (Math.getDistanceBetweenPoints(i, j, radius, radius) > radius) {
+                    pixmap.drawPixel(i, j);
+                }
+            }
+        }
+        return pixmap;
     }
 
 }

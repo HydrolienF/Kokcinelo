@@ -131,6 +131,7 @@ public class Controller {
     public synchronized void endMenuScreen() {
         App.log(1, "end menu screen");
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
+            ((MenuScreen) getScreen()).displayPerf();
             Screen toDispose = getScreen();
             level = ((MenuScreen) (getScreen())).getLevel();
             createNewVideoScreen();
@@ -719,7 +720,7 @@ public class Controller {
         Creature pc = getPlayerCreature();
         if (pc == null) {
             return List.of();
-        }else{
+        } else {
             return pc.getAllFriendlyCreature();
         }
     }

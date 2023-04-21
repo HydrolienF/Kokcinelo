@@ -8,9 +8,6 @@ import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import java.util.HashMap;
-import java.util.IntSummaryStatistics;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -54,7 +51,6 @@ public class GameScreen extends KScreen implements Screen {
     private boolean stopAfterNextDrawBool;
     private InputMultiplexer inputMultiplexer;
     private Texture mask;
-    private List<Integer> times;
     /** Used to store reusable frame buffer */
     private Map<Integer, FrameBuffer> frameBuffers;
     /** Used to store reusable texture */
@@ -68,8 +64,8 @@ public class GameScreen extends KScreen implements Screen {
      * @param game the App where the Screen is display
      */
     public GameScreen(final App game) {
+        super();
         this.game = game;
-        times = new LinkedList<Integer>(); // LinkedList because many add and few get.
         frameBuffers = new HashMap<Integer, FrameBuffer>();
         visibleCircleTextures = new HashMap<Integer, Texture>();
 
@@ -351,8 +347,7 @@ public class GameScreen extends KScreen implements Screen {
         if (!isPause) {
             pause();
         }
-        IntSummaryStatistics stats = times.stream().mapToInt(Integer::intValue).summaryStatistics();
-        App.log(2, "PERFORMANCES", stats.getAverage() + " ms in average. (max: " + stats.getMax() + " ms)");
+        super.displayPerf();
     }
     /***
      * {@summary Definitivly stop current game after next draw.}

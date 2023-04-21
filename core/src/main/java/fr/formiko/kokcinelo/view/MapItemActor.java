@@ -207,13 +207,15 @@ public class MapItemActor extends SkeletonActor {
         if (getSkeleton() != null) {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
-            if (mapItem instanceof Creature) {
+            if (mapItem instanceof Creature && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
                 getAnimationState().getCurrent(0).setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.3f);
             }
-            super.act(delta);
+            if (((Creature) mapItem).getCurrentSpeed() > 0) {
+                super.act(delta);
+            }
         }
     }
-    // Override setter Is not enoth to update rotation and scale as it is done in act()
+    // // Override setter Is not enoth to update rotation and scale as it is done in act()
     // @Override
     // public void setRotation(float degrees) {
     // super.setRotation(degrees);
@@ -240,6 +242,7 @@ public class MapItemActor extends SkeletonActor {
     // personaliseds functions -------------------------------------------------
 
     public void setZoom(float zoom) { setScale(zoom, zoom); }
+    public float getZoom() { return getScaleX(); }
     /**
      * {@summary Set center loaction to a random loaction}
      * 
