@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.view.TraillerImage;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Main class that represent the App &#38; call other Screens.}
@@ -50,6 +52,8 @@ public class App extends Game {
     public static final Color SKY_BLUE_1 = new Color(0f, 0.4f, 1f, 1f);
     public static final Color SKY_BLUE_2 = new Color(0f, 0.7f, 1f, 1f);
     private final Native nativ;
+    private @Null TraillerImage traillerImage;
+    private boolean startTraillerImage;
 
 
     public App(String[] args, Native nativ) {
@@ -122,7 +126,11 @@ public class App extends Game {
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
         Controller.getController().iniAssets();
-        startNewGame();
+        if (startTraillerImage) {
+            traillerImage = new TraillerImage();
+        } else {
+            startNewGame();
+        }
     }
     /**
      * {@summary Start a new Game on this app in GUI.}
@@ -139,7 +147,12 @@ public class App extends Game {
      * @see com.badlogic.gdx.Game#render()
      */
     @Override
-    public void render() { super.render(); }
+    public void render() {
+        super.render();
+        if (traillerImage != null) {
+            traillerImage.render(Gdx.graphics.getDeltaTime());
+        }
+    }
 
     /**
      * {@summary call dispose function of item that need to be dispose so that App close itself.}
@@ -353,6 +366,10 @@ public class App extends Game {
             }
             case "graphicsTest", "gt": {
                 Controller.setGraphicsTest(true);
+                break;
+            }
+            case "traillerImage", "ti": {
+                startTraillerImage = true;
                 break;
             }
             default: {

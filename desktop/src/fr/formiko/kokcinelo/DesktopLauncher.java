@@ -48,7 +48,8 @@ public class DesktopLauncher {
 			App.setWithCloseButton(true);
 			break;
 		case 2: // windowed
-			config.setMaximized(true);
+			// config.setMaximized(true);
+			config.setWindowedMode(1000, 1000);
 			break;
 		}
 		// config.setResizable(false);
