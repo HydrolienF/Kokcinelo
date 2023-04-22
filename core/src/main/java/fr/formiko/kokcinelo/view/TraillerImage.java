@@ -8,12 +8,10 @@ import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.KScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class TraillerImage extends KScreen implements Screen {
-    private Sprite sprite;
     private SpriteBatch spriteBatch;
     private Stage stage;
 

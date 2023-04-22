@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.usual.Os;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +35,9 @@ public class DesktopLauncher {
 				System.out.println("Fail to get version in DesktopLauncher.");
 			}
 		}
+		if (Os.getOs().isLinux()) {
+			displayMode = 0;
+		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		switch (displayMode) {
@@ -48,8 +52,7 @@ public class DesktopLauncher {
 			App.setWithCloseButton(true);
 			break;
 		case 2: // windowed
-			// config.setMaximized(true);
-			config.setWindowedMode(1000, 1000);
+			config.setMaximized(true);
 			break;
 		}
 		// config.setResizable(false);
