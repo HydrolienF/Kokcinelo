@@ -427,11 +427,7 @@ public class MenuScreen extends KScreen implements Screen {
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
         // set background
         if (backgroundLabelColored) {
-            pixmap = new Pixmap(1, 1, Format.RGBA8888);
-            pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
-            pixmap.fill();
-            labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
-            pixmap.dispose();
+            labelStyle.background = Shapes.getWhiteBackground();
         }
 
         skin.add("default", labelStyle);

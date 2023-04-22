@@ -17,6 +17,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -439,5 +441,26 @@ public class Shapes {
         }
         return pixmap;
     }
+
+    /**
+     * {@summary Return a white background with transparency.}
+     * 
+     * @param alpha alpha of the background
+     * @return a white background
+     */
+    public static Drawable getWhiteBackground(float alpha) {
+        Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+        pixmap.setColor(new Color(1f, 1f, 1f, alpha));
+        pixmap.fill();
+        Drawable drawable = new Image(new Texture(pixmap)).getDrawable();
+        pixmap.dispose();
+        return drawable;
+    }
+    /**
+     * {@summary Return a white background with transparency.}
+     * 
+     * @return a white background
+     */
+    public static Drawable getWhiteBackground() { return getWhiteBackground(0.3f); }
 
 }

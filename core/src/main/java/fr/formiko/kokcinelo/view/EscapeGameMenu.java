@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.g;
 import java.util.List;
 import com.badlogic.gdx.Gdx;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -42,9 +44,11 @@ public class EscapeGameMenu implements Disposable {
         FitViewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
+        int pad = Gdx.graphics.getWidth() / 192;
+
         Table table = new Table();
-        table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 10);
-        table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 2 / 3);
+        // table.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 10);
+        // table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 2 / 3);
 
         if (skin == null) {
             skin = MenuScreen.getDefautSkin();
@@ -117,9 +121,14 @@ public class EscapeGameMenu implements Disposable {
                 });
                 break;
             }
-            table.add(itb);
+            table.add(itb).pad(0, pad, 0, pad);
             table.row();
         }
+
+        table.center();
+        table.setBackground(Shapes.getWhiteBackground());
+        table.pack();
+        table.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 3 / 4, Align.center);
 
         stage.addActor(table);
     }
