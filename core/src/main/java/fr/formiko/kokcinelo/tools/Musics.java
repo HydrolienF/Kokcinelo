@@ -19,7 +19,7 @@ public class Musics {
     private static Music music;
     private static float musicsVolume = 1f;
     // @formatter:off
-    private static Map<String, List<Object>> musics = Map.ofEntries(
+    private static Map<String, List<Object>> levelsMusic = Map.ofEntries(
         Map.entry("1K", List.of("Waltz of the Night", 0.8f)),
         Map.entry("2K", List.of("Sailors Of The Dvipa", 0.5f)),
         Map.entry("3K", List.of("Madness", 1f)),
@@ -135,9 +135,9 @@ public class Musics {
      */
     public static void setLevelMusic(String levelId) {
         App.log(1, "Set music for level " + levelId);
-        if (musics.containsKey(levelId)) {
-            setMusic((String) musics.get(levelId).get(0) + " 1min");
-            setVolume((float) musics.get(levelId).get(1));
+        if (levelsMusic.containsKey(levelId)) {
+            setMusic((String) levelsMusic.get(levelId).get(0) + " 1min");
+            setVolume((float) levelsMusic.get(levelId).get(1));
         } else {
             setMusic("Waltz of the Night 1min");
             setVolume(0.8f);
