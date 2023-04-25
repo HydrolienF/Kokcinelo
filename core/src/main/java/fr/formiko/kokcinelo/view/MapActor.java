@@ -98,11 +98,12 @@ public class MapActor extends Actor {
             return texture;
         } else {
             if (textureWithDark == null) {
-                Circle c = null;
-                for (Circle circle : toExcude) {
-                    c = circle;
-                    break;
-                }
+                // Circle c = null;
+                // for (Circle circle : toExcude) {
+                // c = circle;
+                // break;
+                // }
+                Circle c = toExcude.iterator().next();
                 long time = System.currentTimeMillis();
                 textureWithDark = new Texture(getMaskPixmap((int) c.radius));
                 // TODO try to call only once or reduce time to create texture.

@@ -153,18 +153,16 @@ class LevelButton extends Button {
                 return levelButton;
             }
         }
-        return null;
+        // set "1K" to checked if no button is checked.
+        LevelButton lb = getLevelButton("1K");
+        lb.setChecked(true);
+        return lb;
     }
     /**
      * @return the only overed button or the only checked button if no button is overed.
      */
     public static LevelButton getOveredButton() {
-        for (LevelButton levelButton : levelButtonList) {
-            if (levelButton.isOver()) {
-                return levelButton;
-            }
-        }
-        return getCheckedButton();
+        return levelButtonList.stream().filter(lb -> lb.isOver()).findFirst().orElse(getCheckedButton());
     }
     public static Set<LevelButton> getList() { return levelButtonList; }
     /**
@@ -172,12 +170,12 @@ class LevelButton extends Button {
      * @return a level button by it's id.
      */
     public static LevelButton getLevelButton(String id) {
-        for (LevelButton levelButton : levelButtonList) {
-            if (levelButton.getId().equals(id)) {
-                return levelButton;
-            }
+        LevelButton lbr = levelButtonList.stream().filter(lb -> lb.getId().equals(id)).findFirst().orElse(null);
+        if (lbr == null) {
+            App.log(3, "LevelButton not found: " + id);
+            throw new RuntimeException("LevelButton not found: " + id);
         }
-        return null;
+        return lbr;
     }
     /**
      * @return true if the level is unlocked.
