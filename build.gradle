@@ -16,6 +16,7 @@ buildscript {
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
         classpath 'com.diffplug.spotless:spotless-lib:2.35.0'
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.15.0'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
     }
 }
 
@@ -155,6 +156,7 @@ project(":core") {
     apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "jacoco"
+    apply plugin: "org.sonarqube"
     compileJava.dependsOn writeAllAssetsToFile
 
     dependencies {
@@ -167,6 +169,15 @@ project(":core") {
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
         implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+    }
+
+    sonar {
+        properties {
+            // property "sonar.projectName", "Example of Sonar Scanner for Gradle - Multimodule"
+            // property "sonar.projectKey", "org.sonarqube:gradle-multimodule"
+            // property "sonar.host.url", "http://localhost:9000"
+            // property "sonar.sources", "core/src"
+        }
     }
 
     test {
