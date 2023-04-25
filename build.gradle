@@ -171,15 +171,6 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
     }
 
-    sonar {
-        properties {
-            // property "sonar.projectName", "Example of Sonar Scanner for Gradle - Multimodule"
-            // property "sonar.projectKey", "org.sonarqube:gradle-multimodule"
-            // property "sonar.host.url", "http://localhost:9000"
-            // property "sonar.sources", "core/src"
-        }
-    }
-
     test {
         useJUnitPlatform()
 
@@ -202,11 +193,24 @@ project(":core") {
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
         reports {
-            xml.enabled false
+            xml.enabled true
             csv.enabled false
             html.enabled true
             html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
+    }
+
+    sonar {
+        properties {
+            property "sonar.projectName", "$appName"
+            property "sonar.host.url", "http://localhost:9000"
+            property "sonar.login", "admin"
+            property "sonar.password", "admin"
+        }
+    }
+
+    tasks.named('sonar').configure {
+        dependsOn test
     }
 }
 
