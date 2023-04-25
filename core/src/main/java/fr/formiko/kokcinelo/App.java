@@ -54,6 +54,7 @@ public class App extends Game {
     private final Native nativ;
     private @Null TraillerImage traillerImage;
     private boolean startTraillerImage;
+    private static String version;
 
 
     public App(String[] args, Native nativ) {
@@ -331,6 +332,20 @@ public class App extends Game {
         return formatter.format(new Date(System.currentTimeMillis()));// HTML INCOMPATIBLE
         // return "";
     }
+    /**
+     * {@summary Return current version.}
+     * If current version is unknown, return "...".
+     * Current version is unknown if version.md file haven't been save in .jar file.
+     * 
+     * @return current version
+     */
+    public static String getCurrentVersion() {
+        if (version == null) {
+            FileHandle versionFile = Gdx.files.internal("version.md");
+            version = versionFile.exists() ? versionFile.readString() : "...";
+        }
+        return version;
+    }
 
     /**
      * {@summary Update some option from command line args.}
@@ -345,8 +360,7 @@ public class App extends Game {
             }
             switch (arg) {
             case "version", "v": { // HTML INCOMPATIBLE
-                FileHandle versionFile = Gdx.files.internal("version.md");
-                System.out.println(versionFile.readString());
+                System.out.println(getCurrentVersion());
                 // System.exit(0); //HTML INCOMPATIBLE
                 Gdx.app.exit();
                 break;

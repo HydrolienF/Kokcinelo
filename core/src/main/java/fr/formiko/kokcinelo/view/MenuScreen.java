@@ -62,6 +62,7 @@ public class MenuScreen extends KScreen implements Screen {
     private Stage backgroundStage;
     private SpriteBatch batch;
     private static Skin skin;
+    private static Skin skinSmall;
     private static Skin skinTitle;
     private InputMultiplexer inputMultiplexer;
     private Label scoresLabel;
@@ -91,6 +92,9 @@ public class MenuScreen extends KScreen implements Screen {
 
         if (skin == null) {
             skin = getDefautSkin();
+        }
+        if (skinSmall == null) {
+            skinSmall = getDefautSkin(14);
         }
         if (skinTitle == null) {
             skinTitle = getDefautSkin(40);
@@ -299,11 +303,12 @@ public class MenuScreen extends KScreen implements Screen {
 
         updateSelectedLevel(getLevelId());
 
+        Label versionLabel = new Label(App.getCurrentVersion(), skinSmall);
+        versionLabel.setPosition(Gdx.graphics.getWidth() - versionLabel.getWidth(), 0);
+
         Table btable = getLinkButtonsTable(bottomLinksSpace);
         btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
         btable.setPosition(0, 0);
-        stage.addActor(btable);
-
 
         stage.addActor(btable);
         stage.addActor(levelNameLabel);
@@ -313,6 +318,7 @@ public class MenuScreen extends KScreen implements Screen {
             stage.addActor(creature);
         }
         stage.addActor(centerTable);
+        stage.addActor(versionLabel);
 
         stage.setDebugAll(Controller.isDebug());
         addProcessor(stage);
