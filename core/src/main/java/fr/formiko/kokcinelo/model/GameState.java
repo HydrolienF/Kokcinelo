@@ -3,6 +3,8 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -431,8 +433,10 @@ public class GameState {
                     // | NoSuchMethodException | SecurityException e) {
                 } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    App.log(3, "Fail to add a new Creature " + e);
-                    e.printStackTrace();
+                    PrintWriter pw = new PrintWriter(new StringWriter());
+                    e.printStackTrace(pw);
+                    App.log(3, "Fail to add a new Creature " + e + "\n" + pw.toString());
+                    pw.close();
                 }
             }
         }
