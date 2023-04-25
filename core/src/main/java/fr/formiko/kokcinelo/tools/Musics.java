@@ -1,6 +1,8 @@
 package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
+import java.util.List;
+import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
@@ -16,6 +18,17 @@ import com.badlogic.gdx.audio.Music;
 public class Musics {
     private static Music music;
     private static float musicsVolume = 1f;
+    // @formatter:off
+    private static Map<String, List<Object>> musics = Map.ofEntries(
+        Map.entry("1K", List.of("Waltz of the Night", 0.8f)),
+        Map.entry("2K", List.of("Sailors Of The Dvipa", 0.5f)),
+        Map.entry("3K", List.of("Madness", 1f)),
+        Map.entry("2F", List.of("Hako 1", 0.8f)),
+        Map.entry("3F", List.of("Hako 2", 0.8f))
+    );
+    // @formatter:on
+
+    private Musics() {}
 
     public static float getMusicsVolume() { return musicsVolume; }
     public static void setMusicsVolume(float musicsVolume) { Musics.musicsVolume = musicsVolume; }
@@ -122,47 +135,12 @@ public class Musics {
      */
     public static void setLevelMusic(String levelId) {
         App.log(1, "Set music for level " + levelId);
-        switch (levelId) {
-        case "1K":
+        if (musics.containsKey(levelId)) {
+            setMusic((String) musics.get(levelId).get(0) + " 1min");
+            setVolume((float) musics.get(levelId).get(1));
+        } else {
             setMusic("Waltz of the Night 1min");
             setVolume(0.8f);
-            break;
-        case "2K":
-            setMusic("Sailors Of The Dvipa 1min");
-            setVolume(0.5f);
-            break;
-        case "3K":
-            setMusic("Madness 1min");
-            break;
-        case "4K":
-            setMusic("");
-            break;
-        case "5K":
-            setMusic("");
-            break;
-        case "2F":
-            setMusic("Hako 1 1min");
-            setVolume(0.8f);
-            break;
-        case "3F":
-            setMusic("Hako 2 1min");
-            setVolume(0.8f);
-            break;
-        case "4F":
-            setMusic("");
-            break;
-        case "5F":
-            setMusic("");
-            break;
-        case "4A":
-            setMusic("");
-            break;
-        case "5A":
-            setMusic("");
-            break;
-        default:
-            setMusic("Waltz of the Night 1min");
-            break;
         }
     }
 }

@@ -339,8 +339,8 @@ public class Shapes {
         final float egdeSize = 0.2f;
 
         Pixmap darkedArea = new Pixmap((int) width, (int) height, Pixmap.Format.RGBA8888);
-        int xCenter = (int) (darkedArea.getWidth() / 2);
-        int yCenter = (int) (darkedArea.getHeight() / 2);
+        int xCenter = darkedArea.getWidth() / 2;
+        int yCenter = darkedArea.getHeight() / 2;
         float edgeLength = radius * egdeSize;
 
         for (int x = 0; x < darkedArea.getWidth(); x++) {
