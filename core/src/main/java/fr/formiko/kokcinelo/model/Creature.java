@@ -27,6 +27,7 @@ public abstract class Creature extends MapItem {
     protected float hearRadius;
     protected int color;
     protected float movingSpeed;
+    /** Wanted rotation relative to current one. */
     protected float wantedRotation;
     protected long lastHitTime;
     protected long lastShootTime;
@@ -75,6 +76,7 @@ public abstract class Creature extends MapItem {
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
+    public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
     /**
      * Creature witch hunt this &#38; this can see it.
      */
@@ -105,8 +107,20 @@ public abstract class Creature extends MapItem {
                 .orElse(null);
         // @formatter:on
     }
+    /**
+     * @return All Creature of the same type as this.
+     */
+    public Set<Creature> getAllFriendlyCreature() {
+        // @formatter:off
+        return Controller.getController().allCreatures().stream()
+                // TODO some aphid may be friend with ladybug & be added to this.
+                .filter(c -> c.isInstanceOf(getCreaturesFriendly()))
+                .collect(HashSet::new, Set::add, Set::addAll);
+        // @formatter:on
+    }
 
     // FUNCTIONS -----------------------------------------------------------------
+    @Override
     public String toString() {
         return this.getClass().getSimpleName() + " : " + super.toString() + "\n" + "lifePoints : " + lifePoints + "\n" + "maxLifePoints : "
                 + maxLifePoints + "\n" + "hitPoints : " + hitPoints + "\n" + "shootPoints : " + shootPoints + "\n" + "visionRadius : "
@@ -167,22 +181,16 @@ public abstract class Creature extends MapItem {
      * @param degdif Degre difference to go to
      */
     public void goTo(Vector2 v, float degdif) {
-        // Update wantedRotation
-        // Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
-        // float previousRotation = getRotation() % 360;
-        // float newRotation = v2.angleDeg() - 90;
-        // float wantedRotation = (previousRotation - newRotation + 360 + degdif) % 360;
-        // setWantedRotation(wantedRotation);
         Vector2 v2 = new Vector2(v.x - getCenterX(), v.y - getCenterY());
         float newRotation = v2.angleDeg() - 90;
         goTo(newRotation - degdif);
     }
-    public void goTo(float newRotation) {
-        // Update wantedRotation
-        float previousRotation = getRotation() % 360;
-        float wantedRotation = (previousRotation - newRotation + 360) % 360;
-        setWantedRotation(wantedRotation);
-    }
+    /**
+     * {@summary Set wanted rotation to reach newRotation.}
+     * 
+     * @param newRotation rotation to reach
+     */
+    public void goTo(float newRotation) { setWantedRotation((getRotation() - newRotation + 360) % 360); }
     /***
      * {@summary Set wanted rotation to go to v.}
      * 
@@ -204,7 +212,7 @@ public abstract class Creature extends MapItem {
             goTo(vectorList[0], 180f);
         } else {
             // Run by the biggest angle between 2 enemies.
-            List<Float> angles = new ArrayList<Float>();
+            List<Float> angles = new ArrayList<>();
             for (Vector2 v : vectorList) {
                 Vector2 vAngle = new Vector2(v.x - getCenterX(), v.y - getCenterY());
                 angles.add(vAngle.angleDeg());
@@ -231,7 +239,7 @@ public abstract class Creature extends MapItem {
 
             float maxAngleDif = 0;
             float direction = 0;
-            List<Float> anglesDif = new ArrayList<Float>();
+            List<Float> anglesDif = new ArrayList<>();
             float lastAngle = angles.get(angles.size() - 1);
             for (float angle : angles) {
                 float angleDif = (angle - lastAngle + 360) % 360;
@@ -319,7 +327,7 @@ public abstract class Creature extends MapItem {
      * @return the angle of wall (sorted)
      */
     public List<Float> getWallsAngles() {
-        List<Float> wallList = new ArrayList<Float>();
+        List<Float> wallList = new ArrayList<>();
         float distanceToWall = getVisionRadius() / 2;
         // @formatter:off
         // If there is a really close wall, seach for a second one a bit further.
@@ -355,15 +363,14 @@ public abstract class Creature extends MapItem {
      * @param mapHeigth height of the map
      */
     public void stayInMap(float mapWidth, float mapHeigth) {
-        // if have been move to avoid wall
-        if (moveIn(mapWidth, mapHeigth)) {
-            if (getWantedRotation() == 0f) { // if have not already choose a new angle to get out.
-                setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
-            }
+        // if have been move to avoid wall & if have not already choose a new angle to get out.
+        if (moveIn(mapWidth, mapHeigth) && getWantedRotation() == 0f) {
+            setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
         }
     }
     /**
      * {@summary Sometime, rotate a bit, randomly.}
+     * It will move by max 20° from the current rotation.
      * 
      * @param frequency double in [0,1]. Next to 0 it hapend only fiew time. Next to 1 almost all time.
      */

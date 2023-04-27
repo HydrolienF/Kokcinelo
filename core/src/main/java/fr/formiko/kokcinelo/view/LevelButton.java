@@ -2,7 +2,12 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.GreenAnt;
+import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
+import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -31,7 +37,7 @@ class LevelButton extends Button {
     private static Texture lockedLevel;
     private static Texture star;
     private static boolean needToRefreshUnlockedLevel;
-    private Texture texture;
+    private Sprite sprite;
     private final Level level;
     private final int radius;
 
@@ -147,18 +153,16 @@ class LevelButton extends Button {
                 return levelButton;
             }
         }
-        return null;
+        // set "1K" to checked if no button is checked.
+        LevelButton lb = getLevelButton("1K");
+        lb.setChecked(true);
+        return lb;
     }
     /**
      * @return the only overed button or the only checked button if no button is overed.
      */
     public static LevelButton getOveredButton() {
-        for (LevelButton levelButton : levelButtonList) {
-            if (levelButton.isOver()) {
-                return levelButton;
-            }
-        }
-        return getCheckedButton();
+        return levelButtonList.stream().filter(lb -> lb.isOver()).findFirst().orElse(getCheckedButton());
     }
     public static Set<LevelButton> getList() { return levelButtonList; }
     /**
@@ -166,12 +170,12 @@ class LevelButton extends Button {
      * @return a level button by it's id.
      */
     public static LevelButton getLevelButton(String id) {
-        for (LevelButton levelButton : levelButtonList) {
-            if (levelButton.getId().equals(id)) {
-                return levelButton;
-            }
+        LevelButton lbr = levelButtonList.stream().filter(lb -> lb.getId().equals(id)).findFirst().orElse(null);
+        if (lbr == null) {
+            App.log(3, "LevelButton not found: " + id);
+            throw new RuntimeException("LevelButton not found: " + id);
         }
-        return null;
+        return lbr;
     }
     /**
      * @return true if the level is unlocked.
@@ -189,7 +193,7 @@ class LevelButton extends Button {
     public static void clearList() { levelButtonList = null; }
 
     /**
-     * {@summary Draw the button with the rigth border circle &#38; the rigth content texture.}
+     * {@summary Draw the button with the rigth border circle &#38; the rigth content sprite.}
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -201,7 +205,12 @@ class LevelButton extends Button {
         if (isDisabled()) {
             batch.draw(lockedLevel, getX(), getY());
         } else {
-            batch.draw(getTexture(), getX(), getY());
+            // batch.draw(getTexture(), getX(), getY());
+            sprite = getSprite();
+            if (sprite != null) {
+                sprite.setPosition(getX(), getY());
+                sprite.draw(batch);
+            }
         }
 
         if (isChecked() || isOver()) {
@@ -229,20 +238,57 @@ class LevelButton extends Button {
     /**
      * @return the texture of the level button depending of the level id.
      */
-    private Texture getTexture() {
-        if (texture == null) {
-            // TODO return a texture depending of the level id.
+    private Sprite getSprite() {
+        Creature c, c2;
+        final float aphidSize = 0.35f;
+        final float antSize = 0.075f;
+        final float ladybugSize = 0.33f;
+        if (sprite == null) {
             switch (getId()) {
             case "1K": {
-                texture = Shapes.getCircledTexture(radius, App.GREEN, new Texture(Gdx.files.internal("images/Creatures/aphid.png")), 0.6f);
+                c = new Aphid();
+                c.setZoom(aphidSize);
+                sprite = Shapes.getCircledSprite(radius, App.GREEN, c);
+                break;
+            }
+            case "2K": {
+                c = new Ladybug();
+                c.setZoom(ladybugSize);
+                c2 = new RedAnt();
+                c2.setZoom(antSize);
+                sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
+                break;
+            }
+            case "3K": {
+                c = new Ladybug();
+                c.setZoom(ladybugSize);
+                c2 = new GreenAnt();
+                c2.setZoom(antSize);
+                sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
+                break;
+            }
+            case "2F": {
+                c = new Ladybug();
+                c.setZoom(ladybugSize);
+                c2 = new RedAnt();
+                c2.setZoom(antSize);
+                sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
+                break;
+            }
+            case "3F": {
+                c = new Ladybug();
+                c.setZoom(ladybugSize);
+                c2 = new GreenAnt();
+                c2.setZoom(antSize);
+                sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
                 break;
             }
             default: {
-                texture = Shapes.getCircle(radius, App.GREEN);
+                sprite = new Sprite(Shapes.getCircle(radius, App.GREEN));
             }
             }
 
         }
-        return texture;
+        return sprite;
     }
 }

@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.usual.Os;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +34,9 @@ public class DesktopLauncher {
 			} catch (Exception e) {
 				System.out.println("Fail to get version in DesktopLauncher.");
 			}
+		}
+		if (Os.getOs().isLinux()) {
+			displayMode = 0;
 		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);

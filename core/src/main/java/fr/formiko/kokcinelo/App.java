@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.view.TraillerImage;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Main class that represent the App &#38; call other Screens.}
@@ -47,8 +49,12 @@ public class App extends Game {
     public static final List<Integer> STARS_SCORES = List.of(50, 80, 100);
     public static final Color BLUE_BACKGROUND = new Color(0, 203f / 255, 1, 1);
     public static final Color GREEN = new Color(8 / 255f, 194 / 255f, 0 / 255f, 1f);
-    public static final Color SKY_BLUE = new Color(0f, 0.4f, 1f, 1f);
+    public static final Color SKY_BLUE_1 = new Color(0f, 0.4f, 1f, 1f);
+    public static final Color SKY_BLUE_2 = new Color(0f, 0.7f, 1f, 1f);
     private final Native nativ;
+    private @Null TraillerImage traillerImage;
+    private boolean startTraillerImage;
+    private static String version;
 
 
     public App(String[] args, Native nativ) {
@@ -121,7 +127,11 @@ public class App extends Game {
         App.log(1, "APP", "Start app");
         batch = new SpriteBatch();
         Controller.getController().iniAssets();
-        startNewGame();
+        if (startTraillerImage) {
+            traillerImage = new TraillerImage();
+        } else {
+            startNewGame();
+        }
     }
     /**
      * {@summary Start a new Game on this app in GUI.}
@@ -138,7 +148,12 @@ public class App extends Game {
      * @see com.badlogic.gdx.Game#render()
      */
     @Override
-    public void render() { super.render(); }
+    public void render() {
+        super.render();
+        if (traillerImage != null) {
+            traillerImage.render(Gdx.graphics.getDeltaTime());
+        }
+    }
 
     /**
      * {@summary call dispose function of item that need to be dispose so that App close itself.}
@@ -317,6 +332,20 @@ public class App extends Game {
         return formatter.format(new Date(System.currentTimeMillis()));// HTML INCOMPATIBLE
         // return "";
     }
+    /**
+     * {@summary Return current version.}
+     * If current version is unknown, return "...".
+     * Current version is unknown if version.md file haven't been save in .jar file.
+     * 
+     * @return current version
+     */
+    public static String getCurrentVersion() {
+        if (version == null) {
+            FileHandle versionFile = Gdx.files.internal("version.md");
+            version = versionFile.exists() ? versionFile.readString() : "...";
+        }
+        return version;
+    }
 
     /**
      * {@summary Update some option from command line args.}
@@ -326,13 +355,14 @@ public class App extends Game {
             return;
         }
         for (String arg : args) {
-            while (arg != null && arg.length() > 1 && arg.charAt(0) == '-') {
+            if (arg == null)
+                continue;
+            while (arg.length() > 1 && arg.charAt(0) == '-') {
                 arg = arg.substring(1);
             }
             switch (arg) {
             case "version", "v": { // HTML INCOMPATIBLE
-                FileHandle versionFile = Gdx.files.internal("version.md");
-                System.out.println(versionFile.readString());
+                System.out.println(getCurrentVersion());
                 // System.exit(0); //HTML INCOMPATIBLE
                 Gdx.app.exit();
                 break;
@@ -352,6 +382,10 @@ public class App extends Game {
             }
             case "graphicsTest", "gt": {
                 Controller.setGraphicsTest(true);
+                break;
+            }
+            case "traillerImage", "ti": {
+                startTraillerImage = true;
                 break;
             }
             default: {
@@ -420,11 +454,11 @@ public class App extends Game {
     /**
      * {@summary Return color depending of percent.}
      * 
-     * @param percent score percent [0;100]
+     * @param percent score percent [0;100+]
      * @return color
      */
     public static Color getColorFromPercent(int percent) {
-        if (percent == 100) {
+        if (percent >= 100) {
             return Color.GREEN;
         } else {
             return new Color(1f, percent / 100f, 0f, 1f);

@@ -18,6 +18,7 @@ import fr.formiko.kokcinelo.view.VideoScreen;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -87,6 +88,8 @@ public class Controller {
     // public only for tests
     public GameState getGameState() { return gs; }
     public void setGameState(GameState gs) { this.gs = gs; }
+    public float getMapWidth() { return getGameState().getMapWidth(); }
+    public float getMapHeight() { return getGameState().getMapHeight(); }
 
 
     // FUNCTIONS -----------------------------------------------------------------
@@ -128,6 +131,7 @@ public class Controller {
     public synchronized void endMenuScreen() {
         App.log(1, "end menu screen");
         if (getScreen() != null && getScreen() instanceof MenuScreen) {
+            ((MenuScreen) getScreen()).displayPerf();
             Screen toDispose = getScreen();
             level = ((MenuScreen) (getScreen())).getLevel();
             createNewVideoScreen();
@@ -710,6 +714,15 @@ public class Controller {
      */
     public Vector2 getVectorStageCoordinates(float x, float y) {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
+    }
+
+    public Collection<Creature> getLightSources() {
+        Creature pc = getPlayerCreature();
+        if (pc == null) {
+            return List.of();
+        } else {
+            return pc.getAllFriendlyCreature();
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -142,6 +144,7 @@ public class GameState {
     public Collection<Actor> allActors() {
         List<Actor> l = new LinkedList<Actor>();
         if (mapActorBg != null) {
+            mapActorBg.setName("background");
             l.add(mapActorBg);
         }
         for (Creature creature : allCreatures()) {
@@ -150,6 +153,7 @@ public class GameState {
             }
         }
         if (mapActorFg != null) {
+            mapActorFg.setName("foreground");
             l.add(mapActorFg);
         }
         return l;
@@ -429,8 +433,10 @@ public class GameState {
                     // | NoSuchMethodException | SecurityException e) {
                 } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    App.log(3, "Fail to add a new Creature " + e);
-                    e.printStackTrace();
+                    PrintWriter pw = new PrintWriter(new StringWriter());
+                    e.printStackTrace(pw);
+                    App.log(3, "Fail to add a new Creature " + e + "\n" + pw.toString());
+                    pw.close();
                 }
             }
         }

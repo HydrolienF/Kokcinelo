@@ -68,8 +68,8 @@ public class Files {
     public static int getNumberOfText(String languageCode) {
         Map<String, String> map = getText(languageCode);
         int cpt = 0;
-        for (Object key : map.keySet()) {
-            if (map.get(key) != null) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getValue() != null) {
                 cpt++;
             }
         }
@@ -92,7 +92,7 @@ public class Files {
      * @param fileName name of the file to load data from
      * @return the data loaded from file
      */
-    public static HashMap<String, String> loadFromFile(String fileName, boolean internal) {
+    public static Map<String, String> loadFromFile(String fileName, boolean internal) {
         FileHandle file;
         if (internal) {
             file = Gdx.files.internal(fileName);
@@ -107,7 +107,7 @@ public class Files {
      * @param fileName name of the file to load data from
      * @return the data loaded from file
      */
-    public static HashMap<String, String> loadMapFromCSVFile(String fileName, boolean internal) {
+    public static Map<String, String> loadMapFromCSVFile(String fileName, boolean internal) {
         HashMap<String, String> map = new HashMap<String, String>();
         FileHandle file;
         if (internal) {
@@ -118,7 +118,7 @@ public class Files {
         if (file.exists()) {
             for (String line : file.readString().strip().split("\\r?\\n")) {
                 if (!line.isEmpty()) {
-                    String t[] = line.split(",");
+                    String[] t = line.split(",");
                     if (t.length == 2) {
                         map.put(t[0], t[1]);
                     }
@@ -135,8 +135,8 @@ public class Files {
      */
     public static void saveMapToCSVFile(String fileName, Map<String, ?> map) {
         String s = "";
-        for (String key : map.keySet()) {
-            s += key + "," + map.get(key) + "\n";
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            s += entry.getKey() + "," + entry.getValue() + "\n";
         }
         FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
         file.writeString(s, false);
@@ -196,8 +196,8 @@ public class Files {
      */
     public static Set<String> listSubFilesPathsRecusvively(String path) {
         Set<String> set = new HashSet<String>();
-        String[] AssetsNames = Gdx.files.internal("assets.txt").readString().split("\n");
-        for (String name : AssetsNames) {
+        String[] assetsNames = Gdx.files.internal("assets.txt").readString().split("\n");
+        for (String name : assetsNames) {
             if (name.startsWith(path)) {
                 set.add(name);
             }

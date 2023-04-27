@@ -16,6 +16,7 @@ buildscript {
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
         classpath 'com.diffplug.spotless:spotless-lib:2.35.0'
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.15.0'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
     }
 }
 
@@ -155,6 +156,7 @@ project(":core") {
     apply plugin: "java"
     apply plugin: "java-library"
     apply plugin: "jacoco"
+    apply plugin: "org.sonarqube"
     compileJava.dependsOn writeAllAssetsToFile
 
     dependencies {
@@ -191,11 +193,24 @@ project(":core") {
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
         reports {
-            xml.enabled false
+            xml.enabled true
             csv.enabled false
             html.enabled true
             html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
+    }
+
+    sonar {
+        properties {
+            property "sonar.projectName", "$appName"
+            property "sonar.host.url", "http://localhost:9000"
+            property "sonar.login", "admin"
+            property "sonar.password", "admin"
+        }
+    }
+
+    tasks.named('sonar').configure {
+        dependsOn test
     }
 }
 

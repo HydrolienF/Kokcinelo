@@ -16,6 +16,7 @@ import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.g;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.Gdx;
@@ -61,22 +62,24 @@ public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
     private Stage backgroundStage;
     private SpriteBatch batch;
-    private static Skin skin;
-    private static Skin skinTitle;
+    private static Skin skin = getDefautSkin();
+    private static Skin skinSmall = getDefautSkin(14);
+    private static Skin skinTitle = getDefautSkin(40);
     private InputMultiplexer inputMultiplexer;
     private Label scoresLabel;
     private Label levelNameLabel;
     private Label levelDescription;
+    private Label versionLabel;
     private int topSpace;
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
-    public static OrthographicCamera camera;
+    private final OrthographicCamera camera;
     private static List<Actor> creatureImages;
     private boolean playingVideo = false;
     private long timePlayingVideo;
-    private int fullVideoTime = 10000;
-    private float BACKGROUND_SPEED = 100;
+    private int fullVideoTime = 1000;
+    private float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -84,16 +87,11 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Main constructor.}
      */
     public MenuScreen() {
+        super();
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        if (skin == null) {
-            skin = getDefautSkin();
-        }
-        if (skinTitle == null) {
-            skinTitle = getDefautSkin(40);
-        }
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -121,15 +119,17 @@ public class MenuScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        long time = System.currentTimeMillis();
         ScreenUtils.clear(Color.BLACK);
 
         cameraBc.position.x += delta * BACKGROUND_SPEED;
         if (getLevel().getLetter().equals("K")) {
             Actor environement = backgroundStage.getRoot().findActor("environement");
-            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2;
+            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
+            cameraBc.zoom = 1;
         } else {
-            cameraBc.zoom = 0.5f;
-            cameraBc.position.y = Gdx.graphics.getHeight() / 2;
+            cameraBc.zoom = 0.3f;
+            cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
         }
         batch.setProjectionMatrix(cameraBc.combined);
         backgroundStage.act(delta);
@@ -143,15 +143,7 @@ public class MenuScreen extends KScreen implements Screen {
         }
 
         if (playingVideo) {
-            for (Actor actor : stage.getActors()) {
-                if (!creatureImages.contains(actor)) {
-                    float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
-                    if (actor.getY() < Gdx.graphics.getHeight() / 2) {
-                        modifY *= -1;
-                    }
-                    actor.setY(actor.getY() + modifY);
-                }
-            }
+            hidingButtonAnimation(delta);
             // TODO last visible actor need to act while video is playing.
             if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
                 Controller.getController().endMenuScreen();
@@ -160,6 +152,22 @@ public class MenuScreen extends KScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+        times.add((int) (System.currentTimeMillis() - time));
+    }
+
+    /**
+     * {@summary Progressively hide buton.}
+     */
+    private void hidingButtonAnimation(float delta) {
+        for (Actor actor : stage.getActors()) {
+            if (!creatureImages.contains(actor)) {
+                float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
+                if (actor.getY() < Gdx.graphics.getHeight() / 2) {
+                    modifY *= -1;
+                }
+                actor.setY(actor.getY() + modifY);
+            }
+        }
     }
 
     /**
@@ -195,41 +203,57 @@ public class MenuScreen extends KScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
-        playButton.setSize(centerTable.getHeight(), centerTable.getHeight());
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (playingVideo) {
-                    getController().endMenuScreen();
-                } else {
-                    startPlayingVideo();
-                }
-            }
-        });
-        playButton.setScaling(Scaling.fillY);
-        centerTable.add(playButton).expand();
+        centerTable.add(getPlayButton(centerTable.getHeight(), centerTable.getHeight())).expand();
 
         if (App.isWithCloseButton()) {
-            final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
-            closeButton.setSize(w / 40f, w / 40f);
-            closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
-            closeButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) { getController().exitApp(); }
-            });
-            stage.addActor(closeButton);
+            stage.addActor(getCloseButton(w, h));
         }
 
+        createCreatureImages(w, h);
+
+        stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
+
+        createLabels();
+        levelDescription.setSize(w / 3, topSpace);
+        updateSelectedLevel(getLevelId());
+
+        versionLabel = new Label(App.getCurrentVersion(), skinSmall);
+        versionLabel.setPosition(w - versionLabel.getWidth(), 0);
+
+        Table btable = getLinkButtonsTable(bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
+        btable.setPosition(0, 0);
+
+        stage.addActor(btable);
+        stage.addActor(levelNameLabel);
+        stage.addActor(scoresLabel);
+        stage.addActor(levelDescription);
+        for (Actor creature : creatureImages) {
+            stage.addActor(creature);
+        }
+        stage.addActor(centerTable);
+        stage.addActor(versionLabel);
+
+        stage.setDebugAll(Controller.isDebug());
+        addProcessor(stage);
+    }
+
+    /**
+     * {@summary Create images for all creature that can be play.}
+     * It is used to display them walking or flying in the menu.
+     */
+    private void createCreatureImages(int w, int h) {
         creatureImages = new ArrayList<Actor>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
             boolean needToRotate = false;
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                    | NoSuchMethodException | SecurityException e) {
                 // TODO there is an error with .jar
                 App.log(3, "MenuScreen", "Error while creating creature: " + e);
+                continue;
             }
             MapItemActor cActor = c.getActor();
             int imageWidth;
@@ -273,46 +297,61 @@ public class MenuScreen extends KScreen implements Screen {
 
             creatureImages.add(cActor);
         }
+    }
 
-        stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
-
-
+    /**
+     * {@summary Create labels for the menu.}
+     */
+    private void createLabels() {
         levelNameLabel = new Label("", skinTitle);
-        // levelNameLabel.setBounds(0, h - (topSpace / 2), w / 3, topSpace / 2);
         levelNameLabel.setAlignment(Align.center);
-        // levelNameLabel.setWrap(true);
 
         scoresLabel = new Label("", skin);
-        // scoresLabel.setBounds(0, h - topSpace, w / 3, topSpace / 2);
         scoresLabel.setAlignment(Align.center);
-        // scoresLabel.setWrap(true);
 
         levelDescription = new Label("", skin);
-        // levelDescription.setBounds(w * 2 / 3, h - topSpace, w / 3, topSpace);
-        levelDescription.setSize(w / 3, topSpace);
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
+    }
 
-        updateSelectedLevel(getLevelId());
+    /**
+     * {@summary Create a close window button.}
+     * 
+     * @return a close window button.
+     */
+    private Actor getCloseButton(int w, int h) {
+        final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
+        closeButton.setSize(w / 40f, w / 40f);
+        closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { getController().exitApp(); }
+        });
+        return closeButton;
+    }
 
-        Table btable = getLinkButtonsTable(bottomLinksSpace);
-        btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
-        btable.setPosition(0, 0);
-        stage.addActor(btable);
-
-
-        stage.addActor(btable);
-        stage.addActor(levelNameLabel);
-        stage.addActor(scoresLabel);
-        stage.addActor(levelDescription);
-        for (Actor creature : creatureImages) {
-            stage.addActor(creature);
-        }
-        stage.addActor(centerTable);
-
-        stage.setDebugAll(Controller.isDebug());
-        addProcessor(stage);
-
+    /**
+     * {@summary Create a play button.}
+     * 
+     * @param pbWidth  Play button width.
+     * @param pbHeight Play button height.
+     * @return a play button.
+     */
+    private Actor getPlayButton(float pbWidth, float pbHeight) {
+        final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
+        playButton.setSize(pbWidth, pbHeight);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (playingVideo) {
+                    getController().endMenuScreen();
+                } else {
+                    startPlayingVideo();
+                }
+            }
+        });
+        playButton.setScaling(Scaling.fillY);
+        return playButton;
     }
 
     @Override
@@ -423,11 +462,7 @@ public class MenuScreen extends KScreen implements Screen {
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
         // set background
         if (backgroundLabelColored) {
-            pixmap = new Pixmap(1, 1, Format.RGBA8888);
-            pixmap.setColor(new Color(1f, 1f, 1f, 0.3f));
-            pixmap.fill();
-            labelStyle.background = new Image(new Texture(pixmap)).getDrawable();
-            pixmap.dispose();
+            labelStyle.background = Shapes.getWhiteBackground();
         }
 
         skin.add("default", labelStyle);
@@ -501,16 +536,12 @@ public class MenuScreen extends KScreen implements Screen {
         updateLabels();
     }
     /**
-     * Update the labels that depend of selected level.
+     * Update the labels that depend of overed level.
+     * Currently, do the same as updateSelectedLevel.
      * 
      * @param levelId the selected level
      */
-    public void updateOveredLevel(String levelId) {
-        levelNameLabel.setText(getLevelNameText(levelId));
-        scoresLabel.setText(getScoresText(levelId));
-        levelDescription.setText(getLevelDescription(levelId));
-        updateLabels();
-    }
+    public void updateOveredLevel(String levelId) { updateSelectedLevel(levelId); }
 
     public void startPlayingVideo() {
         playingVideo = true;
@@ -530,9 +561,9 @@ public class MenuScreen extends KScreen implements Screen {
         levelNameLabel.pack();
         levelDescription.pack();
         levelDescription.setWidth(maxLabelWidth);
-        scoresLabel.setPosition((maxLabelWidth - scoresLabel.getWidth()) / 2, h - topSpace / 2 - scoresLabel.getHeight());
-        levelNameLabel.setPosition((maxLabelWidth - levelNameLabel.getWidth()) / 2, h - topSpace / 2);
-        levelDescription.setPosition(w * 2 / 3 + (maxLabelWidth - levelDescription.getWidth()) / 2,
+        scoresLabel.setPosition((maxLabelWidth - scoresLabel.getWidth()) / 2, h - topSpace / 2f - scoresLabel.getHeight());
+        levelNameLabel.setPosition((maxLabelWidth - levelNameLabel.getWidth()) / 2, h - topSpace / 2f);
+        levelDescription.setPosition(w * 2f / 3f + (maxLabelWidth - levelDescription.getWidth()) / 2f,
                 Math.min(h - (topSpace + levelDescription.getHeight()) / 2, h - levelDescription.getHeight()));
     }
 

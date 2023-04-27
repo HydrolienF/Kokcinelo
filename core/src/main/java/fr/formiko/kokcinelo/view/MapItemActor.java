@@ -5,15 +5,13 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.KTexture;
+import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -159,13 +157,7 @@ public class MapItemActor extends SkeletonActor {
             float mlp = c.getMaxLifePoints();
             if (mlp > 0) { // if is a Creature witch life point matter
                 if (shapeDrawer == null) {
-                    Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-                    pixmap.setColor(Color.WHITE);
-                    pixmap.drawPixel(0, 0);
-                    Texture texture = new Texture(pixmap); // remember to dispose of later
-                    pixmap.dispose();
-                    TextureRegion region = new TextureRegion(texture, 0, 0, 1, 1);
-                    shapeDrawer = new ShapeDrawer(batch, region);
+                    shapeDrawer = Shapes.createShapeDrawer(batch);
                 }
                 // Draw life bar
                 float len = mlp * 1.5f; // * Gdx.graphics.getWidth() / 1920f;
@@ -215,13 +207,15 @@ public class MapItemActor extends SkeletonActor {
         if (getSkeleton() != null) {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
-            if (mapItem instanceof Creature) {
+            if (mapItem instanceof Creature && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
                 getAnimationState().getCurrent(0).setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.3f);
             }
-            super.act(delta);
+            if (((Creature) mapItem).getCurrentSpeed() > 0) {
+                super.act(delta);
+            }
         }
     }
-    // Override setter Is not enoth to update rotation and scale as it is done in act()
+    // // Override setter Is not enoth to update rotation and scale as it is done in act()
     // @Override
     // public void setRotation(float degrees) {
     // super.setRotation(degrees);
@@ -248,6 +242,7 @@ public class MapItemActor extends SkeletonActor {
     // personaliseds functions -------------------------------------------------
 
     public void setZoom(float zoom) { setScale(zoom, zoom); }
+    public float getZoom() { return getScaleX(); }
     /**
      * {@summary Set center loaction to a random loaction}
      * 
