@@ -14,7 +14,6 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
-import fr.formiko.kokcinelo.view.VideoScreen;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -116,7 +115,6 @@ public class Controller {
         }
     }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen(getLevelId())); }
     /**
      * {@summary Create a new Menu Screen &#38; start music.}
      */
@@ -134,23 +132,10 @@ public class Controller {
             ((MenuScreen) getScreen()).displayPerf();
             Screen toDispose = getScreen();
             level = ((MenuScreen) (getScreen())).getLevel();
-            createNewVideoScreen();
-            toDispose.dispose();
-        } else {
-            App.log(0, "", "getScreen() is not a MenuScreen");
-        }
-    }
-    /**
-     * {@summary End the current screen.}
-     * Current screen is supposed to be a VideoScreen. Other wise it will do nothing.
-     */
-    public synchronized void endVideoScreen() {
-        if (getScreen() != null && getScreen() instanceof VideoScreen) {
-            Screen toDispose = getScreen();
             createNewGame();
             toDispose.dispose();
         } else {
-            App.log(0, "", "getScreen() is not a VideoScreen");
+            App.log(0, "", "getScreen() is not a MenuScreen");
         }
     }
 
