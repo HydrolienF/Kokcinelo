@@ -36,7 +36,6 @@ public class TraillerImage extends KScreen implements Screen {
         Aphid aphid = new Aphid();
         aphid.setZoom(aphidSize);
         aphid.setCenter(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-        // sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
         spriteBatch = new SpriteBatch();
         MapActor map = new MapActor(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, App.GREEN, true);
         map.setScale(2f, 2f);

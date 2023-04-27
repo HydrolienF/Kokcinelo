@@ -62,9 +62,9 @@ public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
     private Stage backgroundStage;
     private SpriteBatch batch;
-    private static Skin skin;
-    private static Skin skinSmall;
-    private static Skin skinTitle;
+    private static Skin skin = getDefautSkin();
+    private static Skin skinSmall = getDefautSkin(14);
+    private static Skin skinTitle = getDefautSkin(40);
     private InputMultiplexer inputMultiplexer;
     private Label scoresLabel;
     private Label levelNameLabel;
@@ -74,7 +74,7 @@ public class MenuScreen extends KScreen implements Screen {
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
     private final Viewport viewport;
-    public static OrthographicCamera camera;
+    private final OrthographicCamera camera;
     private static List<Actor> creatureImages;
     private boolean playingVideo = false;
     private long timePlayingVideo;
@@ -92,15 +92,6 @@ public class MenuScreen extends KScreen implements Screen {
         inputMultiplexer.addProcessor(getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        if (skin == null) {
-            skin = getDefautSkin();
-        }
-        if (skinSmall == null) {
-            skinSmall = getDefautSkin(14);
-        }
-        if (skinTitle == null) {
-            skinTitle = getDefautSkin(40);
-        }
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -134,11 +125,11 @@ public class MenuScreen extends KScreen implements Screen {
         cameraBc.position.x += delta * BACKGROUND_SPEED;
         if (getLevel().getLetter().equals("K")) {
             Actor environement = backgroundStage.getRoot().findActor("environement");
-            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2;
+            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
             cameraBc.zoom = 1;
         } else {
             cameraBc.zoom = 0.3f;
-            cameraBc.position.y = Gdx.graphics.getHeight() / 2 * cameraBc.zoom;
+            cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
         }
         batch.setProjectionMatrix(cameraBc.combined);
         backgroundStage.act(delta);
@@ -152,15 +143,7 @@ public class MenuScreen extends KScreen implements Screen {
         }
 
         if (playingVideo) {
-            for (Actor actor : stage.getActors()) {
-                if (!creatureImages.contains(actor)) {
-                    float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
-                    if (actor.getY() < Gdx.graphics.getHeight() / 2) {
-                        modifY *= -1;
-                    }
-                    actor.setY(actor.getY() + modifY);
-                }
-            }
+            hidingButtonAnimation(delta);
             // TODO last visible actor need to act while video is playing.
             if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
                 Controller.getController().endMenuScreen();
@@ -170,6 +153,21 @@ public class MenuScreen extends KScreen implements Screen {
         stage.act(delta);
         stage.draw();
         times.add((int) (System.currentTimeMillis() - time));
+    }
+
+    /**
+     * {@summary Progressively hide buton.}
+     */
+    private void hidingButtonAnimation(float delta) {
+        for (Actor actor : stage.getActors()) {
+            if (!creatureImages.contains(actor)) {
+                float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
+                if (actor.getY() < Gdx.graphics.getHeight() / 2) {
+                    modifY *= -1;
+                }
+                actor.setY(actor.getY() + modifY);
+            }
+        }
     }
 
     /**
@@ -538,16 +536,12 @@ public class MenuScreen extends KScreen implements Screen {
         updateLabels();
     }
     /**
-     * Update the labels that depend of selected level.
+     * Update the labels that depend of overed level.
+     * Currently, do the same as updateSelectedLevel.
      * 
      * @param levelId the selected level
      */
-    public void updateOveredLevel(String levelId) {
-        levelNameLabel.setText(getLevelNameText(levelId));
-        scoresLabel.setText(getScoresText(levelId));
-        levelDescription.setText(getLevelDescription(levelId));
-        updateLabels();
-    }
+    public void updateOveredLevel(String levelId) { updateSelectedLevel(levelId); }
 
     public void startPlayingVideo() {
         playingVideo = true;
@@ -567,9 +561,9 @@ public class MenuScreen extends KScreen implements Screen {
         levelNameLabel.pack();
         levelDescription.pack();
         levelDescription.setWidth(maxLabelWidth);
-        scoresLabel.setPosition((maxLabelWidth - scoresLabel.getWidth()) / 2, h - topSpace / 2 - scoresLabel.getHeight());
-        levelNameLabel.setPosition((maxLabelWidth - levelNameLabel.getWidth()) / 2, h - topSpace / 2);
-        levelDescription.setPosition(w * 2 / 3 + (maxLabelWidth - levelDescription.getWidth()) / 2,
+        scoresLabel.setPosition((maxLabelWidth - scoresLabel.getWidth()) / 2, h - topSpace / 2f - scoresLabel.getHeight());
+        levelNameLabel.setPosition((maxLabelWidth - levelNameLabel.getWidth()) / 2, h - topSpace / 2f);
+        levelDescription.setPosition(w * 2f / 3f + (maxLabelWidth - levelDescription.getWidth()) / 2f,
                 Math.min(h - (topSpace + levelDescription.getHeight()) / 2, h - levelDescription.getHeight()));
     }
 
