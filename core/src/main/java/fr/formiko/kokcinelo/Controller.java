@@ -14,7 +14,6 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
-import fr.formiko.kokcinelo.view.VideoScreen;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.1
+ * @version 1.3
  * @since 0.1
  */
 public class Controller {
@@ -116,7 +115,6 @@ public class Controller {
         }
     }
 
-    private void createNewVideoScreen() { setScreen(new VideoScreen(getLevelId())); }
     /**
      * {@summary Create a new Menu Screen &#38; start music.}
      */
@@ -134,23 +132,10 @@ public class Controller {
             ((MenuScreen) getScreen()).displayPerf();
             Screen toDispose = getScreen();
             level = ((MenuScreen) (getScreen())).getLevel();
-            createNewVideoScreen();
-            toDispose.dispose();
-        } else {
-            App.log(0, "", "getScreen() is not a MenuScreen");
-        }
-    }
-    /**
-     * {@summary End the current screen.}
-     * Current screen is supposed to be a VideoScreen. Other wise it will do nothing.
-     */
-    public synchronized void endVideoScreen() {
-        if (getScreen() != null && getScreen() instanceof VideoScreen) {
-            Screen toDispose = getScreen();
             createNewGame();
             toDispose.dispose();
         } else {
-            App.log(0, "", "getScreen() is not a VideoScreen");
+            App.log(0, "", "getScreen() is not a MenuScreen");
         }
     }
 
@@ -472,7 +457,7 @@ public class Controller {
 
     /**
      * {@summary Pause game or resume depening of current state.}
-     * It pause move of creature & music.
+     * It pause move of creature &#38; music.
      */
     public void pauseResume() {
         if (getGameScreen().isPause()) {

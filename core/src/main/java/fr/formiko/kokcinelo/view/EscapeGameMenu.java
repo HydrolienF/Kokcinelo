@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * It contains link to many state of the game.
  * 
  * @author Hydrolien
- * @version 0.3
+ * @version 1.3
  * @since 0.3
  */
 public class EscapeGameMenu implements Disposable {

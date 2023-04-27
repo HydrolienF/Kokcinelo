@@ -7,6 +7,10 @@ import java.util.List;
 
 /**
  * {@summary Screen class with fiew more funtion than the one provide by libGDX.}
+ * 
+ * @author Hydrolien
+ * @version 1.3
+ * @since 1.2
  */
 public class KScreen {
     protected int width;
@@ -17,7 +21,7 @@ public class KScreen {
      * {@summary Initialize collections that need to be initialize.}
      */
     public KScreen() {
-        times = new LinkedList<Integer>(); // LinkedList because many add and few get.
+        times = new LinkedList<>(); // LinkedList because many add and few get.
     }
 
     /**
@@ -41,6 +45,5 @@ public class KScreen {
         IntSummaryStatistics stats = times.stream().mapToInt(Integer::intValue).summaryStatistics();
         App.log(1, "PERFORMANCES",
                 getClass().getSimpleName() + ": " + stats.getAverage() + " ms in average. (max: " + stats.getMax() + " ms)");
-        // System.out.println(times);
     }
 }

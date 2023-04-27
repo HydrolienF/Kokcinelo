@@ -400,7 +400,7 @@ public abstract class Creature extends MapItem {
         }
     }
     /**
-     * {@summary Die, remove from controller & play diing animation.}
+     * {@summary Die, remove from controller &#38; play diing animation.}
      */
     public void die() {
         getActor().animate("die", 6);
@@ -422,7 +422,7 @@ public abstract class Creature extends MapItem {
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
 
     /**
-     * {@summary Add time to lastHitTime & lastShootTime.}
+     * {@summary Add time to lastHitTime &#38; lastShootTime.}
      * It is used when the game is resume to avoid that creature can hit &#38; shoot again even if game time have'nt run.
      * 
      * @param timePaused time that have run bewteen pause &#38; resume

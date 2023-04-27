@@ -11,10 +11,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+/**
+ * {@summary Display the trailler image.}
+ * 
+ * @author Hydrolien
+ * @version 1.3
+ * @since 1.2
+ */
 public class TraillerImage extends KScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Stage stage;
 
+    /**
+     * {@summary Create the trailler image.}
+     * It depend of the screen size.
+     */
     public TraillerImage() {
 
         final float aphidSize = 0.35f * 3;
@@ -49,6 +60,11 @@ public class TraillerImage extends KScreen implements Screen {
     public void show() { // TODO Auto-generated method stub
     }
 
+    /**
+     * {@summary Render the trailler image.}
+     * 
+     * @param delta Time between two frames.
+     */
     @Override
     public void render(float delta) {
         spriteBatch.begin();

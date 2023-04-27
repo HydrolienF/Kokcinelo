@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.Null;
  * 
  * @see com.badlogic.gdx.Game
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.1
  */
 public class App extends Game {
@@ -69,7 +69,7 @@ public class App extends Game {
     public static Map<String, String> getDataMap() { return data; }
     public static String getLanguage() { return data.get("language"); }
     /**
-     * {@summary Set language & update translation list.}
+     * {@summary Set language &#38; update translation list.}
      * 
      * @param language language to switch to
      */

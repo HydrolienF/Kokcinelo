@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * {@summary Menu for the end of the game}
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.1
  */
 public class EndGameMenu implements Disposable {

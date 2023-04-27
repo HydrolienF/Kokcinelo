@@ -9,7 +9,7 @@ import java.util.Set;
  * It contains a unique id &#38; fiew useful methods.
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.1
  * @since 0.2
  */
 public final class Level {

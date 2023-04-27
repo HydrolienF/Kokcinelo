@@ -11,8 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
+/**
+ * {@summary Group of actor able to display moving background.}
+ * 
+ * @author Hydrolien
+ * @version 1.3
+ * @since 0.3
+ */
 public class EnvironmentMenuScreen extends Group {
-    private MenuScreen menuScreen;
     private final Chrono chrono;
     private float skyPercent = 0.5f;
     private boolean withGrass;
@@ -21,8 +27,12 @@ public class EnvironmentMenuScreen extends Group {
     private OrthographicCamera camera;
     private ShapeDrawer shapeDrawer;
 
-    public EnvironmentMenuScreen(MenuScreen menuScreen, OrthographicCamera camera) {
-        this.menuScreen = menuScreen;
+    /**
+     * {@summary Create the environment.}
+     * 
+     * @param camera The camera to use
+     */
+    public EnvironmentMenuScreen(OrthographicCamera camera) {
         this.camera = camera;
         chrono = new Chrono();
         chrono.start();
@@ -57,18 +67,21 @@ public class EnvironmentMenuScreen extends Group {
     public float getMaxVisibleX() { return camera.position.x / getScaleX() + getVisibleWidth() / 2; }
     public float getMinVisibleY() { return camera.position.y / getScaleY() - getVisibleHeight() / 2; }
     public float getMaxVisibleY() { return camera.position.y / getScaleY() + getVisibleHeight() / 2; }
-    // public float getVisibleY() { return getY() + camera.position.y - camera.viewportHeight / 2; }
 
+    /**
+     * {@summary Act for actors &#38; be sure that the background actors always cover all background pixels.}
+     */
     @Override
     public void act(float delta) {
         super.act(delta);
         placeBackgroundactorIfNeeded();
     }
 
+    /**
+     * {@summary Draw the background.}
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // setWithGrass(!menuScreen.getLevel().getLetter().equals("F"));
-        // grass.setVisible(isWithGrass());
         super.draw(batch, parentAlpha);
 
 
@@ -85,6 +98,9 @@ public class EnvironmentMenuScreen extends Group {
         shapeDrawer.filledRectangle(0, 0, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight());
     }
 
+    /**
+     * {@summary Be sure that the background actors always cover all background pixels.}
+     */
     private void placeBackgroundactorIfNeeded() {
         // If sky[0] is out of the screen, move it to the right of sky[1] & swap them in array
         // Same for grass
@@ -103,7 +119,7 @@ public class EnvironmentMenuScreen extends Group {
             for (Actor actor : getChildren()) { // everyone is draw back.
                 actor.setPosition(actor.getX() - offset, actor.getY());
             }
-            camera.position.x = Gdx.graphics.getWidth() / 2; // back to start point.
+            camera.position.x = Gdx.graphics.getWidth() / 2f; // back to start point.
         }
     }
 
