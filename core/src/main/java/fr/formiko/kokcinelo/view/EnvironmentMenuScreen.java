@@ -19,7 +19,6 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * @since 0.3
  */
 public class EnvironmentMenuScreen extends Group {
-    private MenuScreen menuScreen;
     private final Chrono chrono;
     private float skyPercent = 0.5f;
     private boolean withGrass;
@@ -31,11 +30,9 @@ public class EnvironmentMenuScreen extends Group {
     /**
      * {@summary Create the environment.}
      * 
-     * @param menuScreen The menu screen wich contain this environment
-     * @param camera     The camera to use
+     * @param camera The camera to use
      */
-    public EnvironmentMenuScreen(MenuScreen menuScreen, OrthographicCamera camera) {
-        this.menuScreen = menuScreen;
+    public EnvironmentMenuScreen(OrthographicCamera camera) {
         this.camera = camera;
         chrono = new Chrono();
         chrono.start();
