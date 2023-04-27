@@ -355,7 +355,9 @@ public class App extends Game {
             return;
         }
         for (String arg : args) {
-            while (arg != null && arg.length() > 1 && arg.charAt(0) == '-') {
+            if (arg == null)
+                continue;
+            while (arg.length() > 1 && arg.charAt(0) == '-') {
                 arg = arg.substring(1);
             }
             switch (arg) {
