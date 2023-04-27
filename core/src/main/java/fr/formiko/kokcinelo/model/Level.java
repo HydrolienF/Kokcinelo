@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Level of the game.}
@@ -18,10 +19,12 @@ public final class Level {
     private static final Set<Level> levelList = Set.of(newLevel("1K"), newLevel("2K"), newLevel("3K"), newLevel("4K"), newLevel("5K"),
             newLevel("2F"), newLevel("3F"), newLevel("4F"), newLevel("5F"), newLevel("4A"), newLevel("5A"));
     private static final Set<String> levelLetters = Set.of("K", "F", "A");
-    private List<Level> nextLevels;
+    private @Null List<Level> nextLevels;
+
 
     private Level(String id) { this.id = id; }
     private static Level newLevel(String id) { return new Level(id); }
+
 
     public boolean isUnlocked() { return unlocked; }
     public void setUnlocked(boolean unlocked) { this.unlocked = unlocked; }

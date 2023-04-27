@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Class that containts all data about current game.}
@@ -81,7 +82,7 @@ public class GameState {
      * @param playerId id of the player
      * @return Creature that player embody.
      */
-    public Creature getPlayerCreature(int playerId) {
+    public @Null Creature getPlayerCreature(int playerId) {
         Player p = getPlayer(playerId);
         if (p != null) {
             return p.getPlayedCreature();

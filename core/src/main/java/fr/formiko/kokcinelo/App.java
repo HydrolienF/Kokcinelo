@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.Null;
  */
 public class App extends Game {
     public SpriteBatch batch;
-    private static Map<String, Sound> soundMap = new HashMap<String, Sound>();
+    private static Map<String, Sound> soundMap = new HashMap<>();
 
     private static Map<String, String> data;
 

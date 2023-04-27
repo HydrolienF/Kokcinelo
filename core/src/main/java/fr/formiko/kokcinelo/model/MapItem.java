@@ -100,11 +100,4 @@ public abstract class MapItem {
      * {@summary Return the distance between center point of this &#38; stage coordinate.}
      */
     public float distanceTo(Vector2 mi2) { return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.x, mi2.y); }
-
-    // /**
-    // * {@summary List of possible state for MapItem.}
-    // */
-    // public enum State {
-    // idle, walk, fly, death
-    // }
 }

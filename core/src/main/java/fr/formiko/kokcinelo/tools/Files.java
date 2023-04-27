@@ -21,6 +21,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  */
 public class Files {
     private static Yaml yaml;
+
+    private Files() {}
+
+
     /**
      * @return a Yaml object initialized by lazy.
      */
@@ -195,7 +199,7 @@ public class Files {
      * @return all subfiles of a directory. (&#38; sub sub files, &#38; sub sub sub files, etc.)
      */
     public static Set<String> listSubFilesPathsRecusvively(String path) {
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
         String[] assetsNames = Gdx.files.internal("assets.txt").readString().split("\n");
         for (String name : assetsNames) {
             if (name.startsWith(path)) {
@@ -209,7 +213,7 @@ public class Files {
      * @return all subfiles of a directory. (&#38; sub sub files, &#38; sub sub sub files, etc.)
      */
     public static Set<FileHandle> listSubFilesRecusvively(String path) {
-        Set<FileHandle> set = new HashSet<FileHandle>();
+        Set<FileHandle> set = new HashSet<>();
         for (String name : listSubFilesPathsRecusvively(path)) {
             set.add(Gdx.files.internal(name));
         }
@@ -220,7 +224,7 @@ public class Files {
      * @return direct directory of a directory
      */
     public static Set<String> listSubDirectory(String path) {
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
         for (String name : listSubFilesPathsRecusvively(path)) {
             if (name.contains("/")) {
                 String dirName = name.substring(0, name.lastIndexOf("/"));

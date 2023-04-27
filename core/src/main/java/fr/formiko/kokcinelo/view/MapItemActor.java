@@ -49,7 +49,7 @@ public class MapItemActor extends SkeletonActor {
      * @param textureName name of the texture to use to represent this Actor
      * @param mapItem     MapItem represent by this
      */
-    public MapItemActor(String textureName, MapItem mapItem) {
+    public MapItemActor(@Null String textureName, MapItem mapItem) {
         this.textureName = textureName;
         this.mapItem = mapItem;
 
@@ -58,10 +58,10 @@ public class MapItemActor extends SkeletonActor {
         }
 
         if (textureRegionMap == null) {
-            textureRegionMap = new HashMap<String, TextureRegion>();
+            textureRegionMap = new HashMap<>();
         }
         if (!textureRegionMap.containsKey(textureName)) {
-            if (Gdx.files != null && textureName != null) {
+            if (Gdx.files != null) {
                 FileHandle file = Gdx.files.internal("images/Creatures/" + textureName + ".png");
                 if (file.exists()) {
                     textureRegionMap.put(textureName, new TextureRegion(new KTexture(file)));
@@ -186,9 +186,9 @@ public class MapItemActor extends SkeletonActor {
                 shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
                 shapeRenderer.begin(ShapeType.Line);
                 shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
-                shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getVisionRadius());
+                shapeRenderer.circle(getCenterX(), getCenterY(), c.getVisionRadius());
                 shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
-                shapeRenderer.circle(getCenterX(), getCenterY(), (float) c.getHitRadius());
+                shapeRenderer.circle(getCenterX(), getCenterY(), c.getHitRadius());
                 shapeRenderer.end();
             }
             Gdx.gl.glDisable(GL30.GL_BLEND);
@@ -355,7 +355,7 @@ public class MapItemActor extends SkeletonActor {
         Animation animation;
         boolean loop;
         // Controls the start frame when changing from another animation to this animation.
-        ObjectFloatMap<Animation> startTimes = new ObjectFloatMap<Animation>();
+        ObjectFloatMap<Animation> startTimes = new ObjectFloatMap<>();
         float defaultStartTime;
     }
 }
