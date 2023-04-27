@@ -26,7 +26,7 @@ public class DesktopLauncher {
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].replaceAll("-", "").equalsIgnoreCase("version")) {
 			try {
-				InputStream is = new DesktopLauncher().getClass().getClassLoader().getResourceAsStream("version.md");
+				InputStream is = DesktopLauncher.class.getClassLoader().getResourceAsStream("version.md");
 				String version = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)).lines()
 						.collect(Collectors.joining("\n"));
 				System.out.println(version);
