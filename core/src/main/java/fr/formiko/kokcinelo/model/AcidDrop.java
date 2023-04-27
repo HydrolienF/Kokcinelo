@@ -18,7 +18,7 @@ public class AcidDrop extends Creature {
     public float getDistanceBeforeHit() { return distanceBeforeHit; }
 
     /**
-     * {@summary Move the acid drop & decrease distance before hit ground or creature.}
+     * {@summary Move the acid drop &#38; decrease distance before hit ground or creature.}
      */
     @Override
     public int moveAI(GameState gs) {

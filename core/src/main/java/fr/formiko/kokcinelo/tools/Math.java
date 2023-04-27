@@ -62,7 +62,6 @@ public class Math {
      * @param max the maximum value
      * @param val the value to test
      * @return val or a bound
-     * @lastEditedVersion 2.5
      */
     public static int between(int min, int max, int val) {
         if (val < min) {
@@ -81,7 +80,6 @@ public class Math {
      * @param max the maximum value
      * @param val the value to test
      * @return val or a bound
-     * @lastEditedVersion 2.5
      */
     public static long between(long min, long max, long val) {
         if (val < min) {
@@ -100,7 +98,6 @@ public class Math {
      * @param max the maximum value
      * @param val the value to test
      * @return val or a bound
-     * @lastEditedVersion 2.5
      */
     public static byte between(byte min, byte max, byte val) {
         if (val < min) {
@@ -119,7 +116,6 @@ public class Math {
      * @param max the maximum value
      * @param val the value to test
      * @return val or a bound
-     * @lastEditedVersion 2.5
      */
     public static float between(float min, float max, float val) {
         if (val < min) {
@@ -138,7 +134,6 @@ public class Math {
      * @param max the maximum value
      * @param val the value to test
      * @return val or a bound
-     * @lastEditedVersion 2.5
      */
     public static double between(double min, double max, double val) {
         if (val < min) {

@@ -186,7 +186,7 @@ public class GameState {
     public boolean isAllLadybugGone() { return ladybugs.isEmpty(); }
 
     /**
-     * @summary Remove a Creature from the list of Creature where class match & from the Stage.
+     * {@summary Remove a Creature from the list of Creature where class match &#38; from the Stage.}
      */
     public void remove(Creature c) {
         if (c instanceof Aphid) {
@@ -201,7 +201,7 @@ public class GameState {
         c.removeActor();
     }
     /**
-     * @summary Remove a collection of Creature from the list of Creature where class match & from the Stage.
+     * {@summary Remove a collection of Creature from the list of Creature where class match &#38; from the Stage.}
      */
     public void remove(Collection<Creature> creatures) {
         for (Creature c : creatures) {

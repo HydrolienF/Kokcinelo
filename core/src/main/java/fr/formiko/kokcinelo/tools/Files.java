@@ -192,7 +192,7 @@ public class Files {
 
     /**
      * @param path the path of the directory to search
-     * @return all subfiles of a directory. (&#38; sub sub files, &38; sub sub sub files, etc.)
+     * @return all subfiles of a directory. (&#38; sub sub files, &#38; sub sub sub files, etc.)
      */
     public static Set<String> listSubFilesPathsRecusvively(String path) {
         Set<String> set = new HashSet<String>();
@@ -206,7 +206,7 @@ public class Files {
     }
     /**
      * @param path the path of the directory to search
-     * @return all subfiles of a directory. (&#38; sub sub files, &38; sub sub sub files, etc.)
+     * @return all subfiles of a directory. (&#38; sub sub files, &#38; sub sub sub files, etc.)
      */
     public static Set<FileHandle> listSubFilesRecusvively(String path) {
         Set<FileHandle> set = new HashSet<FileHandle>();

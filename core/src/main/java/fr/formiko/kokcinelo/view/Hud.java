@@ -39,12 +39,10 @@ public class Hud implements Disposable {
     /**
      * {@summary Main constructor}
      * 
-     * @param sb         SpriteBatch to use
-     * @param worldTimer starting value of world timer
+     * @param sb SpriteBatch to use
      */
     public Hud(SpriteBatch sb) {
         this.maxValue = Controller.getController().getNumberOfAphids();
-        // this.worldTimer = worldTimer;
         // timeCount = 0;
         // setup the HUD viewport using a new camera seperate from our gamecam
         // define our stage using that viewport and our games spritebatch

@@ -224,7 +224,7 @@ public class Shapes {
     /**
      * Resize a Pixmap.
      * 
-     * @param in        Pixmap to resize
+     * @param inPm      Pixmap to resize
      * @param outWidth  new width
      * @param outheight new height
      * @return resized Pixmap
@@ -257,7 +257,7 @@ public class Shapes {
      * For each pixel It check if the 4 next pixels are colored. If they are it, save location to be colored.
      * For each location to color, it place a black pixel.
      * 
-     * @param in PixelMap to outline
+     * @param inPm PixelMap to outline
      * @return a new Pixmap with a black border over the shapes
      */
     public static Pixmap outLine(Pixmap inPm) {

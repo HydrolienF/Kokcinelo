@@ -437,7 +437,7 @@ public class MenuScreen extends KScreen implements Screen {
         if (DEFAULT_CHARS == null) {
             DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
         }
-        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + "ĉĝĥĵŝŭ" + "ĈĜĤĴŜŬ" + " ";
+        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + eo char upper & lower case.
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 

@@ -457,7 +457,7 @@ public class Controller {
 
     /**
      * {@summary Pause game or resume depening of current state.}
-     * It pause move of creature & music.
+     * It pause move of creature &#38; music.
      */
     public void pauseResume() {
         if (getGameScreen().isPause()) {
