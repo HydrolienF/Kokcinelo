@@ -21,7 +21,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
  * @since 0.1
  */
 public class DesktopLauncher {
-	private static int displayMode = 1;
+	private static int displayMode = 0;
 
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].replaceAll("-", "").equalsIgnoreCase("version")) {
