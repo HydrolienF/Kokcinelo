@@ -33,7 +33,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@summary Actor that represent a MapItem.}
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.1
  */
 public class MapItemActor extends SkeletonActor {

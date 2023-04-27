@@ -28,12 +28,14 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.3
  * @since 0.2
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
     private static Texture outCircleTexture;
+
+    private Shapes() {}
 
     public static ShapeRenderer getShapeRenderer() {
         if (shapeRenderer == null) {

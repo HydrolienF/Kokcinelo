@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
  * MipMap is needed to have a good quality when the texture is scaled a lot smaller than the original size.
  * Texture.TextureFilter.MipMapLinearLinear is the best quality.
  * Mipmap may create issues with texure atlas (as spine output). To avoid create 2^n width &#38; heigth texture.
+ * 
+ * @author Hydrolien
+ * @version 1.1
+ * @since 1.1
  */
 public class KTexture extends Texture {
     /**

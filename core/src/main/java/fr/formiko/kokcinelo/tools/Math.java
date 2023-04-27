@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
  * {@summary Math tools class with usefull static functions.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 1.3
  * @since 0.1
  */
 public class Math {

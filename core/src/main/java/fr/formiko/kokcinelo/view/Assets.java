@@ -25,6 +25,9 @@ public class Assets implements Disposable {
     private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
     private static final String DIRECTORY = "images/Creatures/";
 
+    /**
+     * {@summary Load all assets.}
+     */
     public Assets() {
         for (String childName : Files.listSubDirectory(DIRECTORY)) {
             App.log(1, "Load asset " + childName);

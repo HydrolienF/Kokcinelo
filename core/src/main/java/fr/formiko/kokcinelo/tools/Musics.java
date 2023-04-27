@@ -12,7 +12,7 @@ import com.badlogic.gdx.audio.Music;
  * It have a null safety for every function.
  * 
  * @author Hydrolien
- * @version 0.2
+ * @version 1.3
  * @since 0.2
  */
 public class Musics {

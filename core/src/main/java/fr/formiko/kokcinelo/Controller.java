@@ -33,7 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.1
+ * @version 1.3
  * @since 0.1
  */
 public class Controller {

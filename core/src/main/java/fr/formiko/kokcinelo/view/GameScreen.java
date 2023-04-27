@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.1
  */
 public class GameScreen extends KScreen implements Screen {

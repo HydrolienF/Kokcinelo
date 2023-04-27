@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * {@summary Class that containts all data about current game.}
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.1
  */
 public class GameState {
@@ -37,11 +37,11 @@ public class GameState {
      * Use GameState.builder() to create a new GameState.
      */
     private GameState() {
-        aphids = new ArrayList<Aphid>();
-        ants = new ArrayList<Ant>();
-        ladybugs = new ArrayList<Ladybug>();
-        players = new ArrayList<Player>();
-        acidDrops = new LinkedList<AcidDrop>();
+        aphids = new ArrayList<>();
+        ants = new ArrayList<>();
+        ladybugs = new ArrayList<>();
+        players = new ArrayList<>();
+        acidDrops = new LinkedList<>();
     }
 
     // GET SET -------------------------------------------------------------------

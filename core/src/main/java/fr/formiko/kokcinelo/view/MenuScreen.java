@@ -55,7 +55,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 1.0
+ * @version 1.3
  * @since 0.2
  */
 public class MenuScreen extends KScreen implements Screen {
@@ -101,7 +101,7 @@ public class MenuScreen extends KScreen implements Screen {
         cameraBc = new OrthographicCamera();
         Viewport viewportBc = new ScreenViewport(cameraBc);
         backgroundStage = new Stage(viewportBc, batch);
-        backgroundStage.addActor(new EnvironmentMenuScreen(this, cameraBc));
+        backgroundStage.addActor(new EnvironmentMenuScreen(cameraBc));
 
         App.log(0, "constructor", "new MenuScreen: " + toString());
 
