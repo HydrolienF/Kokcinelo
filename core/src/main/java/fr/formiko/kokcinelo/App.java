@@ -218,9 +218,8 @@ public class App extends Game {
      * @param exception exception that have been catch
      */
     public static void log(int logLevel, String tag, String message, Exception exception) {
-        // tag = updatedTag(logLevel, tag);
         String tagTemp = getCurrentTime() + " " + logLevelToString(logLevel);
-        // tagTemp+= " " + Thread.currentThread().getName(); //HTML INCOMPATIBLE
+        tagTemp += " " + Thread.currentThread().getName(); // HTML INCOMPATIBLE
         if (tag == null || tag.equals("")) {
             tag = tagTemp;
         } else {
@@ -238,10 +237,7 @@ public class App extends Game {
             case 1:
                 Gdx.app.log(tag, message);
                 break;
-            // case 2, 3, 4: //HTML INCOMPATIBLE
-            case 2:
-            case 3:
-            case 4:
+            case 2, 3, 4:
                 if (exception != null) {
                     Gdx.app.error(tag, message, exception);
                 } else {
@@ -250,6 +246,9 @@ public class App extends Game {
                 if (logLevel == 4) {
                     Controller.getController().dispose();
                 }
+                break;
+            default:
+                Gdx.app.log(tag, message);
                 break;
             }
         } else {
@@ -306,7 +305,6 @@ public class App extends Game {
      * @return log level String color
      */
     private static String logLevelToStringColor(int logLevel) {
-        // HTML INCOMPATIBLE
         switch (logLevel) {
         case 0:
             return color.BROWN;
@@ -321,7 +319,6 @@ public class App extends Game {
         default:
             return color.NEUTRAL;
         }
-        // return "";
     }
     /**
      * {@summary Return current time in standardized format.}
@@ -342,7 +339,7 @@ public class App extends Game {
     public static String getCurrentVersion() {
         if (version == null) {
             FileHandle versionFile = Gdx.files.internal("version.md");
-            version = versionFile.exists() ? versionFile.readString() : "...";
+            version = versionFile.exists() ? versionFile.readString().split("\n")[0] : "...";
         }
         return version;
     }
