@@ -1,5 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.tools.KScreen;
+
 /**
  * {@summary AcidDrop are creatures that can only move, hit then die.}
  * 
@@ -39,7 +41,7 @@ public class AcidDrop extends Creature {
     @Override
     public int moveAI(GameState gs) {
         moveFront();
-        distanceBeforeHit -= getMovingSpeed();
+        distanceBeforeHit -= getMovingSpeed() * KScreen.getFPSRacio();
         return 0;
     }
 
