@@ -338,9 +338,7 @@ public class Controller {
                     haveInteract = true;
                     playSound("crock", ladybug);
                     ladybug.hit(aphid);
-                    // ladybug.addScorePoints(aphid.getGivenPoints());
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
-                    // System.out.println("Eating " + aphid);
                 }
             }
         }
