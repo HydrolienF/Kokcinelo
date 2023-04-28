@@ -46,6 +46,7 @@ public class KScreen {
     public static float getRacioWidth() { return Gdx.graphics.getWidth() / 1920f; }
     public static float getRacioHeight() { return Gdx.graphics.getHeight() / 1080f; }
     public static float getRacio() { return java.lang.Math.min(getRacioWidth(), getRacioHeight()); }
+    public static float getFPSRacio() { return Gdx.graphics.getDeltaTime() * 60f; }
 
 
     /**

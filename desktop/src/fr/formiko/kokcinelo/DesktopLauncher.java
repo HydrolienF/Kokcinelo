@@ -39,7 +39,7 @@ public class DesktopLauncher {
 			displayMode = 0;
 		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
+		config.setForegroundFPS(0); // 0 = no limite
 		switch (displayMode) {
 		default:
 		case 0: // Real fullscreen

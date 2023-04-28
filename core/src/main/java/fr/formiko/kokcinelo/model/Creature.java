@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.KScreen;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -59,6 +60,7 @@ public abstract class Creature extends MapItem {
     public void setHearRadius(float hearRadius) { this.hearRadius = hearRadius; }
     public float getMaxRotationPerSecond() { return 90f; }
     public float getMovingSpeed() { return movingSpeed; }
+    // public float getMovingSpeedWithFPS() { return movingSpeed * KScreen.getFPSRacio(); }
     public void setMovingSpeed(float movingSpeed) { this.movingSpeed = movingSpeed; }
     public float getCurrentSpeed() { return currentSpeed; }
     public void setCurrentSpeed(float currentSpeed) { this.currentSpeed = currentSpeed; }
@@ -148,7 +150,7 @@ public abstract class Creature extends MapItem {
     public void moveFront(float percentOfSpeed) {
         rotateAStep();
         currentSpeed = getMovingSpeed() * percentOfSpeed;
-        getActor().moveFront(currentSpeed);
+        getActor().moveFront(currentSpeed * KScreen.getFPSRacio());
     }
     /***
      * {@summary Move in the facing direction at max speed.}
