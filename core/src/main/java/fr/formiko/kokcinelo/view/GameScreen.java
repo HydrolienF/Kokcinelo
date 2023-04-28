@@ -408,7 +408,11 @@ public class GameScreen extends KScreen implements Screen {
 
 
     @Override
-    public void hide() {}
+    public void hide() {
+        // Nothing to do when hiding the screen.
+    }
     @Override
-    public void show() {}
+    public void show() {
+        // Nothing to do when showing the screen.
+    }
 }

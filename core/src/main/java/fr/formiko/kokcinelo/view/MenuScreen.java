@@ -350,10 +350,12 @@ public class MenuScreen extends KScreen implements Screen {
     public void resume() { Musics.resume(); }
 
     @Override
-    public void hide() {}
+    public void hide() {
+        // Nothing to do when hiding the screen.
+    }
 
     /**
-     * {@summary Handle user input.}<br>
+     * {@summary Handle user input.}
      */
     private InputProcessor getInputProcessor() {
         return new InputProcessor() {

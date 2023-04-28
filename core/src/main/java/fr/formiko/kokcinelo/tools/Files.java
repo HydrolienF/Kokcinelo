@@ -138,12 +138,12 @@ public class Files {
      * @param map      the map to save
      */
     public static void saveMapToCSVFile(String fileName, Map<String, ?> map) {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, ?> entry : map.entrySet()) {
-            s += entry.getKey() + "," + entry.getValue() + "\n";
+            sb.append(entry.getKey()).append(",").append(entry.getValue()).append("\n");
         }
         FileHandle file = Gdx.files.absolute(Files.getDataPath() + fileName);
-        file.writeString(s, false);
+        file.writeString(sb.toString(), false);
     }
 
     /**
@@ -153,6 +153,7 @@ public class Files {
      * @return all char that may be displayed from translation files.
      */
     public static String loadUniqueCharFromTranslationFiles() {
+        long start = System.currentTimeMillis();
         // TODO PERF save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
         Set<Character> set = new HashSet<>();
         String s = loadContentOfFile(Gdx.files.internal("languages/"), true);
@@ -161,11 +162,12 @@ public class Files {
         for (char c : s.toCharArray()) {
             set.add(c);
         }
-        String r = "";
+        StringBuilder sb = new StringBuilder();
         for (Character c : set) {
-            r += c;
+            sb.append(c);
         }
-        return r;
+        App.log(0, "PERFORMANCES", "loadUniqueCharFromTranslationFiles() took " + (System.currentTimeMillis() - start) + "ms");
+        return sb.toString();
     }
     /**
      * Load the content of a file and all its subfiles. (And subsubfiles, and subsubsubfiles, etc.)
@@ -176,18 +178,18 @@ public class Files {
      */
     public static String loadContentOfFile(FileHandle file, boolean fromAssets) {
         if (fromAssets) {
-            String s = "";
+            StringBuilder sb = new StringBuilder();
             for (FileHandle f : listSubFilesRecusvively(file.path())) {
-                s += f.readString();
+                sb.append(f.readString());
             }
-            return s;
+            return sb.toString();
         } else {
             if (file.isDirectory()) {
-                String s = "";
+                StringBuilder sb = new StringBuilder();
                 for (FileHandle f : file.list()) {
-                    s += loadContentOfFile(f, fromAssets);
+                    sb.append(loadContentOfFile(f, fromAssets));
                 }
-                return s;
+                return sb.toString();
             } else {
                 return file.readString();
             }

@@ -73,7 +73,7 @@ public final class Level {
      */
     public List<Level> getNextLevels() {
         if (nextLevels == null) { // initialize by lazy
-            nextLevels = new ArrayList<Level>();
+            nextLevels = new ArrayList<>();
             addNextLevelsFromLine();
             if (getLetter().equals("K")) { // K can unlock other letters levels
                 addNextLevelsFromOtherLine();
@@ -105,14 +105,18 @@ public final class Level {
      */
     @Override
     public String toString() {
-        String r = getId();
-        r += "(";
+        StringBuilder sb = new StringBuilder();
+        sb.append(id).append("(");
+        boolean first = true;
         for (Level level : getNextLevels()) {
-            r += level.getId() + ", ";
+            if (first) {
+                first = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(level.getId());
         }
-        r += ")";
-        return r;
+        sb.append(")");
+        return sb.toString();
     }
-
-
 }

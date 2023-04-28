@@ -85,9 +85,9 @@ public class App extends Game {
     private static void updateLanguage() {
         HashMap<String, String> defaultMap = Files.getText("en");
         HashMap<String, String> userLanguage = Files.getText(getLanguage());
-        for (String key : userLanguage.keySet()) {
-            if (userLanguage.get(key) != null) {
-                defaultMap.put(key, userLanguage.get(key));
+        for (Map.Entry<String, String> entry : userLanguage.entrySet()) {
+            if (entry.getValue() != null) {
+                defaultMap.put(entry.getKey(), entry.getValue());
             }
         }
         // App.log(1, "map: " + userLanguage);
@@ -411,8 +411,8 @@ public class App extends Game {
         if (tempMap.isEmpty()) {
             calculateLanguagesPercentages();
         } else { // if it exist in a single file
-            for (String key : tempMap.keySet()) {
-                LANGUAGES_PERCENTAGES.put(key, Integer.parseInt(tempMap.get(key)));
+            for (Map.Entry<String, String> entry : tempMap.entrySet()) {
+                LANGUAGES_PERCENTAGES.put(entry.getKey(), Integer.parseInt(entry.getValue()));
             }
         }
         for (String key : LANGUAGES_PERCENTAGES.keySet()) {
