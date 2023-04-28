@@ -19,6 +19,7 @@ import fr.formiko.usual.g;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -499,7 +500,8 @@ public class MenuScreen extends KScreen implements Screen {
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
         LevelButton.resetUnlockedLevels();
-        for (Level level : Level.getLevelList()) {
+        for (Level level : Level.getLevelList().stream().sorted((l1, l2) -> l2.getDrawPriority() - l1.getDrawPriority())
+                .collect(Collectors.toList())) {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {

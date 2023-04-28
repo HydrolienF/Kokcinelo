@@ -35,7 +35,7 @@ public class DesktopLauncher {
 				System.out.println("Fail to get version in DesktopLauncher.");
 			}
 		}
-		if (Os.getOs().isLinux()) {
+		if (Os.getOs().isLinux()) { // TODO to remove
 			displayMode = 0;
 		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
