@@ -40,6 +40,7 @@ class LevelButton extends Button {
     private Sprite sprite;
     private final Level level;
     private final int radius;
+    private final int bestScore;
 
     /**
      * {@summary Main constructor.}
@@ -112,6 +113,12 @@ class LevelButton extends Button {
         });
 
         setDisabled(!isUnlocked() || !App.isPlayableLevel(id));
+
+        if (!isDisabled()) {
+            bestScore = Controller.getController().getBestScore(getId());
+        } else {
+            bestScore = 0;
+        }
     }
 
     // GET SET -----------------------------------------------------------------
@@ -215,20 +222,19 @@ class LevelButton extends Button {
 
         if (isChecked() || isOver()) {
             if (isDisabled()) {
-                batch.draw(circleSelectedDisable, getX(), getY(), radius * 2, radius * 2);
+                batch.draw(circleSelectedDisable, getX(), getY(), radius * 2f, radius * 2f);
             } else {
-                batch.draw(circleSelected, getX(), getY(), radius * 2, radius * 2);
+                batch.draw(circleSelected, getX(), getY(), radius * 2f, radius * 2f);
             }
         } else {
-            batch.draw(circle, getX(), getY(), radius * 2, radius * 2);
+            batch.draw(circle, getX(), getY(), radius * 2f, radius * 2f);
         }
         if (!isDisabled()) {
-            int bestScore = Controller.getController().getBestScore(getId());
             if (bestScore >= App.STARS_SCORES.get(0)) {
                 batch.draw(star, getX(), getY());
             }
             if (bestScore >= App.STARS_SCORES.get(1)) {
-                batch.draw(star, getX() + (getWidth() - star.getWidth()) / 2, getY() - star.getWidth() / 3);
+                batch.draw(star, getX() + (getWidth() - star.getWidth()) / 2, getY() - star.getWidth() / 3f);
             }
             if (bestScore >= App.STARS_SCORES.get(2)) {
                 batch.draw(star, getX() + getWidth() - star.getWidth(), getY());
