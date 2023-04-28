@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @version 1.3
  * @since 0.1
  */
-public class EndGameMenu implements Disposable {
+public class EndGameMenu extends KScreen implements Disposable {
 
     private Stage stage;
     private Viewport viewport;
@@ -35,7 +35,6 @@ public class EndGameMenu implements Disposable {
     private Image replayButton;
     private Button mainMenuButton;
     // private boolean haveWin;
-    private static Skin skin;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -53,10 +52,6 @@ public class EndGameMenu implements Disposable {
         // viewport.setScreenBounds(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth()/2,
         // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
-
-        if (skin == null) {
-            skin = MenuScreen.getDefautSkin();
-        }
 
         Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
         replayButton = new Image(t);
