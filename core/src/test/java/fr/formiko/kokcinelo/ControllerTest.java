@@ -7,10 +7,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ControllerTest extends Assertions {
+class ControllerTest extends Assertions {
     private float epsilon = 0.01f;
     @Test
-    public void testGetSoundVolume() {
+    void testGetSoundVolume() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -21,7 +21,7 @@ public class ControllerTest extends Assertions {
         assertEquals(0.5f, Controller.getSoundVolume(source, target));
     }
     @Test
-    public void testGetSoundVolume2() {
+    void testGetSoundVolume2() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -32,7 +32,7 @@ public class ControllerTest extends Assertions {
         assertEquals(0f, Controller.getSoundVolume(source, target));
     }
     @Test
-    public void testGetSoundVolume3() {
+    void testGetSoundVolume3() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -43,7 +43,7 @@ public class ControllerTest extends Assertions {
         assertEquals(1f, Controller.getSoundVolume(source, target));
     }
     @Test
-    public void testGetSoundVolume4() {
+    void testGetSoundVolume4() {
         Creature target = new Ant();
         target.setHearRadius(1000);
         target.setCenterX(0);
@@ -54,7 +54,7 @@ public class ControllerTest extends Assertions {
         assertTrue(almostEquals(0.92f, Controller.getSoundVolume(source, target)));
     }
     @Test
-    public void testGetSoundVolume5() {
+    void testGetSoundVolume5() {
         Creature target = new Ant();
         target.setHearRadius(100);
         target.setCenterX(200);
@@ -66,7 +66,7 @@ public class ControllerTest extends Assertions {
     }
 
     @Test
-    public void testGetSoundPan() {
+    void testGetSoundPan() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -77,7 +77,7 @@ public class ControllerTest extends Assertions {
         assertEquals(0f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan2() {
+    void testGetSoundPan2() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -88,7 +88,7 @@ public class ControllerTest extends Assertions {
         assertTrue(almostEquals(0f, Controller.getSoundPan(source, target)));
     }
     @Test
-    public void testGetSoundPan3() {
+    void testGetSoundPan3() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -99,7 +99,7 @@ public class ControllerTest extends Assertions {
         assertEquals(1f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan4() {
+    void testGetSoundPan4() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -110,7 +110,7 @@ public class ControllerTest extends Assertions {
         assertEquals(-1f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan5() {
+    void testGetSoundPan5() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -121,7 +121,7 @@ public class ControllerTest extends Assertions {
         assertEquals(0.5f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan6() {
+    void testGetSoundPan6() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -132,7 +132,7 @@ public class ControllerTest extends Assertions {
         assertEquals(0.5f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan7() {
+    void testGetSoundPan7() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -143,7 +143,7 @@ public class ControllerTest extends Assertions {
         assertEquals(-0.5f, Controller.getSoundPan(source, target));
     }
     @Test
-    public void testGetSoundPan8() {
+    void testGetSoundPan8() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -155,7 +155,7 @@ public class ControllerTest extends Assertions {
     }
 
     @Test
-    public void testGetSoundPan9() {
+    void testGetSoundPan9() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -166,7 +166,7 @@ public class ControllerTest extends Assertions {
         assertTrue(almostEquals(0.6666f, Controller.getSoundPan(source, target)));
     }
     @Test
-    public void testGetSoundPan10() {
+    void testGetSoundPan10() {
         Creature target = new Ant();
         target.setHearRadius(200);
         target.setCenterX(0);
@@ -178,62 +178,62 @@ public class ControllerTest extends Assertions {
     }
 
     @Test
-    public void testLoadUnlockedLevels() {
+    void testLoadUnlockedLevels() {
         Controller.loadUnlockedLevels("");
         onlyThisLevelAreUnlocked("1K");
     }
     @Test
-    public void testLoadUnlockedLevels2() {
+    void testLoadUnlockedLevels2() {
         Controller.loadUnlockedLevels(null);
         onlyThisLevelAreUnlocked("1K");
     }
     @Test
-    public void testLoadUnlockedLevels3() {
+    void testLoadUnlockedLevels3() {
         Controller.loadUnlockedLevels("1K,0,1234567");
         onlyThisLevelAreUnlocked("1K");
     }
     @Test
-    public void testLoadUnlockedLevels4() {
+    void testLoadUnlockedLevels4() {
         Controller.loadUnlockedLevels("1K,49,1234567");
         onlyThisLevelAreUnlocked("1K");
     }
     @Test
-    public void testLoadUnlockedLevels5() {
+    void testLoadUnlockedLevels5() {
         Controller.loadUnlockedLevels("1K,50,1234567");
         onlyThisLevelAreUnlocked("1K", "2K", "2F");
     }
     @Test
-    public void testLoadUnlockedLevels6() {
+    void testLoadUnlockedLevels6() {
         Controller.loadUnlockedLevels("1K,1,1234567\n2K,1,1234567");
         onlyThisLevelAreUnlocked("1K", "2K");
     }
     @Test
-    public void testLoadUnlockedLevels7() {
+    void testLoadUnlockedLevels7() {
         Controller.loadUnlockedLevels("2K,1,1234567");
         onlyThisLevelAreUnlocked("1K", "2K");
     }
     @Test
-    public void testLoadUnlockedLevels8() {
+    void testLoadUnlockedLevels8() {
         Controller.loadUnlockedLevels("2K,1,1234567\n\n\n\n\n");
         onlyThisLevelAreUnlocked("1K", "2K");
     }
     @Test
-    public void testLoadUnlockedLevels9() {
+    void testLoadUnlockedLevels9() {
         Controller.loadUnlockedLevels("4K,1,1234567");
         onlyThisLevelAreUnlocked("1K", "4K");
     }
     @Test
-    public void testLoadUnlockedLevels10() {
+    void testLoadUnlockedLevels10() {
         Controller.loadUnlockedLevels("4K,51,1234567");
         onlyThisLevelAreUnlocked("1K", "4K", "5K");
     }
     @Test
-    public void testLoadUnlockedLevels11() {
+    void testLoadUnlockedLevels11() {
         Controller.loadUnlockedLevels("4K,51,1234567\n1K,51,1234567");
         onlyThisLevelAreUnlocked("1K", "4K", "5K", "2K", "2F");
     }
 
-    public void onlyThisLevelAreUnlocked(String... levelIds) {
+    void onlyThisLevelAreUnlocked(String... levelIds) {
         Set<String> levelIdsSet = Set.of((levelIds));
         for (Level level : Level.getLevelList()) {
             if (levelIdsSet.contains(level.getId())) {
@@ -245,5 +245,5 @@ public class ControllerTest extends Assertions {
     }
 
 
-    public boolean almostEquals(float a, float b) { return Math.abs(a - b) < epsilon; }
+    boolean almostEquals(float a, float b) { return Math.abs(a - b) < epsilon; }
 }

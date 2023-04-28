@@ -198,7 +198,7 @@ public class MenuScreen extends KScreen implements Screen {
             stage.addActor(getCloseButton(w, h));
         }
 
-        createCreatureImages(w, h);
+        createCreatureImages(w, h, topSpace);
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -231,7 +231,7 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create images for all creature that can be play.}
      * It is used to display them walking or flying in the menu.
      */
-    private void createCreatureImages(int w, int h) {
+    private static void createCreatureImages(int w, int h, int topSpace) {
         creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
             boolean needToRotate = false;
@@ -274,7 +274,7 @@ public class MenuScreen extends KScreen implements Screen {
                 imageWidth = 1000;
                 imageHeigth = 1000;
             }
-            cActor.setBounds(w / 3f, h - topSpace, w / 3f, topSpace);
+            cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
             if (needToRotate) {
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
