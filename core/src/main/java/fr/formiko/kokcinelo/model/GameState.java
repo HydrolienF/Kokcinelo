@@ -116,7 +116,7 @@ public class GameState {
      * @return All creatures: aphids + ants + ladybugs + acid drop
      */
     public Collection<Creature> allCreatures() {
-        List<Creature> l = new LinkedList<Creature>();
+        List<Creature> l = new LinkedList<>();
         l.addAll(aphids);
         l.addAll(ladybugs);
         l.addAll(ants);
@@ -131,7 +131,7 @@ public class GameState {
      * @return ants &#38; ladybugs
      */
     public Collection<Creature> getAntsAndLadybugs() {
-        List<Creature> l = new LinkedList<Creature>();
+        List<Creature> l = new LinkedList<>();
         l.addAll(ants);
         l.addAll(ladybugs);
         return l;
@@ -143,7 +143,7 @@ public class GameState {
      * @return all actors to draw
      */
     public Collection<Actor> allActors() {
-        List<Actor> l = new LinkedList<Actor>();
+        List<Actor> l = new LinkedList<>();
         if (mapActorBg != null) {
             mapActorBg.setName("background");
             l.add(mapActorBg);
