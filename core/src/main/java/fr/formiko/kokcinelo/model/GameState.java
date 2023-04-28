@@ -3,12 +3,14 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Null;
@@ -99,12 +101,12 @@ public class GameState {
      * @param c Creature to add
      */
     public void addCreature(Creature c) {
-        if (c instanceof Aphid) {
-            aphids.add((Aphid) c);
-        } else if (c instanceof Ant) {
-            ants.add((Ant) c);
-        } else if (c instanceof Ladybug) {
-            ladybugs.add((Ladybug) c);
+        if (c instanceof Aphid aphid) {
+            aphids.add(aphid);
+        } else if (c instanceof Ant ant) {
+            ants.add(ant);
+        } else if (c instanceof Ladybug ladybug) {
+            ladybugs.add(ladybug);
         }
     }
 
