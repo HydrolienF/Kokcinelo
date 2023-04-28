@@ -127,9 +127,9 @@ public class CreatureTest extends Assertions {
 
     @Test
     void testAnt() {
-        new Ant();
-        new RedAnt();
-        new Ladybug();
+        assertDoesNotThrow(() -> new Ant());
+        assertDoesNotThrow(() -> new RedAnt());
+        assertDoesNotThrow(() -> new Ladybug());
     }
 
     void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
