@@ -6,175 +6,53 @@ import fr.formiko.kokcinelo.model.Level;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class ControllerTest extends Assertions {
     private float epsilon = 0.01f;
-    @Test
-    void testGetSoundVolume() {
+
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "200, 0, 400, 0, 500, 0.5",
+        "200, 0, 400, 0, 800, 0",
+        "200, 0, 400, 0, 400, 1",
+        "1000, 0, 400, 50, 450, 0.92",
+        "100, 200, 400, 285, 475, 0",
+    })
+    // @formatter:on
+    void testGetSoundVolume(float hearRadius, float targetX, float targetY, float sourceX, float sourceY, float expectedVolume) {
         Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(400);
+        target.setHearRadius(hearRadius);
+        target.setCenter(targetX, targetY);
         Creature source = new Ant();
-        source.setCenterX(0);
-        source.setCenterY(500);
-        assertEquals(0.5f, Controller.getSoundVolume(source, target));
-    }
-    @Test
-    void testGetSoundVolume2() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(400);
-        Creature source = new Ant();
-        source.setCenterX(0);
-        source.setCenterY(800);
-        assertEquals(0f, Controller.getSoundVolume(source, target));
-    }
-    @Test
-    void testGetSoundVolume3() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(400);
-        Creature source = new Ant();
-        source.setCenterX(0);
-        source.setCenterY(400);
-        assertEquals(1f, Controller.getSoundVolume(source, target));
-    }
-    @Test
-    void testGetSoundVolume4() {
-        Creature target = new Ant();
-        target.setHearRadius(1000);
-        target.setCenterX(0);
-        target.setCenterY(400);
-        Creature source = new Ant();
-        source.setCenterX(50);
-        source.setCenterY(450);
-        assertTrue(almostEquals(0.92f, Controller.getSoundVolume(source, target)));
-    }
-    @Test
-    void testGetSoundVolume5() {
-        Creature target = new Ant();
-        target.setHearRadius(100);
-        target.setCenterX(200);
-        target.setCenterY(400);
-        Creature source = new Ant();
-        source.setCenterX(285);
-        source.setCenterY(475);
-        assertTrue(almostEquals(0f, Controller.getSoundVolume(source, target)));
+        source.setCenter(sourceX, sourceY);
+        assertEquals(expectedVolume, Controller.getSoundVolume(source, target));
     }
 
-    @Test
-    void testGetSoundPan() {
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "200, 0, 0, 0, 0, 0",
+        "200, 0, -240, 0, 0, 0",
+        "200, 0, 0, 10, 0, 1",
+        "200, 0, 0, -3205010, 0, -1",
+        "200, 0, 0, 100, 100, 0.5",
+        "200, 0, 0, 100, -100, 0.5",
+        "200, 0, 0, -100, 100, -0.5",
+        "200, 0, 0, -100, -100, -0.5",
+        "200, 0, 0, 200, 100, 0.6666",
+        "200, 0, 0, 1000, 100, 0.91",
+    })
+    // @formatter:on
+    void testGetSoundPan(float hearRadius, float targetX, float targetY, float sourceX, float sourceY, float expectedPan) {
         Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
+        target.setHearRadius(hearRadius);
+        target.setCenter(targetX, targetY);
         Creature source = new Ant();
-        source.setCenterX(0);
-        source.setCenterY(0);
-        assertEquals(0f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan2() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(-240);
-        Creature source = new Ant();
-        source.setCenterX(0);
-        source.setCenterY(0);
-        assertTrue(almostEquals(0f, Controller.getSoundPan(source, target)));
-    }
-    @Test
-    void testGetSoundPan3() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(10);
-        source.setCenterY(0);
-        assertEquals(1f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan4() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(-3205010);
-        source.setCenterY(0);
-        assertEquals(-1f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan5() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(100);
-        source.setCenterY(100);
-        assertEquals(0.5f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan6() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(100);
-        source.setCenterY(-100);
-        assertEquals(0.5f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan7() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(-100);
-        source.setCenterY(100);
-        assertEquals(-0.5f, Controller.getSoundPan(source, target));
-    }
-    @Test
-    void testGetSoundPan8() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(-100);
-        source.setCenterY(-100);
-        assertEquals(-0.5f, Controller.getSoundPan(source, target));
-    }
-
-    @Test
-    void testGetSoundPan9() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(200);
-        source.setCenterY(100);
-        assertTrue(almostEquals(0.6666f, Controller.getSoundPan(source, target)));
-    }
-    @Test
-    void testGetSoundPan10() {
-        Creature target = new Ant();
-        target.setHearRadius(200);
-        target.setCenterX(0);
-        target.setCenterY(0);
-        Creature source = new Ant();
-        source.setCenterX(1000);
-        source.setCenterY(100);
-        assertTrue(almostEquals(0.91f, Controller.getSoundPan(source, target)));
+        source.setCenter(sourceX, sourceY);
+        assertEquals(expectedPan, Controller.getSoundPan(source, target));
     }
 
     @Test
