@@ -31,22 +31,27 @@ public class KScreen {
     private static String DEFAULT_CHARS;
     private static final boolean backgroundLabelColored = true;
     public static final int FONT_SIZE = 28;
-    protected static Skin skin = getDefautSkin();
-    protected static Skin skinSmall = getDefautSkin(FONT_SIZE * getRacio() * 0.5f);
-    protected static Skin skinTitle = getDefautSkin(FONT_SIZE * getRacio() * 1.6f);
+    protected static Skin skin;
+    protected static Skin skinSmall;
+    protected static Skin skinTitle;
 
     /**
      * {@summary Initialize collections that need to be initialize.}
      */
     public KScreen() {
         times = new LinkedList<>(); // LinkedList because many add and few get.
+        if (skin == null) {
+            skin = getDefautSkin();
+            skinSmall = getDefautSkin(FONT_SIZE * getRacio() * 0.5f);
+            skinTitle = getDefautSkin(FONT_SIZE * getRacio() * 1.6f);
+        }
     }
 
 
-    public static float getRacioWidth() { return Gdx.graphics.getWidth() / 1920f; }
-    public static float getRacioHeight() { return Gdx.graphics.getHeight() / 1080f; }
+    public static float getRacioWidth() { return Gdx.graphics != null ? Gdx.graphics.getWidth() / 1920f : 1f; }
+    public static float getRacioHeight() { return Gdx.graphics != null ? Gdx.graphics.getHeight() / 1080f : 1f; }
     public static float getRacio() { return java.lang.Math.min(getRacioWidth(), getRacioHeight()); }
-    public static float getFPSRacio() { return Gdx.graphics.getDeltaTime() * 60f; }
+    public static float getFPSRacio() { return Gdx.graphics != null ? Gdx.graphics.getDeltaTime() * 60f : 1f; }
 
 
     /**
