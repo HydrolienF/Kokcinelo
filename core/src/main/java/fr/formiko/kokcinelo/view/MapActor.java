@@ -4,8 +4,10 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.tools.Shapes;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -94,7 +96,7 @@ public class MapActor extends Actor {
      * @return texture without first circle area to exclude
      */
     private Texture getMaskedTexture() {
-        if (toExcude.size() == 0) {
+        if (toExcude.isEmpty()) {
             return texture;
         } else {
             if (textureWithDark == null) {
