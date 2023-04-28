@@ -48,6 +48,22 @@ public final class Level {
     }
 
     /**
+     * {@summary Get the draw priority of the level.}
+     */
+    public int getDrawPriority() {
+        switch (getLetter()) {
+        case "K":
+            return 1;
+        case "F":
+            return 2;
+        case "A":
+            return 0;
+        default:
+            return -1;
+        }
+    }
+
+    /**
      * {@summary Return the next levels.}<br>
      * If next level haven't been calculated, it calculate it.<br>
      * Every level can be unlocked by completing the previous level.
@@ -97,4 +113,6 @@ public final class Level {
         r += ")";
         return r;
     }
+
+
 }

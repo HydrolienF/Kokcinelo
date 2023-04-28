@@ -440,7 +440,7 @@ public class Controller {
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
         // if player play as ant, his score is 0 if he stop game before time is up.
-        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && gs.getLadybugs().isEmpty())) {
+        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
             gs.setScore(0);
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;

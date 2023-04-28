@@ -10,7 +10,6 @@ import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.LadybugSideView;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
-import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
@@ -19,6 +18,7 @@ import fr.formiko.usual.g;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -27,22 +27,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -62,16 +55,11 @@ public class MenuScreen extends KScreen implements Screen {
     private Stage stage;
     private Stage backgroundStage;
     private SpriteBatch batch;
-    private static Skin skin = getDefautSkin();
-    private static Skin skinSmall = getDefautSkin(14);
-    private static Skin skinTitle = getDefautSkin(40);
     private InputMultiplexer inputMultiplexer;
     private Label scoresLabel;
     private Label levelNameLabel;
     private Label levelDescription;
     private int topSpace;
-    private static final boolean backgroundLabelColored = true;
-    private static String DEFAULT_CHARS;
     private final Viewport viewport;
     private final OrthographicCamera camera;
     private static List<Actor> creatureImages;
@@ -160,7 +148,7 @@ public class MenuScreen extends KScreen implements Screen {
     private void hidingButtonAnimation(float delta) {
         for (Actor actor : stage.getActors()) {
             if (!creatureImages.contains(actor)) {
-                float modifY = 1000f * delta * (Gdx.graphics.getHeight() / 1080f);
+                float modifY = 1000f * delta * getRacioHeight();
                 if (actor.getY() < Gdx.graphics.getHeight() / 2) {
                     modifY *= -1;
                 }
@@ -417,64 +405,6 @@ public class MenuScreen extends KScreen implements Screen {
         };
     }
 
-    /**
-     * @param fontSize size of the font
-     * @return A simple skin that menus use
-     */
-    public static Skin getDefautSkin(int fontSize) {
-        Skin skin = new Skin();
-
-        // Generate a 1x1 white texture and store it in the skin named "white".
-        Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-        pixmap.dispose();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = fontSize;
-        if (DEFAULT_CHARS == null) {
-            DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
-        }
-        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + eo char upper & lower case.
-        BitmapFont bmf = generator.generateFont(parameter);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
-
-        // bmf.getData().markupEnabled = true; //Use to set color label by label
-
-        // Store the default libGDX font under the name "default".
-        skin.add("default", bmf);
-
-        // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
-        TextButtonStyle textButtonStyle = new TextButtonStyle();
-        // textButtonStyle.up = skin.newDrawable("white", Color.GREEN);
-        // textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        // textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        // textButtonStyle.over = skin.newDrawable("white", Color.RED);
-        textButtonStyle.font = skin.getFont("default");
-        // textButtonStyle.fontColor = Color.RED;
-        skin.add("default", textButtonStyle);
-
-        ButtonStyle buttonStyle = new ButtonStyle();
-        skin.add("default", buttonStyle);
-
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
-        // set background
-        if (backgroundLabelColored) {
-            labelStyle.background = Shapes.getWhiteBackground();
-        }
-
-        skin.add("default", labelStyle);
-        // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
-
-        return skin;
-    }
-    /***
-     * @return A simple skin that menus use
-     */
-    public static Skin getDefautSkin() { return getDefautSkin(28); }
-
     // private ------------------------------------------------------------------------------------
     /**
      * Add the 9 level buttons as circle to fill all aviable space & preserve same space between buttons.
@@ -499,7 +429,8 @@ public class MenuScreen extends KScreen implements Screen {
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
         LevelButton.resetUnlockedLevels();
-        for (Level level : Level.getLevelList()) {
+        for (Level level : Level.getLevelList().stream().sorted((l1, l2) -> l2.getDrawPriority() - l1.getDrawPriority())
+                .collect(Collectors.toList())) {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {

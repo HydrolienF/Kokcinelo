@@ -154,7 +154,7 @@ public class Files {
      */
     public static String loadUniqueCharFromTranslationFiles() {
         // TODO PERF save all char from all translations files (assets/languages/**) in bin/language.yml when creating jar file.
-        Set<Character> set = new HashSet<Character>();
+        Set<Character> set = new HashSet<>();
         String s = loadContentOfFile(Gdx.files.internal("languages/"), true);
         s += FreeTypeFontGenerator.DEFAULT_CHARS;
         s += "\0";
