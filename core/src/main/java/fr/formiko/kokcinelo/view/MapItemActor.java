@@ -122,78 +122,107 @@ public class MapItemActor extends SkeletonActor {
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // super.draw(batch, parentAlpha);
         if (getTextureRegion() == null && getSkeleton() == null) {
             return;
         }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
-
         if (getSkeleton() != null) {
-            int blendSrc = batch.getBlendSrcFunc(), blendDst = batch.getBlendDstFunc();
-            int blendSrcAlpha = batch.getBlendSrcFuncAlpha(), blendDstAlpha = batch.getBlendDstFuncAlpha();
-
-            float oldAlpha = getSkeleton().getColor().a;
-            getSkeleton().getColor().a *= parentAlpha;
-
-            getSkeleton().setPosition(getCenterX(), getCenterY());
-            getSkeleton().updateWorldTransform();
-            getRenderer().draw(batch, getSkeleton());
-
-            if (getResetBlendFunction())
-                batch.setBlendFunctionSeparate(blendSrc, blendDst, blendSrcAlpha, blendDstAlpha);
-
-            color.a = oldAlpha;
+            drawSkeleton(batch, parentAlpha, color);
         } else {
             batch.draw(getTextureRegion(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
                     getRotation());
         }
 
-
         if (mapItem instanceof Creature) {
-            Creature c = (Creature) mapItem;
-            float lp = c.getLifePoints();
-            float mlp = c.getMaxLifePoints();
-            if (mlp > 0) { // if is a Creature witch life point matter
-                if (shapeDrawer == null) {
-                    shapeDrawer = Shapes.createShapeDrawer(batch);
-                }
-                // Draw life bar
-                float len = mlp * 1.5f; // * Gdx.graphics.getWidth() / 1920f;
-                float heigth = len / 10;
-                float greenLen = len * lp / mlp;
-                float redLen = len - greenLen;
-                shapeDrawer.setColor(Color.RED);
-                shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + heigth, redLen,
-                        heigth);
-                shapeDrawer.setColor(Color.GREEN);
-                shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, greenLen, heigth);
-                shapeDrawer.setColor(Color.BLACK);
-                shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, len, heigth, 2);
-            }
+            drawLifePoint(batch);
         }
 
         if (mapItem instanceof Creature && getDebug() && ((Creature) mapItem).getVisionRadius() > 0) {
-            batch.end();
-            Creature c = (Creature) mapItem;
-            Gdx.gl.glEnable(GL30.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
-            if (shapeRenderer == null) {
-                shapeRenderer = new ShapeRenderer();
-            }
-            if (GameScreen.getCamera() != null) {
-                shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
-                shapeRenderer.begin(ShapeType.Line);
-                shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
-                shapeRenderer.circle(getCenterX(), getCenterY(), c.getVisionRadius());
-                shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
-                shapeRenderer.circle(getCenterX(), getCenterY(), c.getHitRadius());
-                shapeRenderer.end();
-            }
-            Gdx.gl.glDisable(GL30.GL_BLEND);
-            batch.begin();
+            drawDebugCircles(batch, parentAlpha);
         }
+    }
+
+    /**
+     * {@summary Draw life point of the Creature.}
+     * 
+     * @param batch batch were to draw
+     */
+    private void drawLifePoint(Batch batch) {
+        Creature c = (Creature) mapItem;
+        float mlp = c.getMaxLifePoints();
+        if (mlp > 0) { // if is a Creature witch life point matter
+            float lp = c.getLifePoints();
+            if (shapeDrawer == null) {
+                shapeDrawer = Shapes.createShapeDrawer(batch);
+            }
+            // Draw life bar
+            float len = mlp * 1.5f;
+            float heigth = len / 10;
+            float greenLen = len * lp / mlp;
+            float redLen = len - greenLen;
+            shapeDrawer.setColor(Color.RED);
+            shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + heigth, redLen, heigth);
+            shapeDrawer.setColor(Color.GREEN);
+            shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, greenLen, heigth);
+            shapeDrawer.setColor(Color.BLACK);
+            shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, len, heigth, 2);
+        }
+    }
+
+    /**
+     * {@summary Draw debug circles for visionRadius and hitRadius.}
+     * 
+     * @param batch       batch were to draw
+     * @param parentAlpha alpha of the parent to draw at same alpha
+     */
+    public void drawDebugCircles(Batch batch, float parentAlpha) {
+        batch.end();
+        Creature c = (Creature) mapItem;
+        Gdx.gl.glEnable(GL30.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+        if (shapeRenderer == null) {
+            shapeRenderer = new ShapeRenderer();
+        }
+        if (GameScreen.getCamera() != null) {
+            shapeRenderer.setProjectionMatrix(GameScreen.getCamera().combined);
+            shapeRenderer.begin(ShapeType.Line);
+            shapeRenderer.setColor(new Color(0f, 0f, 1f, parentAlpha * 1f));
+            shapeRenderer.circle(getCenterX(), getCenterY(), c.getVisionRadius());
+            shapeRenderer.setColor(new Color(1f, 0f, 0f, parentAlpha * 1f));
+            shapeRenderer.circle(getCenterX(), getCenterY(), c.getHitRadius());
+            shapeRenderer.end();
+        }
+        Gdx.gl.glDisable(GL30.GL_BLEND);
+        batch.begin();
+    }
+
+    /**
+     * {@summary Draw skeleton.}
+     * 
+     * @param batch       batch were to draw
+     * @param parentAlpha alpha of the parent to draw at same alpha
+     * @param color       color of the parent to draw at same color
+     */
+    public void drawSkeleton(Batch batch, float parentAlpha, Color color) {
+        // blend need to be called before draw
+        int blendSrc = batch.getBlendSrcFunc();
+        int blendDst = batch.getBlendDstFunc();
+        int blendSrcAlpha = batch.getBlendSrcFuncAlpha();
+        int blendDstAlpha = batch.getBlendDstFuncAlpha();
+
+        float oldAlpha = getSkeleton().getColor().a;
+        getSkeleton().getColor().a *= parentAlpha;
+
+        getSkeleton().setPosition(getCenterX(), getCenterY());
+        getSkeleton().updateWorldTransform();
+        getRenderer().draw(batch, getSkeleton());
+
+        if (getResetBlendFunction())
+            batch.setBlendFunctionSeparate(blendSrc, blendDst, blendSrcAlpha, blendDstAlpha);
+
+        color.a = oldAlpha;
     }
 
     /**
