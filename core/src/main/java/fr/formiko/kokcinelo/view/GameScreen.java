@@ -154,6 +154,8 @@ public class GameScreen extends KScreen implements Screen {
         if (Controller.getController().isSpectatorMode()) {
             // stage.draw();
             game.batch.begin();
+            stage.getCamera().update();
+            game.batch.setProjectionMatrix(stage.getCamera().combined);
             stage.getRoot().draw(game.batch, 1);
             game.batch.end();
         } else { // draw actors only in the visible circles.
@@ -215,7 +217,8 @@ public class GameScreen extends KScreen implements Screen {
             // FrameBuffer frameBuffer = getFrameBuffers((int) ligthSource.getVisionRadius());
             // frameBuffer.bind();
             game.batch.begin();
-            // game.batch.setProjectionMatrix(stage.getCamera().combined);
+            stage.getCamera().update();
+            game.batch.setProjectionMatrix(stage.getCamera().combined);
             drawVisibleAreaCreature(ligthSource);
             drawVisibleAreaMask(ligthSource);
             game.batch.end();
