@@ -152,7 +152,10 @@ public class GameScreen extends KScreen implements Screen {
         backgroundStage.draw();
 
         if (Controller.getController().isSpectatorMode()) {
-            stage.draw();
+            // stage.draw();
+            game.batch.begin();
+            stage.getRoot().draw(game.batch, 1);
+            game.batch.end();
         } else { // draw actors only in the visible circles.
             drawVisibleMapItem(delta);
         }
