@@ -21,8 +21,8 @@ import com.esotericsoftware.spine.SkeletonJson;
  * @since 1.0
  */
 public class Assets implements Disposable {
-    private Map<String, SkeletonData> skeletonDataMap = new HashMap<String, SkeletonData>();
-    private Set<TextureAtlas> texturesAtlasSet = new HashSet<TextureAtlas>();
+    private Map<String, SkeletonData> skeletonDataMap = new HashMap<>();
+    private Set<TextureAtlas> texturesAtlasSet = new HashSet<>();
     private static final String DIRECTORY = "images/Creatures/";
 
     /**

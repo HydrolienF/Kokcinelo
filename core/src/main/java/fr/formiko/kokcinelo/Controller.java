@@ -27,6 +27,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Controller is the link between View &#38; model.}
@@ -76,7 +77,7 @@ public class Controller {
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
     public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
-    public Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
+    public @Null Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
     public void iniAssets() { assets = new Assets(); }
@@ -439,7 +440,7 @@ public class Controller {
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
         // if player play as ant, his score is 0 if he stop game before time is up.
-        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && gs.getLadybugs().size() != 0)) {
+        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && gs.getLadybugs().isEmpty())) {
             gs.setScore(0);
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;

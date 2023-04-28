@@ -24,9 +24,9 @@ public class DesktopLauncher {
 	private static int displayMode = 0;
 
 	public static void main(String[] args) {
-		if (args.length > 0 && args[0].replaceAll("-", "").equalsIgnoreCase("version")) {
+		if (args.length > 0 && args[0].replace("-", "").equalsIgnoreCase("version")) {
 			try {
-				InputStream is = new DesktopLauncher().getClass().getClassLoader().getResourceAsStream("version.md");
+				InputStream is = DesktopLauncher.class.getClassLoader().getResourceAsStream("version.md");
 				String version = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)).lines()
 						.collect(Collectors.joining("\n"));
 				System.out.println(version);
@@ -41,6 +41,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		switch (displayMode) {
+		default:
 		case 0: // Real fullscreen
 			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 			App.setWithCloseButton(true);

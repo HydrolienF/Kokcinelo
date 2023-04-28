@@ -69,7 +69,7 @@ class LevelButton extends Button {
             circleSelectedDisable = Shapes.getCircle(radius, radius / 5, Color.GRAY);
         }
         if (levelButtonList == null) {
-            levelButtonList = new HashSet<LevelButton>();
+            levelButtonList = new HashSet<>();
         }
         if (lockedLevel == null) {
             lockedLevel = Shapes.getCircledTexture(radius, new Color(0.3f, 0.3f, 0.3f, 1f),

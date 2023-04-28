@@ -33,7 +33,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
-    private static Texture outCircleTexture;
+    private static @Null Texture outCircleTexture;
 
     private Shapes() {}
 

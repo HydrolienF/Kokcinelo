@@ -44,7 +44,7 @@ public class MapActor extends Actor {
      * @param color2      color of the gradient.
      */
     public MapActor(float width, float height, Color color, boolean withDetails, int stones, int sticks, @Null Color color2) {
-        toExcude = new HashSet<Circle>();
+        toExcude = new HashSet<>();
         // setColor(color); // if we set color, map appear with some sort of colored filter.
         setWidth(width);
         setHeight(height);

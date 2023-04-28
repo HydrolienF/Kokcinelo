@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Class that containts all data about current game.}
@@ -81,7 +82,7 @@ public class GameState {
      * @param playerId id of the player
      * @return Creature that player embody.
      */
-    public Creature getPlayerCreature(int playerId) {
+    public @Null Creature getPlayerCreature(int playerId) {
         Player p = getPlayer(playerId);
         if (p != null) {
             return p.getPlayedCreature();
@@ -115,7 +116,7 @@ public class GameState {
      * @return All creatures: aphids + ants + ladybugs + acid drop
      */
     public Collection<Creature> allCreatures() {
-        List<Creature> l = new LinkedList<Creature>();
+        List<Creature> l = new LinkedList<>();
         l.addAll(aphids);
         l.addAll(ladybugs);
         l.addAll(ants);
@@ -130,7 +131,7 @@ public class GameState {
      * @return ants &#38; ladybugs
      */
     public Collection<Creature> getAntsAndLadybugs() {
-        List<Creature> l = new LinkedList<Creature>();
+        List<Creature> l = new LinkedList<>();
         l.addAll(ants);
         l.addAll(ladybugs);
         return l;
@@ -142,7 +143,7 @@ public class GameState {
      * @return all actors to draw
      */
     public Collection<Actor> allActors() {
-        List<Actor> l = new LinkedList<Actor>();
+        List<Actor> l = new LinkedList<>();
         if (mapActorBg != null) {
             mapActorBg.setName("background");
             l.add(mapActorBg);

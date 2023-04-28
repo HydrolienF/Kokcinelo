@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Null;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -18,7 +19,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * @since 0.2
  */
 public class LevelButtonTable extends Table {
-    private ShapeDrawer sr;
+    private @Null ShapeDrawer sr;
     private final int lineWidth;
 
     /**

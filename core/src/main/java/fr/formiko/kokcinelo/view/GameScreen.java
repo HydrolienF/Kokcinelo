@@ -50,7 +50,7 @@ public class GameScreen extends KScreen implements Screen {
     private boolean isStop;
     private boolean stopAfterNextDrawBool;
     private InputMultiplexer inputMultiplexer;
-    private Texture mask;
+    // private Texture mask;
     /** Used to store reusable frame buffer */
     private Map<Integer, FrameBuffer> frameBuffers;
     /** Used to store reusable texture */
@@ -66,8 +66,8 @@ public class GameScreen extends KScreen implements Screen {
     public GameScreen(final App game) {
         super();
         this.game = game;
-        frameBuffers = new HashMap<Integer, FrameBuffer>();
-        visibleCircleTextures = new HashMap<Integer, Texture>();
+        frameBuffers = new HashMap<>();
+        visibleCircleTextures = new HashMap<>();
 
         // Gdx.input.setCursorCatched(true);
         float w = Gdx.graphics.getWidth();
@@ -151,7 +151,11 @@ public class GameScreen extends KScreen implements Screen {
 
         backgroundStage.draw();
 
-        drawVisibleMapItem(delta);
+        if (Controller.getController().isSpectatorMode()) {
+            stage.draw();
+        } else { // draw actors only in the visible circles.
+            drawVisibleMapItem(delta);
+        }
 
         foregroundStage.draw();
 

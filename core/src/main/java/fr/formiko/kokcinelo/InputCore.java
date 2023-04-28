@@ -33,7 +33,6 @@ public class InputCore implements InputProcessor {
      */
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        // System.out.println("mouse scrolled of "+amountX+" "+amountY);
         Controller.getController().addZoom(amountY);
         return true;
     }
@@ -57,8 +56,7 @@ public class InputCore implements InputProcessor {
             Controller.getController().createNewMenuScreen();
         } else if (keycode == Input.Keys.SPACE && !screen.isPause()) {
             Creature c = Controller.getController().getPlayerCreature();
-            if (c != null && c instanceof Ant) {
-                // float distance = c.distanceTo(Controller.getController().getVectorStageCoordinates(Gdx.input.getX(), Gdx.input.getY()));
+            if (c instanceof Ant) {
                 Controller.getController().antShoot((Ant) c);
             }
         }

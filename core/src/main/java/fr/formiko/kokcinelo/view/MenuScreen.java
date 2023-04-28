@@ -69,7 +69,6 @@ public class MenuScreen extends KScreen implements Screen {
     private Label scoresLabel;
     private Label levelNameLabel;
     private Label levelDescription;
-    private Label versionLabel;
     private int topSpace;
     private static final boolean backgroundLabelColored = true;
     private static String DEFAULT_CHARS;
@@ -79,7 +78,7 @@ public class MenuScreen extends KScreen implements Screen {
     private boolean playingVideo = false;
     private long timePlayingVideo;
     private int fullVideoTime = 1000;
-    private float BACKGROUND_SPEED = 50;
+    private static final float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -181,9 +180,10 @@ public class MenuScreen extends KScreen implements Screen {
         stage.dispose();
     }
 
-    // TODO Auto-generated method stub
     @Override
-    public void show() {}
+    public void show() {
+        // Noting special to do when the screen is shown.
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -191,8 +191,9 @@ public class MenuScreen extends KScreen implements Screen {
             return;
 
         stage.clear();
-        final int w = width; // = Gdx.graphics.getWidth();
-        final int h = height; // = Gdx.graphics.getHeight();
+        // Gdx.graphics.getWidth() may be outdated here.
+        final int w = width;
+        final int h = height;
         viewport.update(w, h, true);
         App.log(1, "MenuScreen have size: " + w + "x" + h);
         topSpace = h * 40 / 100;
@@ -217,7 +218,7 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setSize(w / 3, topSpace);
         updateSelectedLevel(getLevelId());
 
-        versionLabel = new Label(App.getCurrentVersion(), skinSmall);
+        Label versionLabel = new Label(App.getCurrentVersion(), skinSmall);
         versionLabel.setPosition(w - versionLabel.getWidth(), 0);
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
@@ -243,7 +244,7 @@ public class MenuScreen extends KScreen implements Screen {
      * It is used to display them walking or flying in the menu.
      */
     private void createCreatureImages(int w, int h) {
-        creatureImages = new ArrayList<Actor>();
+        creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
             boolean needToRotate = false;
             Creature c = null;
@@ -285,7 +286,7 @@ public class MenuScreen extends KScreen implements Screen {
                 imageWidth = 1000;
                 imageHeigth = 1000;
             }
-            cActor.setBounds(w / 3, h - topSpace, w / 3, topSpace);
+            cActor.setBounds(w / 3f, h - topSpace, w / 3f, topSpace);
             if (needToRotate) {
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
@@ -367,7 +368,7 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Handle user input.}<br>
      */
     private InputProcessor getInputProcessor() {
-        InputProcessor inputProcessor = (InputProcessor) new InputProcessor() {
+        return new InputProcessor() {
 
             @Override
             public boolean keyDown(int keycode) { return false; }
@@ -414,7 +415,6 @@ public class MenuScreen extends KScreen implements Screen {
             public boolean scrolled(float amountX, float amountY) { return false; }
 
         };
-        return inputProcessor;
     }
 
     /**

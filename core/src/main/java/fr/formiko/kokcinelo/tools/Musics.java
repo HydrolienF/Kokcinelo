@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Tools class to manage music.}
@@ -16,7 +17,7 @@ import com.badlogic.gdx.audio.Music;
  * @since 0.2
  */
 public class Musics {
-    private static Music music;
+    private static @Null Music music;
     private static float musicsVolume = 1f;
     // @formatter:off
     private static Map<String, List<Object>> levelsMusic = Map.ofEntries(
