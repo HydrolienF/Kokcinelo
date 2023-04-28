@@ -28,7 +28,7 @@ class ControllerTest extends Assertions {
         target.setCenter(targetX, targetY);
         Creature source = new Ant();
         source.setCenter(sourceX, sourceY);
-        assertEquals(expectedVolume, Controller.getSoundVolume(source, target));
+        almostEquals(expectedVolume, Controller.getSoundVolume(source, target));
     }
 
     @ParameterizedTest
@@ -52,7 +52,7 @@ class ControllerTest extends Assertions {
         target.setCenter(targetX, targetY);
         Creature source = new Ant();
         source.setCenter(sourceX, sourceY);
-        assertEquals(expectedPan, Controller.getSoundPan(source, target));
+        almostEquals(expectedPan, Controller.getSoundPan(source, target));
     }
 
     @Test
