@@ -40,7 +40,6 @@ public class App extends Game {
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F", "3K", "3F");
-    // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
     public static List<String> SUPPORTED_LANGUAGES;
     public static Map<String, String> LANGUAGES_NAMES;
     public static Map<String, Integer> LANGUAGES_PERCENTAGES;

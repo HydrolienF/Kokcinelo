@@ -539,13 +539,14 @@ public class Controller {
         try {
             map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
-            map = new HashMap<String, String>();
+            map = new HashMap<>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
             if (!App.SUPPORTED_LANGUAGES.contains(l)) {
                 l = "en";
             }
             map.put("language", l);
+            // TODO ini screen size / full screen & others settings.
         }
         map.put("startPlaying", System.currentTimeMillis() + "");
         App.log(1, "FILES", "Loaded data: " + map);
