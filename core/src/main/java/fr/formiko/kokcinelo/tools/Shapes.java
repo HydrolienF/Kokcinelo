@@ -2,8 +2,10 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.model.Creature;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -45,50 +48,13 @@ public class Shapes {
         return shapeRenderer;
     }
     /**
-     * {@summary Draw a sky gradient.}
+     * {@summary Draw a gradiant over a pixmap.}
      * 
-     * @param width  width of the sky rectangle
-     * @param height height of the sky rectangle
-     * @param ligth  ligth of the sky bewteen 0 and 1
+     * @param toDraw Pixmap to draw
+     * @param topColor color of the top
+     * @param bottomColor color of the bottom
      */
-    public static void drawSky(float x, float y, float width, float height, float ligth) {
-        shapeRenderer = getShapeRenderer();
-        // draw blue sky gradient
-        shapeRenderer.begin();
-        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        Color topColor = new Color(0, 0.4f * ligth, 1f * ligth, 1);
-        Color bottomColor = new Color(0, 0.8f * ligth, 1f * ligth, 1);
-        shapeRenderer.rect(x, y, width, height, bottomColor, bottomColor, topColor, topColor);
-        shapeRenderer.end();
-    }
-    /**
-     * {@summary Draw an underground background.}
-     * 
-     * @param width  width of the sky rectangle
-     * @param height height of the sky rectangle
-     */
-    public static void drawUnderground(float x, float y, float width, float height, float pathStart, float pathLength) {
-        shapeRenderer = getShapeRenderer();
-
-        shapeRenderer.begin();
-        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        Color topColor = new Color(0.5f, 0.3f, 0.1f, 1);
-        Color bottomColor = new Color(0.35f, 0.15f, 0.05f, 1);
-        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
-        // Color pathColor = new Color(0.2f, 0.1f, 0.05f, 1);
-        // Color pathColor = new Color(0.8f, 0.5f, 0.3f, 1);
-        // shapeRenderer.rect(0, pathStart * height, width, pathLength * height, pathColor, pathColor, pathColor, pathColor);
-        shapeRenderer.end();
-    }
-    public static void drawGrass(float x, float y, float width, float height, float ligth) {
-        shapeRenderer = getShapeRenderer();
-        shapeRenderer.begin();
-        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        Color topColor = new Color(App.GREEN.r, App.GREEN.g - 40f / 255 * (1 - ligth), App.GREEN.b, 1);
-        Color bottomColor = new Color(App.GREEN.r, App.GREEN.g * 0.4f + 20f / 255 * ligth, App.GREEN.b, 1);
-        shapeRenderer.rect(0, 0, width, height, bottomColor, bottomColor, topColor, topColor);
-        shapeRenderer.end();
-    }
+    //TODO test if it's better createPixmap() with 2 colors
     public static void drawGradientOnPixmap(Pixmap toDraw, Color topColor, Color bottomColor) {
         shapeRenderer = getShapeRenderer();
         shapeRenderer.begin();

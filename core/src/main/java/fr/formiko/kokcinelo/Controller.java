@@ -14,6 +14,7 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -129,10 +131,10 @@ public class Controller {
      */
     public synchronized void endMenuScreen() {
         App.log(1, "end menu screen");
-        if (getScreen() != null && getScreen() instanceof MenuScreen) {
-            ((MenuScreen) getScreen()).displayPerf();
+        if (getScreen() instanceof MenuScreen ms) {
+            ms.displayPerf();
             Screen toDispose = getScreen();
-            level = ((MenuScreen) (getScreen())).getLevel();
+            level = ms.getLevel();
             createNewGame();
             toDispose.dispose();
         } else {
@@ -145,7 +147,7 @@ public class Controller {
      * Current screen is supposed to be a GameScreen. Other wise it will do nothing.
      */
     public synchronized void endGameScreen() {
-        if (getScreen() != null && getScreen() instanceof GameScreen) {
+        if (getScreen() instanceof GameScreen) {
             Screen toDispose = getScreen();
             createNewMenuScreen();
             toDispose.dispose();

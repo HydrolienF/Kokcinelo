@@ -15,10 +15,12 @@ import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.g;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
