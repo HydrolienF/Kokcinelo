@@ -3,14 +3,12 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.view.MapActor;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Null;
@@ -222,13 +220,13 @@ public class GameState {
             for (Creature c : getAntsAndLadybugs()) {
                 if (c.isAI()) {
                     int k = 0;
-                    while (k < 20 && (pc.see(c) || c.see(pc))) {
+                    while (k < 50 && pc.isTooCloseForStart(c)) {
                         App.log(1, "Move out " + c.getId() + " to avoid player to see it");
                         c.setRandomLoaction(getMapWidth(), getMapHeight());
                         k++;
                     }
-                    if (pc.see(c) || c.see(pc)) {
-                        App.log(2, "Can't find a location for c in " + k + " try");
+                    if (pc.isTooCloseForStart(c)) {
+                        App.log(2, "Can't find a location for c in " + k + " tries");
                     }
                 }
             }
