@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,7 +26,6 @@ public class KScreen {
     protected int width;
     protected int height;
     protected List<Integer> times;
-    private static String DEFAULT_CHARS;
     private static final boolean backgroundLabelColored = true;
     public static final int FONT_SIZE = 28;
     protected static Skin skin;
@@ -91,15 +88,7 @@ public class KScreen {
         skin.add("white", new Texture(pixmap));
         pixmap.dispose();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = (int) fontSize;
-        if (DEFAULT_CHARS == null) {
-            DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
-        }
-        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + every char in the translation files.
-        BitmapFont bmf = generator.generateFont(parameter);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        BitmapFont bmf = Fonts.getDefaultFont(fontSize);
 
         // bmf.getData().markupEnabled = true; //Use to set color label by label
 
