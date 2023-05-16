@@ -36,8 +36,8 @@ public class Fonts extends BitmapFont {
         if (emojiSupport == null) {
             emojiSupport = new EmojiSupport();
             emojiSupport.load(Gdx.files.internal("fonts/icons.atlas"));
-            emojiSupport.addEmojisToFont(bmf);
         }
+        emojiSupport.addEmojisToFont(bmf);
 
         return bmf;
     }

@@ -104,7 +104,7 @@ public class EmojiSupport {
         // 2- Add all emoji glyphs to font
         int size = (int) (bitmapFont.getData().lineHeight / bitmapFont.getData().scaleY);
         for (EmojiRegionIndex entry : regions.values()) {
-            App.log(2, "new emoji");
+            App.log(0, "new emoji");
             char ch = (char) (START_CHAR + entry.index);
             BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(ch);
             if (glyph == null) { // Add Emoji as new Glyph (only if not exists in font)
