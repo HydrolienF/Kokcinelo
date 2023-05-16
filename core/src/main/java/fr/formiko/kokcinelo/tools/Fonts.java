@@ -33,7 +33,7 @@ public class Fonts extends BitmapFont {
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-        if(emojiSupport == null) {
+        if (emojiSupport == null) {
             emojiSupport = new EmojiSupport();
             emojiSupport.load(Gdx.files.internal("fonts/icons.atlas"));
             emojiSupport.addEmojisToFont(bmf);
@@ -42,11 +42,9 @@ public class Fonts extends BitmapFont {
         return bmf;
     }
 
-    public static String getTranslation(String key) {
-        return emojiSupport.filterEmojis(g.get(key));
-    }
-    public static String getTranslation(String key, String sDefault) {
-        return emojiSupport.filterEmojis(g.get(key, sDefault));
-    }
+    // public static String filterEmojis(String s) { return s; }
+    public static String filterEmojis(String s) { return emojiSupport.filterEmojis(s); }
+    public static String getTranslation(String key) { return filterEmojis(g.get(key)); }
+    public static String getTranslation(String key, String sDefault) { return filterEmojis(g.get(key, sDefault)); }
 
 }

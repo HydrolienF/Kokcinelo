@@ -41,7 +41,7 @@ import com.badlogic.gdx.utils.StringBuilder;
  * {@summary Helper class to support emojis in libGDX.}
  */
 public class EmojiSupport {
-    private static final char START_CHAR = 0xE000; // Starting replacement-chars (very rarely used range)
+    private static final char START_CHAR = 0xE000; // Starting replacement-chars (private use area)
     private List<Texture> textures; // If multiple pages of emojis
     private Map<Integer, EmojiRegionIndex> regions; // Maps unicode emoji -> injected index
 
@@ -129,12 +129,12 @@ public class EmojiSupport {
         }
     }
     /**
-     * Filter a string to replace emojis with its 0xB000+i index.
+     * Filter a string to replace emojis with its index.
      * 
      * @param str string to filter.
      * @return filtered string.
      */
-    public String filterEmojis(String str) { // Translates str replacing emojis with its 0xB000+i index
+    public String filterEmojis(String str) { // Translates str replacing emojis with its index
 
         if (str == null || str.length() == 0)
             return str;
