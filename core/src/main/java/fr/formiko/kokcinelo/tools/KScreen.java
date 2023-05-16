@@ -103,7 +103,7 @@ public class KScreen {
         ButtonStyle buttonStyle = new ButtonStyle();
         skin.add("default", buttonStyle);
 
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
         // set background
         if (backgroundLabelColored) {
             labelStyle.background = Shapes.getWhiteBackground();

@@ -10,17 +10,15 @@ import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.LadybugSideView;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
+import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
-import fr.formiko.usual.g;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -606,20 +604,20 @@ public class MenuScreen extends KScreen implements Screen {
      * @return A String with level name, last &#38; best score
      */
     private String getScoresText(String levelId) {
-        return g.get("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + g.get("LastScore") + " : "
+        return Fonts.getTranslation("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + Fonts.getTranslation("LastScore") + " : "
                 + getController().getLastScore(levelId) + "%";
     }
     /**
      * @param levelId the level id
      * @return A String with level name, last &#38; best score
      */
-    private String getLevelNameText(String levelId) { return g.get("Level") + " " + levelIdToString(levelId); }
+    private String getLevelNameText(String levelId) { return Fonts.getTranslation("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
-        String desc = g.get("DescriptionLevel" + levelId.substring(1, 2), "") + " " + g.get("DescriptionLevel" + levelId, "");
+        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " " + Fonts.getTranslation("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {
-            return g.get("ComingSoon") + "\n" + desc;
+            return Fonts.getTranslation("ComingSoon") + "\n" + desc;
         }
     }
     /**
