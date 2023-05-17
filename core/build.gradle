@@ -1,4 +1,4 @@
-sourceCompatibility = 17
+sourceCompatibility = 18
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 // this is default value :
