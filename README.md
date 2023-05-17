@@ -29,7 +29,7 @@ Ladybugs can instant eat aphid while ants need to bite or shoot acid severals ti
 Game is done with Java using GUI library [libgdx](https://github.com/libgdx/libgdx).
 
 To compile & run game, launch in command line ```./gradlew r```
-You need Java 18 (or more) to run game.
+You need [Java 18 (or more)](https://adoptium.net/temurin/releases/?version=18) to run game.
 
 You can find the javadoc [here](https://formiko.fr/Kokcinelo/javadoc/)
 
