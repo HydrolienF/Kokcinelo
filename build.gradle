@@ -14,8 +14,8 @@ buildscript {
         classpath 'org.gretty:gretty:3.0.7'
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16'
-        classpath 'com.diffplug.spotless:spotless-lib:2.35.0'
-        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.15.0'
+        classpath 'com.diffplug.spotless:spotless-lib:2.37.0'
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.18.0'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
     }
 }
@@ -75,13 +75,12 @@ allprojects {
                 include '**/*.java'
                 exclude '**/build/**', '**/build-*/**'
             }
-            toggleOffOn()
+            // toggleOffOn()
             // palantirJavaFormat()
-            // removeUnusedImports()
-            // trimTrailingWhitespace()
-            // endWithNewline()
             removeUnusedImports()
-            eclipse('4.10.0').configFile new File(rootProject.projectDir.absolutePath, 'eclipse-formatter.xml')
+            // trimTrailingWhitespace()
+            endWithNewline()
+            eclipse().configFile new File(rootProject.projectDir.absolutePath, 'eclipse-formatter.xml')
         }
     }
 }
