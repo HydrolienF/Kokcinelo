@@ -281,19 +281,19 @@ public class GameState {
             addCreatures(aphidNumber, ladybugNumber, redAntNumber, greenAntNumber);
             Player p;
             switch (level.getLetter()) {
-            case "K":
-                p = new Player(gs.ladybugs.get(0));
-                break;
-            case "F":
-                p = new Player(gs.ants.get(0));
-                break;
-            case "A":
-                p = new Player(gs.aphids.get(0));
-                break;
-            default:
-                App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
-                p = new Player(gs.ladybugs.get(0));
-                break;
+                case "K":
+                    p = new Player(gs.ladybugs.get(0));
+                    break;
+                case "F":
+                    p = new Player(gs.ants.get(0));
+                    break;
+                case "A":
+                    p = new Player(gs.aphids.get(0));
+                    break;
+                default:
+                    App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
+                    p = new Player(gs.ladybugs.get(0));
+                    break;
             }
             if (Controller.isDebug()) {
                 p.getPlayedCreature().setVisionRadius(mapWidth);

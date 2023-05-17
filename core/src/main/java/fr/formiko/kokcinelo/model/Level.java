@@ -52,14 +52,14 @@ public final class Level {
      */
     public int getDrawPriority() {
         switch (getLetter()) {
-        case "K":
-            return 1;
-        case "F":
-            return 2;
-        case "A":
-            return 0;
-        default:
-            return -1;
+            case "K":
+                return 1;
+            case "F":
+                return 2;
+            case "A":
+                return 0;
+            default:
+                return -1;
         }
     }
 

@@ -50,11 +50,11 @@ public class Shapes {
     /**
      * {@summary Draw a gradiant over a pixmap.}
      * 
-     * @param toDraw Pixmap to draw
-     * @param topColor color of the top
+     * @param toDraw      Pixmap to draw
+     * @param topColor    color of the top
      * @param bottomColor color of the bottom
      */
-    //TODO test if it's better createPixmap() with 2 colors
+    // TODO test if it's better createPixmap() with 2 colors
     public static void drawGradientOnPixmap(Pixmap toDraw, Color topColor, Color bottomColor) {
         shapeRenderer = getShapeRenderer();
         shapeRenderer.begin();

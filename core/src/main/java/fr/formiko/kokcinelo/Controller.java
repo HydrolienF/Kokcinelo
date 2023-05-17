@@ -223,26 +223,26 @@ public class Controller {
         Musics.setLevelMusic(getLevelId());
         GameStateBuilder gsb = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         switch (getLevelId()) {
-        case "1K":
-            gsb.setLadybugNumber(1);
-            break;
-        case "2K":
-            gsb.setLadybugNumber(1).setRedAntNumber(3);
-            break;
-        case "2F":
-            gsb.setLadybugNumber(2).setRedAntNumber(1);
-            break;
-        case "3K":
-            gsb.setLadybugNumber(1).setGreenAntNumber(3);
-            break;
-        case "3F":
-            gsb.setLadybugNumber(2).setGreenAntNumber(1);
-            break;
-        default:
-            App.log(3, "levelId not found, use default levelId (1K)");
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
-                    .build();
-            break;
+            case "1K":
+                gsb.setLadybugNumber(1);
+                break;
+            case "2K":
+                gsb.setLadybugNumber(1).setRedAntNumber(3);
+                break;
+            case "2F":
+                gsb.setLadybugNumber(2).setRedAntNumber(1);
+                break;
+            case "3K":
+                gsb.setLadybugNumber(1).setGreenAntNumber(3);
+                break;
+            case "3F":
+                gsb.setLadybugNumber(2).setGreenAntNumber(1);
+                break;
+            default:
+                App.log(3, "levelId not found, use default levelId (1K)");
+                gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
+                        .build();
+                break;
         }
         if (isGraphicsTest()) {
             int antNumber = 50;

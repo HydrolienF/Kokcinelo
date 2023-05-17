@@ -7,4 +7,3 @@ class AppTest extends Assertions {
     @Test
     void testAdd() { assertEquals(43, Integer.sum(20, 23)); }
 }
-

@@ -230,25 +230,25 @@ public class App extends Game {
         }
         if (Gdx.app != null) {
             switch (logLevel) {
-            case 0:
-                Gdx.app.debug(tag, message);
-                break;
-            case 1:
-                Gdx.app.log(tag, message);
-                break;
-            case 2, 3, 4:
-                if (exception != null) {
-                    Gdx.app.error(tag, message, exception);
-                } else {
-                    Gdx.app.error(tag, message);
-                }
-                if (logLevel == 4) {
-                    Controller.getController().dispose();
-                }
-                break;
-            default:
-                Gdx.app.log(tag, message);
-                break;
+                case 0:
+                    Gdx.app.debug(tag, message);
+                    break;
+                case 1:
+                    Gdx.app.log(tag, message);
+                    break;
+                case 2, 3, 4:
+                    if (exception != null) {
+                        Gdx.app.error(tag, message, exception);
+                    } else {
+                        Gdx.app.error(tag, message);
+                    }
+                    if (logLevel == 4) {
+                        Controller.getController().dispose();
+                    }
+                    break;
+                default:
+                    Gdx.app.log(tag, message);
+                    break;
             }
         } else {
             System.out.println("[" + tag + "] " + message);
@@ -283,18 +283,18 @@ public class App extends Game {
      */
     private static String logLevelToString(int logLevel) {
         switch (logLevel) {
-        case 0:
-            return "DEBUG";
-        case 1:
-            return "INFO";
-        case 2:
-            return "WARNING";
-        case 3:
-            return "ERROR";
-        case 4:
-            return "FATAL ERROR";
-        default:
-            return "NULL";
+            case 0:
+                return "DEBUG";
+            case 1:
+                return "INFO";
+            case 2:
+                return "WARNING";
+            case 3:
+                return "ERROR";
+            case 4:
+                return "FATAL ERROR";
+            default:
+                return "NULL";
         }
     }
     /**
@@ -305,18 +305,18 @@ public class App extends Game {
      */
     private static String logLevelToStringColor(int logLevel) {
         switch (logLevel) {
-        case 0:
-            return color.BROWN;
-        case 1:
-            return color.BLUE;
-        case 2:
-            return color.YELLOW;
-        case 3:
-            return color.RED;
-        case 4:
-            return color.RED;
-        default:
-            return color.NEUTRAL;
+            case 0:
+                return color.BROWN;
+            case 1:
+                return color.BLUE;
+            case 2:
+                return color.YELLOW;
+            case 3:
+                return color.RED;
+            case 4:
+                return color.RED;
+            default:
+                return color.NEUTRAL;
         }
     }
     /**
@@ -357,36 +357,36 @@ public class App extends Game {
                 arg = arg.substring(1);
             }
             switch (arg) {
-            case "version", "v": { // HTML INCOMPATIBLE
-                System.out.println(getCurrentVersion());
-                // System.exit(0); //HTML INCOMPATIBLE
-                Gdx.app.exit();
-                break;
-            }
-            case "quiet", "q": {
-                logLevel = Application.LOG_NONE;
-                break;
-            }
-            case "verbose": {
-                logLevel = Application.LOG_DEBUG;
-                break;
-            }
-            case "launchFromLauncher": {
-                launchFromLauncher = true;
-                logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
-                break;
-            }
-            case "graphicsTest", "gt": {
-                Controller.setGraphicsTest(true);
-                break;
-            }
-            case "traillerImage", "ti": {
-                startTraillerImage = true;
-                break;
-            }
-            default: {
-                log(2, arg + " don't match any args possible");
-            }
+                case "version", "v": { // HTML INCOMPATIBLE
+                    System.out.println(getCurrentVersion());
+                    // System.exit(0); //HTML INCOMPATIBLE
+                    Gdx.app.exit();
+                    break;
+                }
+                case "quiet", "q": {
+                    logLevel = Application.LOG_NONE;
+                    break;
+                }
+                case "verbose": {
+                    logLevel = Application.LOG_DEBUG;
+                    break;
+                }
+                case "launchFromLauncher": {
+                    launchFromLauncher = true;
+                    logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
+                    break;
+                }
+                case "graphicsTest", "gt": {
+                    Controller.setGraphicsTest(true);
+                    break;
+                }
+                case "traillerImage", "ti": {
+                    startTraillerImage = true;
+                    break;
+                }
+                default: {
+                    log(2, arg + " don't match any args possible");
+                }
             }
         }
     }

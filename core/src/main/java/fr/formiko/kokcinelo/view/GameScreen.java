@@ -83,15 +83,15 @@ public class GameScreen extends KScreen implements Screen {
         for (Actor a : Controller.getController().allActors()) {
             String name = a.getName() == null ? "" : a.getName();
             switch (name) {
-            case "background":
-                backgroundStage.addActor(a);
-                break;
-            case "foreground":
-                foregroundStage.addActor(a);
-                break;
-            default:
-                stage.addActor(a);
-                break;
+                case "background":
+                    backgroundStage.addActor(a);
+                    break;
+                case "foreground":
+                    foregroundStage.addActor(a);
+                    break;
+                default:
+                    stage.addActor(a);
+                    break;
             }
         }
         stage.setDebugAll(Controller.isDebug());

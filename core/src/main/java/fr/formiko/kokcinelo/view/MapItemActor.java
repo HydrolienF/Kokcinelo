@@ -358,9 +358,9 @@ public class MapItemActor extends SkeletonActor {
                     // Add new animation
                     TrackEntry te = getAnimationState().addAnimation(animationId, animationName, false, 0);
                     switch (animationName) { // Diferent speeds for some animations
-                    case "hit":
-                        te.setTimeScale(2f);
-                        break;
+                        case "hit":
+                            te.setTimeScale(2f);
+                            break;
                     }
                 } else {
                     App.log(0, "Don't animate because there is already a queued event.");

@@ -436,15 +436,15 @@ public class MenuScreen extends KScreen implements Screen {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {
-            case "K":
-                y = ySpaceBetweenButton * 2 + buttonSize;
-                break;
-            case "F":
-                y = ySpaceBetweenButton;
-                break;
-            case "A":
-                y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
-                break;
+                case "K":
+                    y = ySpaceBetweenButton * 2 + buttonSize;
+                    break;
+                case "F":
+                    y = ySpaceBetweenButton;
+                    break;
+                case "A":
+                    y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
+                    break;
             }
             levelButton.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), y);
             if (level.getNumber() == 1) {
@@ -604,8 +604,8 @@ public class MenuScreen extends KScreen implements Screen {
      * @return A String with level name, last &#38; best score
      */
     private String getScoresText(String levelId) {
-        return Fonts.getTranslation("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + Fonts.getTranslation("LastScore") + " : "
-                + getController().getLastScore(levelId) + "%";
+        return Fonts.getTranslation("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + Fonts.getTranslation("LastScore")
+                + " : " + getController().getLastScore(levelId) + "%";
     }
     /**
      * @param levelId the level id
@@ -613,7 +613,8 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private String getLevelNameText(String levelId) { return Fonts.getTranslation("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
-        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " " + Fonts.getTranslation("DescriptionLevel" + levelId, "");
+        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " "
+                + Fonts.getTranslation("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {
