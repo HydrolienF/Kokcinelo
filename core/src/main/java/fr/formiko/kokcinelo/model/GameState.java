@@ -371,6 +371,12 @@ public class GameState {
          */
         public GameStateBuilder setLevel(Level level) {
             this.level = level;
+            if (level != null && !level.getCreaturesToSpawn().isEmpty()) {
+                this.aphidNumber = level.getCreaturesToSpawn().getOrDefault(Aphid.class, 0);
+                this.ladybugNumber = level.getCreaturesToSpawn().getOrDefault(Ladybug.class, 0);
+                this.redAntNumber = level.getCreaturesToSpawn().getOrDefault(RedAnt.class, 0);
+                this.greenAntNumber = level.getCreaturesToSpawn().getOrDefault(GreenAnt.class, 0);
+            }
             return this;
         }
 

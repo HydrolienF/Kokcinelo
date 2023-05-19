@@ -1,7 +1,9 @@
 package fr.formiko.kokcinelo.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.utils.Null;
 
@@ -15,15 +17,51 @@ import com.badlogic.gdx.utils.Null;
  */
 public final class Level {
     private final String id;
+    private final Map<Class<? extends Creature>, Integer> creaturesToSpawn;
     private boolean unlocked;
-    private static final Set<Level> levelList = Set.of(newLevel("1K"), newLevel("2K"), newLevel("3K"), newLevel("4K"), newLevel("5K"),
-            newLevel("2F"), newLevel("3F"), newLevel("4F"), newLevel("5F"), newLevel("4A"), newLevel("5A"));
+    // @formatter:off
+    private static final Set<Level> levelList = Set.of(
+            newLevel("1K", Map.of(Ladybug.class, 1)),
+            newLevel("2K", Map.of(Ladybug.class, 1, RedAnt.class, 3)),
+            newLevel("3K", Map.of(Ladybug.class, 1, GreenAnt.class, 3)),
+            newLevel("4K"),
+            newLevel("5K"),
+            newLevel("2F", Map.of(Ladybug.class, 2, RedAnt.class, 1)),
+            newLevel("3F", Map.of(Ladybug.class, 2, GreenAnt.class, 1)),
+            newLevel("4F"),
+            newLevel("5F"),
+            newLevel("4A"),
+            newLevel("5A"));
+    // @formatter:on
     private static final Set<String> levelLetters = Set.of("K", "F", "A");
-    private @Null List<Level> nextLevels;
+    private @Null List<Level> nextLevels; // Use getter with lazy initialization.
 
-
-    private Level(String id) { this.id = id; }
-    private static Level newLevel(String id) { return new Level(id); }
+    /**
+     * {@summary Create a new level by creation reference to args object.}
+     * 
+     * @param id               Id of the level.
+     * @param creaturesToSpawn Number of creatures to spawn by class.
+     */
+    private Level(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn) {
+        this.id = id;
+        this.creaturesToSpawn = creaturesToSpawn;
+    }
+    /**
+     * {@summary Builder.}
+     * If there is no aphids in Creature to swawn, it add the default number, 100 aphids.
+     * 
+     * @param id               Id of the level.
+     * @param creaturesToSpawn Number of creatures to spawn by class.
+     * @return a new level.
+     */
+    private static Level newLevel(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn) {
+        creaturesToSpawn = new HashMap<>(creaturesToSpawn);
+        if (!creaturesToSpawn.containsKey(Aphid.class)) {
+            creaturesToSpawn.put(Aphid.class, 100);
+        }
+        return new Level(id, creaturesToSpawn);
+    }
+    private static Level newLevel(String id) { return newLevel(id, Map.of()); }
 
 
     public boolean isUnlocked() { return unlocked; }
@@ -99,6 +137,8 @@ public final class Level {
             }
         }
     }
+
+    public Map<Class<? extends Creature>, Integer> getCreaturesToSpawn() { return creaturesToSpawn; }
 
     /**
      * {@summary Return a string representation of the level.}
