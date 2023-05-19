@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import com.badlogic.gdx.math.Vector2;
 
-public class CreatureTest extends Assertions {
+class CreatureTest extends Assertions {
     @Test
     void testCreature() {
         Creature c = new CreatureX();
@@ -127,9 +127,9 @@ public class CreatureTest extends Assertions {
 
     @Test
     void testAnt() {
-        new Ant();
-        new RedAnt();
-        new Ladybug();
+        assertDoesNotThrow(() -> new Ant());
+        assertDoesNotThrow(() -> new RedAnt());
+        assertDoesNotThrow(() -> new Ladybug());
     }
 
     void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
@@ -276,7 +276,7 @@ public class CreatureTest extends Assertions {
         "1994, 1992, 20, 0f, 90f",
     })
     // @formatter:on
-    public void testGetWallsAngles(float x, float y, int visionRadius, float angle1, float angle2) {
+    void testGetWallsAngles(float x, float y, int visionRadius, float angle1, float angle2) {
         createGameStateWithAphidLadybugAnt(1, 1, 0);
         Creature c = new CreatureX(10, visionRadius);
         c.setCenter(x, y);
@@ -295,12 +295,12 @@ public class CreatureTest extends Assertions {
 
 
     class CreatureX extends Creature {
-        public CreatureX(int hitRadius, int visionRadius) {
+        CreatureX(int hitRadius, int visionRadius) {
             super("x");
             this.hitRadius = hitRadius;
             this.visionRadius = visionRadius;
         }
-        public CreatureX() { this(10, 20); }
+        CreatureX() { this(10, 20); }
     }
     void almostEquals(float f1, float f2) { assertTrue(java.lang.Math.abs(f1 - f2) < 0.1f, f1 + " ≃ " + f2); }
     void almostEqualsAngle(float f1, float f2) {

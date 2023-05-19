@@ -83,15 +83,15 @@ public class GameScreen extends KScreen implements Screen {
         for (Actor a : Controller.getController().allActors()) {
             String name = a.getName() == null ? "" : a.getName();
             switch (name) {
-            case "background":
-                backgroundStage.addActor(a);
-                break;
-            case "foreground":
-                foregroundStage.addActor(a);
-                break;
-            default:
-                stage.addActor(a);
-                break;
+                case "background":
+                    backgroundStage.addActor(a);
+                    break;
+                case "foreground":
+                    foregroundStage.addActor(a);
+                    break;
+                default:
+                    stage.addActor(a);
+                    break;
             }
         }
         stage.setDebugAll(Controller.isDebug());
@@ -139,6 +139,7 @@ public class GameScreen extends KScreen implements Screen {
                 App.log(1, "skip a delta to avoid lag.");
             }
         }
+        // ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         ScreenUtils.clear(0f, 0f, 0f, 1);
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -408,7 +409,11 @@ public class GameScreen extends KScreen implements Screen {
 
 
     @Override
-    public void hide() {}
+    public void hide() {
+        // Nothing to do when hiding the screen.
+    }
     @Override
-    public void show() {}
+    public void show() {
+        // Nothing to do when showing the screen.
+    }
 }

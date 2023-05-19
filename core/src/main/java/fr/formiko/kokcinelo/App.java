@@ -40,7 +40,6 @@ public class App extends Game {
     private int logLevel = Application.LOG_INFO;
     private static boolean launchFromLauncher;
     public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "2F", "3K", "3F");
-    // public static final List<String> PLAYABLE_LEVELS = List.of("1K", "2K", "3K", "4F", "2F", "3F");
     public static List<String> SUPPORTED_LANGUAGES;
     public static Map<String, String> LANGUAGES_NAMES;
     public static Map<String, Integer> LANGUAGES_PERCENTAGES;
@@ -85,9 +84,9 @@ public class App extends Game {
     private static void updateLanguage() {
         HashMap<String, String> defaultMap = Files.getText("en");
         HashMap<String, String> userLanguage = Files.getText(getLanguage());
-        for (String key : userLanguage.keySet()) {
-            if (userLanguage.get(key) != null) {
-                defaultMap.put(key, userLanguage.get(key));
+        for (Map.Entry<String, String> entry : userLanguage.entrySet()) {
+            if (entry.getValue() != null) {
+                defaultMap.put(entry.getKey(), entry.getValue());
             }
         }
         // App.log(1, "map: " + userLanguage);
@@ -231,25 +230,25 @@ public class App extends Game {
         }
         if (Gdx.app != null) {
             switch (logLevel) {
-            case 0:
-                Gdx.app.debug(tag, message);
-                break;
-            case 1:
-                Gdx.app.log(tag, message);
-                break;
-            case 2, 3, 4:
-                if (exception != null) {
-                    Gdx.app.error(tag, message, exception);
-                } else {
-                    Gdx.app.error(tag, message);
-                }
-                if (logLevel == 4) {
-                    Controller.getController().dispose();
-                }
-                break;
-            default:
-                Gdx.app.log(tag, message);
-                break;
+                case 0:
+                    Gdx.app.debug(tag, message);
+                    break;
+                case 1:
+                    Gdx.app.log(tag, message);
+                    break;
+                case 2, 3, 4:
+                    if (exception != null) {
+                        Gdx.app.error(tag, message, exception);
+                    } else {
+                        Gdx.app.error(tag, message);
+                    }
+                    if (logLevel == 4) {
+                        Controller.getController().dispose();
+                    }
+                    break;
+                default:
+                    Gdx.app.log(tag, message);
+                    break;
             }
         } else {
             System.out.println("[" + tag + "] " + message);
@@ -284,18 +283,18 @@ public class App extends Game {
      */
     private static String logLevelToString(int logLevel) {
         switch (logLevel) {
-        case 0:
-            return "DEBUG";
-        case 1:
-            return "INFO";
-        case 2:
-            return "WARNING";
-        case 3:
-            return "ERROR";
-        case 4:
-            return "FATAL ERROR";
-        default:
-            return "NULL";
+            case 0:
+                return "DEBUG";
+            case 1:
+                return "INFO";
+            case 2:
+                return "WARNING";
+            case 3:
+                return "ERROR";
+            case 4:
+                return "FATAL ERROR";
+            default:
+                return "NULL";
         }
     }
     /**
@@ -306,18 +305,18 @@ public class App extends Game {
      */
     private static String logLevelToStringColor(int logLevel) {
         switch (logLevel) {
-        case 0:
-            return color.BROWN;
-        case 1:
-            return color.BLUE;
-        case 2:
-            return color.YELLOW;
-        case 3:
-            return color.RED;
-        case 4:
-            return color.RED;
-        default:
-            return color.NEUTRAL;
+            case 0:
+                return color.BROWN;
+            case 1:
+                return color.BLUE;
+            case 2:
+                return color.YELLOW;
+            case 3:
+                return color.RED;
+            case 4:
+                return color.RED;
+            default:
+                return color.NEUTRAL;
         }
     }
     /**
@@ -358,36 +357,36 @@ public class App extends Game {
                 arg = arg.substring(1);
             }
             switch (arg) {
-            case "version", "v": { // HTML INCOMPATIBLE
-                System.out.println(getCurrentVersion());
-                // System.exit(0); //HTML INCOMPATIBLE
-                Gdx.app.exit();
-                break;
-            }
-            case "quiet", "q": {
-                logLevel = Application.LOG_NONE;
-                break;
-            }
-            case "verbose": {
-                logLevel = Application.LOG_DEBUG;
-                break;
-            }
-            case "launchFromLauncher": {
-                launchFromLauncher = true;
-                logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
-                break;
-            }
-            case "graphicsTest", "gt": {
-                Controller.setGraphicsTest(true);
-                break;
-            }
-            case "traillerImage", "ti": {
-                startTraillerImage = true;
-                break;
-            }
-            default: {
-                log(2, arg + " don't match any args possible");
-            }
+                case "version", "v": { // HTML INCOMPATIBLE
+                    System.out.println(getCurrentVersion());
+                    // System.exit(0); //HTML INCOMPATIBLE
+                    Gdx.app.exit();
+                    break;
+                }
+                case "quiet", "q": {
+                    logLevel = Application.LOG_NONE;
+                    break;
+                }
+                case "verbose": {
+                    logLevel = Application.LOG_DEBUG;
+                    break;
+                }
+                case "launchFromLauncher": {
+                    launchFromLauncher = true;
+                    logLevel = Application.LOG_DEBUG; // because all logs go to a file, it's better to have them all.
+                    break;
+                }
+                case "graphicsTest", "gt": {
+                    Controller.setGraphicsTest(true);
+                    break;
+                }
+                case "traillerImage", "ti": {
+                    startTraillerImage = true;
+                    break;
+                }
+                default: {
+                    log(2, arg + " don't match any args possible");
+                }
             }
         }
     }
@@ -411,8 +410,8 @@ public class App extends Game {
         if (tempMap.isEmpty()) {
             calculateLanguagesPercentages();
         } else { // if it exist in a single file
-            for (String key : tempMap.keySet()) {
-                LANGUAGES_PERCENTAGES.put(key, Integer.parseInt(tempMap.get(key)));
+            for (Map.Entry<String, String> entry : tempMap.entrySet()) {
+                LANGUAGES_PERCENTAGES.put(entry.getKey(), Integer.parseInt(entry.getValue()));
             }
         }
         for (String key : LANGUAGES_PERCENTAGES.keySet()) {

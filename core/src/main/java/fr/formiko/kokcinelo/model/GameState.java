@@ -99,12 +99,12 @@ public class GameState {
      * @param c Creature to add
      */
     public void addCreature(Creature c) {
-        if (c instanceof Aphid) {
-            aphids.add((Aphid) c);
-        } else if (c instanceof Ant) {
-            ants.add((Ant) c);
-        } else if (c instanceof Ladybug) {
-            ladybugs.add((Ladybug) c);
+        if (c instanceof Aphid aphid) {
+            aphids.add(aphid);
+        } else if (c instanceof Ant ant) {
+            ants.add(ant);
+        } else if (c instanceof Ladybug ladybug) {
+            ladybugs.add(ladybug);
         }
     }
 
@@ -220,13 +220,13 @@ public class GameState {
             for (Creature c : getAntsAndLadybugs()) {
                 if (c.isAI()) {
                     int k = 0;
-                    while (k < 20 && (pc.see(c) || c.see(pc))) {
+                    while (k < 50 && pc.isTooCloseForStart(c)) {
                         App.log(1, "Move out " + c.getId() + " to avoid player to see it");
                         c.setRandomLoaction(getMapWidth(), getMapHeight());
                         k++;
                     }
-                    if (pc.see(c) || c.see(pc)) {
-                        App.log(2, "Can't find a location for c in " + k + " try");
+                    if (pc.isTooCloseForStart(c)) {
+                        App.log(2, "Can't find a location for c in " + k + " tries");
                     }
                 }
             }
@@ -281,19 +281,19 @@ public class GameState {
             addCreatures(aphidNumber, ladybugNumber, redAntNumber, greenAntNumber);
             Player p;
             switch (level.getLetter()) {
-            case "K":
-                p = new Player(gs.ladybugs.get(0));
-                break;
-            case "F":
-                p = new Player(gs.ants.get(0));
-                break;
-            case "A":
-                p = new Player(gs.aphids.get(0));
-                break;
-            default:
-                App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
-                p = new Player(gs.ladybugs.get(0));
-                break;
+                case "K":
+                    p = new Player(gs.ladybugs.get(0));
+                    break;
+                case "F":
+                    p = new Player(gs.ants.get(0));
+                    break;
+                case "A":
+                    p = new Player(gs.aphids.get(0));
+                    break;
+                default:
+                    App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
+                    p = new Player(gs.ladybugs.get(0));
+                    break;
             }
             if (Controller.isDebug()) {
                 p.getPlayedCreature().setVisionRadius(mapWidth);
@@ -371,6 +371,12 @@ public class GameState {
          */
         public GameStateBuilder setLevel(Level level) {
             this.level = level;
+            if (level != null && !level.getCreaturesToSpawn().isEmpty()) {
+                this.aphidNumber = level.getCreaturesToSpawn().getOrDefault(Aphid.class, 0);
+                this.ladybugNumber = level.getCreaturesToSpawn().getOrDefault(Ladybug.class, 0);
+                this.redAntNumber = level.getCreaturesToSpawn().getOrDefault(RedAnt.class, 0);
+                this.greenAntNumber = level.getCreaturesToSpawn().getOrDefault(GreenAnt.class, 0);
+            }
             return this;
         }
 

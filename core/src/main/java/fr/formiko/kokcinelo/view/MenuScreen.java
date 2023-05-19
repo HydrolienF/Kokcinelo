@@ -10,11 +10,11 @@ import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.LadybugSideView;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
+import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
-import fr.formiko.usual.g;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,7 +198,7 @@ public class MenuScreen extends KScreen implements Screen {
             stage.addActor(getCloseButton(w, h));
         }
 
-        createCreatureImages(w, h);
+        createCreatureImages(w, h, topSpace);
 
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
@@ -231,7 +231,7 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create images for all creature that can be play.}
      * It is used to display them walking or flying in the menu.
      */
-    private void createCreatureImages(int w, int h) {
+    private static void createCreatureImages(int w, int h, int topSpace) {
         creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
             boolean needToRotate = false;
@@ -274,7 +274,7 @@ public class MenuScreen extends KScreen implements Screen {
                 imageWidth = 1000;
                 imageHeigth = 1000;
             }
-            cActor.setBounds(w / 3f, h - topSpace, w / 3f, topSpace);
+            cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
             if (needToRotate) {
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
@@ -292,13 +292,13 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create labels for the menu.}
      */
     private void createLabels() {
-        levelNameLabel = new Label("", skinTitle);
+        levelNameLabel = new Label("", skinTitle, "emoji");
         levelNameLabel.setAlignment(Align.center);
 
-        scoresLabel = new Label("", skin);
+        scoresLabel = new Label("", skin, "emoji");
         scoresLabel.setAlignment(Align.center);
 
-        levelDescription = new Label("", skin);
+        levelDescription = new Label("", skin, "emoji");
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
     }
@@ -350,10 +350,12 @@ public class MenuScreen extends KScreen implements Screen {
     public void resume() { Musics.resume(); }
 
     @Override
-    public void hide() {}
+    public void hide() {
+        // Nothing to do when hiding the screen.
+    }
 
     /**
-     * {@summary Handle user input.}<br>
+     * {@summary Handle user input.}
      */
     private InputProcessor getInputProcessor() {
         return new InputProcessor() {
@@ -434,15 +436,15 @@ public class MenuScreen extends KScreen implements Screen {
             LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {
-            case "K":
-                y = ySpaceBetweenButton * 2 + buttonSize;
-                break;
-            case "F":
-                y = ySpaceBetweenButton;
-                break;
-            case "A":
-                y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
-                break;
+                case "K":
+                    y = ySpaceBetweenButton * 2 + buttonSize;
+                    break;
+                case "F":
+                    y = ySpaceBetweenButton;
+                    break;
+                case "A":
+                    y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
+                    break;
             }
             levelButton.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), y);
             if (level.getNumber() == 1) {
@@ -462,6 +464,9 @@ public class MenuScreen extends KScreen implements Screen {
      */
     public void updateSelectedLevel(String levelId) {
         levelNameLabel.setText(getLevelNameText(levelId));
+        if (App.isPlayableLevel(levelId)) {
+            levelNameLabel.setText(levelNameLabel.getText() + "\n" + getCreatureList(levelId));
+        }
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
@@ -602,22 +607,24 @@ public class MenuScreen extends KScreen implements Screen {
      * @return A String with level name, last &#38; best score
      */
     private String getScoresText(String levelId) {
-        return g.get("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + g.get("LastScore") + " : "
-                + getController().getLastScore(levelId) + "%";
+        return Fonts.getTranslation("BestScore") + " : " + getController().getBestScore(levelId) + "%\n" + Fonts.getTranslation("LastScore")
+                + " : " + getController().getLastScore(levelId) + "%";
     }
     /**
      * @param levelId the level id
      * @return A String with level name, last &#38; best score
      */
-    private String getLevelNameText(String levelId) { return g.get("Level") + " " + levelIdToString(levelId); }
+    private String getLevelNameText(String levelId) { return Fonts.getTranslation("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
-        String desc = g.get("DescriptionLevel" + levelId.substring(1, 2), "") + " " + g.get("DescriptionLevel" + levelId, "");
+        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " "
+                + Fonts.getTranslation("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {
-            return g.get("ComingSoon") + "\n" + desc;
+            return Fonts.getTranslation("ComingSoon") + "\n" + desc;
         }
     }
+    private String getCreatureList(String levelId) { return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn()); }
     /**
      * @param levelId the level id
      * @return A String representing the level id.

@@ -2,10 +2,10 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Fonts;
+import fr.formiko.kokcinelo.tools.KScreen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,12 +21,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @version 0.1
  * @since 0.1
  */
-public class Hud implements Disposable {
+public class Hud extends KScreen implements Disposable {
 
     // Scene2D.ui Stage and its own Viewport for HUD
     private Stage stage;
     private Viewport viewport;
     private Label scoreLabel;
+    private Label insectCountLabel;
     // private float timeCount;
     // private Integer worldTimer;
     /** true when the world timer reaches 0 */
@@ -48,10 +49,9 @@ public class Hud implements Disposable {
         // define our stage using that viewport and our games spritebatch
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
-        BitmapFont bmf = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-        Label.LabelStyle style = new Label.LabelStyle(bmf, Color.WHITE);
-        countdownLabel = new Label("", style);
-        scoreLabel = new Label("", style);
+        countdownLabel = new Label("", skin);
+        scoreLabel = new Label("", skin);
+        insectCountLabel = new Label("", skin, "emoji");
 
         // define a table used to organize our hud's labels
         Table table = new Table();
@@ -63,6 +63,7 @@ public class Hud implements Disposable {
         // table.add(timeLabel).expandX();//.padTop(10);
         // table.row();
         table.add(scoreLabel).expandX();
+        table.add(insectCountLabel).expandX();
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
@@ -95,6 +96,7 @@ public class Hud implements Disposable {
         if (gameTime < 0) {
             timeUp = true;
         }
+        insectCountLabel.setText(Fonts.listOfCreatureToString(Controller.getController().getInsectList()));
         // timeCount = System.currentTimeMillis() - startTime;
         // if (timeCount > 0) {
         // if (worldTimer > 0) {

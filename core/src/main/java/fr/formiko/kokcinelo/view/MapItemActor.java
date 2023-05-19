@@ -6,8 +6,10 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Shapes;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -27,6 +29,7 @@ import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.SkeletonActor;
+
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -139,7 +142,7 @@ public class MapItemActor extends SkeletonActor {
             drawLifePoint(batch);
         }
 
-        if (mapItem instanceof Creature && getDebug() && ((Creature) mapItem).getVisionRadius() > 0) {
+        if (mapItem instanceof Creature c && getDebug() && c.getVisionRadius() > 0) {
             drawDebugCircles(batch, parentAlpha);
         }
     }
@@ -236,8 +239,8 @@ public class MapItemActor extends SkeletonActor {
         if (getSkeleton() != null) {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
-            if (mapItem instanceof Creature && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
-                getAnimationState().getCurrent(0).setTimeScale(((Creature) mapItem).getCurrentSpeed() * 0.3f);
+            if (mapItem instanceof Creature c && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
+                getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f);
             }
             if (((Creature) mapItem).getCurrentSpeed() > 0) {
                 super.act(delta);
@@ -355,9 +358,9 @@ public class MapItemActor extends SkeletonActor {
                     // Add new animation
                     TrackEntry te = getAnimationState().addAnimation(animationId, animationName, false, 0);
                     switch (animationName) { // Diferent speeds for some animations
-                    case "hit":
-                        te.setTimeScale(2f);
-                        break;
+                        case "hit":
+                            te.setTimeScale(2f);
+                            break;
                     }
                 } else {
                     App.log(0, "Don't animate because there is already a queued event.");

@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,25 +26,29 @@ public class KScreen {
     protected int width;
     protected int height;
     protected List<Integer> times;
-    private static String DEFAULT_CHARS;
     private static final boolean backgroundLabelColored = true;
     public static final int FONT_SIZE = 28;
-    protected static Skin skin = getDefautSkin();
-    protected static Skin skinSmall = getDefautSkin(FONT_SIZE * getRacio() * 0.5f);
-    protected static Skin skinTitle = getDefautSkin(FONT_SIZE * getRacio() * 1.6f);
+    protected static Skin skin;
+    protected static Skin skinSmall;
+    protected static Skin skinTitle;
 
     /**
      * {@summary Initialize collections that need to be initialize.}
      */
     public KScreen() {
         times = new LinkedList<>(); // LinkedList because many add and few get.
+        if (skin == null) {
+            skin = getDefautSkin();
+            skinSmall = getDefautSkin(FONT_SIZE * getRacio() * 0.5f);
+            skinTitle = getDefautSkin(FONT_SIZE * getRacio() * 1.6f);
+        }
     }
 
 
-    public static float getRacioWidth() { return Gdx.graphics.getWidth() / 1920f; }
-    public static float getRacioHeight() { return Gdx.graphics.getHeight() / 1080f; }
+    public static float getRacioWidth() { return Gdx.graphics != null ? Gdx.graphics.getWidth() / 1920f : 1f; }
+    public static float getRacioHeight() { return Gdx.graphics != null ? Gdx.graphics.getHeight() / 1080f : 1f; }
     public static float getRacio() { return java.lang.Math.min(getRacioWidth(), getRacioHeight()); }
-    public static float getFPSRacio() { return Gdx.graphics.getDeltaTime() * 60f; }
+    public static float getFPSRacio() { return Gdx.graphics != null ? Gdx.graphics.getDeltaTime() * 60f : 1f; }
 
 
     /**
@@ -86,20 +88,13 @@ public class KScreen {
         skin.add("white", new Texture(pixmap));
         pixmap.dispose();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = (int) fontSize;
-        if (DEFAULT_CHARS == null) {
-            DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
-        }
-        parameter.characters = DEFAULT_CHARS;// FreeTypeFontGenerator.DEFAULT_CHARS + every char in the translation files.
-        BitmapFont bmf = generator.generateFont(parameter);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        BitmapFont bmf = Fonts.getDefaultFont(fontSize);
 
         // bmf.getData().markupEnabled = true; //Use to set color label by label
 
         // Store the default libGDX font under the name "default".
         skin.add("default", bmf);
+        skin.add("emoji", Fonts.getDefaultFont(fontSize, true));
 
         // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -109,13 +104,17 @@ public class KScreen {
         ButtonStyle buttonStyle = new ButtonStyle();
         skin.add("default", buttonStyle);
 
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
+        LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
         // set background
         if (backgroundLabelColored) {
             labelStyle.background = Shapes.getWhiteBackground();
+            labelStyleEmoji.background = Shapes.getWhiteBackground();
         }
+        labelStyle.fontColor = Color.BLACK;
 
         skin.add("default", labelStyle);
+        skin.add("emoji", labelStyleEmoji);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
         return skin;

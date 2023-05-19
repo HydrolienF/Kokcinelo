@@ -63,63 +63,63 @@ public class EscapeGameMenu implements Disposable {
         for (String string : keyList) {
             ImageTextButton itb = new ImageTextButton(g.getM(string), skin, string);
             switch (string) {
-            case "restart":
-                itb.addListener(new ClickListener() {
-                    /**
-                     * Restart game.
-                     */
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Controller.getController().removeEscapeMenu();
-                        Controller.getController().gameOver();
-                        Controller.getController().restartGame();
-                    }
-                });
-                break;
-            case "backToMainMenu":
-                itb.addListener(new ClickListener() {
-                    /**
-                     * Go back to main menu.
-                     */
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Controller.getController().removeEscapeMenu();
-                        Controller.getController().gameOver();
-                        Controller.getController().createNewMenuScreen();
-                    }
-                });
-                break;
-            case "endPartie":
-                itb.addListener(new ClickListener() {
-                    /**
-                     * End current game.
-                     */
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Controller.getController().removeEscapeMenu();
-                        Controller.getController().gameOver();
-                    }
-                });
-                break;
-            case "leaveKokcinelo":
-                itb.addListener(new ClickListener() {
-                    /**
-                     * Leave game.
-                     */
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Controller.getController().removeEscapeMenu();
-                        Controller.getController().gameOver();
-                        Controller.getController().dispose();
-                    }
-                });
-                break;
-            case "resume":
-                itb.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) { Controller.getController().pauseResume(); }
-                });
-                break;
+                case "restart":
+                    itb.addListener(new ClickListener() {
+                        /**
+                         * Restart game.
+                         */
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Controller.getController().removeEscapeMenu();
+                            Controller.getController().gameOver();
+                            Controller.getController().restartGame();
+                        }
+                    });
+                    break;
+                case "backToMainMenu":
+                    itb.addListener(new ClickListener() {
+                        /**
+                         * Go back to main menu.
+                         */
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Controller.getController().removeEscapeMenu();
+                            Controller.getController().gameOver();
+                            Controller.getController().createNewMenuScreen();
+                        }
+                    });
+                    break;
+                case "endPartie":
+                    itb.addListener(new ClickListener() {
+                        /**
+                         * End current game.
+                         */
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Controller.getController().removeEscapeMenu();
+                            Controller.getController().gameOver();
+                        }
+                    });
+                    break;
+                case "leaveKokcinelo":
+                    itb.addListener(new ClickListener() {
+                        /**
+                         * Leave game.
+                         */
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Controller.getController().removeEscapeMenu();
+                            Controller.getController().gameOver();
+                            Controller.getController().dispose();
+                        }
+                    });
+                    break;
+                case "resume":
+                    itb.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) { Controller.getController().pauseResume(); }
+                    });
+                    break;
             }
             table.add(itb).pad(0, pad, 0, pad);
             table.row();

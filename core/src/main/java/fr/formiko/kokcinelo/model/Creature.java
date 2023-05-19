@@ -132,6 +132,7 @@ public abstract class Creature extends MapItem {
     }
     /** Do this see mi */
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius + mi.getHitRadius()); }
+    public boolean isTooCloseForStart(MapItem mi) { return isInRadius(mi, visionRadius * 2f + mi.getHitRadius()); }
     /**
      * {@summary Boost the creature.}
      */

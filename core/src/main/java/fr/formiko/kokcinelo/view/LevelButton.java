@@ -251,47 +251,47 @@ class LevelButton extends Button {
         final float ladybugSize = 0.33f;
         if (sprite == null) {
             switch (getId()) {
-            case "1K": {
-                c = new Aphid();
-                c.setZoom(aphidSize);
-                sprite = Shapes.getCircledSprite(radius, App.GREEN, c);
-                break;
-            }
-            case "2K": {
-                c = new Ladybug();
-                c.setZoom(ladybugSize);
-                c2 = new RedAnt();
-                c2.setZoom(antSize);
-                sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
-                break;
-            }
-            case "3K": {
-                c = new Ladybug();
-                c.setZoom(ladybugSize);
-                c2 = new GreenAnt();
-                c2.setZoom(antSize);
-                sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
-                break;
-            }
-            case "2F": {
-                c = new Ladybug();
-                c.setZoom(ladybugSize);
-                c2 = new RedAnt();
-                c2.setZoom(antSize);
-                sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
-                break;
-            }
-            case "3F": {
-                c = new Ladybug();
-                c.setZoom(ladybugSize);
-                c2 = new GreenAnt();
-                c2.setZoom(antSize);
-                sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
-                break;
-            }
-            default: {
-                sprite = new Sprite(Shapes.getCircle(radius, App.GREEN));
-            }
+                case "1K": {
+                    c = new Aphid();
+                    c.setZoom(aphidSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c);
+                    break;
+                }
+                case "2K": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new RedAnt();
+                    c2.setZoom(antSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
+                    break;
+                }
+                case "3K": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new GreenAnt();
+                    c2.setZoom(antSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
+                    break;
+                }
+                case "2F": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new RedAnt();
+                    c2.setZoom(antSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
+                    break;
+                }
+                case "3F": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new GreenAnt();
+                    c2.setZoom(antSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
+                    break;
+                }
+                default: {
+                    sprite = new Sprite(Shapes.getCircle(radius, App.GREEN));
+                }
             }
 
         }

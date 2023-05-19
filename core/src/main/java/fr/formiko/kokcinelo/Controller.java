@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -129,10 +130,10 @@ public class Controller {
      */
     public synchronized void endMenuScreen() {
         App.log(1, "end menu screen");
-        if (getScreen() != null && getScreen() instanceof MenuScreen) {
-            ((MenuScreen) getScreen()).displayPerf();
+        if (getScreen() instanceof MenuScreen ms) {
+            ms.displayPerf();
             Screen toDispose = getScreen();
-            level = ((MenuScreen) (getScreen())).getLevel();
+            level = ms.getLevel();
             createNewGame();
             toDispose.dispose();
         } else {
@@ -145,7 +146,7 @@ public class Controller {
      * Current screen is supposed to be a GameScreen. Other wise it will do nothing.
      */
     public synchronized void endGameScreen() {
-        if (getScreen() != null && getScreen() instanceof GameScreen) {
+        if (getScreen() instanceof GameScreen) {
             Screen toDispose = getScreen();
             createNewMenuScreen();
             toDispose.dispose();
@@ -219,29 +220,7 @@ public class Controller {
         int gameTime = 60;
         setSpectatorMode(false);
         Musics.setLevelMusic(getLevelId());
-        GameStateBuilder gsb = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
-        switch (getLevelId()) {
-        case "1K":
-            gsb.setLadybugNumber(1);
-            break;
-        case "2K":
-            gsb.setLadybugNumber(1).setRedAntNumber(3);
-            break;
-        case "2F":
-            gsb.setLadybugNumber(2).setRedAntNumber(1);
-            break;
-        case "3K":
-            gsb.setLadybugNumber(1).setGreenAntNumber(3);
-            break;
-        case "3F":
-            gsb.setLadybugNumber(2).setGreenAntNumber(1);
-            break;
-        default:
-            App.log(3, "levelId not found, use default levelId (1K)");
-            gs = GameState.builder().setAphidNumber(100).setLadybugNumber(1).setMapHeight(2000).setMapWidth(2000).setLevel(getLevel())
-                    .build();
-            break;
-        }
+        GameStateBuilder gsb = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         if (isGraphicsTest()) {
             int antNumber = 50;
             gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(antNumber).setAphidNumber(10);
@@ -539,13 +518,14 @@ public class Controller {
         try {
             map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
-            map = new HashMap<String, String>();
+            map = new HashMap<>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
             if (!App.SUPPORTED_LANGUAGES.contains(l)) {
                 l = "en";
             }
             map.put("language", l);
+            // TODO ini screen size / full screen & others settings.
         }
         map.put("startPlaying", System.currentTimeMillis() + "");
         App.log(1, "FILES", "Loaded data: " + map);
@@ -700,6 +680,7 @@ public class Controller {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }
 
+    /** Return a list of ligth sources that may be empty. */
     public Collection<Creature> getLightSources() {
         Creature pc = getPlayerCreature();
         if (pc == null) {
@@ -707,6 +688,12 @@ public class Controller {
         } else {
             return pc.getAllFriendlyCreature();
         }
+    }
+
+    /** Return a Map of, how much insect there is. */
+    public Map<Class<? extends Creature>, Integer> getInsectList() {
+        return gs.allCreatures().stream().filter(c -> c instanceof Creature).filter(c -> !(c instanceof AcidDrop))
+                .collect(Collectors.groupingBy(c -> c.getClass(), Collectors.summingInt(c -> 1)));
     }
 
 }
