@@ -5,20 +5,20 @@ mainMenu: menu principal
 #Menu
 bestScore: meilleur score
 lastScore: dernier score
-descriptionLevelK: Dévorez un maximum de pucerons en 1 minute !
-descriptionLevelF: Protégez un maximum de pucerons en 1 minute !
-descriptionLevelA: Survivez 1 minute !
-descriptionLevel1K: Dirigez votre coccinelle avec le pointeur de la souris & zoomer avec la molette de la souris.
-descriptionLevel2K: Les fourmis feront tout leur possible pour vous en empêcher. Méfiez-vous de leurs mandibules acérées !
-descriptionLevel2F: Les coccinelles tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de vos mandibules. Plus vite vous arrêterez les coccinelles plus vous aurez de points bonus.
-descriptionLevel3K: Les fourmis feront tout leur possible pour vous en empêcher. Méfiez-vous de leurs jets d'acide !
-descriptionLevel3F: Les coccinelles tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de votre acide formique (espace). Plus vite vous arrêterez les coccinelles plus vous aurez de points bonus.
-descriptionLevel4K: Chaque puceron dévoré vous accordera un bonus de vie, de vitesse ou de point.
-descriptionLevel4F: Vos amis les pucerons sécrètent du miellat dont vous raffolez. En fonction de l'espèce de puceron, le miellat vous rendra plus rapide ou rendra vos attaques plus efficaces.
-descriptionLevel4A: Vous êtes le plus beau des pucerons. L'avenir de la colonie dépend de votre survie ! Servez-vous des fourmis pour vous protéger & si nécessaire laisser les autres se faire dévorer à votre place. Vous pouvez accélérer un cours instant (espace) pour vous échapper.
-descriptionLevel5K: Certains pucerons volent. Pour les attraper vous devez voler aussi (espace). En vol vous n'attrapez plus les pucerons au sol.
-descriptionLevel5F: Les coccinelles volent ! Lorsqu'elles volent vous ne pouvez compter que sur votre acide pour les arrêter.
-descriptionLevel5A: Vous êtes le plus appétissant des pucerons. Les coccinelles vous chasserons jusqu'à la mort ! Faite usage de vos ailes & de vos alliées les fourmis pour vous en débarrasser.
+descriptionLevelK: Dévorez un maximum de 🦗 en 1 minute !
+descriptionLevelF: Protégez un maximum de 🦗 en 1 minute !
+descriptionLevelA: Survivez 1 minute !
+descriptionLevel1K: Dirigez votre 🐞 avec le pointeur de la souris & zoomez avec la molette de la souris.
+descriptionLevel2K: Les 🕷 feront tout leur possible pour vous en empêcher. Méfiez-vous de leurs mandibules acérées !
+descriptionLevel2F: Les 🐞 tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de vos mandibules. Plus vite vous arrêterez les 🐞 plus vous aurez de points bonus.
+descriptionLevel3K: Les 🦂 feront tout leur possible pour vous en empêcher. Méfiez-vous de leurs jets d'acide !
+descriptionLevel3F: Les 🐞 tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de votre acide formique (espace). Plus vite vous arrêterez les 🐞 plus vous aurez de points bonus.
+descriptionLevel4K: Chaque 🦗 dévoré vous accordera un bonus de vie, de vitesse ou de point.
+descriptionLevel4F: Vos amis les 🦗 sécrètent du miellat dont vous raffolez. En fonction de l'espèce de 🦗, le miellat vous rendra plus rapide ou rendra vos attaques plus efficaces.
+descriptionLevel4A: Vous êtes le plus beau des 🦗. L'avenir de la colonie dépend de votre survie ! Servez-vous des 🐜 pour vous protéger & si nécessaire laisser les autres se faire dévorer à votre place. Vous pouvez accélérer un cours instant (espace) pour vous échapper.
+descriptionLevel5K: Certains 🦗 volent. Pour les attraper vous devez voler aussi (espace). En vol vous n'attrapez plus les 🦗 au sol.
+descriptionLevel5F: Les 🐞 volent ! Lorsqu'elles volent vous ne pouvez compter que sur votre acide pour les arrêter.
+descriptionLevel5A: Vous êtes le plus appétissant des 🦗. Les 🐞 vous chasserons jusqu'à la mort ! Faite usage de vos ailes & de vos alliées les 🐜 pour vous en débarrasser.
 comingSoon: Bientôt disponible
 #Escape Menu
 restart: recommencer
