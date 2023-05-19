@@ -94,6 +94,7 @@ public class KScreen {
 
         // Store the default libGDX font under the name "default".
         skin.add("default", bmf);
+        skin.add("emoji", Fonts.getDefaultFont(fontSize, true));
 
         // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -104,12 +105,16 @@ public class KScreen {
         skin.add("default", buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
+        LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
         // set background
         if (backgroundLabelColored) {
             labelStyle.background = Shapes.getWhiteBackground();
+            labelStyleEmoji.background = Shapes.getWhiteBackground();
         }
+        labelStyle.fontColor = Color.BLACK;
 
         skin.add("default", labelStyle);
+        skin.add("emoji", labelStyleEmoji);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
         return skin;

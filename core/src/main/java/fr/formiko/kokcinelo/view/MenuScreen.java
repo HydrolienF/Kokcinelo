@@ -298,7 +298,7 @@ public class MenuScreen extends KScreen implements Screen {
         scoresLabel = new Label("", skin);
         scoresLabel.setAlignment(Align.center);
 
-        levelDescription = new Label("", skin);
+        levelDescription = new Label("", skin, "emoji");
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
     }

@@ -14,7 +14,6 @@ import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -703,6 +702,7 @@ public class Controller {
         return getGameScreen().getStage().screenToStageCoordinates(new Vector2(x, y));
     }
 
+    /** Return a list of ligth sources that may be empty. */
     public Collection<Creature> getLightSources() {
         Creature pc = getPlayerCreature();
         if (pc == null) {
@@ -710,6 +710,12 @@ public class Controller {
         } else {
             return pc.getAllFriendlyCreature();
         }
+    }
+
+    /** Return a Map of, how much insect there is. */
+    public Map<Class<? extends Creature>, Integer> getInsectList() {
+        return gs.allCreatures().stream().filter(c -> c instanceof Creature).filter(c -> !(c instanceof AcidDrop))
+                .collect(Collectors.groupingBy(c -> c.getClass(), Collectors.summingInt(c -> 1)));
     }
 
 }
