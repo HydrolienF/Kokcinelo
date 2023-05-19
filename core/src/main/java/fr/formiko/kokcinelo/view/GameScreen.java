@@ -139,7 +139,7 @@ public class GameScreen extends KScreen implements Screen {
                 App.log(1, "skip a delta to avoid lag.");
             }
         }
-        ScreenUtils.clear(0f, 0f, 0f, 1);
+        ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         game.batch.setProjectionMatrix(camera.combined);
 
         getController().updateActorVisibility(Controller.getController().getLocalPlayerId());

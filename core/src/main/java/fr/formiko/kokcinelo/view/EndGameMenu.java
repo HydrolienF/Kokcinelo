@@ -10,11 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -33,7 +32,7 @@ public class EndGameMenu extends KScreen implements Disposable {
     private Viewport viewport;
     private Label scoreLabel;
     private Image replayButton;
-    private Button mainMenuButton;
+    private Label mainMenuButton;
     // private boolean haveWin;
 
     // CONSTRUCTORS --------------------------------------------------------------
@@ -59,13 +58,18 @@ public class EndGameMenu extends KScreen implements Disposable {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
         });
-        mainMenuButton = new TextButton(g.get("MainMenu"), skin);
+        mainMenuButton = new Label(g.get("MainMenu"), skin);
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().createNewMenuScreen(); }
         });
-        skin.add("scoreLabelStyle", new Label.LabelStyle(skin.getFont("default"), App.getColorFromPercent(score * 100 / maxScore)));
-        scoreLabel = new Label(score * 100 / maxScore + "%", skin, "scoreLabelStyle");
+
+        int percent = score * 100 / maxScore;
+        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
+        style.background = ls.background;
+        skin.add("s" + percent, style);
+        scoreLabel = new Label(score * 100 / maxScore + "%", skin, "s" + percent);
 
 
         Table table = new Table();
