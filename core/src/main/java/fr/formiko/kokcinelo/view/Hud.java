@@ -2,10 +2,8 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
-import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
-import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -98,16 +96,7 @@ public class Hud extends KScreen implements Disposable {
         if (gameTime < 0) {
             timeUp = true;
         }
-        Map<Class<? extends Creature>, Integer> map = Controller.getController().getInsectList();
-        StringBuilder sb = new StringBuilder();
-        map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(e -> {
-            try {
-                sb.append(e.getValue()).append(Fonts.getIcon(e.getKey())).append(" ");
-            } catch (Exception ex) {
-                sb.append(e.getValue()).append(e.getKey().getName()).append(" ");
-            }
-        });
-        insectCountLabel.setText(sb.toString());
+        insectCountLabel.setText(Fonts.listOfCreatureToString(Controller.getController().getInsectList()));
         // timeCount = System.currentTimeMillis() - startTime;
         // if (timeCount > 0) {
         // if (worldTimer > 0) {

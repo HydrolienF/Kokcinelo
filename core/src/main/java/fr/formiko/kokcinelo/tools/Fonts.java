@@ -68,4 +68,16 @@ public class Fonts extends BitmapFont {
     public static String getTranslation(String key) { return filterEmojis(g.get(key)); }
     public static String getTranslation(String key, String sDefault) { return filterEmojis(g.get(key, sDefault)); }
     public static String getIcon(Class<? extends Creature> c) { return iconsTransformed.get(c); }
+
+
+    public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map) {
+        StringBuilder sb = new StringBuilder();
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(e -> {
+            if (!sb.isEmpty()) {
+                sb.append("   ");
+            }
+            sb.append(e.getValue()).append(Fonts.getIcon(e.getKey()));
+        });
+        return sb.toString();
+    }
 }

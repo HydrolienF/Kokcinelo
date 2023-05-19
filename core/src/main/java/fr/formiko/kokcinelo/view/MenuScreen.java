@@ -292,10 +292,10 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create labels for the menu.}
      */
     private void createLabels() {
-        levelNameLabel = new Label("", skinTitle);
+        levelNameLabel = new Label("", skinTitle, "emoji");
         levelNameLabel.setAlignment(Align.center);
 
-        scoresLabel = new Label("", skin);
+        scoresLabel = new Label("", skin, "emoji");
         scoresLabel.setAlignment(Align.center);
 
         levelDescription = new Label("", skin, "emoji");
@@ -464,6 +464,9 @@ public class MenuScreen extends KScreen implements Screen {
      */
     public void updateSelectedLevel(String levelId) {
         levelNameLabel.setText(getLevelNameText(levelId));
+        if (App.isPlayableLevel(levelId)) {
+            levelNameLabel.setText(levelNameLabel.getText() + "\n" + getCreatureList(levelId));
+        }
         scoresLabel.setText(getScoresText(levelId));
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
@@ -621,6 +624,7 @@ public class MenuScreen extends KScreen implements Screen {
             return Fonts.getTranslation("ComingSoon") + "\n" + desc;
         }
     }
+    private String getCreatureList(String levelId) { return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn()); }
     /**
      * @param levelId the level id
      * @return A String representing the level id.
