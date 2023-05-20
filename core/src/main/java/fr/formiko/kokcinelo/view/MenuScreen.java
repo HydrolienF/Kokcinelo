@@ -177,6 +177,7 @@ public class MenuScreen extends KScreen implements Screen {
     public void resize(int width, int height) {
         if (!needResize(width, height))
             return;
+        App.saveSizeInOptions(width, height);
 
         stage.clear();
         // Gdx.graphics.getWidth() may be outdated here.

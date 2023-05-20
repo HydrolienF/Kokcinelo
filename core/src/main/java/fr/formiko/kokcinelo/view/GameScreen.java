@@ -323,6 +323,7 @@ public class GameScreen extends KScreen implements Screen {
     public void resize(int width, int height) {
         if (!needResize(width, height))
             return;
+        App.saveSizeInOptions(width, height);
         viewport.update(width, height);
     }
     /***

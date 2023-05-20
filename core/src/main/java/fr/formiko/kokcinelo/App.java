@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo;
 
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.tools.OptionsMap;
 import fr.formiko.kokcinelo.view.TraillerImage;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
@@ -34,6 +35,7 @@ public class App extends Game {
     private static Map<String, Sound> soundMap = new HashMap<>();
 
     private static Map<String, String> data;
+    private static OptionsMap options;
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -66,7 +68,12 @@ public class App extends Game {
     public static boolean isWithCloseButton() { return withCloseButton; }
     public static void setWithCloseButton(boolean withCloseButton) { App.withCloseButton = withCloseButton; }
     public static Map<String, String> getDataMap() { return data; }
+    public static OptionsMap getOptionsMap() { return options; }
     public static String getLanguage() { return data.get("language"); }
+    public static void saveSizeInOptions(int width, int height) {
+        options.putInt("screenWidth", width);
+        options.putInt("screenHeigth", height);
+    }
     /**
      * {@summary Set language &#38; update translation list.}
      * 
@@ -113,6 +120,7 @@ public class App extends Game {
 
         loadLanguagesData();
         data = Controller.getController().loadData();
+        options = Controller.loadOptions();
         updateLanguage();
         // // full screen
         // try {
@@ -163,6 +171,7 @@ public class App extends Game {
     public void dispose() {
         // Save played time etc
         Controller.getController().saveData();
+        Controller.getController().saveOptions();
         App.log(1, "Normal close of the app.");
         Gdx.app.exit();
     }
@@ -182,7 +191,7 @@ public class App extends Game {
         if (soundMap.get(fileName) == null) {
             soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
         }
-        soundMap.get(fileName).play(volume, 1f, pan);
+        soundMap.get(fileName).play(volume * getOptionsMap().getFloat("soundVolume"), 1f, pan);
     }
     /**
      * {@summary Play the given sound with default volume &#38; default pan.}

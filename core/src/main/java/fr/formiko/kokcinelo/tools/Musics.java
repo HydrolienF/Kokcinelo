@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Null;
  */
 public class Musics {
     private static @Null Music music;
-    private static float musicsVolume = 1f;
     // @formatter:off
     private static Map<String, List<Object>> levelsMusic = Map.ofEntries(
         Map.entry("1K", List.of("Waltz of the Night", 0.8f)),
@@ -31,8 +30,7 @@ public class Musics {
 
     private Musics() {}
 
-    public static float getMusicsVolume() { return musicsVolume; }
-    public static void setMusicsVolume(float musicsVolume) { Musics.musicsVolume = musicsVolume; }
+    public static float getMusicsVolume() { return App.getOptionsMap().getFloat("musicVolume"); }
     // public static Music getMusic() { return music; }
     /**
      * Set the current music.
@@ -44,7 +42,7 @@ public class Musics {
         stop();
         dispose();
         music = Gdx.audio.newMusic(Gdx.files.internal("musics/" + fileName + ".mp3"));
-        music.setVolume(musicsVolume);
+        music.setVolume(getMusicsVolume());
         App.log(1, "Current music : " + fileName);
     }
     /**
@@ -106,7 +104,7 @@ public class Musics {
      */
     public static void setVolume(float volume) {
         if (music != null) {
-            music.setVolume(volume * musicsVolume);
+            music.setVolume(volume * getMusicsVolume());
         }
     }
     /**

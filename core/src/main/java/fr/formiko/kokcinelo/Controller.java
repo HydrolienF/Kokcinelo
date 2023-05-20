@@ -11,6 +11,7 @@ import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
+import fr.formiko.kokcinelo.tools.OptionsMap;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
@@ -494,6 +495,7 @@ public class Controller {
     }
     /**
      * {@summary Save all important data.}
+     * It will update the lastDatePlayed and add the time played since the last time the game was played.
      */
     public void saveData() {
         Map<String, String> map = App.getDataMap();
@@ -512,12 +514,14 @@ public class Controller {
     }
     /**
      * {@summary Load all important data.}
+     * It create it if it doesn't exist.
      */
     public Map<String, String> loadData() {
         Map<String, String> map;
         try {
             map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
+            App.log(1, "FILES", "Data file not found " + e);
             map = new HashMap<>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
@@ -531,6 +535,30 @@ public class Controller {
         App.log(1, "FILES", "Loaded data: " + map);
         return map;
     }
+
+    public void saveOptions() { Files.saveInFile("options.yml", App.getOptionsMap()); }
+
+    /**
+     * {@summary Load all options.}
+     * It create it if it doesn't exist.
+     */
+    public static OptionsMap loadOptions() {
+        OptionsMap map;
+        try {
+            map = new OptionsMap(Files.loadFromFile("options.yml", false));
+        } catch (Exception e) {
+            App.log(1, "FILES", "Options file not found " + e);
+            map = new OptionsMap();
+            map.put("musicVolume", "1.0");
+            map.put("soundVolume", "1.0");
+            map.put("displayMode", "0");
+            map.put("screenWidth", "0");
+            map.put("screenHeigth", "0");
+            map.put("maxFps", "0"); // 0 = no limits
+        }
+        return map;
+    }
+
     /**
      * {@summary Return the best score of a level.}
      * 
