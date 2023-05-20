@@ -419,22 +419,22 @@ public class MenuScreen extends KScreen implements Screen {
 
         Table levelButtonTable = new LevelButtonTable(w / 200);
         levelButtonTable.setBounds(0, 0, w, h);
-        int buttonRadius = (int) levelButtonTable.getWidth() / 24;
-        int buttonSize = buttonRadius * 2;
+        float buttonRadius = Math.min(levelButtonTable.getWidth() / 20f, levelButtonTable.getHeight() / 7f);
+        float buttonSize = buttonRadius * 2;
         int len = 5;
 
-        int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
-        int xSpaceBetweenButton = xFreeSpace / (len + 1);
+        float xFreeSpace = levelButtonTable.getWidth() - (len * buttonSize);
+        float xSpaceBetweenButton = xFreeSpace / (len + 1);
 
-        int yFreeSpace = (int) levelButtonTable.getHeight() - (3 * buttonSize);
-        int ySpaceBetweenButton = yFreeSpace / len;
+        float yFreeSpace = levelButtonTable.getHeight() - (3 * buttonSize);
+        float ySpaceBetweenButton = yFreeSpace / len;
 
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
         LevelButton.resetUnlockedLevels();
         for (Level level : Level.getLevelList().stream().sorted((l1, l2) -> l2.getDrawPriority() - l1.getDrawPriority())
                 .collect(Collectors.toList())) {
-            LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
+            LevelButton levelButton = new LevelButton((int) buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {
                 case "K":
@@ -447,7 +447,7 @@ public class MenuScreen extends KScreen implements Screen {
                     y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
                     break;
             }
-            levelButton.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), y);
+            levelButton.setPosition((int) xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), (int) y);
             if (level.getNumber() == 1) {
                 levelButton.setChecked(true);
             }
