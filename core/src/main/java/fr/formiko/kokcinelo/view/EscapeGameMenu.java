@@ -32,7 +32,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class EscapeGameMenu implements Disposable {
     private Stage stage;
     private static Skin skin;
-    private static List<String> keyList;
+    private static final List<String> keyList = List.of("restart", "endPartie", "backToMainMenu", "leaveKokcinelo", "resume");
 
     // CONSTRUCTORS ----------------------------------------------------------------
     /**
@@ -53,7 +53,6 @@ public class EscapeGameMenu implements Disposable {
 
         if (skin == null) {
             skin = MenuScreen.getDefautSkin();
-            keyList = List.of("restart", "endPartie", "backToMainMenu", "leaveKokcinelo", "resume");
             for (String key : keyList) {
                 ImageTextButtonStyle itbs = new ImageTextButtonStyle();
                 itbs.font = skin.getFont("default");

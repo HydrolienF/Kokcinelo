@@ -46,7 +46,7 @@ public abstract class Creature extends MapItem {
      * 
      * @param textureName name of the texture to use from assets/images/
      */
-    public Creature(String textureName) {
+    protected Creature(String textureName) {
         super(textureName);
         wantedRotation = 0f;
         defaultMoveFrontSpeed = 0.6f;
@@ -284,7 +284,7 @@ public abstract class Creature extends MapItem {
      * @return the seeable creatures
      */
     public Collection<Creature> seeableCreatures(Collection<? extends Creature> coll) {
-        Set<Creature> set = new HashSet<Creature>();
+        Set<Creature> set = new HashSet<>();
         for (Creature c : coll) {
             if (isInRadius(c, c.getHitRadius() + getVisionRadius())) {
                 set.add(c);

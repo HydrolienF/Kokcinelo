@@ -411,7 +411,7 @@ public class App extends Game {
      * @return The list of supported languages
      */
     private static void loadListOfSupportedLanguages() {
-        SUPPORTED_LANGUAGES = new ArrayList<String>();
+        SUPPORTED_LANGUAGES = new ArrayList<>();
         Map<String, String> tempMap = Files.loadMapFromCSVFile("languages/languagesPercents.csv", true);
         // It may be useful for performance issues, some day, to load languages percents from a single file include in packaged jar
         if (tempMap.isEmpty()) {
@@ -431,7 +431,7 @@ public class App extends Game {
      * {@summary Calculate languages percentages from all translations maps.}
      */
     private static void calculateLanguagesPercentages() {
-        LANGUAGES_PERCENTAGES = new HashMap<String, Integer>();
+        LANGUAGES_PERCENTAGES = new HashMap<>();
         int defaultLanguageKeys = Files.getNumberOfText("en");
         for (FileHandle subFile : Files.listSubFilesRecusvively("languages/")) {
             String fileName = subFile.name();

@@ -60,8 +60,8 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
-        // isDebug = true; // @a
-        toRemove = new HashSet<Creature>();
+        // isDebug = true;
+        toRemove = new HashSet<>();
         // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
