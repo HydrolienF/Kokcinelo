@@ -122,7 +122,7 @@ public class GameScreen extends KScreen implements Screen {
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
-     * {@summary Draw all thing that need to be draw during a game.}
+     * {@summary Update &#38; draw all thing that need to be draw during a game.}
      * 
      * @see com.badlogic.gdx.Screen#render(float)
      */
@@ -153,12 +153,7 @@ public class GameScreen extends KScreen implements Screen {
         backgroundStage.draw();
 
         if (Controller.getController().isSpectatorMode()) {
-            // Next lines replace stage.draw()
-            game.batch.begin();
-            stage.getCamera().update();
-            game.batch.setProjectionMatrix(stage.getCamera().combined);
-            stage.getRoot().draw(game.batch, 1);
-            game.batch.end();
+            drawForSpectateMode();
         } else { // draw actors only in the visible circles.
             drawVisibleMapItem(delta);
         }
@@ -168,38 +163,72 @@ public class GameScreen extends KScreen implements Screen {
 
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
-        if (!isPause) {
-            if (isTimeUp() || getController().isAllAphidGone() && !stopAtTheEnd) {
-                getController().gameOver();
-            }
-            if (getController().isAllLadybugGone() && !stopAtTheEnd) {
-                // if player is an ant or an aphid give it bonus score for time.
-                if (!(getController().getPlayerCreature() instanceof Ladybug)) {
-                    getController().addScore((int) hud.getGameTime());
-                }
-                getController().gameOver();
-            }
+        if (!isPause && !stopAtTheEnd) {
+            testEndGameCondition();
         }
 
-        if (egm != null) {
-            game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
-            egm.getStage().act(delta);
-            egm.getStage().draw();
-        }
-        // if (isPause && em == null) {
-        // createEscapeMenu();
-        // }
-        if (em != null) {
-            game.batch.setProjectionMatrix(em.getStage().getCamera().combined);
-            em.getStage().act(delta);
-            em.getStage().draw();
-        }
+        drawEndGameMenu(delta);
+        drawEscapeGameMenu(delta);
         if (stopAtTheEnd) {
             stopAfterNextDrawBool = false;
             stop();
             Controller.getController().playEndGameSound();
         }
         times.add((int) (System.currentTimeMillis() - time));
+    }
+
+    /**
+     * {@summary Test if game sould be ended.}
+     * Game can be ended by times or no more aphids or ladybugs.
+     */
+    private void testEndGameCondition() {
+        if (isTimeUp() || getController().isAllAphidGone()) {
+            getController().gameOver();
+        }
+        if (getController().isAllLadybugGone()) {
+            // if player is an ant or an aphid give it bonus score for time.
+            if (!(getController().getPlayerCreature() instanceof Ladybug)) {
+                getController().addScore((int) hud.getGameTime());
+            }
+            getController().gameOver();
+        }
+    }
+
+    /**
+     * {@summary Draw all actors as if player was in spectate mode.}
+     */
+    private void drawForSpectateMode() {
+        // Next lines replace stage.draw()
+        game.batch.begin();
+        stage.getCamera().update();
+        game.batch.setProjectionMatrix(stage.getCamera().combined);
+        stage.getRoot().draw(game.batch, 1);
+        game.batch.end();
+    }
+
+    /**
+     * {@summary Draw the end game menu.}
+     * 
+     * @param delta
+     */
+    private void drawEndGameMenu(float delta) {
+        if (egm != null) {
+            game.batch.setProjectionMatrix(egm.getStage().getCamera().combined);
+            egm.getStage().act(delta);
+            egm.getStage().draw();
+        }
+    }
+    /**
+     * {@summary Draw the escape game menu.}
+     * 
+     * @param delta time since last draw
+     */
+    private void drawEscapeGameMenu(float delta) {
+        if (em != null) {
+            game.batch.setProjectionMatrix(em.getStage().getCamera().combined);
+            em.getStage().act(delta);
+            em.getStage().draw();
+        }
     }
 
     /**

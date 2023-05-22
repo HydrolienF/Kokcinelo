@@ -6,10 +6,8 @@ import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Shapes;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -29,7 +27,6 @@ import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.SkeletonActor;
-
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**

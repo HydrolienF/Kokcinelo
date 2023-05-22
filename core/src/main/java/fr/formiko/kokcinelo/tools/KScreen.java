@@ -31,7 +31,6 @@ public class KScreen {
     protected int width;
     protected int height;
     protected List<Integer> times;
-    private static final boolean backgroundLabelColored = true;
     public static final int FONT_SIZE = 28;
     protected static Skin skin;
     protected static Skin skinSmall;
@@ -112,10 +111,8 @@ public class KScreen {
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
         LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
         // set background
-        if (backgroundLabelColored) {
-            labelStyle.background = Shapes.getWhiteBackground();
-            labelStyleEmoji.background = Shapes.getWhiteBackground();
-        }
+        labelStyle.background = Shapes.getWhiteBackground();
+        labelStyleEmoji.background = Shapes.getWhiteBackground();
         labelStyle.fontColor = Color.BLACK;
 
         skin.add("default", labelStyle);

@@ -18,6 +18,7 @@ import fr.formiko.kokcinelo.tools.Shapes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -233,30 +234,26 @@ public class MenuScreen extends KScreen implements Screen {
      * It is used to display them walking or flying in the menu.
      */
     private static void createCreatureImages(int w, int h, int topSpace) {
+        // final Map<Class<? extends Creature>, Vector2> imageSize = Map.of(Ant.class, new Vector2(3600, 4800));
+        final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
+                LadybugSideView.class, "K", Aphid.class, "A");
         creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
-            boolean needToRotate = false;
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | NoSuchMethodException | SecurityException e) {
-                // TODO there is an error with .jar
                 App.log(3, "MenuScreen", "Error while creating creature: " + e);
                 continue;
             }
             MapItemActor cActor = c.getActor();
+            cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
             int imageWidth;
             int imageHeigth;
             if (c instanceof Ant) {
-                needToRotate = true;
                 imageWidth = 3600;
                 imageHeigth = 4800;
-                if (c instanceof RedAnt) {
-                    cActor.setName("F2");
-                } else if (c instanceof GreenAnt) {
-                    cActor.setName("F3");
-                }
             } else if (c instanceof Ladybug) {
                 if (c instanceof LadybugSideView) {
                     imageWidth = 1484;
@@ -265,18 +262,16 @@ public class MenuScreen extends KScreen implements Screen {
                     imageWidth = 738;
                     imageHeigth = 536;
                 }
-                cActor.setName("K");
-            } else if (c instanceof Aphid) {
-                // TODO set imageWidth & imageHeigth
-                imageWidth = 1000;
-                imageHeigth = 1000;
-                cActor.setName("A");
+                // } else if (c instanceof Aphid) {
+                // // TODO set imageWidth & imageHeigth
+                // imageWidth = 1000;
+                // imageHeigth = 1000;
             } else {
                 imageWidth = 1000;
                 imageHeigth = 1000;
             }
             cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
-            if (needToRotate) {
+            if (!(c instanceof LadybugSideView)) { // Need to rotate
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
             }
