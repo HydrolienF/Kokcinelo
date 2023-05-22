@@ -497,12 +497,42 @@ public class MenuScreen extends KScreen implements Screen {
     private Table getLinkButtonsTable(int size) {
         Table table = new Table();
         table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size, false));
-
         table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size, true));
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
-        // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
+        table.add(getSwitchLanguageButton(size));
+        table.add(getOptionsButton(size));
+        return table;
+    }
+
+    /**
+     * {@summary Return a clickable image that open options menu.}
+     * 
+     * @param size the size of the image
+     * @return a clickable image that open options menu
+     */
+    private Image getOptionsButton(int size) {
+        Image options = getClickableLink("basic/settings", null, size, false);
+        options.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO : add options
+                // if (!langTable.remove()) {
+                // stage.addActor(langTable);
+                // }
+            }
+        });
+        return options;
+    }
+
+    /**
+     * {@summary Return a clickable image that open switch language table.}
+     * 
+     * @param size the size of the image
+     * @return a clickable image that open switch language table
+     */
+    private Image getSwitchLanguageButton(int size) {
         Table langTable = new Table();
         Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
         int perRow = 1;
@@ -510,6 +540,7 @@ public class MenuScreen extends KScreen implements Screen {
             perRow = 4;
         }
         int k = 0;
+        // for each language create a clickable label to switch to it language
         for (String languageCode : App.SUPPORTED_LANGUAGES) {
             String languageName = App.LANGUAGES_NAMES.get(languageCode);
             Integer percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
@@ -539,8 +570,8 @@ public class MenuScreen extends KScreen implements Screen {
         }
         langTable.pack();
         langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);
-        Image flag = getClickableLink("basic/language", null, size, false);
-        flag.addListener(new ClickListener() {
+        Image lang = getClickableLink("basic/language", null, size, false);
+        lang.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!langTable.remove()) {
@@ -548,8 +579,7 @@ public class MenuScreen extends KScreen implements Screen {
                 }
             }
         });
-        table.add(flag);
-        return table;
+        return lang;
     }
 
     /**
