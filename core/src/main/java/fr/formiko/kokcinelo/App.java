@@ -188,9 +188,7 @@ public class App extends Game {
      * @param pan      left rigth ballance of the sound file in [-1, 1]
      */
     public static void playSound(String fileName, float volume, float pan) {
-        if (soundMap.get(fileName) == null) {
-            soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
-        }
+        soundMap.computeIfAbsent(fileName, k -> Gdx.audio.newSound(Gdx.files.internal("sounds/" + k + ".mp3")));
         soundMap.get(fileName).play(volume * getOptionsMap().getFloat("soundVolume"), 1f, pan);
     }
     /**

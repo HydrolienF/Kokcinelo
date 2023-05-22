@@ -264,11 +264,10 @@ public class GameScreen extends KScreen implements Screen {
 
 
     private FrameBuffer getFrameBuffers(int radius) {
-        if (!frameBuffers.containsKey(radius)) {
-            frameBuffers.put(radius, new FrameBuffer(Format.RGBA8888, radius * 2, radius * 2, false));
-        }
+        frameBuffers.computeIfAbsent(radius, k -> new FrameBuffer(Format.RGBA8888, k * 2, k * 2, false));
         return frameBuffers.get(radius);
     }
+
     public Texture getVisibleCircleTexture(int radius) {
         if (!visibleCircleTextures.containsKey(radius)) {
             // visibleCircleTextures.put(radius, createVisibleCircleTexture(radius));
