@@ -431,6 +431,9 @@ public class MenuScreen extends KScreen implements Screen {
                 case "A":
                     y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
                     break;
+                default:
+                    App.log(2, "Level " + level.getId() + " has no letter that match with a row");
+                    break;
             }
             levelButton.setPosition((int) xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), (int) y);
             if (level.getNumber() == 1) {

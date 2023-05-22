@@ -153,7 +153,7 @@ public class GameScreen extends KScreen implements Screen {
         backgroundStage.draw();
 
         if (Controller.getController().isSpectatorMode()) {
-            // stage.draw();
+            // Next lines replace stage.draw()
             game.batch.begin();
             stage.getCamera().update();
             game.batch.setProjectionMatrix(stage.getCamera().combined);
@@ -169,19 +169,15 @@ public class GameScreen extends KScreen implements Screen {
         game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
         if (!isPause) {
-            if (isTimeUp() || getController().isAllAphidGone()) {
-                if (!stopAtTheEnd) {
-                    getController().gameOver();
-                }
+            if (isTimeUp() || getController().isAllAphidGone() && !stopAtTheEnd) {
+                getController().gameOver();
             }
-            if (getController().isAllLadybugGone()) {
-                if (!stopAtTheEnd) {
-                    // if player is an ant or an aphid give it bonus score for time.
-                    if (!(getController().getPlayerCreature() instanceof Ladybug)) {
-                        getController().addScore((int) hud.getGameTime());
-                    }
-                    getController().gameOver();
+            if (getController().isAllLadybugGone() && !stopAtTheEnd) {
+                // if player is an ant or an aphid give it bonus score for time.
+                if (!(getController().getPlayerCreature() instanceof Ladybug)) {
+                    getController().addScore((int) hud.getGameTime());
                 }
+                getController().gameOver();
             }
         }
 

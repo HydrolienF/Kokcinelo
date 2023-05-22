@@ -31,7 +31,6 @@ public class Musics {
     private Musics() {}
 
     public static float getMusicsVolume() { return App.getOptionsMap().getFloat("musicVolume"); }
-    // public static Music getMusic() { return music; }
     /**
      * Set the current music.
      * 
@@ -125,7 +124,6 @@ public class Musics {
         play("Sun Is Not Falling cut");
         setLooping(true);
     }
-    // public static void playGameMusic() { play("Sun Is Not Falling"); }
 
     /**
      * Set a level music.
