@@ -533,6 +533,25 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open switch language table
      */
     private Image getSwitchLanguageButton(int size) {
+        Table langTable = createLangTable();
+        Image lang = getClickableLink("basic/language", null, size, false);
+        lang.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!langTable.remove()) {
+                    stage.addActor(langTable);
+                }
+            }
+        });
+        return lang;
+    }
+
+    /**
+     * {@summary Return a table with language switch label.}
+     * 
+     * @return a table with language switch label
+     */
+    private Table createLangTable() {
         Table langTable = new Table();
         Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
         int perRow = 1;
@@ -569,17 +588,8 @@ public class MenuScreen extends KScreen implements Screen {
             }
         }
         langTable.pack();
-        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);
-        Image lang = getClickableLink("basic/language", null, size, false);
-        lang.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!langTable.remove()) {
-                    stage.addActor(langTable);
-                }
-            }
-        });
-        return lang;
+        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2); // center
+        return langTable;
     }
 
     /**
