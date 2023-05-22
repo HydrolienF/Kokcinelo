@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -52,8 +53,8 @@ public class EndGameMenu extends KScreen implements Disposable {
         // Gdx.graphics.getHeight()/2);
         stage = new Stage(viewport, sb);
 
-        Texture t = new Texture(Gdx.files.internal("images/icons/basic/replay.png"));
-        replayButton = new Image(t);
+        replayButton = new Image(new Texture(Gdx.files.internal("images/icons/basic/replay.png")));
+        replayButton.setColor(Color.WHITE);
         replayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }

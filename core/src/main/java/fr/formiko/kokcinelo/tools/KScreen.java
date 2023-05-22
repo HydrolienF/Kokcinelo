@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +11,14 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * {@summary Screen class with fiew more funtion than the one provide by libGDX.}
@@ -123,4 +128,21 @@ public class KScreen {
      * @return A simple skin that menus use
      */
     public static Skin getDefautSkin() { return getDefautSkin(FONT_SIZE * getRacio()); }
+
+    /**
+     * {@summary Create a close window button.}
+     * 
+     * @return a close window button.
+     */
+    protected Actor getCloseButton(int w, int h) {
+        final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
+        closeButton.setColor(Color.RED);
+        closeButton.setSize(w / 40f, w / 40f);
+        closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { Controller.getController().exitApp(); }
+        });
+        return closeButton;
+    }
 }

@@ -291,9 +291,8 @@ public class GameScreen extends KScreen implements Screen {
         // game.dispose();
         // }
         if (Gdx.input.isKeyPressed(Input.Keys.F11)) {
-            Boolean fullScreen = Gdx.graphics.isFullscreen();
             Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-            if (fullScreen == true)
+            if (Gdx.graphics.isFullscreen())
                 Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
             else
                 Gdx.graphics.setFullscreenMode(currentMode);
@@ -367,8 +366,13 @@ public class GameScreen extends KScreen implements Screen {
      */
     public void stopAfterNextDraw() { stopAfterNextDrawBool = true; }
 
-    // create our game HUD for scores/timers/level info
-    private void createTextUI() { hud = new Hud(game.batch); }
+    /**
+     * Create our game HUD for scores/timers/level info &#38; close button.
+     */
+    private void createTextUI() {
+        hud = new Hud(game.batch);
+        addProcessor(hud.getStage());
+    }
     /**
      * {@summary Create an EndGameMenu as a HUD &#38; add the input listener to this.}
      */

@@ -454,7 +454,13 @@ public class Controller {
     public void removeEscapeMenu() { getGameScreen().removeEscapeMenu(); }
 
     public void exitApp() { dispose(); }
-    public void dispose() { app.dispose(); }
+    public void dispose() {
+        if (getScreen() instanceof GameScreen) { // if current sate is "in game".
+            removeEscapeMenu(); // null safe if escape menu is not created
+            gameOver();
+        }
+        app.dispose();
+    }
 
 
     // Files ----------------------------------------------------------------------------------------------

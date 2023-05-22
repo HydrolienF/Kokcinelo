@@ -305,22 +305,6 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
     /**
-     * {@summary Create a close window button.}
-     * 
-     * @return a close window button.
-     */
-    private Actor getCloseButton(int w, int h) {
-        final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
-        closeButton.setSize(w / 40f, w / 40f);
-        closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
-        closeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) { getController().exitApp(); }
-        });
-        return closeButton;
-    }
-
-    /**
      * {@summary Create a play button.}
      * 
      * @param pbWidth  Play button width.
@@ -330,6 +314,7 @@ public class MenuScreen extends KScreen implements Screen {
     private Actor getPlayButton(float pbWidth, float pbHeight) {
         final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(pbWidth, pbHeight);
+        playButton.setColor(Color.GREEN);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -575,8 +560,10 @@ public class MenuScreen extends KScreen implements Screen {
      * @return A web site link button
      */
     private Image getClickableLink(String imageName, String url, int buttonSize, boolean outlined) {
-        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize, outlined);
-        Image b = new Image(t);
+        Image b = new Image(resizeTexture("images/icons/" + imageName + ".png", buttonSize, outlined));
+        if (imageName.contains("basic")) {
+            b.setColor(Color.BLACK);
+        }
         if (url != null) {
             b.addListener(new ClickListener() {
                 @Override
