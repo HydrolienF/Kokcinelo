@@ -17,8 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * {@summary Screen class with fiew more funtion than the one provide by libGDX.}
@@ -119,12 +121,25 @@ public class KScreen {
         skin.add("emoji", labelStyleEmoji);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
 
+        skin.add("default-horizontal", getSliderStyle(fontSize));
+
         return skin;
     }
     /***
      * @return A simple skin that menus use
      */
     public static Skin getDefautSkin() { return getDefautSkin(FONT_SIZE * getRacio()); }
+
+    /**
+     * @return A slider style
+     */
+    private static SliderStyle getSliderStyle(float fontSize) {
+        int borderWidth = (int) (fontSize / 8f);
+        Drawable background = Shapes.getOveredRectangle((int) (100f * getRacioWidth()), (int) (fontSize / 2f), Color.GRAY, borderWidth,
+                Color.BLACK);
+        Drawable knob = Shapes.getRectangle((int) (fontSize / 3f), (int) (fontSize), Color.ORANGE);
+        return new SliderStyle(background, knob);
+    }
 
     /**
      * {@summary Create a close window button.}

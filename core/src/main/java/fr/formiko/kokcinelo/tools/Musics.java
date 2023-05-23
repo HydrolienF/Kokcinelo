@@ -30,7 +30,7 @@ public class Musics {
 
     private Musics() {}
 
-    public static float getMusicsVolume() { return App.getOptionsMap().getFloat("musicVolume"); }
+    public static float getMusicsVolume() { return App.getOptionsMap().getMusicVolume(); }
     /**
      * Set the current music.
      * 

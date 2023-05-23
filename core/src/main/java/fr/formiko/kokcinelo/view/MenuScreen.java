@@ -49,7 +49,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 1.3
+ * @version 2.3
  * @since 0.2
  */
 public class MenuScreen extends KScreen implements Screen {
@@ -69,6 +69,9 @@ public class MenuScreen extends KScreen implements Screen {
     private int fullVideoTime = 1000;
     private static final float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
+    private Actor playButton;
+    private Table langTable;
+    private Table optionsTable;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -194,7 +197,8 @@ public class MenuScreen extends KScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        centerTable.add(getPlayButton(centerTable.getHeight(), centerTable.getHeight())).expand();
+        playButton = getPlayButton(centerTable.getHeight(), centerTable.getHeight());
+        centerTable.add(playButton).expand();
 
         if (App.isWithCloseButton()) {
             stage.addActor(getCloseButton(w, h));
@@ -205,14 +209,14 @@ public class MenuScreen extends KScreen implements Screen {
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
         createLabels();
-        levelDescription.setSize(w / 3, topSpace);
+        levelDescription.setSize(w / 3f, topSpace);
         updateSelectedLevel(getLevelId());
 
         Label versionLabel = new Label(App.getCurrentVersion(), skinSmall);
         versionLabel.setPosition(w - versionLabel.getWidth(), 0);
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
-        btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 6, bottomLinksSpace);
         btable.setPosition(0, 0);
 
         stage.addActor(btable);
@@ -353,6 +357,8 @@ public class MenuScreen extends KScreen implements Screen {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     if (playingVideo) {
                         getController().endMenuScreen();
+                    } else if (optionsTable.isVisible() || langTable.isVisible()) {
+                        setCenterActorVisible(playButton);
                     } else {
                         startPlayingVideo();
                     }
@@ -513,14 +519,21 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open options menu
      */
     private Image getOptionsButton(int size) {
+        optionsTable = new OptionsTable(skin);
+        optionsTable.setVisible(false);
+        stage.addActor(optionsTable);
         Image options = getClickableLink("basic/settings", null, size, false);
         options.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO : add options
-                // if (!langTable.remove()) {
-                // stage.addActor(langTable);
+                // if (!optionsTable.remove()) {
+                // stage.addActor(optionsTable);
                 // }
+                if (optionsTable.isVisible()) {
+                    setCenterActorVisible(playButton);
+                } else {
+                    setCenterActorVisible(optionsTable);
+                }
             }
         });
         return options;
@@ -533,17 +546,31 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open switch language table
      */
     private Image getSwitchLanguageButton(int size) {
-        Table langTable = createLangTable();
+        langTable = createLangTable();
+        langTable.setVisible(false);
+        stage.addActor(langTable);
         Image lang = getClickableLink("basic/language", null, size, false);
         lang.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!langTable.remove()) {
-                    stage.addActor(langTable);
+                if (langTable.isVisible()) {
+                    setCenterActorVisible(playButton);
+                } else {
+                    setCenterActorVisible(langTable);
                 }
             }
         });
         return lang;
+    }
+    /**
+     * Set the only visible center actor.
+     * 
+     * @param actor the actor to set visible
+     */
+    private void setCenterActorVisible(Actor actor) {
+        langTable.setVisible(langTable.equals(actor));
+        optionsTable.setVisible(optionsTable.equals(actor));
+        playButton.setVisible(playButton.equals(actor));
     }
 
     /**
@@ -576,7 +603,7 @@ public class MenuScreen extends KScreen implements Screen {
             languageLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    langTable.remove();
+                    setCenterActorVisible(playButton);
                     App.setLanguage(languageCode);
                     updateSelectedLevel(getLevelId());
                 }

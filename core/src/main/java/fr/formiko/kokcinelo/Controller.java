@@ -6,12 +6,12 @@ import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
+import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
-import fr.formiko.kokcinelo.tools.OptionsMap;
 import fr.formiko.kokcinelo.view.Assets;
 import fr.formiko.kokcinelo.view.GameScreen;
 import fr.formiko.kokcinelo.view.MenuScreen;
@@ -548,13 +548,13 @@ public class Controller {
      * {@summary Load all options.}
      * It create it if it doesn't exist.
      */
-    public static OptionsMap loadOptions() {
-        OptionsMap map;
+    public static KOptionsMap loadOptions() {
+        KOptionsMap map;
         try {
-            map = new OptionsMap(Files.loadFromFile("options.yml", false));
+            map = new KOptionsMap(Files.loadFromFile("options.yml", false));
         } catch (Exception e) {
             App.log(1, "FILES", "Options file not found " + e);
-            map = new OptionsMap();
+            map = new KOptionsMap();
             map.put("musicVolume", "1.0");
             map.put("soundVolume", "1.0");
             map.put("displayMode", "0");

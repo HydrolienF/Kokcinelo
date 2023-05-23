@@ -1,8 +1,8 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
-import fr.formiko.kokcinelo.tools.OptionsMap;
 import fr.formiko.kokcinelo.view.TraillerImage;
 import fr.formiko.usual.color;// HTML INCOMPATIBLE
 import fr.formiko.usual.g;
@@ -35,7 +35,7 @@ public class App extends Game {
     private static Map<String, Sound> soundMap = new HashMap<>();
 
     private static Map<String, String> data;
-    private static OptionsMap options;
+    private static KOptionsMap options;
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -68,7 +68,7 @@ public class App extends Game {
     public static boolean isWithCloseButton() { return withCloseButton; }
     public static void setWithCloseButton(boolean withCloseButton) { App.withCloseButton = withCloseButton; }
     public static Map<String, String> getDataMap() { return data; }
-    public static OptionsMap getOptionsMap() { return options; }
+    public static KOptionsMap getOptionsMap() { return options; }
     public static String getLanguage() { return data.get("language"); }
     public static void saveSizeInOptions(int width, int height) {
         options.putInt("screenWidth", width);
@@ -189,7 +189,7 @@ public class App extends Game {
      */
     public static void playSound(String fileName, float volume, float pan) {
         soundMap.computeIfAbsent(fileName, k -> Gdx.audio.newSound(Gdx.files.internal("sounds/" + k + ".mp3")));
-        soundMap.get(fileName).play(volume * getOptionsMap().getFloat("soundVolume"), 1f, pan);
+        soundMap.get(fileName).play(volume * getOptionsMap().getSoundVolume(), 1f, pan);
     }
     /**
      * {@summary Play the given sound with default volume &#38; default pan.}
