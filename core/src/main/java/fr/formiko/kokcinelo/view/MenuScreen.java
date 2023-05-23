@@ -15,6 +15,7 @@ import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
+import fr.formiko.kokcinelo.view.OptionsTable.OptionsTablesTypes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -70,8 +70,7 @@ public class MenuScreen extends KScreen implements Screen {
     private static final float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
     private Actor playButton;
-    private Table langTable;
-    private Table optionsTable;
+    private List<OptionsTable> optionsTables = new ArrayList<>();
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -216,7 +215,7 @@ public class MenuScreen extends KScreen implements Screen {
         versionLabel.setPosition(w - versionLabel.getWidth(), 0);
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
-        btable.setSize(bottomLinksSpace * 6, bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 7, bottomLinksSpace);
         btable.setPosition(0, 0);
 
         stage.addActor(btable);
@@ -357,8 +356,8 @@ public class MenuScreen extends KScreen implements Screen {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     if (playingVideo) {
                         getController().endMenuScreen();
-                    } else if (optionsTable.isVisible() || langTable.isVisible()) {
-                        setCenterActorVisible(playButton);
+                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) {
+                        setCenterActorVisible();
                     } else {
                         startPlayingVideo();
                     }
@@ -507,8 +506,9 @@ public class MenuScreen extends KScreen implements Screen {
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
-        table.add(getSwitchLanguageButton(size));
-        table.add(getOptionsButton(size));
+        table.add(getOptionsButton(size, OptionsTablesTypes.LANGUAGES, "language"));
+        table.add(getOptionsButton(size, OptionsTablesTypes.AUDIO, "music"));
+        table.add(getOptionsButton(size, OptionsTablesTypes.GRAPHICS, "screen"));
         return table;
     }
 
@@ -518,19 +518,17 @@ public class MenuScreen extends KScreen implements Screen {
      * @param size the size of the image
      * @return a clickable image that open options menu
      */
-    private Image getOptionsButton(int size) {
-        optionsTable = new OptionsTable(skin);
+    private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
+        OptionsTable optionsTable = new OptionsTable(this, skin, type);
         optionsTable.setVisible(false);
         stage.addActor(optionsTable);
-        Image options = getClickableLink("basic/settings", null, size, false);
+        optionsTables.add(optionsTable);
+        Image options = getClickableLink("basic/" + iconName, null, size, false);
         options.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // if (!optionsTable.remove()) {
-                // stage.addActor(optionsTable);
-                // }
                 if (optionsTable.isVisible()) {
-                    setCenterActorVisible(playButton);
+                    setCenterActorVisible();
                 } else {
                     setCenterActorVisible(optionsTable);
                 }
@@ -539,85 +537,19 @@ public class MenuScreen extends KScreen implements Screen {
         return options;
     }
 
-    /**
-     * {@summary Return a clickable image that open switch language table.}
-     * 
-     * @param size the size of the image
-     * @return a clickable image that open switch language table
-     */
-    private Image getSwitchLanguageButton(int size) {
-        langTable = createLangTable();
-        langTable.setVisible(false);
-        stage.addActor(langTable);
-        Image lang = getClickableLink("basic/language", null, size, false);
-        lang.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (langTable.isVisible()) {
-                    setCenterActorVisible(playButton);
-                } else {
-                    setCenterActorVisible(langTable);
-                }
-            }
-        });
-        return lang;
-    }
+
     /**
      * Set the only visible center actor.
      * 
      * @param actor the actor to set visible
      */
-    private void setCenterActorVisible(Actor actor) {
-        langTable.setVisible(langTable.equals(actor));
-        optionsTable.setVisible(optionsTable.equals(actor));
+    void setCenterActorVisible(Actor actor) {
+        for (OptionsTable optionsTable : optionsTables) {
+            optionsTable.setVisible(optionsTable.equals(actor));
+        }
         playButton.setVisible(playButton.equals(actor));
     }
-
-    /**
-     * {@summary Return a table with language switch label.}
-     * 
-     * @return a table with language switch label
-     */
-    private Table createLangTable() {
-        Table langTable = new Table();
-        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
-        int perRow = 1;
-        if (App.SUPPORTED_LANGUAGES.size() > 10) {
-            perRow = 4;
-        }
-        int k = 0;
-        // for each language create a clickable label to switch to it language
-        for (String languageCode : App.SUPPORTED_LANGUAGES) {
-            String languageName = App.LANGUAGES_NAMES.get(languageCode);
-            Integer percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
-            if (percent == null) {
-                continue;
-            }
-            if (percent != 100) {
-                languageName += " (" + percent + "%)";
-            }
-            LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
-            style.background = ls.background;
-            skin.add("s" + percent, style);
-            Label languageLabel = new Label(languageName, skin, "s" + percent);
-            languageLabel.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    setCenterActorVisible(playButton);
-                    App.setLanguage(languageCode);
-                    updateSelectedLevel(getLevelId());
-                }
-            });
-            langTable.add(languageLabel);
-            k++;
-            if (k % perRow == 0) {
-                langTable.row();
-            }
-        }
-        langTable.pack();
-        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2); // center
-        return langTable;
-    }
+    void setCenterActorVisible() { setCenterActorVisible(playButton); }
 
     /**
      * {@summary Return a web site link button.}
