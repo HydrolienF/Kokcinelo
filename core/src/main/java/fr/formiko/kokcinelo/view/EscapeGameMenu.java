@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.g;
 import java.util.List;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,7 +32,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class EscapeGameMenu implements Disposable {
     private Stage stage;
     private static Skin skin;
-    private static List<String> keyList;
+    private static final List<String> keyList = List.of("restart", "endPartie", "backToMainMenu", "leaveKokcinelo", "resume");
 
     // CONSTRUCTORS ----------------------------------------------------------------
     /**
@@ -52,11 +53,31 @@ public class EscapeGameMenu implements Disposable {
 
         if (skin == null) {
             skin = MenuScreen.getDefautSkin();
-            keyList = List.of("restart", "endPartie", "backToMainMenu", "leaveKokcinelo", "resume");
             for (String key : keyList) {
                 ImageTextButtonStyle itbs = new ImageTextButtonStyle();
                 itbs.font = skin.getFont("default");
-                itbs.imageUp = new TextureRegionDrawable(new Texture(Gdx.files.internal("images/icons/basic/" + key + ".png")));
+                switch (key) {
+                    case "restart":
+                        itbs.fontColor = Color.YELLOW;
+                        break;
+                    case "endPartie":
+                        itbs.fontColor = new Color(1f, 0.8f, 0f, 1);
+                        break;
+                    case "backToMainMenu":
+                        itbs.fontColor = new Color(1f, 0.5f, 0f, 1);
+                        break;
+                    case "leaveKokcinelo":
+                        itbs.fontColor = Color.RED;
+                        break;
+                    case "resume":
+                        itbs.fontColor = Color.GREEN;
+                        break;
+                    default:
+                        itbs.fontColor = Color.WHITE;
+                        break;
+                }
+                itbs.imageUp = new TextureRegionDrawable(new Texture(Gdx.files.internal("images/icons/basic/" + key + ".png")))
+                        .tint(itbs.fontColor);
                 skin.add(key, itbs);
             }
         }
@@ -107,11 +128,7 @@ public class EscapeGameMenu implements Disposable {
                          * Leave game.
                          */
                         @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            Controller.getController().removeEscapeMenu();
-                            Controller.getController().gameOver();
-                            Controller.getController().dispose();
-                        }
+                        public void clicked(InputEvent event, float x, float y) { Controller.getController().exitApp(); }
                     });
                     break;
                 case "resume":

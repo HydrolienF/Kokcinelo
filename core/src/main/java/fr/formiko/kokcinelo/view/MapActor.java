@@ -4,10 +4,8 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Math;
 import fr.formiko.kokcinelo.tools.Shapes;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -186,7 +184,7 @@ public class MapActor extends Actor {
             for (int j = 0; j < substones; j++) {
                 pixmap.setColor(getRandomGrey());
                 pixmap.fillCircle((int) (x + ((random() - 0.5) * 2.0 * radius)), (int) (y + ((random() - 0.5) * radius)),
-                        (int) ((double) radius / ((random() * 2) + 1.5)));
+                        (int) (radius / ((random() * 2) + 1.5)));
             }
         }
     }
@@ -236,12 +234,12 @@ public class MapActor extends Actor {
     //@formatter:off
     private void drawStickBranch(Pixmap pixmap, int width, int height, float x, float y, int segments, int subsegments, float rotation, float length, float thikness) {
     //@formatter:on
-        float thiknessModifier = (float) (random() * 0.2) + 0.6f;
-        float lengthX = (float) (length * MathUtils.cos(rotation * MathUtils.degreesToRadians));
-        float lengthY = (float) (length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians));
+        float thiknessModifier = (random() * 0.2f) + 0.6f;
+        float lengthX = length * MathUtils.cos(rotation * MathUtils.degreesToRadians);
+        float lengthY = length * MathUtils.sin((-1 * rotation) * MathUtils.degreesToRadians);
         float rotation2 = rotation - 90;
-        float thiknessX = (float) (thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians));
-        float thiknessY = (float) (thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians));
+        float thiknessX = thikness * MathUtils.cos(rotation2 * MathUtils.degreesToRadians);
+        float thiknessY = thikness * MathUtils.sin((-1 * rotation2) * MathUtils.degreesToRadians);
 
         int px = (int) Math.between(0, getWidth(), x);
         int pxl = (int) Math.between(0, getWidth(), x + lengthX);
@@ -256,8 +254,8 @@ public class MapActor extends Actor {
         pixmap.fillTriangle(px, py, pxl, pyl, pxlt, pylt);
         pixmap.fillTriangle(pxt, pyt, pxl, pyl, pxlt, pylt);
         if (segments > 1) {
-            drawStickBranch(pixmap, width, height, x + lengthX, y + lengthY, segments - 1, subsegments,
-                    rotation + (float) (random() * 40 - 20), length * (random() * 1.3f), thikness * thiknessModifier);
+            drawStickBranch(pixmap, width, height, x + lengthX, y + lengthY, segments - 1, subsegments, rotation + (random() * 40) - 20,
+                    length * (random() * 1.3f), thikness * thiknessModifier);
             for (int i = 0; i < subsegments; i++) {
                 float modRotation = 50f + random() * 30f;
                 if (random() > 0.5) {

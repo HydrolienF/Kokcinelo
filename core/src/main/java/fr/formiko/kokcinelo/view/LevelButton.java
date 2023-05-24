@@ -86,6 +86,7 @@ class LevelButton extends Button {
             /**
              * React to user click by set selected to true if button can be selected.
              */
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!isDisabled()) {
                     ms.updateSelectedLevel(getId());

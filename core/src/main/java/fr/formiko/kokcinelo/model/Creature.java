@@ -46,7 +46,7 @@ public abstract class Creature extends MapItem {
      * 
      * @param textureName name of the texture to use from assets/images/
      */
-    public Creature(String textureName) {
+    protected Creature(String textureName) {
         super(textureName);
         wantedRotation = 0f;
         defaultMoveFrontSpeed = 0.6f;
@@ -221,7 +221,7 @@ public abstract class Creature extends MapItem {
                 angles.add(vAngle.angleDeg());
             }
             // Also avoid wall by conciderning walls as enemies.
-            if (forbiddenAngles.size() > 0) {
+            if (!forbiddenAngles.isEmpty()) {
                 angles.add(forbiddenAngles.get(0));
                 if (forbiddenAngles.size() > 1) {
                     float a0 = forbiddenAngles.get(0);
@@ -238,7 +238,7 @@ public abstract class Creature extends MapItem {
                 }
             }
 
-            angles.sort((a1, a2) -> Float.compare(a1, a2));
+            angles.sort(Float::compare);
 
             float maxAngleDif = 0;
             float direction = 0;
@@ -284,7 +284,7 @@ public abstract class Creature extends MapItem {
      * @return the seeable creatures
      */
     public Collection<Creature> seeableCreatures(Collection<? extends Creature> coll) {
-        Set<Creature> set = new HashSet<Creature>();
+        Set<Creature> set = new HashSet<>();
         for (Creature c : coll) {
             if (isInRadius(c, c.getHitRadius() + getVisionRadius())) {
                 set.add(c);

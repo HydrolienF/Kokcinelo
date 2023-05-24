@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +11,16 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * {@summary Screen class with fiew more funtion than the one provide by libGDX.}
@@ -26,7 +33,6 @@ public class KScreen {
     protected int width;
     protected int height;
     protected List<Integer> times;
-    private static final boolean backgroundLabelColored = true;
     public static final int FONT_SIZE = 28;
     protected static Skin skin;
     protected static Skin skinSmall;
@@ -107,15 +113,15 @@ public class KScreen {
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
         LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
         // set background
-        if (backgroundLabelColored) {
-            labelStyle.background = Shapes.getWhiteBackground();
-            labelStyleEmoji.background = Shapes.getWhiteBackground();
-        }
+        labelStyle.background = Shapes.getWhiteBackground();
+        labelStyleEmoji.background = Shapes.getWhiteBackground();
         labelStyle.fontColor = Color.BLACK;
 
         skin.add("default", labelStyle);
         skin.add("emoji", labelStyleEmoji);
         // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
+
+        skin.add("default-horizontal", getSliderStyle(fontSize));
 
         return skin;
     }
@@ -123,4 +129,32 @@ public class KScreen {
      * @return A simple skin that menus use
      */
     public static Skin getDefautSkin() { return getDefautSkin(FONT_SIZE * getRacio()); }
+
+    /**
+     * @return A slider style
+     */
+    private static SliderStyle getSliderStyle(float fontSize) {
+        int borderWidth = (int) (fontSize / 8f);
+        Drawable background = Shapes.getOveredRectangle((int) (100f * getRacioWidth()), (int) (fontSize / 2f), Color.GRAY, borderWidth,
+                Color.BLACK);
+        Drawable knob = Shapes.getRectangle((int) (fontSize / 3f), (int) (fontSize), Color.ORANGE);
+        return new SliderStyle(background, knob);
+    }
+
+    /**
+     * {@summary Create a close window button.}
+     * 
+     * @return a close window button.
+     */
+    protected Actor getCloseButton(int w, int h) {
+        final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
+        closeButton.setColor(Color.RED);
+        closeButton.setSize(w / 40f, w / 40f);
+        closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { Controller.getController().exitApp(); }
+        });
+        return closeButton;
+    }
 }

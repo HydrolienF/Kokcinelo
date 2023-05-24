@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.TraillerImage;
@@ -34,6 +35,7 @@ public class App extends Game {
     private static Map<String, Sound> soundMap = new HashMap<>();
 
     private static Map<String, String> data;
+    private static KOptionsMap options;
 
     private String[] args;
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // HTML INCOMPATIBLE
@@ -66,7 +68,12 @@ public class App extends Game {
     public static boolean isWithCloseButton() { return withCloseButton; }
     public static void setWithCloseButton(boolean withCloseButton) { App.withCloseButton = withCloseButton; }
     public static Map<String, String> getDataMap() { return data; }
+    public static KOptionsMap getOptionsMap() { return options; }
     public static String getLanguage() { return data.get("language"); }
+    public static void saveSizeInOptions(int width, int height) {
+        options.putInt("screenWidth", width);
+        options.putInt("screenHeigth", height);
+    }
     /**
      * {@summary Set language &#38; update translation list.}
      * 
@@ -113,6 +120,7 @@ public class App extends Game {
 
         loadLanguagesData();
         data = Controller.getController().loadData();
+        options = Controller.loadOptions();
         updateLanguage();
         // // full screen
         // try {
@@ -163,6 +171,7 @@ public class App extends Game {
     public void dispose() {
         // Save played time etc
         Controller.getController().saveData();
+        Controller.getController().saveOptions();
         App.log(1, "Normal close of the app.");
         Gdx.app.exit();
     }
@@ -179,10 +188,8 @@ public class App extends Game {
      * @param pan      left rigth ballance of the sound file in [-1, 1]
      */
     public static void playSound(String fileName, float volume, float pan) {
-        if (soundMap.get(fileName) == null) {
-            soundMap.put(fileName, Gdx.audio.newSound(Gdx.files.internal("sounds/" + fileName + ".mp3")));
-        }
-        soundMap.get(fileName).play(volume, 1f, pan);
+        soundMap.computeIfAbsent(fileName, k -> Gdx.audio.newSound(Gdx.files.internal("sounds/" + k + ".mp3")));
+        soundMap.get(fileName).play(volume * getOptionsMap().getSoundVolume(), 1f, pan);
     }
     /**
      * {@summary Play the given sound with default volume &#38; default pan.}
@@ -404,7 +411,7 @@ public class App extends Game {
      * @return The list of supported languages
      */
     private static void loadListOfSupportedLanguages() {
-        SUPPORTED_LANGUAGES = new ArrayList<String>();
+        SUPPORTED_LANGUAGES = new ArrayList<>();
         Map<String, String> tempMap = Files.loadMapFromCSVFile("languages/languagesPercents.csv", true);
         // It may be useful for performance issues, some day, to load languages percents from a single file include in packaged jar
         if (tempMap.isEmpty()) {
@@ -424,7 +431,7 @@ public class App extends Game {
      * {@summary Calculate languages percentages from all translations maps.}
      */
     private static void calculateLanguagesPercentages() {
-        LANGUAGES_PERCENTAGES = new HashMap<String, Integer>();
+        LANGUAGES_PERCENTAGES = new HashMap<>();
         int defaultLanguageKeys = Files.getNumberOfText("en");
         for (FileHandle subFile : Files.listSubFilesRecusvively("languages/")) {
             String fileName = subFile.name();

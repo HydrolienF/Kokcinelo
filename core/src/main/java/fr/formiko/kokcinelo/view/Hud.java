@@ -7,6 +7,7 @@ import fr.formiko.kokcinelo.tools.KScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -53,18 +54,26 @@ public class Hud extends KScreen implements Disposable {
         scoreLabel = new Label("", skin);
         insectCountLabel = new Label("", skin, "emoji");
 
+        Actor closeButton = getCloseButton(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if (App.isWithCloseButton()) {
+            stage.addActor(closeButton);
+        }
+
         // define a table used to organize our hud's labels
         Table table = new Table();
         // Top-Align table
         table.top();
         // make the table fill the entire stage
-        table.setFillParent(true);
+        table.setWidth(Gdx.graphics.getWidth() - closeButton.getWidth());
+        table.setHeight(Gdx.graphics.getHeight());
+        // table.setFillParent(true);
 
         // table.add(timeLabel).expandX();//.padTop(10);
         // table.row();
         table.add(scoreLabel).expandX();
         table.add(insectCountLabel).expandX();
         table.add(countdownLabel).expandX();
+
 
         stage.addActor(table);
         App.log(0, "constructor", "new Hud: " + toString());

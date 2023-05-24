@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo;
 
+import fr.formiko.kokcinelo.tools.OptionsMap;
 import fr.formiko.usual.Os;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 
@@ -21,8 +23,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
  * @since 0.1
  */
 public class DesktopLauncher {
-    private static int displayMode = 0;
-
     public static void main(String[] args) {
         if (args.length > 0 && args[0].replace("-", "").equalsIgnoreCase("version")) {
             try {
@@ -35,11 +35,19 @@ public class DesktopLauncher {
                 System.out.println("Fail to get version in DesktopLauncher.");
             }
         }
+
+        Gdx.files = new Lwjgl3Files();
+        OptionsMap options = Controller.loadOptions();
+        App.log(1, "options : " + options);
+        int displayMode = options.getInt("displayMode");
+        int maxFps = options.getInt("maxFps");
+
         if (Os.getOs().isLinux()) { // TODO to remove
             displayMode = 0;
         }
+
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setForegroundFPS(0); // 0 = no limite
+        config.setForegroundFPS(maxFps); // 0 = no limite
         switch (displayMode) {
             default:
             case 0: // Real fullscreen
@@ -53,8 +61,15 @@ public class DesktopLauncher {
                 App.setWithCloseButton(true);
                 break;
             case 2: // windowed
-                config.setMaximized(true);
-                break;
+                int screenWidth = options.getInt("screenWidth");
+                int screenHeigth = options.getInt("screenHeigth");
+                if (screenWidth > 0 && screenHeigth > 0) {
+                    App.log(1, "Start on windowed mode : " + screenWidth + "x" + screenHeigth + ".");
+                    config.setWindowedMode(screenWidth, screenHeigth);
+                    break;
+                } else {
+                    config.setMaximized(true);
+                }
         }
         // config.setResizable(false);
         config.useVsync(true);
@@ -64,6 +79,7 @@ public class DesktopLauncher {
         new Lwjgl3Application(game, config);
     }
 }
+
 
 class DesktopNative implements Native {
     @Override

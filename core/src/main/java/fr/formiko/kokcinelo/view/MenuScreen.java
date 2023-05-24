@@ -15,9 +15,11 @@ import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.KTexture;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
+import fr.formiko.kokcinelo.view.OptionsTable.OptionsTablesTypes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -34,7 +36,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -48,7 +49,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * 
  * @see com.badlogic.gdx.Screen
  * @author Hydrolien
- * @version 1.3
+ * @version 2.3
  * @since 0.2
  */
 public class MenuScreen extends KScreen implements Screen {
@@ -68,6 +69,8 @@ public class MenuScreen extends KScreen implements Screen {
     private int fullVideoTime = 1000;
     private static final float BACKGROUND_SPEED = 50;
     private OrthographicCamera cameraBc;
+    private Actor playButton;
+    private List<OptionsTable> optionsTables = new ArrayList<>();
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -177,6 +180,7 @@ public class MenuScreen extends KScreen implements Screen {
     public void resize(int width, int height) {
         if (!needResize(width, height))
             return;
+        App.saveSizeInOptions(width, height);
 
         stage.clear();
         // Gdx.graphics.getWidth() may be outdated here.
@@ -192,7 +196,8 @@ public class MenuScreen extends KScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        centerTable.add(getPlayButton(centerTable.getHeight(), centerTable.getHeight())).expand();
+        playButton = getPlayButton(centerTable.getHeight(), centerTable.getHeight());
+        centerTable.add(playButton).expand();
 
         if (App.isWithCloseButton()) {
             stage.addActor(getCloseButton(w, h));
@@ -203,14 +208,14 @@ public class MenuScreen extends KScreen implements Screen {
         stage.addActor(getLevelButtonTable(w, bottomSpace)); // need to be done before use getScoresText()
 
         createLabels();
-        levelDescription.setSize(w / 3, topSpace);
+        levelDescription.setSize(w / 3f, topSpace);
         updateSelectedLevel(getLevelId());
 
         Label versionLabel = new Label(App.getCurrentVersion(), skinSmall);
         versionLabel.setPosition(w - versionLabel.getWidth(), 0);
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
-        btable.setSize(bottomLinksSpace * 5, bottomLinksSpace);
+        btable.setSize(bottomLinksSpace * 7, bottomLinksSpace);
         btable.setPosition(0, 0);
 
         stage.addActor(btable);
@@ -232,30 +237,26 @@ public class MenuScreen extends KScreen implements Screen {
      * It is used to display them walking or flying in the menu.
      */
     private static void createCreatureImages(int w, int h, int topSpace) {
+        // final Map<Class<? extends Creature>, Vector2> imageSize = Map.of(Ant.class, new Vector2(3600, 4800));
+        final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
+                LadybugSideView.class, "K", Aphid.class, "A");
         creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
-            boolean needToRotate = false;
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | NoSuchMethodException | SecurityException e) {
-                // TODO there is an error with .jar
                 App.log(3, "MenuScreen", "Error while creating creature: " + e);
                 continue;
             }
             MapItemActor cActor = c.getActor();
+            cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
             int imageWidth;
             int imageHeigth;
             if (c instanceof Ant) {
-                needToRotate = true;
                 imageWidth = 3600;
                 imageHeigth = 4800;
-                if (c instanceof RedAnt) {
-                    cActor.setName("F2");
-                } else if (c instanceof GreenAnt) {
-                    cActor.setName("F3");
-                }
             } else if (c instanceof Ladybug) {
                 if (c instanceof LadybugSideView) {
                     imageWidth = 1484;
@@ -264,18 +265,16 @@ public class MenuScreen extends KScreen implements Screen {
                     imageWidth = 738;
                     imageHeigth = 536;
                 }
-                cActor.setName("K");
-            } else if (c instanceof Aphid) {
-                // TODO set imageWidth & imageHeigth
-                imageWidth = 1000;
-                imageHeigth = 1000;
-                cActor.setName("A");
+                // } else if (c instanceof Aphid) {
+                // // TODO set imageWidth & imageHeigth
+                // imageWidth = 1000;
+                // imageHeigth = 1000;
             } else {
                 imageWidth = 1000;
                 imageHeigth = 1000;
             }
             cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
-            if (needToRotate) {
+            if (!(c instanceof LadybugSideView)) { // Need to rotate
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
             }
@@ -304,22 +303,6 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
     /**
-     * {@summary Create a close window button.}
-     * 
-     * @return a close window button.
-     */
-    private Actor getCloseButton(int w, int h) {
-        final Image closeButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/endPartie.png")));
-        closeButton.setSize(w / 40f, w / 40f);
-        closeButton.setPosition(w - closeButton.getWidth() + 1, h - closeButton.getHeight() + 1);
-        closeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) { getController().exitApp(); }
-        });
-        return closeButton;
-    }
-
-    /**
      * {@summary Create a play button.}
      * 
      * @param pbWidth  Play button width.
@@ -329,6 +312,7 @@ public class MenuScreen extends KScreen implements Screen {
     private Actor getPlayButton(float pbWidth, float pbHeight) {
         final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(pbWidth, pbHeight);
+        playButton.setColor(Color.GREEN);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -372,6 +356,8 @@ public class MenuScreen extends KScreen implements Screen {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     if (playingVideo) {
                         getController().endMenuScreen();
+                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) {
+                        setCenterActorVisible();
                     } else {
                         startPlayingVideo();
                     }
@@ -418,22 +404,22 @@ public class MenuScreen extends KScreen implements Screen {
 
         Table levelButtonTable = new LevelButtonTable(w / 200);
         levelButtonTable.setBounds(0, 0, w, h);
-        int buttonRadius = (int) levelButtonTable.getWidth() / 24;
-        int buttonSize = buttonRadius * 2;
+        float buttonRadius = Math.min(levelButtonTable.getWidth() / 20f, levelButtonTable.getHeight() / 7f);
+        float buttonSize = buttonRadius * 2;
         int len = 5;
 
-        int xFreeSpace = (int) levelButtonTable.getWidth() - (len * buttonSize);
-        int xSpaceBetweenButton = xFreeSpace / (len + 1);
+        float xFreeSpace = levelButtonTable.getWidth() - (len * buttonSize);
+        float xSpaceBetweenButton = xFreeSpace / (len + 1);
 
-        int yFreeSpace = (int) levelButtonTable.getHeight() - (3 * buttonSize);
-        int ySpaceBetweenButton = yFreeSpace / len;
+        float yFreeSpace = levelButtonTable.getHeight() - (3 * buttonSize);
+        float ySpaceBetweenButton = yFreeSpace / len;
 
         App.log(1, "Level.getLevelList() " + Level.getLevelList());
 
         LevelButton.resetUnlockedLevels();
         for (Level level : Level.getLevelList().stream().sorted((l1, l2) -> l2.getDrawPriority() - l1.getDrawPriority())
                 .collect(Collectors.toList())) {
-            LevelButton levelButton = new LevelButton(buttonRadius, skin, level.getId(), this);
+            LevelButton levelButton = new LevelButton((int) buttonRadius, skin, level.getId(), this);
             float y = 0;
             switch (level.getLetter()) {
                 case "K":
@@ -445,8 +431,11 @@ public class MenuScreen extends KScreen implements Screen {
                 case "A":
                     y = levelButtonTable.getHeight() - ySpaceBetweenButton - buttonSize;
                     break;
+                default:
+                    App.log(2, "Level " + level.getId() + " has no letter that match with a row");
+                    break;
             }
-            levelButton.setPosition(xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), y);
+            levelButton.setPosition((int) xSpaceBetweenButton + (xSpaceBetweenButton + buttonSize) * (level.getNumber() - 1), (int) y);
             if (level.getNumber() == 1) {
                 levelButton.setChecked(true);
             }
@@ -513,60 +502,54 @@ public class MenuScreen extends KScreen implements Screen {
     private Table getLinkButtonsTable(int size) {
         Table table = new Table();
         table.add(getClickableLink("basic/info", "https://github.com/HydrolienF/Kokcinelo#team", size, false));
-
         table.add(getClickableLink("homeWebSiteLink", "https://formiko.fr/kokcinelo", size, true));
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
-        // table.add(getClickableLink("reportBugLink", "https://formiko.fr/kokcinelo", size));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
-        Table langTable = new Table();
-        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
-        int perRow = 1;
-        if (App.SUPPORTED_LANGUAGES.size() > 10) {
-            perRow = 4;
-        }
-        int k = 0;
-        for (String languageCode : App.SUPPORTED_LANGUAGES) {
-            String languageName = App.LANGUAGES_NAMES.get(languageCode);
-            Integer percent = App.LANGUAGES_PERCENTAGES.get(languageCode);
-            if (percent == null) {
-                continue;
-            }
-            if (percent != 100) {
-                languageName += " (" + percent + "%)";
-            }
-            LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
-            style.background = ls.background;
-            skin.add("s" + percent, style);
-            Label languageLabel = new Label(languageName, skin, "s" + percent);
-            languageLabel.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    langTable.remove();
-                    App.setLanguage(languageCode);
-                    updateSelectedLevel(getLevelId());
-                }
-            });
-            langTable.add(languageLabel);
-            k++;
-            if (k % perRow == 0) {
-                langTable.row();
-            }
-        }
-        langTable.pack();
-        langTable.setPosition((stage.getWidth() - langTable.getWidth()) / 2, (stage.getHeight() - langTable.getHeight()) / 2);
-        Image flag = getClickableLink("basic/language", null, size, false);
-        flag.addListener(new ClickListener() {
+        table.add(getOptionsButton(size, OptionsTablesTypes.LANGUAGES, "language"));
+        table.add(getOptionsButton(size, OptionsTablesTypes.AUDIO, "music"));
+        table.add(getOptionsButton(size, OptionsTablesTypes.GRAPHICS, "screen"));
+        return table;
+    }
+
+    /**
+     * {@summary Return a clickable image that open options menu.}
+     * 
+     * @param size the size of the image
+     * @return a clickable image that open options menu
+     */
+    private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
+        OptionsTable optionsTable = new OptionsTable(this, skin, type);
+        optionsTable.setVisible(false);
+        stage.addActor(optionsTable);
+        optionsTables.add(optionsTable);
+        Image options = getClickableLink("basic/" + iconName, null, size, false);
+        options.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!langTable.remove()) {
-                    stage.addActor(langTable);
+                if (optionsTable.isVisible()) {
+                    setCenterActorVisible();
+                } else {
+                    setCenterActorVisible(optionsTable);
                 }
             }
         });
-        table.add(flag);
-        return table;
+        return options;
     }
+
+
+    /**
+     * Set the only visible center actor.
+     * 
+     * @param actor the actor to set visible
+     */
+    void setCenterActorVisible(Actor actor) {
+        for (OptionsTable optionsTable : optionsTables) {
+            optionsTable.setVisible(optionsTable.equals(actor));
+        }
+        playButton.setVisible(playButton.equals(actor));
+    }
+    void setCenterActorVisible() { setCenterActorVisible(playButton); }
 
     /**
      * {@summary Return a web site link button.}
@@ -574,8 +557,10 @@ public class MenuScreen extends KScreen implements Screen {
      * @return A web site link button
      */
     private Image getClickableLink(String imageName, String url, int buttonSize, boolean outlined) {
-        Texture t = resizeTexture("images/icons/" + imageName + ".png", buttonSize, outlined);
-        Image b = new Image(t);
+        Image b = new Image(resizeTexture("images/icons/" + imageName + ".png", buttonSize, outlined));
+        if (imageName.contains("basic")) {
+            b.setColor(Color.BLACK);
+        }
         if (url != null) {
             b.addListener(new ClickListener() {
                 @Override

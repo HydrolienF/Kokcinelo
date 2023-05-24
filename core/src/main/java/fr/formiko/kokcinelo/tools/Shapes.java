@@ -2,10 +2,8 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.model.Creature;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -36,6 +33,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  */
 public class Shapes {
     private static ShapeRenderer shapeRenderer;
+    private static ShapeDrawer shapeDrawer;
     private static @Null Texture outCircleTexture;
 
     private Shapes() {}
@@ -46,6 +44,14 @@ public class Shapes {
             shapeRenderer.setAutoShapeType(true);
         }
         return shapeRenderer;
+    }
+    public static ShapeDrawer getShapeDrawer() {
+        SpriteBatch batch = new SpriteBatch();
+        batch.begin();
+        if (shapeDrawer == null) {
+            shapeDrawer = createShapeDrawer(batch);
+        }
+        return shapeDrawer;
     }
     /**
      * {@summary Draw a gradiant over a pixmap.}
@@ -430,5 +436,22 @@ public class Shapes {
      * @return a white background
      */
     public static Drawable getWhiteBackground() { return getWhiteBackground(0.3f); }
+
+    public static Drawable getOveredRectangle(int width, int height, Color backgroundColor, int borderWidth, @Null Color borderColor) {
+        Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
+        pixmap.setColor(backgroundColor);
+        pixmap.fill();
+        if (borderColor != null) {
+            pixmap.setColor(borderColor);
+            pixmap.fillRectangle(0, 0, borderWidth, height);
+            pixmap.fillRectangle(0, 0, width, borderWidth);
+            pixmap.fillRectangle(borderWidth, height - borderWidth, width, height);
+            pixmap.fillRectangle(width - borderWidth, borderWidth, width, height);
+        }
+        Drawable drawable = new Image(new Texture(pixmap)).getDrawable();
+        pixmap.dispose();
+        return drawable;
+    }
+    public static Drawable getRectangle(int width, int height, Color color) { return getOveredRectangle(width, height, color, 1, null); }
 
 }

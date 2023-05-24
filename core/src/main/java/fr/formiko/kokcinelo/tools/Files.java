@@ -63,7 +63,7 @@ public class Files {
             return map;
         } catch (Exception e) {
             App.log(2, "", "fail to load translated map " + e);
-            return new HashMap<String, String>();
+            return new HashMap<>();
         }
     }
     /**
@@ -94,6 +94,7 @@ public class Files {
      * Load a map from a file.
      * 
      * @param fileName name of the file to load data from
+     * @param internal if the file is internal or not
      * @return the data loaded from file
      */
     public static Map<String, String> loadFromFile(String fileName, boolean internal) {
@@ -112,7 +113,7 @@ public class Files {
      * @return the data loaded from file
      */
     public static Map<String, String> loadMapFromCSVFile(String fileName, boolean internal) {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         FileHandle file;
         if (internal) {
             file = Gdx.files.internal(fileName);

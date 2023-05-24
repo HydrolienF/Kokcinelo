@@ -6,6 +6,7 @@ import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
+import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
@@ -59,8 +60,8 @@ public class Controller {
     public Controller(App app) {
         this.app = app;
         controller = this;
-        // isDebug = true; // @a
-        toRemove = new HashSet<Creature>();
+        // isDebug = true;
+        toRemove = new HashSet<>();
         // assets = new Assets();
         App.log(0, "constructor", "new Controller: " + toString());
     }
@@ -453,7 +454,13 @@ public class Controller {
     public void removeEscapeMenu() { getGameScreen().removeEscapeMenu(); }
 
     public void exitApp() { dispose(); }
-    public void dispose() { app.dispose(); }
+    public void dispose() {
+        if (getScreen() instanceof GameScreen) { // if current sate is "in game".
+            removeEscapeMenu(); // null safe if escape menu is not created
+            gameOver();
+        }
+        app.dispose();
+    }
 
 
     // Files ----------------------------------------------------------------------------------------------
@@ -494,6 +501,7 @@ public class Controller {
     }
     /**
      * {@summary Save all important data.}
+     * It will update the lastDatePlayed and add the time played since the last time the game was played.
      */
     public void saveData() {
         Map<String, String> map = App.getDataMap();
@@ -512,12 +520,14 @@ public class Controller {
     }
     /**
      * {@summary Load all important data.}
+     * It create it if it doesn't exist.
      */
     public Map<String, String> loadData() {
         Map<String, String> map;
         try {
             map = Files.loadFromFile("data.yml", false);
         } catch (Exception e) {
+            App.log(1, "FILES", "Data file not found " + e);
             map = new HashMap<>();
             map.put("firstDatePlayed", System.currentTimeMillis() + "");
             String l = Locale.getDefault().getLanguage();
@@ -531,6 +541,30 @@ public class Controller {
         App.log(1, "FILES", "Loaded data: " + map);
         return map;
     }
+
+    public void saveOptions() { Files.saveInFile("options.yml", App.getOptionsMap()); }
+
+    /**
+     * {@summary Load all options.}
+     * It create it if it doesn't exist.
+     */
+    public static KOptionsMap loadOptions() {
+        KOptionsMap map;
+        try {
+            map = new KOptionsMap(Files.loadFromFile("options.yml", false));
+        } catch (Exception e) {
+            App.log(1, "FILES", "Options file not found " + e);
+            map = new KOptionsMap();
+            map.put("musicVolume", "1.0");
+            map.put("soundVolume", "1.0");
+            map.put("displayMode", "0");
+            map.put("screenWidth", "0");
+            map.put("screenHeigth", "0");
+            map.put("maxFps", "0"); // 0 = no limits
+        }
+        return map;
+    }
+
     /**
      * {@summary Return the best score of a level.}
      * 
