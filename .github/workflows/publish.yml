@@ -80,11 +80,11 @@ jobs:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         include:
           - os: ubuntu-latest
-            launcher-extension: 'deb'
+            launcher-extension: deb
           - os: windows-latest
-            launcher-extension: 'exe'
-            - os: macos-latest
-            launcher-extension: 'dmg'
+            launcher-extension: exe
+          - os: macos-latest
+            launcher-extension: dmg
     if: github.event.pull_request.merged == true
     needs: releaseJob
     runs-on: ${{ matrix.os }}
