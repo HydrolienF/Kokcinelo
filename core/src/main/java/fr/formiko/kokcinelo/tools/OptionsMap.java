@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * {@summary Tool class to manage options.}
- * It extends HashMap<String, String> to add some methods to get and put int, float and boolean.
+ * It extends HashMap&lt;String, String&gt; to add some methods to get and put int, float and boolean.
  */
 public class OptionsMap extends HashMap<String, String> {
     public OptionsMap(Map<String, String> m) {
