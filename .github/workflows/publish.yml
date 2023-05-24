@@ -79,12 +79,18 @@ jobs:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         include:
-          - os: ubuntu-latest
-            launcher-extension: [deb, rpm]
-          - os: windows-latest
-            launcher-extension: [exe, msi]
-          - os: macos-latest
-            launcher-extension: [dmg, pkg]
+          - launcher-extension: deb
+            os: ubuntu-latest
+          - launcher-extension: rpm
+            os: ubuntu-latest
+          - launcher-extension: exe
+            os: windows-latest
+          - launcher-extension: msi
+            os: windows-latest
+          - launcher-extension: dmg
+            os: macos-latest
+          - launcher-extension: pkg
+            os: macos-latest
     if: github.event.pull_request.merged == true
     needs: releaseJob
     runs-on: ${{ matrix.os }}
