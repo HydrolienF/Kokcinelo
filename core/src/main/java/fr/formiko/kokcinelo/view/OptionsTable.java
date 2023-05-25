@@ -27,27 +27,26 @@ public class OptionsTable extends Table {
     private static final String OPTIONS_STYLE = "optionsTableStyle";
     private static final String OPTIONS_STYLE_TITLE = "optionsTableStyleTitle";
     private final MenuScreen menuScreen;
-    private final Skin skin;
+    private static Skin skin;
     private final float padSize;
     private final OptionsTablesTypes type;
+    private boolean initialized = false;
+
+    /**
+     * {@summary Create an empty OptionsTable.}
+     */
+    public OptionsTable(MenuScreen menuScreen, OptionsTablesTypes type) {
+        super();
+        this.menuScreen = menuScreen;
+        this.type = type;
+        this.padSize = 10 * KScreen.getRacio();
+    }
 
     /**
      * {@summary Initialize all item needed for the options.}
      */
-    public OptionsTable(MenuScreen menuScreen, Skin skin, Skin skinTitle, OptionsTablesTypes type) {
-        super();
-        this.menuScreen = menuScreen;
-        this.skin = skin;
-        this.type = type;
+    public void init() {
         setBackground(Shapes.getWhiteBackground());
-        padSize = 10 * KScreen.getRacio();
-
-        LabelStyle ls = new LabelStyle(skin.get(Label.LabelStyle.class).font, null);
-        ls.fontColor = Color.BLACK;
-        skin.add(OPTIONS_STYLE, ls);
-        ls = new LabelStyle(skinTitle.get(Label.LabelStyle.class).font, null);
-        ls.fontColor = Color.BLACK;
-        skin.add(OPTIONS_STYLE_TITLE, ls);
 
         if (type == OptionsTablesTypes.AUDIO) {
             initAudio();
@@ -59,6 +58,18 @@ public class OptionsTable extends Table {
 
         pack();
         setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, Align.center);
+        initialized = true;
+        App.log(0, "constructor", "init OptionsTable: " + type);
+    }
+
+    public static void setSkins(Skin skin, Skin skinTitle) {
+        OptionsTable.skin = skin;
+        LabelStyle ls = new LabelStyle(skin.get(Label.LabelStyle.class).font, null);
+        ls.fontColor = Color.BLACK;
+        skin.add(OPTIONS_STYLE, ls);
+        ls = new LabelStyle(skinTitle.get(Label.LabelStyle.class).font, null);
+        ls.fontColor = Color.BLACK;
+        skin.add(OPTIONS_STYLE_TITLE, ls);
     }
 
     /** Create audio options table */
@@ -141,7 +152,29 @@ public class OptionsTable extends Table {
     private void initGraphics() {
         addTitleLable("Video").colspan(2);
         row();
+        // final SelectBox<String> displayModeSelectBox = new SelectBox<>(skin);
+        // displayModeSelectBox.setItems(App.getOptionsMap().getListOfDisplayMode().toArray(new String[0]));
+        // displayModeSelectBox.setSelectedIndex(App.getOptionsMap().getDisplayMode());
+        // displayModeSelectBox.addListener(new ClickListener() {
+        // @Override
+        // public void clicked(InputEvent event, float x, float y) {
+        // App.getOptionsMap().setDisplayMode(displayModeSelectBox.getSelectedIndex());
+        // App.playSound("clicOn");
+        // }
+        // });
     }
+
+    /**
+     * Initialize the table by lazy when it's visible.
+     */
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible && !initialized) {
+            init();
+        }
+    }
+
 
     private Cell<Label> addTitleLable(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE_TITLE)); }
     private Cell<Label> addLabel(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE)); }

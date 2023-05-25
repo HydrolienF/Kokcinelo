@@ -506,6 +506,7 @@ public class MenuScreen extends KScreen implements Screen {
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
+        OptionsTable.setSkins(skin, skinTitle);
         table.add(getOptionsButton(size, OptionsTablesTypes.LANGUAGES, "language"));
         table.add(getOptionsButton(size, OptionsTablesTypes.AUDIO, "music"));
         table.add(getOptionsButton(size, OptionsTablesTypes.GRAPHICS, "screen"));
@@ -519,7 +520,7 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open options menu
      */
     private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
-        OptionsTable optionsTable = new OptionsTable(this, skin, skinTitle, type);
+        OptionsTable optionsTable = new OptionsTable(this, type);
         optionsTable.setVisible(false);
         stage.addActor(optionsTable);
         optionsTables.add(optionsTable);
