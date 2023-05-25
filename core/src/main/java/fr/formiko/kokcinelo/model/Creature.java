@@ -363,11 +363,11 @@ public abstract class Creature extends MapItem {
      * It also change wantedRotation if a wall have been hit.
      * 
      * @param mapWidth  width of the map
-     * @param mapHeigth height of the map
+     * @param mapHeight height of the map
      */
-    public void stayInMap(float mapWidth, float mapHeigth) {
+    public void stayInMap(float mapWidth, float mapHeight) {
         // if have been move to avoid wall & if have not already choose a new angle to get out.
-        if (moveIn(mapWidth, mapHeigth) && getWantedRotation() == 0f) {
+        if (moveIn(mapWidth, mapHeight) && getWantedRotation() == 0f) {
             setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
         }
     }

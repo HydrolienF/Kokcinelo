@@ -559,7 +559,7 @@ public class Controller {
             map.put("soundVolume", "1.0");
             map.put("displayMode", "0");
             map.put("screenWidth", "0");
-            map.put("screenHeigth", "0");
+            map.put("screenHeight", "0");
             map.put("maxFps", "0"); // 0 = no limits
         }
         return map;

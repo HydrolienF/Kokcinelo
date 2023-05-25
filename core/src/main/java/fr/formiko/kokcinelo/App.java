@@ -72,7 +72,7 @@ public class App extends Game {
     public static String getLanguage() { return data.get("language"); }
     public static void saveSizeInOptions(int width, int height) {
         options.putInt("screenWidth", width);
-        options.putInt("screenHeigth", height);
+        options.putInt("screenHeight", height);
     }
     /**
      * {@summary Set language &#38; update translation list.}

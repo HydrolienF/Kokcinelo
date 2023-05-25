@@ -253,32 +253,32 @@ public class MenuScreen extends KScreen implements Screen {
             MapItemActor cActor = c.getActor();
             cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
             int imageWidth;
-            int imageHeigth;
+            int imageHeight;
             if (c instanceof Ant) {
                 imageWidth = 3600;
-                imageHeigth = 4800;
+                imageHeight = 4800;
             } else if (c instanceof Ladybug) {
                 if (c instanceof LadybugSideView) {
                     imageWidth = 1484;
-                    imageHeigth = 926;
+                    imageHeight = 926;
                 } else {
                     imageWidth = 738;
-                    imageHeigth = 536;
+                    imageHeight = 536;
                 }
                 // } else if (c instanceof Aphid) {
-                // // TODO set imageWidth & imageHeigth
+                // // TODO set imageWidth & imageHeight
                 // imageWidth = 1000;
-                // imageHeigth = 1000;
+                // imageHeight = 1000;
             } else {
                 imageWidth = 1000;
-                imageHeigth = 1000;
+                imageHeight = 1000;
             }
             cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
             if (!(c instanceof LadybugSideView)) { // Need to rotate
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
             }
-            c.setZoom(Math.min(cActor.getWidth() / imageHeigth, cActor.getHeight() / imageWidth));
+            c.setZoom(Math.min(cActor.getWidth() / imageHeight, cActor.getHeight() / imageWidth));
 
             c.setCurrentSpeed(c.getMovingSpeed());
             c.setMaxLifePoints(0); // Don't show life bar

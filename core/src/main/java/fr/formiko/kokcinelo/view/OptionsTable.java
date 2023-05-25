@@ -11,9 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -152,16 +154,61 @@ public class OptionsTable extends Table {
     private void initGraphics() {
         addTitleLable("Video").colspan(2);
         row();
-        // final SelectBox<String> displayModeSelectBox = new SelectBox<>(skin);
-        // displayModeSelectBox.setItems(App.getOptionsMap().getListOfDisplayMode().toArray(new String[0]));
-        // displayModeSelectBox.setSelectedIndex(App.getOptionsMap().getDisplayMode());
-        // displayModeSelectBox.addListener(new ClickListener() {
-        // @Override
-        // public void clicked(InputEvent event, float x, float y) {
-        // App.getOptionsMap().setDisplayMode(displayModeSelectBox.getSelectedIndex());
-        // App.playSound("clicOn");
-        // }
-        // });
+
+        int tfWidth = 4 * KScreen.FONT_SIZE; // It should be enoth for 4 char text (or less).
+        System.out.println("tfWidth: " + tfWidth);
+        final TextField widthTextField = new TextField("" + App.getOptionsMap().getScreenWidth(), skin) {
+            @Override
+            public float getPrefWidth() { return tfWidth; }
+        };
+        widthTextField.setAlignment(Align.center);
+        widthTextField.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { App.playSound("clicOn"); }
+        });
+        final TextField heightTextField = new TextField("" + App.getOptionsMap().getScreenHeight(), skin) {
+            @Override
+            public float getPrefWidth() { return tfWidth; }
+        };
+        heightTextField.setAlignment(Align.center);
+        heightTextField.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { App.playSound("clicOn"); }
+        });
+
+        final SelectBox<String> displayModeSelectBox = new SelectBox<>(skin);
+        displayModeSelectBox.setItems(App.getOptionsMap().getListOfDisplayMode().toArray(new String[3]));
+        displayModeSelectBox.setSelectedIndex(App.getOptionsMap().getDisplayMode());
+        displayModeSelectBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { App.playSound("clicOn"); }
+        });
+        displayModeSelectBox.getScrollPane().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.getOptionsMap().setDisplayMode(displayModeSelectBox.getSelectedIndex());
+                updateWidthHeightTextFieldVisibility(widthTextField, heightTextField);
+                App.playSound("clicOff");
+            }
+        });
+        // displayModeSelectBox.setAlignment(Align.center);
+        displayModeSelectBox.setAlignment(Align.center);
+        updateWidthHeightTextFieldVisibility(widthTextField, heightTextField);
+
+        add(displayModeSelectBox).pad(0, padSize, 0, padSize).colspan(2);
+        row();
+        add(widthTextField).pad(0, padSize, 0, padSize);
+        add(heightTextField).pad(0, padSize, 0, padSize);
+        row();
+
+        // TODO apply frame size changes
+        // TODO add field for max fps
+        // TODO ask to restart app to apply changes
+    }
+    private void updateWidthHeightTextFieldVisibility(TextField widthTextField, TextField heightTextField) {
+        boolean visible = App.getOptionsMap().getDisplayMode() >= 2;
+        widthTextField.setVisible(visible);
+        heightTextField.setVisible(visible);
     }
 
     /**

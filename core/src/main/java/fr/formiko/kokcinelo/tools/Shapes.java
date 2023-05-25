@@ -258,7 +258,7 @@ public class Shapes {
      * {@summary Create a pixmap with a single color.}
      * 
      * @param width  width of pixmap
-     * @param height heigth of pixmap
+     * @param height height of pixmap
      * @param color  color of pixmap
      * @param color2 2a color of pixmap for gradient (optional)
      */
