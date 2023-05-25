@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * {@summary Game Hud that display player/game stats.}
  * 
  * @author Hydrolien
- * @version 0.1
+ * @version 2.3
  * @since 0.1
  */
 public class Hud extends KScreen implements Disposable {

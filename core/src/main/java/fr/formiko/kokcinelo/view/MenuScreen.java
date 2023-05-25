@@ -354,11 +354,17 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
-                    if (playingVideo) {
+                    if (playingVideo) { // skip video
                         getController().endMenuScreen();
-                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) {
-                        setCenterActorVisible();
-                    } else {
+                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) { // hide options
+                        if (optionsTables.stream().anyMatch(OptionsTable::isRequireRestart)) { // ask for restart Kokcinelo
+                            optionsTables.stream().forEach(ot -> ot.setRequireRestart(false));
+                            setCenterActorVisible(optionsTables.stream().filter(ot -> ot.getType() == OptionsTablesTypes.RESTART)
+                                    .findFirst().orElse(null));
+                        } else {
+                            setCenterActorVisible();
+                        }
+                    } else { // launch a new game
                         startPlayingVideo();
                     }
                 }
@@ -510,6 +516,9 @@ public class MenuScreen extends KScreen implements Screen {
         table.add(getOptionsButton(size, OptionsTablesTypes.LANGUAGES, "language"));
         table.add(getOptionsButton(size, OptionsTablesTypes.AUDIO, "music"));
         table.add(getOptionsButton(size, OptionsTablesTypes.GRAPHICS, "screen"));
+        OptionsTable restartTable = new OptionsTable(this, OptionsTablesTypes.RESTART);
+        stage.addActor(restartTable);
+        optionsTables.add(restartTable);
         return table;
     }
 
@@ -521,7 +530,6 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
         OptionsTable optionsTable = new OptionsTable(this, type);
-        optionsTable.setVisible(false);
         stage.addActor(optionsTable);
         optionsTables.add(optionsTable);
         Image options = getClickableLink("basic/" + iconName, null, size, false);
@@ -545,10 +553,14 @@ public class MenuScreen extends KScreen implements Screen {
      * @param actor the actor to set visible
      */
     void setCenterActorVisible(Actor actor) {
-        for (OptionsTable optionsTable : optionsTables) {
-            optionsTable.setVisible(optionsTable.equals(actor));
+        if (actor == null) {
+            setCenterActorVisible();
+        } else {
+            for (OptionsTable optionsTable : optionsTables) {
+                optionsTable.setVisible(optionsTable.equals(actor));
+            }
+            playButton.setVisible(playButton.equals(actor));
         }
-        playButton.setVisible(playButton.equals(actor));
     }
     void setCenterActorVisible() { setCenterActorVisible(playButton); }
 

@@ -1,6 +1,8 @@
 package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.IntTextField;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
@@ -15,16 +17,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 /**
  * {@summary Options table.}
+ * 
+ * @author Hydrolien
+ * @version 2.4
+ * @since 2.4
  */
 public class OptionsTable extends Table {
     enum OptionsTablesTypes {
-        AUDIO, LANGUAGES, GRAPHICS;
+        AUDIO, LANGUAGES, GRAPHICS, RESTART;
     }
     private static final String OPTIONS_STYLE = "optionsTableStyle";
     private static final String OPTIONS_STYLE_TITLE = "optionsTableStyleTitle";
@@ -33,6 +40,7 @@ public class OptionsTable extends Table {
     private final float padSize;
     private final OptionsTablesTypes type;
     private boolean initialized = false;
+    private boolean requireRestart = false;
 
     /**
      * {@summary Create an empty OptionsTable.}
@@ -42,6 +50,7 @@ public class OptionsTable extends Table {
         this.menuScreen = menuScreen;
         this.type = type;
         this.padSize = 10 * KScreen.getRacio();
+        setVisible(false);
     }
 
     /**
@@ -50,12 +59,19 @@ public class OptionsTable extends Table {
     public void init() {
         setBackground(Shapes.getWhiteBackground());
 
-        if (type == OptionsTablesTypes.AUDIO) {
-            initAudio();
-        } else if (type == OptionsTablesTypes.LANGUAGES) {
-            initLanguages();
-        } else if (type == OptionsTablesTypes.GRAPHICS) {
-            initGraphics();
+        switch (type) {
+            case AUDIO:
+                initAudio();
+                break;
+            case LANGUAGES:
+                initLanguages();
+                break;
+            case GRAPHICS:
+                initGraphics();
+                break;
+            case RESTART:
+                initRestart();
+                break;
         }
 
         pack();
@@ -156,24 +172,14 @@ public class OptionsTable extends Table {
         row();
 
         int tfWidth = 4 * KScreen.FONT_SIZE; // It should be enoth for 4 char text (or less).
-        System.out.println("tfWidth: " + tfWidth);
-        final TextField widthTextField = new TextField("" + App.getOptionsMap().getScreenWidth(), skin) {
-            @Override
-            public float getPrefWidth() { return tfWidth; }
-        };
-        widthTextField.setAlignment(Align.center);
-        widthTextField.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) { App.playSound("clicOn"); }
+        final TextField widthTextField = new IntTextField(App.getOptionsMap().getScreenWidth(), skin, tfWidth, Align.center, i -> {
+            App.getOptionsMap().setScreenWidth(i);
+            requireRestart = true;
         });
-        final TextField heightTextField = new TextField("" + App.getOptionsMap().getScreenHeight(), skin) {
-            @Override
-            public float getPrefWidth() { return tfWidth; }
-        };
-        heightTextField.setAlignment(Align.center);
-        heightTextField.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) { App.playSound("clicOn"); }
+
+        final TextField heightTextField = new IntTextField(App.getOptionsMap().getScreenHeight(), skin, tfWidth, Align.center, i -> {
+            App.getOptionsMap().setScreenHeight(i);
+            requireRestart = true;
         });
 
         final SelectBox<String> displayModeSelectBox = new SelectBox<>(skin);
@@ -186,6 +192,7 @@ public class OptionsTable extends Table {
         displayModeSelectBox.getScrollPane().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                requireRestart = true;
                 App.getOptionsMap().setDisplayMode(displayModeSelectBox.getSelectedIndex());
                 updateWidthHeightTextFieldVisibility(widthTextField, heightTextField);
                 App.playSound("clicOff");
@@ -201,14 +208,26 @@ public class OptionsTable extends Table {
         add(heightTextField).pad(0, padSize, 0, padSize);
         row();
 
-        // TODO apply frame size changes
         // TODO add field for max fps
-        // TODO ask to restart app to apply changes
     }
     private void updateWidthHeightTextFieldVisibility(TextField widthTextField, TextField heightTextField) {
-        boolean visible = App.getOptionsMap().getDisplayMode() >= 2;
+        final boolean visible = App.getOptionsMap().getDisplayMode() >= 2;
         widthTextField.setVisible(visible);
         heightTextField.setVisible(visible);
+    }
+
+    /** Create a ask restart dialog */
+    private void initRestart() {
+        addTitleLable("RestartFullGame");
+        row();
+        addLabel("RestartFullGameMessage");
+        row();
+        TextButton restartButton = new TextButton(g.get("RestartFullGame"), skin);
+        restartButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) { Controller.getController().restartFullGame(); }
+        });
+        add(restartButton);
     }
 
     /**
@@ -220,7 +239,14 @@ public class OptionsTable extends Table {
         if (visible && !initialized) {
             init();
         }
+        // if (requireRestart) {
+        // requireRestart = false;
+        // // TODO ask to restart app to apply changes
+        // }
     }
+    public OptionsTablesTypes getType() { return type; }
+    public boolean isRequireRestart() { return requireRestart; }
+    public void setRequireRestart(boolean requireRestart) { this.requireRestart = requireRestart; }
 
 
     private Cell<Label> addTitleLable(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE_TITLE)); }

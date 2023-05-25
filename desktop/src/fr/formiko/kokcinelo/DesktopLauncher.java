@@ -79,11 +79,15 @@ public class DesktopLauncher {
     }
 }
 
-
+/**
+ * {@summary Provide special for Desktop function.}
+ */
 class DesktopNative implements Native {
     @Override
     public void toFront() {
         Lwjgl3Window window = ((Lwjgl3Graphics) Gdx.graphics).getWindow();
         window.focusWindow();
     }
+    @Override
+    public void exit(int code) { System.exit(code); }
 }

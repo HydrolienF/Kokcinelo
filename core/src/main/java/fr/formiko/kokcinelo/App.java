@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Null;
  * 
  * @see com.badlogic.gdx.Game
  * @author Hydrolien
- * @version 1.3
+ * @version 2.4
  * @since 0.1
  */
 public class App extends Game {
@@ -168,12 +168,17 @@ public class App extends Game {
      * @see com.badlogic.gdx.Game#dispose()
      */
     @Override
-    public void dispose() {
+    public void dispose() { exit(0); }
+    public void exit(int code) {
         // Save played time etc
         Controller.getController().saveData();
         Controller.getController().saveOptions();
-        App.log(1, "Normal close of the app.");
-        Gdx.app.exit();
+        App.log(1, "Normal close of the app with code: " + code);
+        if (code == 0) {
+            Gdx.app.exit();
+        } else {
+            nativ.exit(code);
+        }
     }
 
     public static boolean isPlayableLevel(String levelId) { return PLAYABLE_LEVELS.contains(levelId); }

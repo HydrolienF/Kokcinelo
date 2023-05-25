@@ -5,6 +5,13 @@ import fr.formiko.usual.g;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * {@summary Tool class to manage options.}
+ * 
+ * @author Hydrolien
+ * @version 2.4
+ * @since 2.4
+ */
 public class KOptionsMap extends OptionsMap {
     public KOptionsMap(Map<String, String> m) { super(m); }
     public KOptionsMap() { super(); }

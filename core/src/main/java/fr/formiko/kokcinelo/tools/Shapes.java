@@ -28,7 +28,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
  * 
  * @author Hydrolien
- * @version 1.3
+ * @version 2.4
  * @since 0.2
  */
 public class Shapes {
