@@ -25,6 +25,7 @@ public class OptionsTable extends Table {
         AUDIO, LANGUAGES, GRAPHICS;
     }
     private static final String OPTIONS_STYLE = "optionsTableStyle";
+    private static final String OPTIONS_STYLE_TITLE = "optionsTableStyleTitle";
     private final MenuScreen menuScreen;
     private final Skin skin;
     private final float padSize;
@@ -33,7 +34,7 @@ public class OptionsTable extends Table {
     /**
      * {@summary Initialize all item needed for the options.}
      */
-    public OptionsTable(MenuScreen menuScreen, Skin skin, OptionsTablesTypes type) {
+    public OptionsTable(MenuScreen menuScreen, Skin skin, Skin skinTitle, OptionsTablesTypes type) {
         super();
         this.menuScreen = menuScreen;
         this.skin = skin;
@@ -44,6 +45,9 @@ public class OptionsTable extends Table {
         LabelStyle ls = new LabelStyle(skin.get(Label.LabelStyle.class).font, null);
         ls.fontColor = Color.BLACK;
         skin.add(OPTIONS_STYLE, ls);
+        ls = new LabelStyle(skinTitle.get(Label.LabelStyle.class).font, null);
+        ls.fontColor = Color.BLACK;
+        skin.add(OPTIONS_STYLE_TITLE, ls);
 
         if (type == OptionsTablesTypes.AUDIO) {
             initAudio();
@@ -59,7 +63,7 @@ public class OptionsTable extends Table {
 
     /** Create audio options table */
     private void initAudio() {
-        addLabel("Audio").colspan(2);
+        addTitleLable("Audio").colspan(2);
         row();
         addLabel("MusicVolume");
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.01f, false, skin);
@@ -100,6 +104,8 @@ public class OptionsTable extends Table {
         if (App.SUPPORTED_LANGUAGES.size() > 10) {
             perRow = 4;
         }
+        addTitleLable("Language").colspan(perRow);
+        row();
         int k = 0;
         // for each language create a clickable label to switch to it language
         for (String languageCode : App.SUPPORTED_LANGUAGES) {
@@ -133,10 +139,11 @@ public class OptionsTable extends Table {
 
     /** Create graphics options table */
     private void initGraphics() {
-        addLabel("Video").colspan(2);
+        addTitleLable("Video").colspan(2);
         row();
     }
 
+    private Cell<Label> addTitleLable(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE_TITLE)); }
     private Cell<Label> addLabel(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE)); }
     private Cell<Label> addLabel(Label label) { return add(label).pad(0, padSize, 0, padSize); }
 }

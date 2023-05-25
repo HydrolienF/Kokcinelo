@@ -519,7 +519,7 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open options menu
      */
     private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
-        OptionsTable optionsTable = new OptionsTable(this, skin, type);
+        OptionsTable optionsTable = new OptionsTable(this, skin, skinTitle, type);
         optionsTable.setVisible(false);
         stage.addActor(optionsTable);
         optionsTables.add(optionsTable);
