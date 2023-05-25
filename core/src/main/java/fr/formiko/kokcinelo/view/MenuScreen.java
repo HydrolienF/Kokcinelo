@@ -564,6 +564,13 @@ public class MenuScreen extends KScreen implements Screen {
     }
     void setCenterActorVisible() { setCenterActorVisible(playButton); }
 
+    /** Change language of the game */
+    public void setLanguage(String languageCode) {
+        App.setLanguage(languageCode);
+        updateSelectedLevel(getLevelId()); // update levels Strings
+        optionsTables.stream().forEach(OptionsTable::uninitialize); // reset option so that options string will be reloaded
+    }
+
     /**
      * {@summary Return a web site link button.}
      * 

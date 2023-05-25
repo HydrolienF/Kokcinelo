@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -76,7 +75,7 @@ public class OptionsTable extends Table {
 
         pack();
         setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, Align.center);
-        initialized = true;
+        setInitalized(true);
         App.log(0, "constructor", "init OptionsTable: " + type);
     }
 
@@ -154,8 +153,7 @@ public class OptionsTable extends Table {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     menuScreen.setCenterActorVisible();
-                    App.setLanguage(languageCode);
-                    menuScreen.updateSelectedLevel(menuScreen.getLevelId());
+                    menuScreen.setLanguage(languageCode);
                 }
             });
             addLabel(languageLabel);
@@ -218,11 +216,13 @@ public class OptionsTable extends Table {
 
     /** Create a ask restart dialog */
     private void initRestart() {
-        addTitleLable("RestartFullGame");
-        row();
         addLabel("RestartFullGameMessage");
         row();
-        TextButton restartButton = new TextButton(g.get("RestartFullGame"), skin);
+        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        LabelStyle style = new LabelStyle(ls.font, Color.BLACK);
+        style.background = Shapes.getRectangle(1, 1, new Color(0.85f, 0.85f, 0.85f, 1));
+        skin.add("restart", style);
+        Label restartButton = new Label(g.get("RestartFullGame").toUpperCase(), skin, "restart");
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartFullGame(); }
@@ -247,6 +247,12 @@ public class OptionsTable extends Table {
     public OptionsTablesTypes getType() { return type; }
     public boolean isRequireRestart() { return requireRestart; }
     public void setRequireRestart(boolean requireRestart) { this.requireRestart = requireRestart; }
+    private void setInitalized(boolean initialized) { this.initialized = initialized; }
+    public boolean isInitialized() { return initialized; }
+    public void uninitialize() {
+        setInitalized(false);
+        clear();
+    }
 
 
     private Cell<Label> addTitleLable(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE_TITLE)); }

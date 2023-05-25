@@ -150,7 +150,7 @@ public class KScreen {
         return new SliderStyle(background, knob);
     }
     private static ScrollPaneStyle getScrollPaneStyle() {
-        return new ScrollPaneStyle(Shapes.getRectangle(1, 1, new Color(1f, 1f, 1f, 0.6f)), null, null, null, null);
+        return new ScrollPaneStyle(Shapes.getRectangle(1, 1, new Color(1f, 1f, 1f, 0.8f)), null, null, null, null);
     }
     private static ListStyle getListStyle(Skin skin) {
         return new ListStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Color.BLACK, Shapes.getRectangle(1, 1, Color.ORANGE));

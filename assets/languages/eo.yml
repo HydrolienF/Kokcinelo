@@ -26,3 +26,18 @@ endPartie: fini la partio
 backToMainMenu: reveni al menuo
 leaveKokcinelo: forlasi Kokcinelo
 resume: resumi
+#Options
+audio: sono
+musicVolume: muziko
+soundVolume: sono
+video: video
+screenWidth: ekranlarĝo
+screenHeight: ekranalteco
+maxFps: maksimumaj fps
+displayMode: montra reĝimo
+fullScreen: plenekrane
+windowedFullScreen: fenestrplenekrane
+windowed: fenestre
+language: lingvo
+restartFullGame: rekomenci
+restartFullGameMessage: Rekomenci ludo per apliki ŝanĝojn.

@@ -1,12 +1,6 @@
-# 3.0
+# Current milestone
 
-## Added
-- Counts of alive Creature ingame
-- Audio/Video options
-
-## Changed
-- Display icons for insect names
-
+See [CHANGELOG.md](https://github.com/HydrolienF/Kokcinelo/blob/master/CHANGELOG.md)
 
 # 2.0
 
