@@ -37,9 +37,9 @@ public class EnvironmentMenuScreen extends Group {
         chrono = new Chrono();
         chrono.start();
         withGrass = true;
-        int heigth = 4000;
-        float chunkSize = heigth * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
-        setSize(2 * chunkSize, heigth);
+        int height = 4000;
+        float chunkSize = height * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
+        setSize(2 * chunkSize, height);
         grass = new MapActor[2];
         sky = new MapActor[2];
         for (int i = 0; i < 2; i++) {

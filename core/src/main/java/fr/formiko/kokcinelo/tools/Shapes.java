@@ -28,7 +28,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@summary Tools to get Shapes that ShapeRenderer is not able to create.}
  * 
  * @author Hydrolien
- * @version 1.3
+ * @version 2.4
  * @since 0.2
  */
 public class Shapes {
@@ -258,7 +258,7 @@ public class Shapes {
      * {@summary Create a pixmap with a single color.}
      * 
      * @param width  width of pixmap
-     * @param height heigth of pixmap
+     * @param height height of pixmap
      * @param color  color of pixmap
      * @param color2 2a color of pixmap for gradient (optional)
      */

@@ -16,9 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
@@ -37,6 +41,7 @@ public class KScreen {
     protected static Skin skin;
     protected static Skin skinSmall;
     protected static Skin skinTitle;
+    private static final String DEFAULT_STYLE = "default";
 
     /**
      * {@summary Initialize collections that need to be initialize.}
@@ -98,30 +103,34 @@ public class KScreen {
 
         // bmf.getData().markupEnabled = true; //Use to set color label by label
 
-        // Store the default libGDX font under the name "default".
-        skin.add("default", bmf);
+        // Store the default libGDX font under the name DEFAULT_STYLE.
+        skin.add(DEFAULT_STYLE, bmf);
         skin.add("emoji", Fonts.getDefaultFont(fontSize, true));
 
-        // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
+        // Configure a TextButtonStyle and name it DEFAULT_STYLE. Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
+        textButtonStyle.font = skin.getFont(DEFAULT_STYLE);
+        skin.add(DEFAULT_STYLE, textButtonStyle);
 
         ButtonStyle buttonStyle = new ButtonStyle();
-        skin.add("default", buttonStyle);
+        skin.add(DEFAULT_STYLE, buttonStyle);
 
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default"), null);
+        LabelStyle labelStyle = new LabelStyle(skin.getFont(DEFAULT_STYLE), null);
         LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
         // set background
         labelStyle.background = Shapes.getWhiteBackground();
         labelStyleEmoji.background = Shapes.getWhiteBackground();
         labelStyle.fontColor = Color.BLACK;
 
-        skin.add("default", labelStyle);
+        skin.add(DEFAULT_STYLE, labelStyle);
         skin.add("emoji", labelStyleEmoji);
-        // skin.add("default", new LabelStyle(skin.getFont("default"), null)); //Use to set color label by label
+        // skin.add(DEFAULT_STYLE, new LabelStyle(skin.getFont(DEFAULT_STYLE), null)); //Use to set color label by label
 
         skin.add("default-horizontal", getSliderStyle(fontSize));
+        skin.add(DEFAULT_STYLE, getScrollPaneStyle());
+        skin.add(DEFAULT_STYLE, getListStyle(skin));
+        skin.add(DEFAULT_STYLE, getSelectBoxStyle(skin));
+        skin.add(DEFAULT_STYLE, getTextFieldStyle(skin));
 
         return skin;
     }
@@ -139,6 +148,20 @@ public class KScreen {
                 Color.BLACK);
         Drawable knob = Shapes.getRectangle((int) (fontSize / 3f), (int) (fontSize), Color.ORANGE);
         return new SliderStyle(background, knob);
+    }
+    private static ScrollPaneStyle getScrollPaneStyle() {
+        return new ScrollPaneStyle(Shapes.getRectangle(1, 1, new Color(1f, 1f, 1f, 0.8f)), null, null, null, null);
+    }
+    private static ListStyle getListStyle(Skin skin) {
+        return new ListStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Color.BLACK, Shapes.getRectangle(1, 1, Color.ORANGE));
+    }
+    private static SelectBoxStyle getSelectBoxStyle(Skin skin) {
+        return new SelectBoxStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.WHITE),
+                skin.get(ScrollPaneStyle.class), skin.get(ListStyle.class));
+    }
+    private static TextFieldStyle getTextFieldStyle(Skin skin) {
+        return new TextFieldStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.BLACK),
+                Shapes.getRectangle(1, 1, Color.GRAY), Shapes.getRectangle(1, 1, Color.WHITE));
     }
 
     /**

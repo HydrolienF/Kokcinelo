@@ -253,32 +253,32 @@ public class MenuScreen extends KScreen implements Screen {
             MapItemActor cActor = c.getActor();
             cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
             int imageWidth;
-            int imageHeigth;
+            int imageHeight;
             if (c instanceof Ant) {
                 imageWidth = 3600;
-                imageHeigth = 4800;
+                imageHeight = 4800;
             } else if (c instanceof Ladybug) {
                 if (c instanceof LadybugSideView) {
                     imageWidth = 1484;
-                    imageHeigth = 926;
+                    imageHeight = 926;
                 } else {
                     imageWidth = 738;
-                    imageHeigth = 536;
+                    imageHeight = 536;
                 }
                 // } else if (c instanceof Aphid) {
-                // // TODO set imageWidth & imageHeigth
+                // // TODO set imageWidth & imageHeight
                 // imageWidth = 1000;
-                // imageHeigth = 1000;
+                // imageHeight = 1000;
             } else {
                 imageWidth = 1000;
-                imageHeigth = 1000;
+                imageHeight = 1000;
             }
             cActor.setBounds(w / 3f, (float) h - topSpace, w / 3f, topSpace);
             if (!(c instanceof LadybugSideView)) { // Need to rotate
                 cActor.setOrigin(Align.center); // Don't work well with rotation of not square image.
                 cActor.setRotation(-90);
             }
-            c.setZoom(Math.min(cActor.getWidth() / imageHeigth, cActor.getHeight() / imageWidth));
+            c.setZoom(Math.min(cActor.getWidth() / imageHeight, cActor.getHeight() / imageWidth));
 
             c.setCurrentSpeed(c.getMovingSpeed());
             c.setMaxLifePoints(0); // Don't show life bar
@@ -354,11 +354,17 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
-                    if (playingVideo) {
+                    if (playingVideo) { // skip video
                         getController().endMenuScreen();
-                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) {
-                        setCenterActorVisible();
-                    } else {
+                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) { // hide options
+                        if (optionsTables.stream().anyMatch(OptionsTable::isRequireRestart)) { // ask for restart Kokcinelo
+                            optionsTables.stream().forEach(ot -> ot.setRequireRestart(false));
+                            setCenterActorVisible(optionsTables.stream().filter(ot -> ot.getType() == OptionsTablesTypes.RESTART)
+                                    .findFirst().orElse(null));
+                        } else {
+                            setCenterActorVisible();
+                        }
+                    } else { // launch a new game
                         startPlayingVideo();
                     }
                 }
@@ -506,9 +512,13 @@ public class MenuScreen extends KScreen implements Screen {
         table.add(getClickableLink("discordLink", "https://discord.gg/vqvfGzf", size, true));
         table.add(getClickableLink("supportGameLink", "https://tipeee.com/formiko", size, true));
 
+        OptionsTable.setSkins(skin, skinTitle);
         table.add(getOptionsButton(size, OptionsTablesTypes.LANGUAGES, "language"));
         table.add(getOptionsButton(size, OptionsTablesTypes.AUDIO, "music"));
         table.add(getOptionsButton(size, OptionsTablesTypes.GRAPHICS, "screen"));
+        OptionsTable restartTable = new OptionsTable(this, OptionsTablesTypes.RESTART);
+        stage.addActor(restartTable);
+        optionsTables.add(restartTable);
         return table;
     }
 
@@ -519,8 +529,7 @@ public class MenuScreen extends KScreen implements Screen {
      * @return a clickable image that open options menu
      */
     private Image getOptionsButton(int size, OptionsTablesTypes type, String iconName) {
-        OptionsTable optionsTable = new OptionsTable(this, skin, type);
-        optionsTable.setVisible(false);
+        OptionsTable optionsTable = new OptionsTable(this, type);
         stage.addActor(optionsTable);
         optionsTables.add(optionsTable);
         Image options = getClickableLink("basic/" + iconName, null, size, false);
@@ -544,12 +553,23 @@ public class MenuScreen extends KScreen implements Screen {
      * @param actor the actor to set visible
      */
     void setCenterActorVisible(Actor actor) {
-        for (OptionsTable optionsTable : optionsTables) {
-            optionsTable.setVisible(optionsTable.equals(actor));
+        if (actor == null) {
+            setCenterActorVisible();
+        } else {
+            for (OptionsTable optionsTable : optionsTables) {
+                optionsTable.setVisible(optionsTable.equals(actor));
+            }
+            playButton.setVisible(playButton.equals(actor));
         }
-        playButton.setVisible(playButton.equals(actor));
     }
     void setCenterActorVisible() { setCenterActorVisible(playButton); }
+
+    /** Change language of the game */
+    public void setLanguage(String languageCode) {
+        App.setLanguage(languageCode);
+        updateSelectedLevel(getLevelId()); // update levels Strings
+        optionsTables.stream().forEach(OptionsTable::uninitialize); // reset option so that options string will be reloaded
+    }
 
     /**
      * {@summary Return a web site link button.}

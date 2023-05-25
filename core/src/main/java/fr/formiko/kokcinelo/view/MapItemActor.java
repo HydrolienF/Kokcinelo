@@ -157,15 +157,15 @@ public class MapItemActor extends SkeletonActor {
             }
             // Draw life bar
             float len = mlp * 1.5f;
-            float heigth = len / 10;
+            float height = len / 10;
             float greenLen = len * lp / mlp;
             float redLen = len - greenLen;
             shapeDrawer.setColor(Color.RED);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + heigth, redLen, heigth);
+            shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + height, redLen, height);
             shapeDrawer.setColor(Color.GREEN);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, greenLen, heigth);
+            shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, greenLen, height);
             shapeDrawer.setColor(Color.BLACK);
-            shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + heigth, len, heigth, 2);
+            shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, len, height, 2);
         }
     }
 

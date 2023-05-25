@@ -36,7 +36,7 @@ public class MapActor extends Actor {
      * {@summary Main constructor.}
      * 
      * @param width       width of this
-     * @param height      heigth of this
+     * @param height      height of this
      * @param color       color of this
      * @param withDetails if true, add some details to the map.
      * @param stones      number of stones to add to the map.
@@ -113,10 +113,10 @@ public class MapActor extends Actor {
         }
     }
     /**
-     * {@summary Create a texture with width, heigth &#38; color.}
+     * {@summary Create a texture with width, height &#38; color.}
      * 
      * @param width  width of texture
-     * @param height heigth of texture
+     * @param height height of texture
      * @param color  color of texture
      * @param stones number of stones to add
      */

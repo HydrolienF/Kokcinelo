@@ -1,6 +1,6 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.kokcinelo.tools.OptionsMap;
+import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.usual.Os;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -37,17 +37,16 @@ public class DesktopLauncher {
         }
 
         Gdx.files = new Lwjgl3Files();
-        OptionsMap options = Controller.loadOptions();
+        KOptionsMap options = Controller.loadOptions();
         App.log(1, "options : " + options);
-        int displayMode = options.getInt("displayMode");
-        int maxFps = options.getInt("maxFps");
+        int displayMode = options.getDisplayMode();
 
         if (Os.getOs().isLinux()) { // TODO to remove
             displayMode = 0;
         }
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setForegroundFPS(maxFps); // 0 = no limite
+        config.setForegroundFPS(options.getMaxFps()); // 0 = no limite
         switch (displayMode) {
             default:
             case 0: // Real fullscreen
@@ -61,11 +60,11 @@ public class DesktopLauncher {
                 App.setWithCloseButton(true);
                 break;
             case 2: // windowed
-                int screenWidth = options.getInt("screenWidth");
-                int screenHeigth = options.getInt("screenHeigth");
-                if (screenWidth > 0 && screenHeigth > 0) {
-                    App.log(1, "Start on windowed mode : " + screenWidth + "x" + screenHeigth + ".");
-                    config.setWindowedMode(screenWidth, screenHeigth);
+                int screenWidth = options.getScreenWidth();
+                int screenHeight = options.getScreenHeight();
+                if (screenWidth > 0 && screenHeight > 0) {
+                    App.log(1, "Start on windowed mode : " + screenWidth + "x" + screenHeight + ".");
+                    config.setWindowedMode(screenWidth, screenHeight);
                     break;
                 } else {
                     config.setMaximized(true);
@@ -80,11 +79,15 @@ public class DesktopLauncher {
     }
 }
 
-
+/**
+ * {@summary Provide special for Desktop function.}
+ */
 class DesktopNative implements Native {
     @Override
     public void toFront() {
         Lwjgl3Window window = ((Lwjgl3Graphics) Gdx.graphics).getWindow();
         window.focusWindow();
     }
+    @Override
+    public void exit(int code) { System.exit(code); }
 }

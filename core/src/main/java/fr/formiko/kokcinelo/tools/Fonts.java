@@ -17,6 +17,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 
 /**
  * {@summary Class that provide a way to load font.}
+ * 
+ * @author Hydrolien
+ * @version 2.4
+ * @since 2.4
  */
 public class Fonts extends BitmapFont {
     private static String DEFAULT_CHARS;

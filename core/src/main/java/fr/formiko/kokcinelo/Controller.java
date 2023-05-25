@@ -284,7 +284,10 @@ public class Controller {
         getGameScreen().setGameTime(gameTime);
         App.log(1, "new Game started");
     }
+    /** Restart the current Game. */
     public void restartGame() { createNewGame(); }
+    /** Restart all the app. */
+    public void restartFullGame() { app.exit(100); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
     public Collection<Creature> allCreatures() { return gs.allCreatures(); }
     public Iterable<Actor> allActors() { return gs.allActors(); }
@@ -555,12 +558,12 @@ public class Controller {
         } catch (Exception e) {
             App.log(1, "FILES", "Options file not found " + e);
             map = new KOptionsMap();
-            map.put("musicVolume", "1.0");
-            map.put("soundVolume", "1.0");
-            map.put("displayMode", "0");
-            map.put("screenWidth", "0");
-            map.put("screenHeigth", "0");
-            map.put("maxFps", "0"); // 0 = no limits
+            map.setMusicVolume(1.0f);
+            map.setSoundVolume(1.0f);
+            map.setDisplayMode(0);
+            map.setScreenWidth(0);
+            map.setScreenHeight(0);
+            map.setMaxFps(0);// 0 = no limits
         }
         return map;
     }

@@ -5,6 +5,7 @@ package fr.formiko.kokcinelo;
  */
 public interface Native {
     public void toFront();
+    public void exit(int code);
 }
 
 /**
@@ -13,6 +14,9 @@ public interface Native {
 class NullNative implements Native {
     @Override
     public void toFront() {
+        // do nothing
+    }
+    public void exit(int code) {
         // do nothing
     }
 }

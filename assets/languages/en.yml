@@ -26,3 +26,18 @@ endPartie: end Game
 backToMainMenu: back to main menu
 leaveKokcinelo: leave Kokcinelo
 resume: resume
+#Options
+audio: audio
+musicVolume: music
+soundVolume: sound
+video: video
+screenWidth: screen width
+screenHeight: screen height
+maxFps: max fps
+displayMode: display mode
+fullScreen: full screen
+windowedFullScreen: windowed full screen
+windowed: windowed
+language: language
+restartFullGame: restart
+restartFullGameMessage: Restart Kokcinelo to apply changes.
