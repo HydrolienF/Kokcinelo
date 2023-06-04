@@ -101,7 +101,7 @@ public class GameScreen extends KScreen implements Screen {
         // rotationSpeed = 0.5f;
         maxZoom = 0.2f;
 
-        InputProcessor inputProcessor = (InputProcessor) new InputCore(this);
+        InputProcessor inputProcessor = new InputCore(this);
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);

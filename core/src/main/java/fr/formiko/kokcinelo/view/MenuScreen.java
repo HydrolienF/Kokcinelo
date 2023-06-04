@@ -71,6 +71,7 @@ public class MenuScreen extends KScreen implements Screen {
     private OrthographicCamera cameraBc;
     private Actor playButton;
     private List<OptionsTable> optionsTables = new ArrayList<>();
+    private boolean isPause;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -109,40 +110,42 @@ public class MenuScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        long time = System.currentTimeMillis();
-        ScreenUtils.clear(Color.BLACK);
+        if (!isPause) {
+            long time = System.currentTimeMillis();
+            ScreenUtils.clear(Color.BLACK);
 
-        cameraBc.position.x += delta * BACKGROUND_SPEED;
-        if (getLevel().getLetter().equals("K")) {
-            Actor environement = backgroundStage.getRoot().findActor("environement");
-            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
-            cameraBc.zoom = 1;
-        } else {
-            cameraBc.zoom = 0.3f;
-            cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
-        }
-        batch.setProjectionMatrix(cameraBc.combined);
-        backgroundStage.act(delta);
-        backgroundStage.draw();
-
-        batch.setProjectionMatrix(camera.combined);
-        for (Actor creature : creatureImages) { // Only show the creature of the current level.
-            creature.setVisible(creature.getName() != null
-                    && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
-                            && creature.getName().contains("" + getLevel().getNumber()))));
-        }
-
-        if (playingVideo) {
-            hidingButtonAnimation(delta);
-            // TODO last visible actor need to act while video is playing.
-            if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
-                Controller.getController().endMenuScreen();
+            cameraBc.position.x += delta * BACKGROUND_SPEED;
+            if (getLevel().getLetter().equals("K")) {
+                Actor environement = backgroundStage.getRoot().findActor("environement");
+                cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
+                cameraBc.zoom = 1;
+            } else {
+                cameraBc.zoom = 0.3f;
+                cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
             }
-        }
+            batch.setProjectionMatrix(cameraBc.combined);
+            backgroundStage.act(delta);
+            backgroundStage.draw();
 
-        stage.act(delta);
-        stage.draw();
-        times.add((int) (System.currentTimeMillis() - time));
+            batch.setProjectionMatrix(camera.combined);
+            for (Actor creature : creatureImages) { // Only show the creature of the current level.
+                creature.setVisible(creature.getName() != null
+                        && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
+                                && creature.getName().contains("" + getLevel().getNumber()))));
+            }
+
+            if (playingVideo) {
+                hidingButtonAnimation(delta);
+                // TODO last visible actor need to act while video is playing.
+                if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
+                    Controller.getController().endMenuScreen();
+                }
+            }
+
+            stage.act(delta);
+            stage.draw();
+            times.add((int) (System.currentTimeMillis() - time));
+        }
     }
 
     /**
@@ -328,10 +331,16 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
     @Override
-    public void pause() { Musics.pause(); }
+    public void pause() {
+        Musics.pause();
+        isPause = true;
+    }
 
     @Override
-    public void resume() { Musics.resume(); }
+    public void resume() {
+        Musics.resume();
+        isPause = false;
+    }
 
     @Override
     public void hide() {
