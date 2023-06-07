@@ -235,7 +235,7 @@ public class Shapes {
      * @return a new Pixmap with a black border over the shapes
      */
     public static Pixmap outLine(Pixmap inPm) {
-        Set<Vector2> locationsToColor = new HashSet<Vector2>();
+        Set<Vector2> locationsToColor = new HashSet<>();
         for (int x = 0; x < inPm.getWidth(); x++) {
             for (int y = 0; y < inPm.getHeight(); y++) {
                 // If one of the 4 next pixels is colored, it save the location to be colored.
