@@ -4,10 +4,12 @@ import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.Level;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class ControllerTest extends Assertions {
     private float epsilon = 0.01f;
@@ -55,64 +57,32 @@ class ControllerTest extends Assertions {
         assertTrue(almostEquals(expectedPan, Controller.getSoundPan(source, target)));
     }
 
-    @Test
-    void testLoadUnlockedLevels() {
-        Controller.loadUnlockedLevels("");
-        onlyThisLevelAreUnlocked("1K");
-    }
-    @Test
-    void testLoadUnlockedLevels2() {
-        Controller.loadUnlockedLevels(null);
-        onlyThisLevelAreUnlocked("1K");
-    }
-    @Test
-    void testLoadUnlockedLevels3() {
-        Controller.loadUnlockedLevels("1K,0,1234567");
-        onlyThisLevelAreUnlocked("1K");
-    }
-    @Test
-    void testLoadUnlockedLevels4() {
-        Controller.loadUnlockedLevels("1K,49,1234567");
-        onlyThisLevelAreUnlocked("1K");
-    }
-    @Test
-    void testLoadUnlockedLevels5() {
-        Controller.loadUnlockedLevels("1K,50,1234567");
-        onlyThisLevelAreUnlocked("1K", "2K", "2F");
-    }
-    @Test
-    void testLoadUnlockedLevels6() {
-        Controller.loadUnlockedLevels("1K,1,1234567\n2K,1,1234567");
-        onlyThisLevelAreUnlocked("1K", "2K");
-    }
-    @Test
-    void testLoadUnlockedLevels7() {
-        Controller.loadUnlockedLevels("2K,1,1234567");
-        onlyThisLevelAreUnlocked("1K", "2K");
-    }
-    @Test
-    void testLoadUnlockedLevels8() {
-        Controller.loadUnlockedLevels("2K,1,1234567\n\n\n\n\n");
-        onlyThisLevelAreUnlocked("1K", "2K");
-    }
-    @Test
-    void testLoadUnlockedLevels9() {
-        Controller.loadUnlockedLevels("4K,1,1234567");
-        onlyThisLevelAreUnlocked("1K", "4K");
-    }
-    @Test
-    void testLoadUnlockedLevels10() {
-        Controller.loadUnlockedLevels("4K,51,1234567");
-        onlyThisLevelAreUnlocked("1K", "4K", "5K");
-    }
-    @Test
-    void testLoadUnlockedLevels11() {
-        Controller.loadUnlockedLevels("4K,51,1234567\n1K,51,1234567");
-        onlyThisLevelAreUnlocked("1K", "4K", "5K", "2K", "2F");
+    @ParameterizedTest
+    @MethodSource("unlockedLevels")
+    void testLoadUnlockedLevels(String contentOfTheFile, Set<String> expectedUnlockedLevels) {
+        Controller.loadUnlockedLevels(contentOfTheFile);
+        onlyThisLevelAreUnlocked(expectedUnlockedLevels);
     }
 
-    void onlyThisLevelAreUnlocked(String... levelIds) {
-        Set<String> levelIdsSet = Set.of((levelIds));
+    private static Stream<Arguments> unlockedLevels() {
+        //@formatter:off
+        return Stream.of(
+            Arguments.of("", Set.of("1K")),
+            Arguments.of(null, Set.of("1K")),
+            Arguments.of("1K,0,1234567", Set.of("1K")),
+            Arguments.of("1K,49,1234567", Set.of("1K")),
+            Arguments.of("1K,50,1234567", Set.of("1K", "2K", "2F")),
+            Arguments.of("1K,1,1234567\n2K,1,1234567", Set.of("1K", "2K")),
+            Arguments.of("2K,1,1234567", Set.of("1K", "2K")),
+            Arguments.of("2K,1,1234567\n\n\n\n\n", Set.of("1K", "2K")),
+            Arguments.of("4K,1,1234567", Set.of("1K", "4K")),
+            Arguments.of("4K,51,1234567", Set.of("1K", "4K", "5K")),
+            Arguments.of("4K,51,1234567\n1K,51,1234567", Set.of("1K", "4K", "5K", "2K", "2F"))
+        );
+        //@formatter:on
+    }
+
+    void onlyThisLevelAreUnlocked(Set<String> levelIdsSet) {
         for (Level level : Level.getLevelList()) {
             if (levelIdsSet.contains(level.getId())) {
                 assertTrue(level.isUnlocked(), "levelId: " + level.getId());

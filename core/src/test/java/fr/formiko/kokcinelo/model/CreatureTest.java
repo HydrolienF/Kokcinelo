@@ -3,10 +3,14 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.Controller;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import com.badlogic.gdx.math.Vector2;
 
 class CreatureTest extends Assertions {
@@ -38,62 +42,31 @@ class CreatureTest extends Assertions {
     @Test
     void testCreatureMove() {
         Creature c = new CreatureX();
-        // c.setMovingSpeed(1f);
         c.setCenter(0, 0);
         c.setRotation(0);
         c.getActor().moveFront(1f);
         almostEquals(0, c.getCenterX());
         almostEquals(1, c.getCenterY());
     }
-    @Test
-    void testCreatureMoveWithSpeed() {
+
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "1, 0, 0, 0, 1, 0, 1",
+        "1, 0, 0, 0, 0.2f, 0, 0.2f",
+        "4.5f, 0, 0, 0, 0.2f, 0, 0.9f",
+        "4.5f, 0, 0, 90, 0.2f, -0.9f, 0",
+        "5f, 0, 0, 45, 0.2f, -0.70711f, 0.70711f",
+    })
+    // @formatter:on
+    void testCreatureMoveWithSpeed(float movingSpeed, float x, float y, float rotation, float distance, float expectedX, float expectedY) {
         Creature c = new CreatureX();
-        c.setMovingSpeed(1f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(1f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(1, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeed2() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(1f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(0.2f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(0.2f, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeed3() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(4.5f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(0.2f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(0.9f, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeedY() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(4.5f);
-        c.setCenter(0, 0);
-        c.setRotation(90);
-        c.moveFront(0.2f);
-        almostEquals(-0.9f, c.getCenterX());
-        almostEquals(0, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeedXY() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(5f);
-        c.setCenter(0, 0);
-        c.setRotation(45);
-        c.moveFront(0.2f);
-        almostEquals(-0.70711f, c.getCenterX());
-        almostEquals(0.70711f, c.getCenterY());
+        c.setMovingSpeed(movingSpeed);
+        c.setCenter(x, y);
+        c.setRotation(rotation);
+        c.moveFront(distance);
+        almostEquals(expectedX, c.getCenterX());
+        almostEquals(expectedY, c.getCenterY());
     }
 
     @Test
@@ -126,10 +99,13 @@ class CreatureTest extends Assertions {
     }
 
     @Test
-    void testAnt() {
+    void testConstructor() {
         assertDoesNotThrow(() -> new Ant());
         assertDoesNotThrow(() -> new RedAnt());
+        assertDoesNotThrow(() -> new GreenAnt());
         assertDoesNotThrow(() -> new Ladybug());
+        assertDoesNotThrow(() -> new LadybugSideView());
+        assertDoesNotThrow(() -> new Aphid());
     }
 
     void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
@@ -291,6 +267,23 @@ class CreatureTest extends Assertions {
             angleNumber++;
         }
         assertEquals(angleNumber, wallsAngles.size());
+    }
+    @ParameterizedTest
+    @MethodSource("creatureProvider")
+    void testToString(Creature c, Set<String> contains) {
+        String s = c.toString();
+        for (String str : contains) {
+            assertTrue(s.contains(str));
+        }
+    }
+
+    private static Stream<Arguments> creatureProvider() {
+        Creature ladybug = new Ladybug();
+        ladybug.setCenter(-7.356f, 8.2425f);
+        ladybug.setRotation(0.123456f);
+        ladybug.setMovingSpeed(0.2f);
+        return Stream.of(Arguments.of(new Ant(), Set.of("Ant")),
+                Arguments.of(ladybug, Set.of("Ladybug", "8.2425", "-7.356", "0.123456", "0.2")));
     }
 
 

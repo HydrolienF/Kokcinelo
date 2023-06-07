@@ -26,7 +26,7 @@ public abstract class MapItem {
      * 
      * @param textureName name of the texture to use from assets/images/
      */
-    public MapItem(String textureName) {
+    protected MapItem(String textureName) {
         id = idCpt++;
         actor = new MapItemActor(textureName, this);
     }
@@ -62,7 +62,10 @@ public abstract class MapItem {
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override
-    public String toString() { return String.valueOf(id); }
+    public String toString() {
+        return String.valueOf(id) + "hitRadius : " + hitRadius + "\n" + "center : " + getCenter() + "\n" + "rotation : " + getRotation()
+                + "\n" + "zoom : " + getZoom() + "\n" + "actor : " + getActor() + "\n";
+    }
     @Override
     public int hashCode() { return id; }
     /**
