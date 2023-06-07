@@ -89,7 +89,7 @@ public abstract class Creature extends MapItem {
         // @formatter:off
         return Controller.getController().allCreatures().stream()
                 .filter(c -> c.isInstanceOf(getCreaturesHuntedBy()))
-                .filter(c -> see(c))
+                .filter(this::see)
                 .collect(HashSet::new, Set::add, Set::addAll);
         // @formatter:on
     }
@@ -103,7 +103,7 @@ public abstract class Creature extends MapItem {
         // @formatter:off
         return Controller.getController().allCreatures().stream()
                 .filter(c -> c.isInstanceOf(getCreaturesToHunt()))
-                .filter(c -> see(c))
+                .filter(this::see)
                 // Compare distance to this.
                 .min((c1, c2) -> Float.compare(distanceTo(c1), distanceTo(c2)))
                 .orElse(null);
@@ -203,17 +203,19 @@ public abstract class Creature extends MapItem {
     public void goTo(MapItem mi) { goTo(mi.getCenter()); }
     /**
      * {@summary Set wanted rotation to run away from v.}
-     * To run away from we calculate angle to go to the center of the enemies,
-     * then add 180 degre to go to the oposite direction.
+     * To run away from we calculate angle to each enemy & wall.
+     * Then we run away from the biggest angle.
      * 
-     * @param vectorList contains coordinate of Points to run away from
+     * @param vectorList      contains coordinate of Points to run away from
+     * @param forbiddenAngles contains angle to avoid as wall direction
      */
     public void runAwayFrom(List<Float> forbiddenAngles, Vector2... vectorList) {
-        if (vectorList.length == 0) {
-            return;
-        } else if (vectorList.length == 1 && forbiddenAngles.isEmpty()) {
+        // No enemy -> do nothing.
+        // 1 enemy & no wall -> easy to run away.
+        if (vectorList.length == 1 && forbiddenAngles.isEmpty()) {
             goTo(vectorList[0], 180f);
-        } else {
+            // More than 1 enemy or wall -> find a good way to run away.
+        } else if (vectorList.length > 1) {
             // Run by the biggest angle between 2 enemies.
             List<Float> angles = new ArrayList<>();
             for (Vector2 v : vectorList) {
@@ -221,22 +223,7 @@ public abstract class Creature extends MapItem {
                 angles.add(vAngle.angleDeg());
             }
             // Also avoid wall by conciderning walls as enemies.
-            if (!forbiddenAngles.isEmpty()) {
-                angles.add(forbiddenAngles.get(0));
-                if (forbiddenAngles.size() > 1) {
-                    float a0 = forbiddenAngles.get(0);
-                    float a1 = forbiddenAngles.get(1);
-                    if (forbiddenAngles.get(0) == 0 && forbiddenAngles.get(1) == 270) { // patch for the angle 270 to 0.
-                        a0 = 270;
-                        a1 = 360;
-                    }
-                    // Add more enemies angle between the 2 forbidden angles to avoid to go into the corner.
-                    // (Add 7, one for each 10° should be enoth.)
-                    for (float i = a0 + 10; i < a1; i += 10) {
-                        angles.add(i);
-                    }
-                }
-            }
+            addForbiddenAngleAsEnemisAngles(forbiddenAngles, angles);
 
             angles.sort(Float::compare);
 
@@ -259,6 +246,31 @@ public abstract class Creature extends MapItem {
             App.log(0, "maxanglesDif : " + maxAngleDif);
             App.log(0, "direction:" + direction);
             goTo(direction - 90);
+        }
+    }
+
+    /**
+     * {@summary Add forbidden angles as enemies angles.}
+     * 
+     * @param forbiddenAngles angles to avoid
+     * @param angles          enemies angles where to add new enemis angles
+     */
+    private void addForbiddenAngleAsEnemisAngles(List<Float> forbiddenAngles, List<Float> angles) {
+        if (!forbiddenAngles.isEmpty()) {
+            angles.add(forbiddenAngles.get(0));
+            if (forbiddenAngles.size() > 1) {
+                float a0 = forbiddenAngles.get(0);
+                float a1 = forbiddenAngles.get(1);
+                if (forbiddenAngles.get(0) == 0 && forbiddenAngles.get(1) == 270) { // patch for the angle 270 to 0.
+                    a0 = 270;
+                    a1 = 360;
+                }
+                // Add more enemies angle between the 2 forbidden angles to avoid to go into the corner.
+                // (Add 7, one for each 10° should be enoth.)
+                for (float i = a0 + 10; i < a1; i += 10) {
+                    angles.add(i);
+                }
+            }
         }
     }
 
@@ -302,7 +314,7 @@ public abstract class Creature extends MapItem {
         Collection<Creature> enemies = getVisibleCreatureHuntedBy();
         if (!enemies.isEmpty()) {
             // Run away move
-            Vector2[] vectors = enemies.stream().map(c -> c.getCenter()).toArray(Vector2[]::new);
+            Vector2[] vectors = enemies.stream().map(MapItem::getCenter).toArray(Vector2[]::new);
             runAwayFrom(getWallsAngles(), vectors);
             moveFront();
             moveStatus = 2;
