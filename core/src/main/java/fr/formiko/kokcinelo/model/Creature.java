@@ -64,6 +64,8 @@ public abstract class Creature extends MapItem {
     public void setMovingSpeed(float movingSpeed) { this.movingSpeed = movingSpeed; }
     public float getCurrentSpeed() { return currentSpeed; }
     public void setCurrentSpeed(float currentSpeed) { this.currentSpeed = currentSpeed; }
+    public float getDefaultMoveFrontSpeed() { return defaultMoveFrontSpeed; }
+    public void setDefaultMoveFrontSpeed(float defaultMoveFrontSpeed) { this.defaultMoveFrontSpeed = defaultMoveFrontSpeed; }
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
     public float getLifePoints() { return lifePoints; }
@@ -76,6 +78,7 @@ public abstract class Creature extends MapItem {
     public void setShootPoints(float shootPoints) { this.shootPoints = shootPoints; }
     public int getShootRadius() { return shootRadius; }
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
+    public float getAnimationSpeedMultiplier() { return 1f; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
@@ -215,7 +218,7 @@ public abstract class Creature extends MapItem {
         if (vectorList.length == 1 && forbiddenAngles.isEmpty()) {
             goTo(vectorList[0], 180f);
             // More than 1 enemy or wall -> find a good way to run away.
-        } else if (vectorList.length > 1) {
+        } else if (vectorList.length > 1 || !forbiddenAngles.isEmpty()) {
             // Run by the biggest angle between 2 enemies.
             List<Float> angles = new ArrayList<>();
             for (Vector2 v : vectorList) {
