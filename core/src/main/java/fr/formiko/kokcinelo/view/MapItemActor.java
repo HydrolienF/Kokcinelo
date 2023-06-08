@@ -22,8 +22,10 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationState.AnimationStateListener;
 import com.esotericsoftware.spine.AnimationState.TrackEntry;
 import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.Event;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.SkeletonActor;
@@ -97,7 +99,47 @@ public class MapItemActor extends SkeletonActor {
             setRenderer(skeletonRenderer);
             setSkeleton(skeleton);
             setAnimationState(animationState);
+
+            // addDelay();
         }
+    }
+
+    /**
+     * The first animation will be play from a random time.
+     * It is used so that all Creature of same type don't move at the same time.
+     */
+    private void addDelay() {
+        // TODO not working as espected
+        float delay = (float) Math.random() * getAnimationState().getCurrent(0).getAnimation().getDuration() / 4;
+        getAnimationState().getCurrent(0).setAnimationStart(delay);
+        getAnimationState().addListener(new AnimationStateListener() {
+            @Override
+            public void complete(TrackEntry entry) {
+                getAnimationState().getCurrent(0).setAnimationStart(0);
+                getAnimationState().removeListener(this);
+                App.log(2, "1a animation complete");
+            }
+            @Override
+            public void start(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void interrupt(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void end(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void dispose(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void event(TrackEntry entry, Event event) {
+                // Nothing to do
+            }
+        });
     }
     /**
      * {@summary Secondary constructor with a null texture but a fix size.}

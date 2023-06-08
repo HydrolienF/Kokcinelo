@@ -19,9 +19,10 @@ public class Aphid extends Creature {
     private Type type;
     private Color color;
     private enum Type {
-        normal
+        NORMAL, SPEED, HEALTH, SCORE, VISIBILITY
     }
-    private static Map<Type, Color> typeColorMap = Map.of(Type.normal, new Color(0.4f, 1f, 0f, 1f));
+    private static Map<Type, Color> typeColorMap = Map.of(Type.NORMAL, new Color(0.4f, 1f, 0f, 1f), Type.SPEED, Color.NAVY, Type.HEALTH,
+            Color.RED, Type.SCORE, Color.GOLD, Type.VISIBILITY, Color.CYAN);
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -37,7 +38,8 @@ public class Aphid extends Creature {
         hitRadius = 20;
         movingSpeed = 1.5f;
         defaultMoveFrontSpeed = 0.3f;
-        type = Type.normal;
+        type = Type.NORMAL;
+        // type = Type.values()[MathUtils.random(0, Type.values().length - 1)]; // random color.
         colorSkeleton();
     }
 
