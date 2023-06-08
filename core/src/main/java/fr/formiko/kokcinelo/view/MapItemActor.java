@@ -117,7 +117,6 @@ public class MapItemActor extends SkeletonActor {
             public void complete(TrackEntry entry) {
                 getAnimationState().getCurrent(0).setAnimationStart(0);
                 getAnimationState().removeListener(this);
-                App.log(2, "1a animation complete");
             }
             @Override
             public void start(TrackEntry entry) {
