@@ -390,7 +390,7 @@ public class GameState {
          * @param antsNumber     number of ants to play with
          */
         private void addCreatures(int aphidsNumber, int ladybugsNumber, int redAntNumber, int greenAntNumber) {
-            addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
+            addC(aphidsNumber, 0.02f, 0.04f, true, true, Aphid.class);
             addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
             float antSize = 0.05f;
             addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);

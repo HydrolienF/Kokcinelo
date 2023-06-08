@@ -67,7 +67,7 @@ public class MenuScreen extends KScreen implements Screen {
     private boolean playingVideo = false;
     private long timePlayingVideo;
     private int fullVideoTime = 1000;
-    private static final float BACKGROUND_SPEED = 50;
+    private float backgroundSpeed = 50;
     private OrthographicCamera cameraBc;
     private Actor playButton;
     private List<OptionsTable> optionsTables = new ArrayList<>();
@@ -114,15 +114,21 @@ public class MenuScreen extends KScreen implements Screen {
             long time = System.currentTimeMillis();
             ScreenUtils.clear(Color.BLACK);
 
-            cameraBc.position.x += delta * BACKGROUND_SPEED;
             if (getLevel().getLetter().equals("K")) {
                 Actor environement = backgroundStage.getRoot().findActor("environement");
                 cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
                 cameraBc.zoom = 1;
-            } else {
+                backgroundSpeed = 50;
+            } else if (getLevel().getLetter().equals("F")) {
                 cameraBc.zoom = 0.3f;
                 cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
+                backgroundSpeed = 50;
+            } else if (getLevel().getLetter().equals("A")) {
+                cameraBc.zoom = 0.1f;
+                cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
+                backgroundSpeed = 14;
             }
+            cameraBc.position.x += delta * backgroundSpeed;
             batch.setProjectionMatrix(cameraBc.combined);
             backgroundStage.act(delta);
             backgroundStage.draw();
@@ -244,7 +250,7 @@ public class MenuScreen extends KScreen implements Screen {
         final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
                 LadybugSideView.class, "K", Aphid.class, "A");
         creatureImages = new ArrayList<>();
-        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class, Aphid.class)) {
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
@@ -268,10 +274,9 @@ public class MenuScreen extends KScreen implements Screen {
                     imageWidth = 738;
                     imageHeight = 536;
                 }
-                // } else if (c instanceof Aphid) {
-                // // TODO set imageWidth & imageHeight
-                // imageWidth = 1000;
-                // imageHeight = 1000;
+            } else if (c instanceof Aphid) {
+                imageWidth = 2000;
+                imageHeight = 2000;
             } else {
                 imageWidth = 1000;
                 imageHeight = 1000;
@@ -283,7 +288,7 @@ public class MenuScreen extends KScreen implements Screen {
             }
             c.setZoom(Math.min(cActor.getWidth() / imageHeight, cActor.getHeight() / imageWidth));
 
-            c.setCurrentSpeed(c.getMovingSpeed());
+            c.setCurrentSpeed(c.getMovingSpeed() * c.getDefaultMoveFrontSpeed() / 0.6f);
             c.setMaxLifePoints(0); // Don't show life bar
 
             creatureImages.add(cActor);

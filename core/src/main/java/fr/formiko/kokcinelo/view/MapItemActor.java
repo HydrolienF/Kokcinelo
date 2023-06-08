@@ -235,7 +235,7 @@ public class MapItemActor extends SkeletonActor {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
             if (mapItem instanceof Creature c && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
-                getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f);
+                getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f * c.getAnimationSpeedMultiplier());
             }
             if (((Creature) mapItem).getCurrentSpeed() > 0) {
                 super.act(delta);

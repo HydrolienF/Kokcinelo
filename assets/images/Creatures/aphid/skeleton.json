@@ -1,0 +1,402 @@
+{
+"skeleton": {
+	"hash": "2YqzUUVBE8E",
+	"spine": "4.1.21",
+	"x": -798.07,
+	"y": -887.76,
+	"width": 1596.15,
+	"height": 1775.52,
+	"images": "../morceau par morceau/aphid piece by piece/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "antennae r", "parent": "root", "length": 850, "rotation": -80, "x": 103.1, "y": 490.51 },
+	{ "name": "antennae l", "parent": "root", "length": 850, "rotation": -100, "x": -103.1, "y": 490.51 },
+	{ "name": "leg 1 r", "parent": "root", "x": 125.78, "y": 399.64 },
+	{ "name": "leg 1 femur r", "parent": "leg 1 r", "length": 220, "rotation": 9.4, "y": 0.98 },
+	{ "name": "leg 1 tibia tarsus r", "parent": "leg 1 femur r", "length": 480, "rotation": 59.6, "x": 218.93, "y": -0.14 },
+	{ "name": "leg 1 l", "parent": "root", "x": -125.78, "y": 399.64 },
+	{ "name": "leg 1 femur l", "parent": "leg 1 l", "length": 220, "rotation": 170.6, "y": 0.87 },
+	{ "name": "leg 1 tibia tarsus l", "parent": "leg 1 femur l", "length": 480, "rotation": -59.6, "x": 218.95, "y": 0.03 },
+	{ "name": "leg 2 r", "parent": "root", "x": 175.7, "y": 329.85 },
+	{ "name": "leg 2 femur r", "parent": "leg 2 r", "length": 360, "rotation": -44.5 },
+	{ "name": "leg 2 tibia tarsus r", "parent": "leg 2 femur r", "length": 430, "rotation": 8.5, "x": 370.83, "y": -0.83 },
+	{ "name": "leg 2 l", "parent": "root", "x": 175.7, "y": 329.85 },
+	{ "name": "leg 2 femur l", "parent": "leg 2 l", "length": 360, "rotation": -135.5, "x": -351.4 },
+	{ "name": "leg 2 tibia tarsus l", "parent": "leg 2 femur l", "length": 444, "rotation": -8.5, "x": 370.83, "y": 0.83 },
+	{ "name": "leg 3 r", "parent": "root", "x": 242.36, "y": 121.38 },
+	{ "name": "leg 3 femur r", "parent": "leg 3 r", "length": 499.5, "rotation": -83 },
+	{ "name": "leg 3 tibia tarsus r", "parent": "leg 3 femur r", "length": 512.55, "rotation": -2, "x": 502.23, "y": -0.06 },
+	{ "name": "leg 3 l", "parent": "root", "x": 242.36, "y": 121.38 },
+	{ "name": "leg 3 femur l", "parent": "leg 3 l", "length": 499.5, "rotation": -97, "x": -484.72 },
+	{ "name": "leg 3 tibia tarsus l", "parent": "leg 3 femur l", "length": 512.55, "rotation": 2, "x": 502.23, "y": 0.06 }
+],
+"slots": [
+	{ "name": "leg 2 tibia tarsus background r", "bone": "leg 2 tibia tarsus r", "attachment": "leg 2 tibia tarsus background" },
+	{ "name": "leg 2 tibia tarsus background l", "bone": "leg 2 tibia tarsus l", "attachment": "leg 2 tibia tarsus background" },
+	{ "name": "leg 2 tibia tarsus r", "bone": "leg 2 tibia tarsus r", "attachment": "leg 2 tibia tarsus" },
+	{ "name": "leg 2 tibia tarsus l", "bone": "leg 2 tibia tarsus l", "attachment": "leg 2 tibia tarsus" },
+	{ "name": "leg 2 femur background r", "bone": "leg 2 femur r", "attachment": "leg 2 femur background" },
+	{ "name": "leg 2 femur background l", "bone": "leg 2 femur l", "attachment": "leg 2 femur background" },
+	{ "name": "leg 2 femur", "bone": "leg 2 femur r", "attachment": "leg 2 femur" },
+	{ "name": "leg 2 femul", "bone": "leg 2 femur l", "attachment": "leg 2 femur" },
+	{ "name": "leg 3 tibia tarsus background r", "bone": "leg 3 tibia tarsus r", "attachment": "leg 3 tibia tarsus background" },
+	{ "name": "leg 3 tibia tarsus background l", "bone": "leg 3 tibia tarsus l", "attachment": "leg 3 tibia tarsus background" },
+	{ "name": "leg 3 tibia tarsus r", "bone": "leg 3 tibia tarsus r", "attachment": "leg 3 tibia tarsus" },
+	{ "name": "leg 3 tibia tarsus l", "bone": "leg 3 tibia tarsus l", "attachment": "leg 3 tibia tarsus" },
+	{ "name": "leg 3 femur background r", "bone": "leg 3 femur r", "attachment": "leg 3 femur background" },
+	{ "name": "leg 3 femur background l", "bone": "leg 3 femur l", "attachment": "leg 3 femur background" },
+	{ "name": "leg 3 femur l", "bone": "leg 3 femur l", "attachment": "leg 3 femur" },
+	{ "name": "leg 3 femur r", "bone": "leg 3 femur r", "attachment": "leg 3 femur" },
+	{ "name": "leg 1 tibia tarsus background r", "bone": "leg 1 tibia tarsus r", "attachment": "leg 1 tibia tarsus background" },
+	{ "name": "leg 1 tibia tarsus background l", "bone": "leg 1 tibia tarsus l", "attachment": "leg 1 tibia tarsus background" },
+	{ "name": "leg 1 tibia tarsus r", "bone": "leg 1 tibia tarsus r", "attachment": "leg 1 tibia tarsus" },
+	{ "name": "leg 1 tibia tarsus l", "bone": "leg 1 tibia tarsus l", "attachment": "leg 1 tibia tarsus" },
+	{ "name": "leg 1 femur background r", "bone": "leg 1 femur r", "attachment": "leg 1 femur background" },
+	{ "name": "leg 1 femur background l", "bone": "leg 1 femur l", "attachment": "leg 1 femur background" },
+	{ "name": "leg 1 femur r", "bone": "leg 1 femur r", "attachment": "leg 1 femur" },
+	{ "name": "leg 1 femur l", "bone": "leg 1 femur l", "attachment": "leg 1 femur" },
+	{ "name": "body background", "bone": "root", "attachment": "body background" },
+	{ "name": "body", "bone": "root", "attachment": "body" },
+	{ "name": "antennae background r", "bone": "antennae r", "attachment": "antennae background" },
+	{ "name": "antennae r", "bone": "antennae r", "attachment": "antennae" },
+	{ "name": "antennae background l", "bone": "antennae l", "attachment": "antennae background" },
+	{ "name": "antennae l", "bone": "antennae l", "attachment": "antennae" },
+	{ "name": "cornicle r", "bone": "root", "attachment": "cornicle" },
+	{ "name": "cornicle l", "bone": "root", "attachment": "cornicle" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"antennae background l": {
+				"antennae background": { "x": 465.16, "y": 186.71, "scaleX": -1, "rotation": 100, "width": 1590, "height": 1770 }
+			},
+			"antennae background r": {
+				"antennae background": { "x": 465.16, "y": -186.71, "rotation": 80, "width": 1590, "height": 1770 }
+			},
+			"antennae l": {
+				"antennae": { "x": 465.16, "y": 186.71, "scaleX": -1, "rotation": 100, "width": 1590, "height": 1770 }
+			},
+			"antennae r": {
+				"antennae": { "x": 465.16, "y": -186.71, "rotation": 80, "width": 1590, "height": 1770 }
+			},
+			"body": {
+				"body": { "width": 1590, "height": 1770 }
+			},
+			"body background": {
+				"body background": { "width": 1590, "height": 1770 }
+			},
+			"cornicle l": {
+				"cornicle": { "scaleX": -1, "width": 1590, "height": 1770 }
+			},
+			"cornicle r": {
+				"cornicle": { "width": 1590, "height": 1770 }
+			},
+			"leg 1 femur background l": {
+				"leg 1 femur background": { "x": -189.5, "y": 374.59, "scaleX": -1, "rotation": -170.6, "width": 1590, "height": 1770 }
+			},
+			"leg 1 femur background r": {
+				"leg 1 femur background": { "x": -189.52, "y": -374.7, "rotation": -9.4, "width": 1590, "height": 1770 }
+			},
+			"leg 1 femur l": {
+				"leg 1 femur": { "x": -189.5, "y": 374.59, "scaleX": -1, "rotation": -170.6, "width": 1590, "height": 1770 }
+			},
+			"leg 1 femur r": {
+				"leg 1 femur": { "x": -189.52, "y": -374.7, "rotation": -9.4, "width": 1590, "height": 1770 }
+			},
+			"leg 1 tibia tarsus background l": {
+				"leg 1 tibia tarsus background": { "x": -529.76, "y": -162.75, "scaleX": -1, "rotation": -111, "width": 1590, "height": 1770 }
+			},
+			"leg 1 tibia tarsus background r": {
+				"leg 1 tibia tarsus background": { "x": -529.76, "y": 162.75, "rotation": -69, "width": 1590, "height": 1770 }
+			},
+			"leg 1 tibia tarsus l": {
+				"leg 1 tibia tarsus": { "x": -529.76, "y": -162.75, "scaleX": -1, "rotation": -111, "width": 1590, "height": 1770 }
+			},
+			"leg 1 tibia tarsus r": {
+				"leg 1 tibia tarsus": { "x": -529.76, "y": 162.75, "rotation": -69, "width": 1590, "height": 1770 }
+			},
+			"leg 2 femul": {
+				"leg 2 femur": { "x": 105.87, "y": 358.41, "scaleX": -1, "rotation": 135.5, "width": 1590, "height": 1770 }
+			},
+			"leg 2 femur": {
+				"leg 2 femur": { "x": 105.87, "y": -358.41, "rotation": 44.5, "width": 1590, "height": 1770 }
+			},
+			"leg 2 femur background l": {
+				"leg 2 femur background": { "x": 105.87, "y": 358.41, "scaleX": -1, "rotation": 135.5, "width": 1590, "height": 1770 }
+			},
+			"leg 2 femur background r": {
+				"leg 2 femur background": { "x": 105.87, "y": -358.41, "rotation": 44.5, "width": 1590, "height": 1770 }
+			},
+			"leg 2 tibia tarsus background l": {
+				"leg 2 tibia tarsus background": { "x": -314.9, "y": 314.49, "scaleX": -1, "rotation": 144, "width": 1590, "height": 1770 }
+			},
+			"leg 2 tibia tarsus background r": {
+				"leg 2 tibia tarsus background": { "x": -314.9, "y": -314.49, "rotation": 36, "width": 1590, "height": 1770 }
+			},
+			"leg 2 tibia tarsus l": {
+				"leg 2 tibia tarsus": { "x": -314.9, "y": 314.49, "scaleX": -1, "rotation": 144, "width": 1590, "height": 1770 }
+			},
+			"leg 2 tibia tarsus r": {
+				"leg 2 tibia tarsus": { "x": -314.9, "y": -314.49, "rotation": 36, "width": 1590, "height": 1770 }
+			},
+			"leg 3 femur background l": {
+				"leg 3 femur background": { "x": 90.94, "y": 255.34, "scaleX": -1, "rotation": 97.2, "width": 1590, "height": 1770 }
+			},
+			"leg 3 femur background r": {
+				"leg 3 femur background": { "x": 90.94, "y": -255.34, "rotation": 83, "width": 1590, "height": 1770 }
+			},
+			"leg 3 femur l": {
+				"leg 3 femur": { "x": 90.94, "y": 255.34, "scaleX": -1, "rotation": 97, "width": 1590, "height": 1770 }
+			},
+			"leg 3 femur r": {
+				"leg 3 femur": { "x": 90.94, "y": -255.34, "rotation": 83, "width": 1590, "height": 1770 }
+			},
+			"leg 3 tibia tarsus background l": {
+				"leg 3 tibia tarsus background": { "x": -402.13, "y": 269.49, "scaleX": -1, "rotation": 95, "width": 1590, "height": 1770 }
+			},
+			"leg 3 tibia tarsus background r": {
+				"leg 3 tibia tarsus background": { "x": -402.13, "y": -269.49, "rotation": 85, "width": 1590, "height": 1770 }
+			},
+			"leg 3 tibia tarsus l": {
+				"leg 3 tibia tarsus": { "x": -402.13, "y": 269.49, "scaleX": -1, "rotation": 95, "width": 1590, "height": 1770 }
+			},
+			"leg 3 tibia tarsus r": {
+				"leg 3 tibia tarsus": { "x": -402.13, "y": -269.49, "rotation": 85, "width": 1590, "height": 1770 }
+			}
+		}
+	}
+],
+"animations": {
+	"default": {
+		"bones": {
+			"antennae r": {
+				"rotate": [
+					{},
+					{ "time": 0.6667, "value": -2 },
+					{ "time": 1.3333 }
+				]
+			},
+			"antennae l": {
+				"rotate": [
+					{},
+					{ "time": 0.6667, "value": 2 },
+					{ "time": 1.3333 }
+				]
+			}
+		}
+	},
+	"walk": {
+		"bones": {
+			"leg 3 femur r": {
+				"rotate": [
+					{
+						"curve": [ 0.222, 0, 0.444, 30 ]
+					},
+					{
+						"time": 0.6667,
+						"value": 30,
+						"curve": [ 0.889, 30, 1.111, 0 ]
+					},
+					{ "time": 1.3333 }
+				],
+				"scale": [
+					{
+						"curve": [ 0.222, 1, 0.444, 0.8, 0.222, 1, 0.444, 1 ]
+					},
+					{
+						"time": 0.6667,
+						"x": 0.8,
+						"curve": [ 0.889, 0.8, 1.111, 1, 0.889, 1, 1.111, 1 ]
+					},
+					{ "time": 1.3333 }
+				]
+			},
+			"leg 3 tibia tarsus r": {
+				"rotate": [
+					{
+						"value": -6,
+						"curve": [ 0.222, -6, 0.444, 11 ]
+					},
+					{
+						"time": 0.6667,
+						"value": 11,
+						"curve": [ 0.756, 11, 0.844, -6 ]
+					},
+					{ "time": 0.9333, "value": -6 }
+				]
+			},
+			"leg 2 femur r": {
+				"rotate": [
+					{
+						"value": 37.5,
+						"curve": [ 0.222, 37.5, 0.444, 0 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.889, 0, 1.111, 37.5 ]
+					},
+					{ "time": 1.3333, "value": 37.5 }
+				]
+			},
+			"leg 2 tibia tarsus r": {
+				"rotate": [
+					{
+						"curve": [ 0.089, 0, 0.178, -28.5 ]
+					},
+					{ "time": 0.2667, "value": -28.5, "curve": "stepped" },
+					{
+						"time": 0.6667,
+						"value": -28.5,
+						"curve": [ 0.889, -28.5, 1.111, 0 ]
+					},
+					{ "time": 1.3333 }
+				],
+				"scale": [
+					{
+						"curve": [ 0.222, 1, 0.444, 1.1, 0.222, 1, 0.444, 1 ]
+					},
+					{
+						"time": 0.6667,
+						"x": 1.1,
+						"curve": [ 0.889, 1.1, 1.111, 1, 0.889, 1, 1.111, 1 ]
+					},
+					{ "time": 1.3333 }
+				]
+			},
+			"leg 1 femur r": {
+				"rotate": [
+					{
+						"curve": [ 0.222, 0, 0.444, 28 ]
+					},
+					{
+						"time": 0.6667,
+						"value": 28,
+						"curve": [ 0.889, 28, 1.111, 0 ]
+					},
+					{ "time": 1.3333 }
+				]
+			},
+			"leg 1 tibia tarsus r": {
+				"rotate": [
+					{
+						"value": -75.6,
+						"curve": [ 0.222, -75.6, 0.581, -0.58 ]
+					},
+					{
+						"time": 0.6667,
+						"value": -19.6,
+						"curve": [ 0.85, -60.26, 1.111, -75.6 ]
+					},
+					{ "time": 1.3333, "value": -75.6 }
+				]
+			},
+			"leg 3 femur l": {
+				"rotate": [
+					{
+						"value": -30,
+						"curve": [ 0.222, -30, 0.444, 0 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.889, 0, 1.111, -30 ]
+					},
+					{ "time": 1.3333, "value": -30 }
+				],
+				"scale": [
+					{
+						"x": 0.8,
+						"curve": [ 0.222, 0.8, 0.444, 1, 0.222, 1, 0.444, 1 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.889, 1, 1.111, 0.8, 0.889, 1, 1.111, 1 ]
+					},
+					{ "time": 1.3333, "x": 0.8 }
+				]
+			},
+			"leg 3 tibia tarsus l": {
+				"rotate": [
+					{
+						"value": -10,
+						"curve": [ 0.089, -10, 0.178, 7 ]
+					},
+					{ "time": 0.2667, "value": 7, "curve": "stepped" },
+					{
+						"time": 0.6667,
+						"value": 7,
+						"curve": [ 0.889, 7, 1.111, -10 ]
+					},
+					{ "time": 1.3333, "value": -10 }
+				]
+			},
+			"leg 2 femur l": {
+				"rotate": [
+					{
+						"curve": [ 0.222, 0, 0.444, -37.5 ]
+					},
+					{
+						"time": 0.6667,
+						"value": -37.5,
+						"curve": [ 0.889, -37.5, 1.111, 0 ]
+					},
+					{ "time": 1.3333 }
+				]
+			},
+			"leg 2 tibia tarsus l": {
+				"rotate": [
+					{
+						"value": 28.5,
+						"curve": [ 0.222, 28.5, 0.444, 0 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.756, 0, 0.844, 28.5 ]
+					},
+					{ "time": 0.9333, "value": 28.5 }
+				],
+				"scale": [
+					{
+						"x": 1.1,
+						"curve": [ 0.222, 1.1, 0.444, 1, 0.222, 1, 0.444, 1 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.889, 1, 1.111, 1.1, 0.889, 1, 1.111, 1 ]
+					},
+					{ "time": 1.3333, "x": 1.1 }
+				]
+			},
+			"leg 1 femur l": {
+				"rotate": [
+					{
+						"value": -28,
+						"curve": [ 0.222, -28, 0.444, 0 ]
+					},
+					{
+						"time": 0.6667,
+						"curve": [ 0.889, 0, 1.111, -28 ]
+					},
+					{ "time": 1.3333, "value": -28 }
+				]
+			},
+			"leg 1 tibia tarsus l": {
+				"rotate": [
+					{
+						"value": 19.6,
+						"curve": [ 0.195, 56.04, 0.444, 75.6 ]
+					},
+					{
+						"time": 0.6667,
+						"value": 75.6,
+						"curve": [ 0.889, 75.6, 1.285, 1.82 ]
+					},
+					{ "time": 1.3333, "value": 19.6 }
+				]
+			}
+		}
+	}
+}
+}

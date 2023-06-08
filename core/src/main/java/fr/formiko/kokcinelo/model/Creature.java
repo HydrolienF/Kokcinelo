@@ -26,7 +26,6 @@ public abstract class Creature extends MapItem {
     protected float shootPoints;
     protected float visionRadius;
     protected float hearRadius;
-    protected int color;
     protected float movingSpeed;
     /** Wanted rotation relative to current one. */
     protected float wantedRotation;
@@ -129,9 +128,9 @@ public abstract class Creature extends MapItem {
     public String toString() {
         return this.getClass().getSimpleName() + " : " + super.toString() + "\n" + "lifePoints : " + lifePoints + "\n" + "maxLifePoints : "
                 + maxLifePoints + "\n" + "hitPoints : " + hitPoints + "\n" + "shootPoints : " + shootPoints + "\n" + "visionRadius : "
-                + visionRadius + "\n" + "color : " + color + "\n" + "movingSpeed : " + movingSpeed + "\n" + "wantedRotation : "
-                + wantedRotation + "\n" + "lastHitTime : " + lastHitTime + "\n" + "lastShootTime : " + lastShootTime + "\n"
-                + "hitFrequency : " + hitFrequency + "\n" + "shootFrequency : " + shootFrequency + "\n";
+                + visionRadius + "\n" + "movingSpeed : " + movingSpeed + "\n" + "wantedRotation : " + wantedRotation + "\n"
+                + "lastHitTime : " + lastHitTime + "\n" + "lastShootTime : " + lastShootTime + "\n" + "hitFrequency : " + hitFrequency
+                + "\n" + "shootFrequency : " + shootFrequency + "\n";
     }
     /** Do this see mi */
     public boolean see(MapItem mi) { return isInRadius(mi, visionRadius + mi.getHitRadius()); }

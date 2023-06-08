@@ -247,7 +247,7 @@ class LevelButton extends Button {
      */
     private Sprite getSprite() {
         Creature c, c2;
-        final float aphidSize = 0.35f;
+        final float aphidSize = 0.07f;
         final float antSize = 0.075f;
         final float ladybugSize = 0.33f;
         if (sprite == null) {
