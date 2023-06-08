@@ -21,7 +21,7 @@ public class Aphid extends Creature {
     private enum Type {
         normal
     }
-    private static Map<Type, Color> typeColorMap = Map.of(Type.normal, Color.GREEN);
+    private static Map<Type, Color> typeColorMap = Map.of(Type.normal, new Color(0.4f, 1f, 0f, 1f));
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
