@@ -643,7 +643,9 @@ public class MenuScreen extends KScreen implements Screen {
             return Fonts.getTranslation("ComingSoon") + "\n" + desc;
         }
     }
-    private String getCreatureList(String levelId) { return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn()); }
+    private String getCreatureList(String levelId) {
+        return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn(), 4);
+    }
     /**
      * @param levelId the level id
      * @return A String representing the level id.

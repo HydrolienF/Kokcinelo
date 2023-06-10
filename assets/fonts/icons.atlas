@@ -1,40 +1,68 @@
 
 icons.png
-size: 512, 128
+size: 1024, 128
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 1F41C
-  rotate: false
-  xy: 2, 2
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-1F41E
   rotate: false
   xy: 104, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-1F577
-  rotate: false
-  xy: 308, 2
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-1F982
+1F41E
   rotate: false
   xy: 206, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-1F997
+1F577
+  rotate: false
+  xy: 512, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F7E5
   rotate: false
   xy: 410, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F7E6
+  rotate: false
+  xy: 2, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F7E7
+  rotate: false
+  xy: 716, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F7E9
+  rotate: false
+  xy: 818, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F982
+  rotate: false
+  xy: 308, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1F997
+  rotate: false
+  xy: 614, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

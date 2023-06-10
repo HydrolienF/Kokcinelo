@@ -17,7 +17,7 @@ public class Aphid extends Creature {
     // private Color color;
     private static final Map<Class<? extends Aphid>, Color> typeColorMap = Map.of(Aphid.class, new Color(0.4f, 1f, 0f, 1f),
             SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, Color.GOLD, VisibilityAphid.class,
-            new Color(0.05f, 0.15f, 0.08f, 1f));
+            new Color(0.05f, 0.25f, 0f, 1f));
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -95,33 +95,3 @@ public class Aphid extends Creature {
     }
 }
 
-// SUBCLASSES -------------------------------------------------------------------
-class SpeedAphid extends Aphid {
-    public SpeedAphid() { super(); }
-    @Override
-    public void bonusWhenEaten(Creature eater) {
-        App.log(1, "BONUS", "Give eat bonus: " + getClass().getSimpleName() + " to " + eater.getId());
-        eater.setMovingSpeed(eater.getMovingSpeed() * 1.03f);
-    }
-}
-class HealthAphid extends Aphid {
-    public HealthAphid() { super(); }
-    @Override
-    public void bonusWhenEaten(Creature eater) {
-        App.log(1, "BONUS", "Give eat bonus: " + getClass().getSimpleName() + " to " + eater.getId());
-        eater.setLifePoints(eater.getLifePoints() + eater.getMaxLifePoints() / 10f);
-    }
-}
-class ScoreAphid extends Aphid {
-    public ScoreAphid() { super(); }
-    @Override
-    public int getGivenPoints() { return 10; }
-}
-class BigScoreAphid extends Aphid {
-    public BigScoreAphid() { super(); }
-    @Override
-    public int getGivenPoints() { return 50; }
-}
-class VisibilityAphid extends Aphid {
-    public VisibilityAphid() { super(); }
-}

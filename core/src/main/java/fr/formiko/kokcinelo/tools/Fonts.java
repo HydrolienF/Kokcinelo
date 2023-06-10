@@ -2,12 +2,18 @@ package fr.formiko.kokcinelo.tools;
 
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GreenAnt;
+import fr.formiko.kokcinelo.model.HealthAphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.RedAnt;
+import fr.formiko.kokcinelo.model.ScoreAphid;
+import fr.formiko.kokcinelo.model.SpeedAphid;
+import fr.formiko.kokcinelo.model.VisibilityAphid;
 import fr.formiko.usual.g;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,7 +32,8 @@ public class Fonts extends BitmapFont {
     private static String DEFAULT_CHARS;
     private static EmojiSupport emojiSupport;
     private static final Map<Class<? extends Creature>, String> icons = Map.of(Ant.class, "🐜", Ladybug.class, "🐞", Aphid.class, "🦗",
-            RedAnt.class, "🕷", GreenAnt.class, "🦂");
+            RedAnt.class, "🕷", GreenAnt.class, "🦂", SpeedAphid.class, "🟦", HealthAphid.class, "🟥", ScoreAphid.class, "🟧",
+            BigScoreAphid.class, "🟧", VisibilityAphid.class, "🟩");
     private static Map<Class<? extends Creature>, String> iconsTransformed;
 
     /**
@@ -74,14 +81,23 @@ public class Fonts extends BitmapFont {
     public static String getIcon(Class<? extends Creature> c) { return iconsTransformed.get(c); }
 
 
-    public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map) {
+    public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map, int splitEveryXCreature) {
+        AtomicInteger count = new AtomicInteger(0);
         StringBuilder sb = new StringBuilder();
         map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(e -> {
             if (!sb.isEmpty()) {
-                sb.append("   ");
+                if (count.incrementAndGet() >= splitEveryXCreature) {
+                    sb.append("\n");
+                    count.set(0);
+                } else {
+                    sb.append("   ");
+                }
             }
             sb.append(e.getValue()).append(Fonts.getIcon(e.getKey()));
         });
         return sb.toString();
+    }
+    public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map) {
+        return listOfCreatureToString(map, Integer.MAX_VALUE);
     }
 }
