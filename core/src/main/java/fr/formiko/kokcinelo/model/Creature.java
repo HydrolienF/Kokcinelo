@@ -68,7 +68,13 @@ public abstract class Creature extends MapItem {
     public float getWantedRotation() { return wantedRotation; }
     public void setWantedRotation(float wantedRotation) { this.wantedRotation = wantedRotation; }
     public float getLifePoints() { return lifePoints; }
-    public void setLifePoints(float lifePoints) { this.lifePoints = lifePoints; }
+    /** Setter with max value. */
+    public void setLifePoints(float lifePoints) {
+        this.lifePoints = lifePoints;
+        if (lifePoints > getMaxLifePoints()) {
+            this.lifePoints = getMaxLifePoints();
+        }
+    }
     public float getMaxLifePoints() { return maxLifePoints; }
     public void setMaxLifePoints(float maxLifePoints) { this.maxLifePoints = maxLifePoints; }
     public float getHitPoints() { return hitPoints; }
@@ -81,6 +87,8 @@ public abstract class Creature extends MapItem {
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
+    // public static float getZoomMin() { return 1f; }
+    // public static float getZoomMax() { return 1f; }
     /**
      * Creature witch hunt this &#38; this can see it.
      */

@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Null;
 
@@ -269,7 +272,7 @@ public class GameState {
             if (aphidNumber < 1) {
                 aphidNumber = 1;
             }
-            gs.setMaxScore(aphidNumber);
+            // gs.setMaxScore(aphidNumber);
 
             if (level == null) {
                 level = Level.getLevel("1K");
@@ -307,7 +310,8 @@ public class GameState {
             gs.setLocalPlayerId(p.getId());
             addMapForeground();
 
-            // System.out.println(gs);
+            gs.setMaxScore(gs.getAphids().stream().mapToInt(a -> a.getGivenPoints()).sum());
+
             return gs;
         }
         /**
@@ -371,12 +375,12 @@ public class GameState {
          */
         public GameStateBuilder setLevel(Level level) {
             this.level = level;
-            if (level != null && !level.getCreaturesToSpawn().isEmpty()) {
-                this.aphidNumber = level.getCreaturesToSpawn().getOrDefault(Aphid.class, 0);
-                this.ladybugNumber = level.getCreaturesToSpawn().getOrDefault(Ladybug.class, 0);
-                this.redAntNumber = level.getCreaturesToSpawn().getOrDefault(RedAnt.class, 0);
-                this.greenAntNumber = level.getCreaturesToSpawn().getOrDefault(GreenAnt.class, 0);
-            }
+            // if (level != null && !level.getCreaturesToSpawn().isEmpty()) {
+            // this.aphidNumber = level.getCreaturesToSpawn().getOrDefault(Aphid.class, 0);
+            // this.ladybugNumber = level.getCreaturesToSpawn().getOrDefault(Ladybug.class, 0);
+            // this.redAntNumber = level.getCreaturesToSpawn().getOrDefault(RedAnt.class, 0);
+            // this.greenAntNumber = level.getCreaturesToSpawn().getOrDefault(GreenAnt.class, 0);
+            // }
             return this;
         }
 
@@ -390,11 +394,28 @@ public class GameState {
          * @param antsNumber     number of ants to play with
          */
         private void addCreatures(int aphidsNumber, int ladybugsNumber, int redAntNumber, int greenAntNumber) {
-            addC(aphidsNumber, 0.02f, 0.04f, true, true, Aphid.class);
-            addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
-            float antSize = 0.05f;
-            addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);
-            addC(greenAntNumber, antSize, antSize, true, true, GreenAnt.class);
+            final Map<Class<? extends Creature>, Vector2> zoom = Map.of(Aphid.class, new Vector2(0.02f, 0.04f), Ladybug.class,
+                    new Vector2(0.4f, 0.4f), Ant.class, new Vector2(0.05f, 0.05f));
+            if (level != null) {
+                for (Entry<Class<? extends Creature>, Integer> entry : level.getCreaturesToSpawn().entrySet()) {
+                    float min = 1f;
+                    float max = 1f;
+                    for (Entry<Class<? extends Creature>, Vector2> c : zoom.entrySet()) {
+                        if (c.getKey().isAssignableFrom(entry.getKey())) {
+                            min = c.getValue().x;
+                            max = c.getValue().y;
+                            break;
+                        }
+                    }
+                    addC(entry.getValue(), min, max, true, true, entry.getKey());
+                }
+            } else {
+                addC(aphidsNumber, 0.02f, 0.04f, true, true, Aphid.class);
+                addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
+                float antSize = 0.05f;
+                addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);
+                addC(greenAntNumber, antSize, antSize, true, true, GreenAnt.class);
+            }
         }
 
         /**
@@ -411,16 +432,8 @@ public class GameState {
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
-                    Creature c = creatureClass.getDeclaredConstructor().newInstance(); // HTML INCOMPATIBLE
-                    // version to replace last line that work in html
-                    // Creature c = null;
-                    // if (creatureClass.toString().endsWith("Aphid")) {
-                    // c = new Aphid();
-                    // } else if (creatureClass.toString().endsWith("Ant")) {
-                    // c = new Ant();
-                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
-                    // c = new Ladybug();
-                    // }
+                    Creature c = creatureClass.getDeclaredConstructor().newInstance();
+
                     if (randomLocaction) {
                         c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
@@ -447,6 +460,7 @@ public class GameState {
                 }
             }
         }
+
         /**
          * {@summary Add the map background.}
          */

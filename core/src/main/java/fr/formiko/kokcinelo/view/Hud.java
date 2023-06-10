@@ -44,7 +44,7 @@ public class Hud extends KScreen implements Disposable {
      * @param sb SpriteBatch to use
      */
     public Hud(SpriteBatch sb) {
-        this.maxValue = Controller.getController().getNumberOfAphids();
+        this.maxValue = Controller.getController().getGameState().getMaxScore();
         // timeCount = 0;
         // setup the HUD viewport using a new camera seperate from our gamecam
         // define our stage using that viewport and our games spritebatch

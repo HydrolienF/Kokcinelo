@@ -305,6 +305,7 @@ public class Controller {
         }
         antsHit();
         antsShoot();
+        antsEatHoneydew();
         acidDropsHit();
     }
 
@@ -322,11 +323,28 @@ public class Controller {
                     playSound("crock", ladybug);
                     ladybug.hit(aphid);
                     gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
+                    aphid.bonusWhenEaten(ladybug);
                 }
             }
         }
         return haveInteract;
     }
+
+    public boolean antsEatHoneydew() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            for (Aphid aphid : gs.getAphids()) {
+                if (ant.hitBoxConnected(aphid) && aphid.isHoneydewReady()) {
+                    haveInteract = true;
+                    // TODO
+                    // playSound("slurp", ant);
+                    aphid.bonusWhenCollectHoneydew(ant);
+                }
+            }
+        }
+        return haveInteract;
+    }
+
     /**
      * {@summary Let ants hit ladybug.}
      * 

@@ -1,11 +1,9 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
-import fr.formiko.kokcinelo.tools.Math;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 
 /**
  * {@summary Aphids are Creatures eated by ladybugs.}
@@ -16,13 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
  * @version 0.1
  */
 public class Aphid extends Creature {
-    private Type type;
-    private Color color;
-    private enum Type {
-        NORMAL, SPEED, HEALTH, SCORE, VISIBILITY
-    }
-    private static Map<Type, Color> typeColorMap = Map.of(Type.NORMAL, new Color(0.4f, 1f, 0f, 1f), Type.SPEED, Color.NAVY, Type.HEALTH,
-            Color.RED, Type.SCORE, Color.GOLD, Type.VISIBILITY, Color.CYAN);
+    // private Color color;
+    private static final Map<Class<? extends Aphid>, Color> typeColorMap = Map.of(Aphid.class, new Color(0.4f, 1f, 0f, 1f),
+            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, Color.GOLD, VisibilityAphid.class,
+            new Color(0.05f, 0.15f, 0.08f, 1f));
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -38,8 +33,6 @@ public class Aphid extends Creature {
         hitRadius = 20;
         movingSpeed = 1.5f;
         defaultMoveFrontSpeed = 0.3f;
-        type = Type.NORMAL;
-        // type = Type.values()[MathUtils.random(0, Type.values().length - 1)]; // random color.
         colorSkeleton();
     }
 
@@ -52,15 +45,18 @@ public class Aphid extends Creature {
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(Ladybug.class); }
     @Override
     public float getAnimationSpeedMultiplier() { return 4f; } // Aphid are small so they need to move faster in animation for realisme.
-    public Color getColor() { return getColor(0f); } // it can be set with a small variation.
-    public Color getColor(float variation) {
-        if (color == null) {
-            color = new Color(Math.between(0f, 1f, typeColorMap.get(type).r + MathUtils.random(-variation, variation)),
-                    Math.between(0f, 1f, typeColorMap.get(type).g + MathUtils.random(-variation, variation)),
-                    Math.between(0f, 1f, typeColorMap.get(type).b + MathUtils.random(-variation, variation)), typeColorMap.get(type).a);
-        }
-        return color;
-    }
+    public Color getColor() { return typeColorMap.get(getClass()); }
+    // public Color getColor() { return getColor(0f); } // it can be set with a small variation.
+    // public Color getColor(float variation) {
+    // if (color == null) {
+    // color = new Color(Math.between(0f, 1f, typeColorMap.get(getClass()).r + MathUtils.random(-variation, variation)),
+    // Math.between(0f, 1f, typeColorMap.get(getClass()).g + MathUtils.random(-variation, variation)),
+    // Math.between(0f, 1f, typeColorMap.get(getClass()).b + MathUtils.random(-variation, variation)),
+    // typeColorMap.get(getClass()).a);
+    // }
+    // return color;
+    // }
+    public boolean isHoneydewReady() { return false; } // TODO
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -79,4 +75,53 @@ public class Aphid extends Creature {
             App.log(3, "Aphid skeleton is null");
         }
     }
+
+    /**
+     * {@summary Give bonus to eater when aphid is eaten.}
+     * 
+     * @param eater The creature that eat the aphid.
+     */
+    public void bonusWhenEaten(Creature eater) {
+        // Default bonus is nothing.
+    }
+    /**
+     * {@summary Give bonus to collector when honeydew is collected.}
+     * 
+     * @param collector The creature that collect the honeydew.
+     */
+    public void bonusWhenCollectHoneydew(Creature collector) {
+        // Default bonus is nothing.
+        // TODO find thing to give.
+    }
+}
+
+// SUBCLASSES -------------------------------------------------------------------
+class SpeedAphid extends Aphid {
+    public SpeedAphid() { super(); }
+    @Override
+    public void bonusWhenEaten(Creature eater) {
+        App.log(1, "BONUS", "Give eat bonus: " + getClass().getSimpleName() + " to " + eater.getId());
+        eater.setMovingSpeed(eater.getMovingSpeed() * 1.03f);
+    }
+}
+class HealthAphid extends Aphid {
+    public HealthAphid() { super(); }
+    @Override
+    public void bonusWhenEaten(Creature eater) {
+        App.log(1, "BONUS", "Give eat bonus: " + getClass().getSimpleName() + " to " + eater.getId());
+        eater.setLifePoints(eater.getLifePoints() + eater.getMaxLifePoints() / 10f);
+    }
+}
+class ScoreAphid extends Aphid {
+    public ScoreAphid() { super(); }
+    @Override
+    public int getGivenPoints() { return 10; }
+}
+class BigScoreAphid extends Aphid {
+    public BigScoreAphid() { super(); }
+    @Override
+    public int getGivenPoints() { return 50; }
+}
+class VisibilityAphid extends Aphid {
+    public VisibilityAphid() { super(); }
 }
