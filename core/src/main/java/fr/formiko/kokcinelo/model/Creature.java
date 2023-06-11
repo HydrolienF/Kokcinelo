@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
  * Creature can move, fly, hit, eat, died.
  * 
  * @author Hydrolien
- * @version 1.0
+ * @version 2.5
  * @since 0.1
  */
 public abstract class Creature extends MapItem {
@@ -31,9 +31,11 @@ public abstract class Creature extends MapItem {
     protected float wantedRotation;
     protected long lastHitTime;
     protected long lastShootTime;
+    protected long lastCollectedTime;
     protected int hitFrequency;
     protected int shootFrequency;
     protected int shootRadius;
+    protected int collectedFrequency;
 
     protected float lifePoints;
     protected float currentSpeed;
@@ -435,6 +437,8 @@ public abstract class Creature extends MapItem {
      * @return true if this can shoot other creatures
      */
     public boolean canShoot() { return (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency); }
+
+    public boolean canBeCollected() { return (System.currentTimeMillis() - lastCollectedTime) > collectedFrequency; }
     /**
      * {@summary Shoot a Creature.}
      */
@@ -455,6 +459,7 @@ public abstract class Creature extends MapItem {
     public void addTime(long timePaused) {
         lastHitTime += timePaused;
         lastShootTime += timePaused;
+        lastCollectedTime += timePaused;
     }
 
     /**

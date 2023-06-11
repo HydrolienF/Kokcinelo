@@ -36,7 +36,7 @@ import com.badlogic.gdx.utils.Null;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.3
+ * @version 2.5
  * @since 0.1
  */
 public class Controller {
@@ -305,7 +305,8 @@ public class Controller {
         }
         antsHit();
         antsShoot();
-        antsEatHoneydew();
+        aphidHonewdewUpdate();
+        antsCollectHoneydew();
         acidDropsHit();
     }
 
@@ -330,15 +331,30 @@ public class Controller {
         return haveInteract;
     }
 
-    public boolean antsEatHoneydew() {
+    /**
+     * Update the visibility of the honeydew of the aphids.
+     */
+    public void aphidHonewdewUpdate() {
+        for (Aphid aphid : gs.getAphids()) {
+            aphid.updateHonewdewVisibility();
+        }
+    }
+
+    /**
+     * {@summary Let ants collect honeydew.}
+     * 
+     * @return true if an ant have interact with an aphid
+     */
+    public boolean antsCollectHoneydew() {
         boolean haveInteract = false;
         for (Ant ant : gs.getAnts()) {
             for (Aphid aphid : gs.getAphids()) {
                 if (ant.hitBoxConnected(aphid) && aphid.isHoneydewReady()) {
+                    App.log(1, "Ant " + ant.getId() + " collect honeydew of " + aphid.getId());
                     haveInteract = true;
                     // TODO
                     // playSound("slurp", ant);
-                    aphid.bonusWhenCollectHoneydew(ant);
+                    aphid.collectHoneydew(ant);
                 }
             }
         }

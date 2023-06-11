@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.Color;
  * Ant always try to protect them.
  * 
  * @author Hydrolien
- * @since 1.0
- * @version 0.1
+ * @version 2.5
+ * @since 0.1
  */
 public class Aphid extends Creature {
     // private Color color;
@@ -34,6 +34,8 @@ public class Aphid extends Creature {
         movingSpeed = 1.5f;
         defaultMoveFrontSpeed = 0.3f;
         colorSkeleton();
+        collectedFrequency = 20000;
+        lastCollectedTime = System.currentTimeMillis() - (long) (Math.random() * collectedFrequency);
     }
 
     // GET SET -------------------------------------------------------------------
@@ -56,7 +58,7 @@ public class Aphid extends Creature {
     // }
     // return color;
     // }
-    public boolean isHoneydewReady() { return false; } // TODO
+    public boolean isHoneydewReady() { return canBeCollected(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -89,9 +91,39 @@ public class Aphid extends Creature {
      * 
      * @param collector The creature that collect the honeydew.
      */
-    public void bonusWhenCollectHoneydew(Creature collector) {
+    protected void bonusWhenCollectHoneydew(Creature collector) {
         // Default bonus is nothing.
         // TODO find thing to give.
+    }
+
+    /**
+     * Update honeydew visibility depending of last collected time.
+     */
+    public void updateHonewdewVisibility() { setHoneydewVisibility(isHoneydewReady()); }
+
+    /**
+     * {@summary Set honeydew visibility.}
+     * It set the scale of honeydew bone to 0 or 1.
+     * 
+     * @param visible True if honeydew is visible, false otherwise.
+     */
+    public void setHoneydewVisibility(boolean visible) {
+        if (getActor() != null && getActor().getSkeleton() != null) {
+            if (visible) {
+                getActor().getSkeleton().findBone("honeydew").setScale(1, 1);
+            } else {
+                getActor().getSkeleton().findBone("honeydew").setScale(0, 0);
+            }
+        }
+    }
+
+    /**
+     * {@summary Collect honeydew of this.}
+     * It set lastCollectedTime to current time and give bonus to collector.
+     */
+    public void collectHoneydew(Creature collector) {
+        bonusWhenCollectHoneydew(collector);
+        lastCollectedTime = System.currentTimeMillis();
     }
 }
 

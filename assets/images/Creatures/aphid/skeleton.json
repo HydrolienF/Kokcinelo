@@ -1,11 +1,11 @@
 {
 "skeleton": {
-	"hash": "2YqzUUVBE8E",
+	"hash": "vTOnCTvAK1I",
 	"spine": "4.1.21",
 	"x": -798.07,
-	"y": -887.76,
+	"y": -1117,
 	"width": 1596.15,
-	"height": 1775.52,
+	"height": 2004.76,
 	"images": "../morceau par morceau/aphid piece by piece/",
 	"audio": ""
 },
@@ -30,7 +30,8 @@
 	{ "name": "leg 3 tibia tarsus r", "parent": "leg 3 femur r", "length": 512.55, "rotation": -2, "x": 502.23, "y": -0.06 },
 	{ "name": "leg 3 l", "parent": "root", "x": 242.36, "y": 121.38 },
 	{ "name": "leg 3 femur l", "parent": "leg 3 l", "length": 499.5, "rotation": -97, "x": -484.72 },
-	{ "name": "leg 3 tibia tarsus l", "parent": "leg 3 femur l", "length": 512.55, "rotation": 2, "x": 502.23, "y": 0.06 }
+	{ "name": "leg 3 tibia tarsus l", "parent": "leg 3 femur l", "length": 512.55, "rotation": 2, "x": 502.23, "y": 0.06 },
+	{ "name": "honeydew", "parent": "root", "y": -493.32 }
 ],
 "slots": [
 	{ "name": "leg 2 tibia tarsus background r", "bone": "leg 2 tibia tarsus r", "attachment": "leg 2 tibia tarsus background" },
@@ -64,7 +65,8 @@
 	{ "name": "antennae background l", "bone": "antennae l", "attachment": "antennae background" },
 	{ "name": "antennae l", "bone": "antennae l", "attachment": "antennae" },
 	{ "name": "cornicle r", "bone": "root", "attachment": "cornicle" },
-	{ "name": "cornicle l", "bone": "root", "attachment": "cornicle" }
+	{ "name": "cornicle l", "bone": "root", "attachment": "cornicle" },
+	{ "name": "honeydew", "bone": "honeydew", "attachment": "honeydew full with background" }
 ],
 "skins": [
 	{
@@ -93,6 +95,9 @@
 			},
 			"cornicle r": {
 				"cornicle": { "width": 1590, "height": 1770 }
+			},
+			"honeydew": {
+				"honeydew full with background": { "y": 376.32, "width": 1590, "height": 2000 }
 			},
 			"leg 1 femur background l": {
 				"leg 1 femur background": { "x": -189.5, "y": 374.59, "scaleX": -1, "rotation": -170.6, "width": 1590, "height": 1770 }

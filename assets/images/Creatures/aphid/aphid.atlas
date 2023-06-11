@@ -27,69 +27,72 @@ pma:true
 cornicle
 bounds:4,4,147,194
 offsets:918,261,1590,1770
-leg 1 femur background
-bounds:694,4,261,90
-offsets:903,1267,1590,1770
+honeydew full with background
+bounds:694,4,450,316
+offsets:570,309,1590,2000
 
 aphid_4.png
 size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 1 femur
-bounds:4,4,265,94
+bounds:694,4,265,94
 offsets:901,1265,1590,1770
-leg 1 tibia tarsus background
-bounds:694,4,140,391
-offsets:1119,1310,1590,1770
+leg 1 femur background
+bounds:4,4,261,90
+offsets:903,1267,1590,1770
 
 aphid_5.png
 size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 1 tibia tarsus
-bounds:4,4,194,462
+bounds:694,4,194,462
 offsets:1117,1308,1590,1770
-leg 2 femur background
-bounds:694,4,304,301
-offsets:955,931,1590,1770
+leg 1 tibia tarsus background
+bounds:4,4,140,391
+offsets:1119,1310,1590,1770
 
 aphid_6.png
 size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 2 femur
-bounds:4,4,308,305
+bounds:694,4,308,305
 offsets:953,929,1590,1770
-leg 2 tibia tarsus background
-bounds:694,4,309,239
-offsets:1213,738,1590,1770
+leg 2 femur background
+bounds:4,4,304,301
+offsets:955,931,1590,1770
 
 aphid_7.png
 size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 2 tibia tarsus
-bounds:4,4,379,277
+bounds:694,4,379,277
 offsets:1211,702,1590,1770
-leg 3 femur background
-bounds:694,4,119,531
-offsets:1013,494,1590,1770
+leg 2 tibia tarsus background
+bounds:4,4,309,239
+offsets:1213,738,1590,1770
 
 aphid_8.png
 size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 3 femur
+bounds:694,4,119,531
+offsets:1013,494,1590,1770
+leg 3 femur background
 bounds:4,4,119,531
 offsets:1013,494,1590,1770
-leg 3 tibia tarsus background
-bounds:694,4,60,463
-offsets:1073,71,1590,1770
 
 aphid_9.png
-size:694,1267
+size:1384,1267
 filter:MipMapLinearLinear,MipMapLinearLinear
 pma:true
 leg 3 tibia tarsus
-bounds:4,4,84,536
+bounds:694,4,84,536
 offsets:1071,0,1590,1770
+leg 3 tibia tarsus background
+bounds:4,4,60,463
+offsets:1073,71,1590,1770
