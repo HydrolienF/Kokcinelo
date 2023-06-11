@@ -94,7 +94,6 @@ public class Aphid extends Creature {
      */
     protected void bonusWhenCollectHoneydew(Creature collector) {
         // Default bonus is nothing.
-        // TODO find thing to give.
     }
 
     /**

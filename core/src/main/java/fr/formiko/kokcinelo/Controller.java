@@ -78,7 +78,7 @@ public class Controller {
     public int getNumberOfAphids() { return gs.getAphids().size(); }
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
-    public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
+    public void addScoreForLadybug(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
     public @Null Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
