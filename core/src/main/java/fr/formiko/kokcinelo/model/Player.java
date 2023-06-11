@@ -41,13 +41,6 @@ public class Player {
             addScore(score);
         }
     }
-    public void addScoreForAnt(int score) {
-        if (!(playedCreature instanceof Ant)) {
-            addScore(-score);
-        } else {
-            addScore(score);
-        }
-    }
     public void addScore(int score) { setScore(getScore() + score); }
     public Creature getPlayedCreature() { return playedCreature; }
     public void setPlayedCreature(Creature playedCreature) { this.playedCreature = playedCreature; }

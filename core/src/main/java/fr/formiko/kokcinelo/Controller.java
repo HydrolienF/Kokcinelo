@@ -10,6 +10,8 @@ import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.model.Player;
+import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
@@ -78,8 +80,8 @@ public class Controller {
     public int getNumberOfAphids() { return gs.getAphids().size(); }
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
-    public void addScoreForLadybug(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
     public @Null Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
+    public Player getLocalPlayer() { return gs.getPlayer(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
     public void iniAssets() { assets = new Assets(); }
@@ -224,7 +226,7 @@ public class Controller {
         GameStateBuilder gsb = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         if (isGraphicsTest()) {
             int antNumber = 50;
-            gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(antNumber).setAphidNumber(10);
+            gsb.setLevel(Level.newTestLevel(Map.of(Ladybug.class, 2, RedAnt.class, antNumber, Aphid.class, 10), false));
         }
         gs = gsb.build();
         gs.moveAIAwayFromPlayers();
@@ -323,7 +325,7 @@ public class Controller {
                     haveInteract = true;
                     playSound("crock", ladybug);
                     ladybug.hit(aphid);
-                    gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
+                    ladybug.addScore(aphid.getGivenPoints());
                     aphid.bonusWhenEaten(ladybug);
                 }
             }
@@ -352,8 +354,7 @@ public class Controller {
                 if (ant.hitBoxConnected(aphid) && aphid.isHoneydewReady()) {
                     App.log(1, "Ant " + ant.getId() + " collect honeydew of " + aphid.getId());
                     haveInteract = true;
-                    // TODO
-                    // playSound("slurp", ant);
+                    playSound("slurp", ant);
                     aphid.collectHoneydew(ant);
                 }
             }

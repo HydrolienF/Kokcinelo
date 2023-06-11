@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.Controller;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -109,8 +110,8 @@ class CreatureTest extends Assertions {
     }
 
     void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
-        GameState gs = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLadybugNumber(ladybug)
-                .setAphidNumber(aphid).setRedAntNumber(ant).build();
+        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000)
+                .setLevel(Level.newTestLevel(Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false)).build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
         Controller.setDebug(false);
@@ -285,6 +286,8 @@ class CreatureTest extends Assertions {
         return Stream.of(Arguments.of(new Ant(), Set.of("Ant")),
                 Arguments.of(ladybug, Set.of("Ladybug", "8.2425", "-7.356", "0.123456", "0.2")));
     }
+
+    // TODO test addScore.
 
 
     class CreatureX extends Creature {

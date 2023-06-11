@@ -290,6 +290,7 @@ public class MenuScreen extends KScreen implements Screen {
 
             c.setCurrentSpeed(c.getMovingSpeed() * c.getDefaultMoveFrontSpeed() / 0.6f);
             c.setMaxLifePoints(0); // Don't show life bar
+            c.setLastCollectedTime(Long.MAX_VALUE); // Never be collectable
 
             creatureImages.add(cActor);
         }

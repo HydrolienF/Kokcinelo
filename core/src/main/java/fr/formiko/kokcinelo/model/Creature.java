@@ -86,6 +86,10 @@ public abstract class Creature extends MapItem {
     public int getShootRadius() { return shootRadius; }
     public void setShootRadius(int shootRadius) { this.shootRadius = shootRadius; }
     public float getAnimationSpeedMultiplier() { return 1f; }
+    public int getCollectedFrequency() { return collectedFrequency; }
+    public void setCollectedFrequency(int collectedFrequency) { this.collectedFrequency = collectedFrequency; }
+    public long getLastCollectedTime() { return lastCollectedTime; }
+    public void setLastCollectedTime(long lastCollectedTime) { this.lastCollectedTime = lastCollectedTime; }
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
@@ -132,6 +136,7 @@ public abstract class Creature extends MapItem {
                 .collect(HashSet::new, Set::add, Set::addAll);
         // @formatter:on
     }
+    public boolean isFriendly(Creature c) { return c.isInstanceOf(getCreaturesFriendly()); }
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override
@@ -460,6 +465,18 @@ public abstract class Creature extends MapItem {
         lastHitTime += timePaused;
         lastShootTime += timePaused;
         lastCollectedTime += timePaused;
+    }
+
+    /**
+     * Add score to this creature team.
+     */
+    public void addScore(int score) {
+        // If player see this creature as a friend, add score to player
+        if (Controller.getController().getPlayerCreature().isFriendly(this)) {
+            Controller.getController().getLocalPlayer().addScore(score);
+        } else { // else remove score to player
+            Controller.getController().getLocalPlayer().addScore(-score);
+        }
     }
 
     /**

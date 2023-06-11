@@ -188,7 +188,7 @@ public class GameScreen extends KScreen implements Screen {
         if (getController().isAllLadybugGone()) {
             // if player is an ant or an aphid give it bonus score for time.
             if (!(getController().getPlayerCreature() instanceof Ladybug)) {
-                getController().addScoreForLadybug((int) hud.getGameTime());
+                getController().getPlayerCreature().addScore((int) hud.getGameTime());
             }
             getController().gameOver();
         }
