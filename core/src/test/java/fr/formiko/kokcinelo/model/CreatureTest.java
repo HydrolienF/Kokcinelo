@@ -291,7 +291,6 @@ class CreatureTest extends Assertions {
                 Arguments.of(ladybug, Set.of("Ladybug", "8.2425", "-7.356", "0.123456", "0.2")));
     }
 
-    // TODO test addScore.
     @ParameterizedTest
     // @formatter:off
     @CsvSource({
