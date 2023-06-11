@@ -66,8 +66,8 @@ public final class Level {
     private static Level newLevel(String id) { return newLevel(id, Map.of()); }
 
     /** To use only for testing */
-    public static Level newTestLevel(Map<Class<? extends Creature>, Integer> creaturesToSpawn, boolean widthHoneydew) {
-        return newLevel("0T", creaturesToSpawn, widthHoneydew);
+    public static Level newTestLevel(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn, boolean widthHoneydew) {
+        return newLevel(id, creaturesToSpawn, widthHoneydew);
     }
 
 

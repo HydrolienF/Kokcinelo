@@ -109,12 +109,16 @@ class CreatureTest extends Assertions {
         assertDoesNotThrow(() -> new Aphid());
     }
 
-    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
+    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant, String levelId) {
         GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000)
-                .setLevel(Level.newTestLevel(Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false)).build();
+                .setLevel(Level.newTestLevel(levelId, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
+                .build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
         Controller.setDebug(false);
+    }
+    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
+        createGameStateWithAphidLadybugAnt(aphid, ladybug, ant, "1K");
     }
 
     @Test
@@ -288,6 +292,46 @@ class CreatureTest extends Assertions {
     }
 
     // TODO test addScore.
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "1, 1, 0, 0K, K, 1, 1",
+        "1, 1, 0, 0K, A, 1, -1",
+        "1, 1, 0, 0K, A, -1, 1",
+        "1, 1, 0, 0K, K, 17, 17",
+        "1, 1, 1, 0K, K, 1, 1",
+        "100, 3, 4, 0K, K, 1, 1",
+        "1, 1, 1, 0K, F, 1, -1",
+
+        "1, 1, 1, 0F, K, 1, 99",
+        "1, 1, 1, 0F, F, 1, 101",
+        "1, 1, 1, 1A, A, 1, 101",
+        "1, 1, 1, 0A, K, 1, 99",
+        "1, 1, 1, 0A, F, 1, 101",
+        "1, 1, 1, 0F, A, 1, 101",
+    })
+    // @formatter:on
+    void testAddScore(int nbAphids, int nbLadybugs, int nbAnts, String levelId, String creatureToAddScore, int scoreToAdd,
+            int expectedScore) {
+        createGameStateWithAphidLadybugAnt(nbAphids, nbLadybugs, nbAnts, levelId);
+        Creature c;
+        switch (creatureToAddScore) {
+            case "A":
+                c = Controller.getController().getGameState().getAphids().get(0);
+                break;
+            case "K":
+                c = Controller.getController().getGameState().getLadybugs().get(0);
+                break;
+            case "F":
+                c = Controller.getController().getGameState().getAnts().get(0);
+                break;
+            default:
+                c = null;
+                assertTrue(false);
+        }
+        c.addScore(scoreToAdd);
+        assertEquals(expectedScore, Controller.getController().getLocalPlayer().getScore());
+    }
 
 
     class CreatureX extends Creature {

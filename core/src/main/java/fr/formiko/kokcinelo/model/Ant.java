@@ -42,6 +42,8 @@ public class Ant extends Creature {
     public float getMaxRotationPerSecond() { return 200f; }
     @Override
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Ladybug.class); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
 }

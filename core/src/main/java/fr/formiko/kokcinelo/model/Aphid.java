@@ -60,6 +60,8 @@ public class Aphid extends Creature {
     // return color;
     // }
     public boolean isHoneydewReady() { return canBeCollected() && Controller.getController().getLevel().isWidthHoneydew(); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
