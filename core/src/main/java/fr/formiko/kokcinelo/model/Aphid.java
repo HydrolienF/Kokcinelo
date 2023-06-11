@@ -128,4 +128,3 @@ public class Aphid extends Creature {
         lastCollectedTime = System.currentTimeMillis();
     }
 }
-
