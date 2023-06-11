@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Null;
 public final class Level {
     private final String id;
     private final Map<Class<? extends Creature>, Integer> creaturesToSpawn;
+    private final boolean widthHoneydew;
     private boolean unlocked;
     // @formatter:off
     private static final Set<Level> levelList = Set.of(
@@ -24,14 +25,14 @@ public final class Level {
             newLevel("2K", Map.of(Aphid.class, 100, Ladybug.class, 1, RedAnt.class, 3)),
             newLevel("3K", Map.of(Aphid.class, 100, Ladybug.class, 1, GreenAnt.class, 3)),
             newLevel("4K", Map.of(Ladybug.class, 1, RedAnt.class, 2, GreenAnt.class, 2,
-                    Aphid.class, 50, ScoreAphid.class, 2, SpeedAphid.class, 10,HealthAphid.class, 10, VisibilityAphid.class, 10)),
+                    Aphid.class, 50, ScoreAphid.class, 2, SpeedAphid.class, 10,HealthAphid.class, 10, VisibilityAphid.class, 10), true),
             newLevel("5K"),
             newLevel("2F", Map.of(Aphid.class, 100, Ladybug.class, 2, RedAnt.class, 1)),
             newLevel("3F", Map.of(Aphid.class, 100, Ladybug.class, 2, GreenAnt.class, 1)),
             newLevel("4F", Map.of(Ladybug.class, 2, RedAnt.class, 1,
-                    Aphid.class, 50, ScoreAphid.class, 2, SpeedAphid.class, 10,HealthAphid.class, 10, VisibilityAphid.class, 10)),
+                    Aphid.class, 50, ScoreAphid.class, 2, SpeedAphid.class, 10,HealthAphid.class, 10, VisibilityAphid.class, 10), true),
             newLevel("5F"),
-            newLevel("4A", Map.of(Ladybug.class, 3, GreenAnt.class, 1, RedAnt.class, 1, Aphid.class, 50, BigScoreAphid.class, 1)),
+            newLevel("4A", Map.of(Ladybug.class, 3, GreenAnt.class, 1, RedAnt.class, 1, Aphid.class, 50, BigScoreAphid.class, 1), true),
             newLevel("5A"));
     // @formatter:on
     private static final Set<String> levelLetters = Set.of("K", "F", "A");
@@ -43,9 +44,10 @@ public final class Level {
      * @param id               Id of the level.
      * @param creaturesToSpawn Number of creatures to spawn by class.
      */
-    private Level(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn) {
+    private Level(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn, boolean widthHoneydew) {
         this.id = id;
         this.creaturesToSpawn = creaturesToSpawn;
+        this.widthHoneydew = widthHoneydew;
     }
     /**
      * {@summary Builder.}
@@ -55,8 +57,11 @@ public final class Level {
      * @param creaturesToSpawn Number of creatures to spawn by class.
      * @return a new level.
      */
+    private static Level newLevel(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn, boolean widthHoneydew) {
+        return new Level(id, creaturesToSpawn, widthHoneydew);
+    }
     private static Level newLevel(String id, Map<Class<? extends Creature>, Integer> creaturesToSpawn) {
-        return new Level(id, creaturesToSpawn);
+        return newLevel(id, creaturesToSpawn, false);
     }
     private static Level newLevel(String id) { return newLevel(id, Map.of()); }
 
@@ -67,6 +72,7 @@ public final class Level {
     public static Set<Level> getLevelList() { return levelList; }
     public int getNumber() { return Integer.parseInt(getId().substring(0, 1)); }
     public String getLetter() { return getId().substring(1, 2); }
+    public boolean isWidthHoneydew() { return widthHoneydew; }
     /**
      * {@summary Get a level from its id.}
      * 

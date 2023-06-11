@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
@@ -58,7 +59,7 @@ public class Aphid extends Creature {
     // }
     // return color;
     // }
-    public boolean isHoneydewReady() { return canBeCollected(); }
+    public boolean isHoneydewReady() { return canBeCollected() && Controller.getController().getLevel().isWidthHoneydew(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
