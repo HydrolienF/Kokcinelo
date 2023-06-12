@@ -294,23 +294,25 @@ class CreatureTest extends Assertions {
     @ParameterizedTest
     // @formatter:off
     @CsvSource({
-        "1, 1, 0, 0K, K, 1, 1",
-        "1, 1, 0, 0K, A, 1, -1",
-        "1, 1, 0, 0K, A, -1, 1",
-        "1, 1, 0, 0K, K, 17, 17",
-        "1, 1, 1, 0K, K, 1, 1",
-        "100, 3, 4, 0K, K, 1, 1",
-        "1, 1, 1, 0K, F, 1, -1",
+        "1, 1, 0, 0K, K, 1, 0, 1",
+        "1, 1, 0, 0K, A, 1, 1, 0",
+        "1, 1, 0, 0K, A, 1, 0, 0", // can't go under 0
+        "1, 1, 0, 0K, A, -1, 0, 1",
+        "1, 1, 0, 0K, K, 17, 0, 17",
+        "1, 1, 1, 0K, K, 1, 0, 1",
+        "100, 3, 4, 0K, K, 1, 0, 1",
+        "1, 1, 1, 0K, F, 1, 2, 1",
 
-        "1, 1, 1, 0F, K, 1, 99",
-        "1, 1, 1, 0F, F, 1, 101",
-        "1, 1, 1, 1A, A, 1, 101",
-        "1, 1, 1, 0A, K, 1, 99",
-        "1, 1, 1, 0A, F, 1, 101",
-        "1, 1, 1, 0F, A, 1, 101",
+        "1, 1, 1, 0F, K, 1, 100, 99",
+        "1, 1, 1, 0F, F, 1, 50, 51",
+        "1, 1, 1, 1A, A, 1, 50, 51",
+        "1, 1, 1, 0A, K, 1, 99, 98",
+        "1, 1, 1, 0A, F, 1, 99, 100",
+        "1, 1, 1, 0F, A, 1, 99, 100",
+        "1, 1, 1, 0F, A, 1, 100, 100", // not more than max score
     })
     // @formatter:on
-    void testAddScore(int nbAphids, int nbLadybugs, int nbAnts, String levelId, String creatureToAddScore, int scoreToAdd,
+    void testAddScore(int nbAphids, int nbLadybugs, int nbAnts, String levelId, String creatureToAddScore, int scoreToAdd, int defaultScore,
             int expectedScore) {
         createGameStateWithAphidLadybugAnt(nbAphids, nbLadybugs, nbAnts, levelId);
         Creature c;
@@ -328,6 +330,8 @@ class CreatureTest extends Assertions {
                 c = null;
                 assertTrue(false);
         }
+        Controller.getController().getGameState().setMaxScore(100);
+        Controller.getController().getLocalPlayer().setScore(defaultScore);
         c.addScore(scoreToAdd);
         assertEquals(expectedScore, Controller.getController().getLocalPlayer().getScore());
     }

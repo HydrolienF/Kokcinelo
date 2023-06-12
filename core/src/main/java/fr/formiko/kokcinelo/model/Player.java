@@ -1,5 +1,8 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Math;
+
 /**
  * {@summary Player move a ladybug or an ant.}
  * Ant controling player figth ladybug controling player &#38; vis versa.
@@ -33,7 +36,7 @@ public class Player {
 
     // GET SET -------------------------------------------------------------------
     public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
+    public void setScore(int score) { this.score = Math.between(0, Controller.getController().getGameState().getMaxScore(), score); }
     public void addScore(int score) { setScore(getScore() + score); }
     public Creature getPlayedCreature() { return playedCreature; }
     public void setPlayedCreature(Creature playedCreature) { this.playedCreature = playedCreature; }
