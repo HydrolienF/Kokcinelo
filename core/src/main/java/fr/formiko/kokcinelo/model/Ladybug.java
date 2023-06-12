@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import java.util.Set;
 
+
 /**
  * {@summary Ladybugs are Creature that eat aphids.}
  * Usually ladybugs run away from ants.
@@ -39,5 +40,12 @@ public class Ladybug extends Creature {
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ladybug.class); }
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ladybug.class); }
+    @Override
+    public String getSpaceActionName() {
+        if (canFly) {
+            return "FlyAction";
+        }
+        return super.getSpaceActionName();
+    }
     // FUNCTIONS -----------------------------------------------------------------
 }

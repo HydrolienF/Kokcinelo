@@ -42,6 +42,7 @@ public abstract class Creature extends MapItem {
     protected float lifePoints;
     protected float currentSpeed;
     protected float defaultMoveFrontSpeed;
+    protected boolean canFly;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**

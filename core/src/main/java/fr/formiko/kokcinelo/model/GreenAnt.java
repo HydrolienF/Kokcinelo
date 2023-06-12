@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
-import fr.formiko.usual.g;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -30,5 +29,5 @@ public class GreenAnt extends Ant {
     }
 
     @Override
-    public String getSpaceActionName() { return g.get("AcidShootAction"); }
+    public String getSpaceActionName() { return "AcidShootAction"; }
 }

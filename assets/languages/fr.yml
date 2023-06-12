@@ -44,3 +44,4 @@ restartFullGameMessage: Redémarrer le jeu pour appliquer les changements.
 # In Game
 acidShootAction: tirer
 runAction: accélérer
+flyAction: voler

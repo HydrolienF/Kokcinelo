@@ -44,3 +44,4 @@ restartFullGameMessage: Restart Kokcinelo to apply changes.
 # In Game
 acidShootAction: shoot
 runAction: speed up
+flyAction: fly
