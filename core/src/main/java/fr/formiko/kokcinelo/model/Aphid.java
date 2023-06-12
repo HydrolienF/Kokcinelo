@@ -2,6 +2,7 @@ package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.usual.g;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
@@ -65,6 +66,8 @@ public class Aphid extends Creature {
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ant.class, Aphid.class); }
+    @Override
+    public String getSpaceActionName() { return g.get("RunAction"); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**

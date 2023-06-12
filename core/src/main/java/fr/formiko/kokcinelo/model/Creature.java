@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.KScreen;
+import fr.formiko.kokcinelo.tools.Math;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Null;
 
 /**
  * {@summary Abstact class that represent Creature on the map.}
@@ -95,6 +97,20 @@ public abstract class Creature extends MapItem {
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
     public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(getClass()); }
+    public @Null String getSpaceActionName() { return null; }
+    /**
+     * @return progress of the creature action that can be done with space key.
+     */
+    public float getSpaceActionProgress() {
+        // (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency);
+        float actionProgress = 0f;
+        if (shootPoints > 0) {
+            actionProgress = (System.currentTimeMillis() - lastShootTime) / (float) shootFrequency;
+        }
+        // TODO add ability to fly for level 5
+        // TODO #180 add speed up for Aphid
+        return Math.between(0f, 1f, actionProgress);
+    }
     // public static float getZoomMin() { return 1f; }
     // public static float getZoomMax() { return 1f; }
     /**
@@ -192,7 +208,8 @@ public abstract class Creature extends MapItem {
         if (wantedRotation > 180) {
             wantedRotation -= 360;
         }
-        float allowedRotation = Math.min(getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime(), Math.abs(wantedRotation));
+        float allowedRotation = java.lang.Math.min(getMaxRotationPerSecond() * Gdx.graphics.getDeltaTime(),
+                java.lang.Math.abs(wantedRotation));
         if (wantedRotation > 0) {
             allowedRotation *= -1;
         }
@@ -225,7 +242,7 @@ public abstract class Creature extends MapItem {
     public void goTo(MapItem mi) { goTo(mi.getCenter()); }
     /**
      * {@summary Set wanted rotation to run away from v.}
-     * To run away from we calculate angle to each enemy & wall.
+     * To run away from we calculate angle to each enemy &#38; wall.
      * Then we run away from the biggest angle.
      * 
      * @param vectorList      contains coordinate of Points to run away from
@@ -402,7 +419,7 @@ public abstract class Creature extends MapItem {
     public void stayInMap(float mapWidth, float mapHeight) {
         // if have been move to avoid wall & if have not already choose a new angle to get out.
         if (moveIn(mapWidth, mapHeight) && getWantedRotation() == 0f) {
-            setWantedRotation((160f + (float) (Math.random() * 40)) % 360f);
+            setWantedRotation((160f + (float) (java.lang.Math.random() * 40)) % 360f);
         }
     }
     /**
@@ -412,9 +429,9 @@ public abstract class Creature extends MapItem {
      * @param frequency double in [0,1]. Next to 0 it hapend only fiew time. Next to 1 almost all time.
      */
     public void minorRandomRotation(double frequency) {
-        double r = Math.random() / (Gdx.graphics.getDeltaTime() * 100);
+        double r = java.lang.Math.random() / (Gdx.graphics.getDeltaTime() * 100);
         if (r < frequency) { // randomize rotation
-            setWantedRotation((float) (Math.random() * 40) - 20f);
+            setWantedRotation((float) (java.lang.Math.random() * 40) - 20f);
         }
     }
     /**

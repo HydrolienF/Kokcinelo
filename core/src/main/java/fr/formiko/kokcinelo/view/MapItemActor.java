@@ -4,8 +4,8 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.KProgressBar;
 import fr.formiko.kokcinelo.tools.KTexture;
-import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
@@ -29,7 +29,6 @@ import com.esotericsoftware.spine.Event;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.SkeletonActor;
-import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * {@summary Actor that represent a MapItem.}
@@ -44,7 +43,7 @@ public class MapItemActor extends SkeletonActor {
     private MapItem mapItem;
     // private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
-    private ShapeDrawer shapeDrawer;
+    private KProgressBar progressBar;
     /**
      * {@summary Main constructor.}
      * 
@@ -193,20 +192,13 @@ public class MapItemActor extends SkeletonActor {
         float mlp = c.getMaxLifePoints();
         if (mlp > 0) { // if is a Creature witch life point matter
             float lp = c.getLifePoints();
-            if (shapeDrawer == null) {
-                shapeDrawer = Shapes.createShapeDrawer(batch);
+            if (progressBar == null) {
+                progressBar = new KProgressBar((int) (mlp * 1.5f), -1, Color.GREEN, new Color(1, 0, 0, 0.5f), Color.BLACK);
             }
-            // Draw life bar
-            float len = mlp * 1.5f;
-            float height = len / 10;
-            float greenLen = len * lp / mlp;
-            float redLen = len - greenLen;
-            shapeDrawer.setColor(Color.RED);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + height, redLen, height);
-            shapeDrawer.setColor(Color.GREEN);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, greenLen, height);
-            shapeDrawer.setColor(Color.BLACK);
-            shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, len, height, 2);
+            progressBar.setProgress(lp / mlp);
+            progressBar.setPosition(getCenterX() - progressBar.getWidth() / 2,
+                    getCenterY() + mapItem.getHitRadius() + progressBar.getHeight());
+            progressBar.draw(batch, 1f);
         }
     }
 

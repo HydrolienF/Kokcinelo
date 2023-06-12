@@ -5,6 +5,7 @@ import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,6 +31,7 @@ public class Hud extends KScreen implements Disposable {
     private Viewport viewport;
     private Label scoreLabel;
     private Label insectCountLabel;
+    private @Null CreatureActionProgressBar creatureActionProgressBar;
     // private float timeCount;
     // private Integer worldTimer;
     /** true when the world timer reaches 0 */
@@ -65,6 +68,12 @@ public class Hud extends KScreen implements Disposable {
         gameTime = -1;
         setPlayerScore(0);
     }
+    /**
+     * {@summary Create top labels for the Hud.}
+     * 
+     * @param width Width of the table
+     * @return a Table with all top actors
+     */
     private Table createTopTable(float width) {
         countdownLabel = new Label("", skin);
         scoreLabel = new Label("", skin);
@@ -81,11 +90,25 @@ public class Hud extends KScreen implements Disposable {
         topTable.add(countdownLabel).expandX();
         return topTable;
     }
+    /**
+     * {@summary Create bottom buton for the Hud.}
+     * 
+     * @param width Width of the table
+     * @return a Table with all bottom actors
+     */
     private Table createBottomTable(int width) {
         Table bottomTable = new Table();
         bottomTable.bottom();
         bottomTable.setSize(width, Gdx.graphics.getHeight());
 
+        String spaceActionName = Controller.getController().getPlayerCreature().getSpaceActionName();
+        if (spaceActionName != null) {
+            creatureActionProgressBar = new CreatureActionProgressBar(width, height, new Color(0.5f, 0.5f, 0.5f, 1f),
+                    new Color(0.5f, 0.5f, 0.5f, 0.2f), Color.BLACK, Color.GREEN, spaceActionName, skin);
+            float capbWidth = width / 5f;
+            creatureActionProgressBar.setSize(capbWidth, capbWidth / 7f);
+            bottomTable.add(creatureActionProgressBar);
+        }
         return bottomTable;
     }
 
@@ -116,9 +139,16 @@ public class Hud extends KScreen implements Disposable {
             timeUp = true;
         }
         insectCountLabel.setText(Fonts.listOfCreatureToString(Controller.getController().getInsectList()));
+        updateCreatureActionProgressBar();
     }
 
     @Override
     public void dispose() { stage.dispose(); }
+
+    private void updateCreatureActionProgressBar() {
+        if (creatureActionProgressBar != null) {
+            creatureActionProgressBar.setProgress(Controller.getController().getPlayerCreature().getSpaceActionProgress());
+        }
+    }
 
 }
