@@ -33,6 +33,7 @@ public class Aphid extends Creature {
         visionRadius = 120;
         hitRadius = 20;
         movingSpeed = 1.5f;
+        hearRadius = 200;
         defaultMoveFrontSpeed = 0.3f;
         colorSkeleton();
         collectedFrequency = 20000;
