@@ -41,3 +41,6 @@ windowed: fenêtré
 language: langue
 restartFullGame: redémarrer
 restartFullGameMessage: Redémarrer le jeu pour appliquer les changements.
+# In Game
+acidShootAction: tirer
+runAction: accélérer

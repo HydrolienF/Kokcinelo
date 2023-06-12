@@ -41,3 +41,6 @@ windowed: fenestre
 language: lingvo
 restartFullGame: rekomenci
 restartFullGameMessage: Rekomenci ludo per apliki ŝanĝojn.
+# In Game
+acidShootAction: pafi
+runAction: akceli

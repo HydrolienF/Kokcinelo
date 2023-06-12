@@ -41,3 +41,6 @@ windowed: windowed
 language: language
 restartFullGame: restart
 restartFullGameMessage: Restart Kokcinelo to apply changes.
+# In Game
+acidShootAction: shoot
+runAction: speed up
