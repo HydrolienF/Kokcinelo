@@ -34,10 +34,12 @@ public abstract class Creature extends MapItem {
     protected long lastHitTime;
     protected long lastShootTime;
     protected long lastCollectedTime;
+    protected long lastRunTime;
     protected int hitFrequency;
     protected int shootFrequency;
     protected int shootRadius;
     protected int collectedFrequency;
+    protected int runFrequency;
 
     protected float lifePoints;
     protected float currentSpeed;
@@ -103,13 +105,14 @@ public abstract class Creature extends MapItem {
      * @return progress of the creature action that can be done with space key.
      */
     public float getSpaceActionProgress() {
-        // (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency);
         float actionProgress = 0f;
         if (shootPoints > 0) {
             actionProgress = (System.currentTimeMillis() - lastShootTime) / (float) shootFrequency;
         }
+        if (runFrequency > 0) {
+            actionProgress = (System.currentTimeMillis() - lastRunTime) / (float) runFrequency;
+        }
         // TODO add ability to fly for level 5
-        // TODO #180 add speed up for Aphid
         return Math.between(0f, 1f, actionProgress);
     }
     // public static float getZoomMin() { return 1f; }
@@ -189,7 +192,9 @@ public abstract class Creature extends MapItem {
      */
     public void moveFront(float percentOfSpeed) {
         rotateAStep();
-        currentSpeed = getMovingSpeed() * percentOfSpeed;
+        // If last run time is less than 1s ago, multiply speed by 3.
+        float runMultiplier = lastRunTime + 1000 > System.currentTimeMillis() ? 3f : 1f;
+        currentSpeed = getMovingSpeed() * percentOfSpeed * runMultiplier;
         getActor().moveFront(currentSpeed * KScreen.getFPSRacio());
     }
     /***
@@ -460,11 +465,16 @@ public abstract class Creature extends MapItem {
     public void die() {
         getActor().animate("die", 6);
         Controller.getController().addToRemove(this);
+        if (!isAI()) { // TODO find another way to do this in multiplayer
+            Controller.getController().gameOver();
+        }
     }
     /**
      * @return true if this can shoot other creatures
      */
     public boolean canShoot() { return (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency); }
+
+    public boolean canRun() { return (runFrequency > 0 && (System.currentTimeMillis() - lastRunTime) > runFrequency); }
 
     public boolean canBeCollected() {
         return collectedFrequency >= 0 && (System.currentTimeMillis() - lastCollectedTime) > collectedFrequency;
@@ -477,6 +487,8 @@ public abstract class Creature extends MapItem {
         getActor().animate("shoot", 6);
         // App.log(1, this + " shoot " + c);
     }
+
+    public void run() { lastRunTime = System.currentTimeMillis(); }
     /** Return true if is an AI. */
     public boolean isAI() { return !equals(Controller.getController().getPlayerCreature()); }
 
@@ -490,6 +502,7 @@ public abstract class Creature extends MapItem {
         lastHitTime += timePaused;
         lastShootTime += timePaused;
         lastCollectedTime += timePaused;
+        lastRunTime = +timePaused;
     }
 
     /**

@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.Ladybug;
@@ -248,9 +249,9 @@ public class MenuScreen extends KScreen implements Screen {
     private static void createCreatureImages(int w, int h, int topSpace) {
         // final Map<Class<? extends Creature>, Vector2> imageSize = Map.of(Ant.class, new Vector2(3600, 4800));
         final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
-                LadybugSideView.class, "K", Aphid.class, "A");
+                LadybugSideView.class, "K", BigScoreAphid.class, "A");
         creatureImages = new ArrayList<>();
-        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class, Aphid.class)) {
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class, BigScoreAphid.class)) {
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();

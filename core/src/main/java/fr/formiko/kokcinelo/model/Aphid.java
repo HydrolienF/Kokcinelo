@@ -17,8 +17,8 @@ import com.badlogic.gdx.graphics.Color;
 public class Aphid extends Creature {
     // private Color color;
     private static final Map<Class<? extends Aphid>, Color> typeColorMap = Map.of(Aphid.class, new Color(0.4f, 1f, 0f, 1f),
-            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, Color.GOLD, VisibilityAphid.class,
-            new Color(0.05f, 0.25f, 0f, 1f));
+            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, new Color(0.86f, 0.50f, 0.1f, 1f),
+            BigScoreAphid.class, new Color(0.86f, 0.50f, 0.1f, 1f), VisibilityAphid.class, new Color(0.05f, 0.25f, 0f, 1f));
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -36,6 +36,7 @@ public class Aphid extends Creature {
         defaultMoveFrontSpeed = 0.3f;
         colorSkeleton();
         collectedFrequency = 20000;
+        runFrequency = 5000;
         lastCollectedTime = System.currentTimeMillis() - (long) (Math.random() * collectedFrequency);
         setHoneydewVisibility(false);
     }
@@ -49,7 +50,7 @@ public class Aphid extends Creature {
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(Ladybug.class); }
     @Override
     public float getAnimationSpeedMultiplier() { return 4f; } // Aphid are small so they need to move faster in animation for realisme.
-    public Color getColor() { return typeColorMap.get(getClass()); }
+    public Color getColor() { return typeColorMap.getOrDefault(getClass(), Color.GRAY); }
     // public Color getColor() { return getColor(0f); } // it can be set with a small variation.
     // public Color getColor(float variation) {
     // if (color == null) {

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -282,7 +283,8 @@ public class GameState {
                     p = new Player(gs.ants.get(0));
                     break;
                 case "A":
-                    p = new Player(gs.aphids.get(0));
+                    p = new Player(gs.aphids.stream().max((a1, a2) -> a1.getGivenPoints() - a2.getGivenPoints())
+                            .orElseThrow(NoSuchElementException::new));
                     break;
                 default:
                     App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
@@ -404,9 +406,10 @@ public class GameState {
                     // | NoSuchMethodException | SecurityException e) {
                 } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    PrintWriter pw = new PrintWriter(new StringWriter());
+                    StringWriter out = new StringWriter();
+                    PrintWriter pw = new PrintWriter(out);
                     e.printStackTrace(pw);
-                    App.log(3, "Fail to add a new Creature " + e + "\n" + pw.toString());
+                    App.log(3, "Fail to add a new Creature " + e + "\n" + out.toString());
                     pw.close();
                 }
             }

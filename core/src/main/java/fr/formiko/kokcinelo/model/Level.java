@@ -32,7 +32,7 @@ public final class Level {
             newLevel("4F", Map.of(Ladybug.class, 2, RedAnt.class, 1,
                     Aphid.class, 50, ScoreAphid.class, 2, SpeedAphid.class, 10,HealthAphid.class, 10, VisibilityAphid.class, 10), true),
             newLevel("5F"),
-            newLevel("4A", Map.of(Ladybug.class, 3, GreenAnt.class, 1, RedAnt.class, 1, Aphid.class, 50, BigScoreAphid.class, 1), true),
+            newLevel("4A", Map.of(Ladybug.class, 4, RedAnt.class, 2, Aphid.class, 50, BigScoreAphid.class, 1), true),
             newLevel("5A"));
     // @formatter:on
     private static final Set<String> levelLetters = Set.of("K", "F", "A");
