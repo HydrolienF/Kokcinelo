@@ -51,6 +51,7 @@ public abstract class Creature extends MapItem {
         super(textureName);
         wantedRotation = 0f;
         defaultMoveFrontSpeed = 0.6f;
+        collectedFrequency = -1;
     }
 
     // GET SET -------------------------------------------------------------------
@@ -447,7 +448,9 @@ public abstract class Creature extends MapItem {
      */
     public boolean canShoot() { return (shootPoints > 0 && (System.currentTimeMillis() - lastShootTime) > shootFrequency); }
 
-    public boolean canBeCollected() { return (System.currentTimeMillis() - lastCollectedTime) > collectedFrequency; }
+    public boolean canBeCollected() {
+        return collectedFrequency >= 0 && (System.currentTimeMillis() - lastCollectedTime) > collectedFrequency;
+    }
     /**
      * {@summary Shoot a Creature.}
      */

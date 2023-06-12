@@ -255,7 +255,7 @@ class LevelButton extends Button {
                 case "1K": {
                     c = new Aphid();
                     c.setZoom(aphidSize);
-                    c.setLastCollectedTime(Long.MAX_VALUE); // to make sure it's not with honeydew
+                    c.setCollectedFrequency(-1); // to make sure it's not with honeydew
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c);
                     break;
                 }

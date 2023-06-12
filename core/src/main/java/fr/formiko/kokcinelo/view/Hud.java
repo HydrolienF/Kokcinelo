@@ -38,6 +38,7 @@ public class Hud extends KScreen implements Disposable {
     private float gameTime;
     private int maxValue;
 
+    // CONSTRUCTORS --------------------------------------------------------------
     /**
      * {@summary Main constructor}
      * 
@@ -50,38 +51,45 @@ public class Hud extends KScreen implements Disposable {
         // define our stage using that viewport and our games spritebatch
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, sb);
-        countdownLabel = new Label("", skin);
-        scoreLabel = new Label("", skin);
-        insectCountLabel = new Label("", skin, "emoji");
 
         Actor closeButton = getCloseButton(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         if (App.isWithCloseButton()) {
             stage.addActor(closeButton);
         }
 
-        // define a table used to organize our hud's labels
-        Table table = new Table();
-        // Top-Align table
-        table.top();
-        // make the table fill the entire stage
-        table.setWidth(Gdx.graphics.getWidth() - closeButton.getWidth());
-        table.setHeight(Gdx.graphics.getHeight());
-        // table.setFillParent(true);
+        stage.addActor(createTopTable(Gdx.graphics.getWidth() - closeButton.getWidth()));
+        stage.addActor(createBottomTable(Gdx.graphics.getWidth()));
 
-        // table.add(timeLabel).expandX();//.padTop(10);
-        // table.row();
-        table.add(scoreLabel).expandX();
-        table.add(insectCountLabel).expandX();
-        table.add(countdownLabel).expandX();
-
-
-        stage.addActor(table);
         App.log(0, "constructor", "new Hud: " + toString());
         // startTime = System.currentTimeMillis();
         gameTime = -1;
         setPlayerScore(0);
     }
+    private Table createTopTable(float width) {
+        countdownLabel = new Label("", skin);
+        scoreLabel = new Label("", skin);
+        insectCountLabel = new Label("", skin, "emoji");
 
+        // define a table used to organize our hud's labels
+        Table topTable = new Table();
+        // Top-Align table
+        topTable.top();
+        topTable.setSize(width, Gdx.graphics.getHeight());
+
+        topTable.add(scoreLabel).expandX();
+        topTable.add(insectCountLabel).expandX();
+        topTable.add(countdownLabel).expandX();
+        return topTable;
+    }
+    private Table createBottomTable(int width) {
+        Table bottomTable = new Table();
+        bottomTable.bottom();
+        bottomTable.setSize(width, Gdx.graphics.getHeight());
+
+        return bottomTable;
+    }
+
+    // GET SET -------------------------------------------------------------------
     public Stage getStage() { return stage; }
     public void setPlayerScore(int value) { scoreLabel.setText(value + "/" + maxValue); }
     public float getGameTime() { return gameTime; }
@@ -94,6 +102,8 @@ public class Hud extends KScreen implements Disposable {
     }
     public boolean isTimeUp() { return timeUp; }
 
+
+    // FUNCTIONS -----------------------------------------------------------------
     /**
      * {@summary Update Component that need to be update on time.}
      * 
@@ -106,16 +116,6 @@ public class Hud extends KScreen implements Disposable {
             timeUp = true;
         }
         insectCountLabel.setText(Fonts.listOfCreatureToString(Controller.getController().getInsectList()));
-        // timeCount = System.currentTimeMillis() - startTime;
-        // if (timeCount > 0) {
-        // if (worldTimer > 0) {
-        // worldTimer--;
-        // } else {
-        // timeUp = true;
-        // }
-        // countdownLabel.setText("" + worldTimer);
-        // timeCount = 0;
-        // }
     }
 
     @Override

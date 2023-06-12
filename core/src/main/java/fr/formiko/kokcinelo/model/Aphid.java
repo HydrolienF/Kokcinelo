@@ -37,6 +37,7 @@ public class Aphid extends Creature {
         colorSkeleton();
         collectedFrequency = 20000;
         lastCollectedTime = System.currentTimeMillis() - (long) (Math.random() * collectedFrequency);
+        setHoneydewVisibility(false);
     }
 
     // GET SET -------------------------------------------------------------------
