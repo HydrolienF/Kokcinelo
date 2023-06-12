@@ -37,5 +37,7 @@ public class Ladybug extends Creature {
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(Ant.class); }
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ladybug.class); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ladybug.class); }
     // FUNCTIONS -----------------------------------------------------------------
 }

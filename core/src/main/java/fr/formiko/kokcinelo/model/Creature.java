@@ -93,6 +93,7 @@ public abstract class Creature extends MapItem {
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(getClass()); }
     // public static float getZoomMin() { return 1f; }
     // public static float getZoomMax() { return 1f; }
     /**
@@ -126,17 +127,20 @@ public abstract class Creature extends MapItem {
         // @formatter:on
     }
     /**
-     * @return All Creature of the same type as this.
+     * @return All friendly creatures of this.
      */
     public Set<Creature> getAllFriendlyCreature() {
-        // @formatter:off
-        return Controller.getController().allCreatures().stream()
-                // TODO some aphid may be friend with ladybug & be added to this.
-                .filter(c -> c.isInstanceOf(getCreaturesFriendly()))
-                .collect(HashSet::new, Set::add, Set::addAll);
-        // @formatter:on
+        return Controller.getController().allCreatures().stream().filter(this::isFriendly).collect(HashSet::new, Set::add, Set::addAll);
+    }
+    /**
+     * @return All friendly creatures of this witch this can see.
+     */
+    public Set<Creature> getAllFriendlyWithVisibilityCreature() {
+        return Controller.getController().allCreatures().stream().filter(this::isFriendlyWithVisibility).collect(HashSet::new, Set::add,
+                Set::addAll);
     }
     public boolean isFriendly(Creature c) { return c.isInstanceOf(getCreaturesFriendly()); }
+    public boolean isFriendlyWithVisibility(Creature c) { return c.isInstanceOf(getCreaturesFriendlyWithVisibility()); }
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override

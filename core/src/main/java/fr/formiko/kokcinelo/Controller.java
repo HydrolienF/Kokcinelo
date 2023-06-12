@@ -758,14 +758,14 @@ public class Controller {
         if (pc == null) {
             return List.of();
         } else {
-            return pc.getAllFriendlyCreature();
+            return pc.getAllFriendlyWithVisibilityCreature();
         }
     }
 
     /** Return a Map of, how much insect there is. */
     public Map<Class<? extends Creature>, Integer> getInsectList() {
-        return gs.allCreatures().stream().filter(c -> c instanceof Creature).filter(c -> !(c instanceof AcidDrop))
-                .collect(Collectors.groupingBy(c -> c.getClass(), Collectors.summingInt(c -> 1)));
+        return gs.allCreatures().stream().filter(Creature.class::isInstance).filter(c -> !(c instanceof AcidDrop))
+                .collect(Collectors.groupingBy(Creature::getClass, Collectors.summingInt(c -> 1)));
     }
 
 }
