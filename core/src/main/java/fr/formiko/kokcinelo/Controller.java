@@ -758,7 +758,9 @@ public class Controller {
         if (pc == null) {
             return List.of();
         } else {
-            return pc.getAllFriendlyWithVisibilityCreature();
+            return Set.of(pc);
+            // TODO #158
+            // return pc.getAllFriendlyWithVisibilityCreature();
         }
     }
 
