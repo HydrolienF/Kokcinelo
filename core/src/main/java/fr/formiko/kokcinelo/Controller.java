@@ -302,14 +302,13 @@ public class Controller {
      * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
      */
     public void interact() {
-        if (ladybugsEat()) {
-            getGameScreen().setPlayerScore(gs.getScore());
-        }
+        ladybugsEat();
         antsHit();
         antsShoot();
         aphidHonewdewUpdate();
         antsCollectHoneydew();
         acidDropsHit();
+        getGameScreen().setPlayerScore(gs.getScore());
     }
 
     /**
@@ -455,8 +454,9 @@ public class Controller {
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        // if player play as ant, his score is 0 if he stop game before time is up.
-        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
+        // if player play as ant or aphid, his score is 0 if he stop game before time is up.
+        if ((getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Aphid)
+                && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
             gs.setScore(0);
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
