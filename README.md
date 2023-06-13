@@ -42,7 +42,7 @@ You can find the javadoc [here](https://formiko.fr/Kokcinelo/javadoc/)
 Hydrolien
 
 ## Musicians :
-[Felknia](https://www.youtube.com/FelkniaMusic)
+[Felknia](https://www.youtube.com/FelkniaMusic), [Alexander Nakarada](https://www.serpentsoundstudios.com/official-releases) (CC BY 4.0)
 
 ## Noisemakers: 
 Hydrolien, [pikbest.com](https://fr.pikbest.com/)
