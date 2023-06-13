@@ -103,4 +103,14 @@ public abstract class MapItem {
      * {@summary Return the distance between center point of this &#38; stage coordinate.}
      */
     public float distanceTo(Vector2 mi2) { return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.x, mi2.y); }
+
+    /**
+     * {@summary Add time to values that need it.}
+     * It is used when the game is resume to avoid that creature can hit &#38; shoot again even if game time have'nt run.
+     * 
+     * @param timePaused time that have run bewteen pause &#38; resume
+     */
+    public void addTime(long timePaused) {
+        // Nothing to do here.
+    }
 }

@@ -1,0 +1,32 @@
+{
+"skeleton": {
+	"hash": "DhW8bHODlYo",
+	"spine": "4.1.23",
+	"x": -1385.39,
+	"y": -1385.39,
+	"width": 2770.77,
+	"height": 2770.77,
+	"images": "../morceau par morceau/blood spot piece by piece/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "bloodSpot", "parent": "root" }
+],
+"slots": [
+	{ "name": "bloodSpot", "bone": "bloodSpot", "attachment": "bloodSpot" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"bloodSpot": {
+				"bloodSpot": { "rotation": 28.07, "width": 2048, "height": 2048 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {}
+}
+}

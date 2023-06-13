@@ -88,12 +88,18 @@ public class MapItemActor extends SkeletonActor {
 
             AnimationState animationState = new AnimationState(stateData);
             // different track index = animation are play at the same time, same track index = animation are play one after the other
-            try {
-                animationState.addAnimation(0, "walk", true, 0);
-            } catch (IllegalArgumentException e) {
-                animationState.addAnimation(0, "fly", true, 0);
+            if (mapItem instanceof Creature) {
+                try {
+                    animationState.addAnimation(0, "walk", true, 0);
+                } catch (IllegalArgumentException e) {
+                    try {
+                        animationState.addAnimation(0, "fly", true, 0);
+                    } catch (IllegalArgumentException e2) {
+                        App.log(2, "No walk or fly animation found for " + textureName + " skeleton");
+                    }
+                }
+                animationState.addAnimation(1, "default", true, 0);
             }
-            animationState.addAnimation(1, "default", true, 0);
 
             setRenderer(skeletonRenderer);
             setSkeleton(skeleton);
@@ -270,7 +276,7 @@ public class MapItemActor extends SkeletonActor {
             if (mapItem instanceof Creature c && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
                 getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f * c.getAnimationSpeedMultiplier());
             }
-            if (((Creature) mapItem).getCurrentSpeed() > 0) {
+            if (mapItem instanceof Creature && ((Creature) mapItem).getCurrentSpeed() > 0) {
                 super.act(delta);
             }
         }

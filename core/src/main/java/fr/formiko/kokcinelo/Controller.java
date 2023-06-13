@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo;
 import fr.formiko.kokcinelo.model.AcidDrop;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BloodSpot;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
@@ -244,7 +245,7 @@ public class Controller {
             for (Ant ant : gs.getAnts()) {
                 ant.setCenter(2000, 2000);
             }
-            for (Creature c : gs.allCreatures()) {
+            for (Creature c : allCreatures()) {
                 c.setMovingSpeed(0.05f);
             }
 
@@ -292,6 +293,8 @@ public class Controller {
     public void restartFullGame() { app.exit(100); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
     public Collection<Creature> allCreatures() { return gs.allCreatures(); }
+    public Collection<MapItem> allMapItems() { return gs.allMapItems(); }
+
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
     public boolean isAllLadybugGone() { return gs.isAllLadybugGone(); }
@@ -299,7 +302,7 @@ public class Controller {
 
     /**
      * {@summary Let Creature interact with each other.}
-     * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
+     * It let ladybugs eat aphids and if they do, update player score, play matching sound etc.
      */
     public void interact() {
         ladybugsEat();
@@ -326,6 +329,10 @@ public class Controller {
                     ladybug.hit(aphid);
                     ladybug.addScore(aphid.getGivenPoints());
                     aphid.bonusWhenEaten(ladybug);
+                    BloodSpot bloodSpot = new BloodSpot(aphid);
+                    gs.getBloodSpots().add(bloodSpot);
+                    getGameScreen().getStage().addActor(bloodSpot.getActor());
+                    bloodSpot.getActor().setZIndex(gs.getBloodSpots().size() - 1);
                 }
             }
         }
@@ -479,8 +486,8 @@ public class Controller {
     public void pauseResume() {
         if (getGameScreen().isPause()) {
             removeEscapeMenu();
-            for (Creature creature : gs.allCreatures()) {
-                creature.addTime(System.currentTimeMillis() - timeStartPause);
+            for (MapItem mapItem : allMapItems()) {
+                mapItem.addTime(System.currentTimeMillis() - timeStartPause);
             }
             getGameScreen().resume();
         } else {
@@ -766,7 +773,7 @@ public class Controller {
 
     /** Return a Map of, how much insect there is. */
     public Map<Class<? extends Creature>, Integer> getInsectList() {
-        return gs.allCreatures().stream().filter(Creature.class::isInstance).filter(c -> !(c instanceof AcidDrop))
+        return allCreatures().stream().filter(Creature.class::isInstance).filter(c -> !(c instanceof AcidDrop))
                 .collect(Collectors.groupingBy(Creature::getClass, Collectors.summingInt(c -> 1)));
     }
 

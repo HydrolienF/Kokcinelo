@@ -14,6 +14,7 @@ public class AcidDrop extends Creature {
 
     /**
      * {@summary Create a new acid drop.}
+     * Acid drop are created when an ant shoot acid.
      * 
      * @param centerX           center x position
      * @param centerY           center y position
