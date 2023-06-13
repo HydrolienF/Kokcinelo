@@ -22,6 +22,8 @@ import com.badlogic.gdx.utils.Null;
  * @since 0.1
  */
 public abstract class Creature extends MapItem {
+    public static final List<Class<? extends Creature>> ORDER = List.of(Ladybug.class, Ant.class, RedAnt.class, GreenAnt.class, Aphid.class,
+            HealthAphid.class, SpeedAphid.class, ScoreAphid.class, BigScoreAphid.class, VisibilityAphid.class);
     protected boolean fliing;
     protected float maxLifePoints;
     protected float hitPoints;

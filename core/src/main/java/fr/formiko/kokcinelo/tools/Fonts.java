@@ -84,17 +84,19 @@ public class Fonts extends BitmapFont {
     public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map, int splitEveryXCreature) {
         AtomicInteger count = new AtomicInteger(0);
         StringBuilder sb = new StringBuilder();
-        map.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(e -> {
-            if (!sb.isEmpty()) {
-                if (count.incrementAndGet() >= splitEveryXCreature) {
-                    sb.append("\n");
-                    count.set(0);
-                } else {
-                    sb.append("   ");
-                }
-            }
-            sb.append(e.getValue()).append(Fonts.getIcon(e.getKey()));
-        });
+        map.entrySet().stream()
+                .sorted((e1, e2) -> Integer.compare(Creature.ORDER.indexOf(e1.getKey()), Creature.ORDER.indexOf(e2.getKey())))
+                .forEach(e -> {
+                    if (!sb.isEmpty()) {
+                        if (count.incrementAndGet() >= splitEveryXCreature) {
+                            sb.append("\n");
+                            count.set(0);
+                        } else {
+                            sb.append("   ");
+                        }
+                    }
+                    sb.append(e.getValue()).append(Fonts.getIcon(e.getKey()));
+                });
         return sb.toString();
     }
     public static String listOfCreatureToString(Map<Class<? extends Creature>, Integer> map) {
