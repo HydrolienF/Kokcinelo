@@ -1,6 +1,7 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
+import fr.formiko.kokcinelo.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -30,4 +31,15 @@ public class GreenAnt extends Ant {
 
     @Override
     public String getSpaceActionName() { return "AcidShootAction"; }
+
+    @Override
+    public void shoot() {
+        super.shoot();
+        Controller.getController().playSound("shoot", this);
+        // Create new acid drop
+        AcidDrop ad = new AcidDrop(getCenterX(), getCenterY(), getRotation(), getShootRadius(), getShootPoints());
+        App.log(0, "New acid drop with distance before hit: " + ad.getDistanceBeforeHit());
+        Controller.getController().getGameState().getAcidDrops().add(ad);
+        Controller.getController().getGameScreen().getStage().addActor(ad.getActor());
+    }
 }

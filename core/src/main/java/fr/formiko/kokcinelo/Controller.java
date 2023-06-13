@@ -415,12 +415,6 @@ public class Controller {
             return;
         }
         ant.shoot();
-        playSound("shoot", ant);
-        // Create new acid drop
-        AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.getShootRadius(), ant.getShootPoints());
-        App.log(0, "New acid drop with distance before hit: " + ad.getDistanceBeforeHit());
-        gs.getAcidDrops().add(ad);
-        getGameScreen().getStage().addActor(ad.getActor());
     }
 
     /**
