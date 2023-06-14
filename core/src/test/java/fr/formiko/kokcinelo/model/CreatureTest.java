@@ -107,9 +107,15 @@ class CreatureTest extends Assertions {
         assertDoesNotThrow(() -> new Ladybug());
         assertDoesNotThrow(() -> new LadybugSideView());
         assertDoesNotThrow(() -> new Aphid());
+        assertDoesNotThrow(() -> new VisibilityAphid());
+        assertDoesNotThrow(() -> new HealthAphid());
+        assertDoesNotThrow(() -> new SpeedAphid());
+        assertDoesNotThrow(() -> new ScoreAphid());
+        assertDoesNotThrow(() -> new BigScoreAphid());
+
     }
 
-    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant, String levelId) {
+    static void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant, String levelId) {
         GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000)
                 .setLevel(Level.newTestLevel(levelId, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
                 .build();
@@ -117,7 +123,7 @@ class CreatureTest extends Assertions {
         Controller.getController().setGameState(gs);
         Controller.setDebug(false);
     }
-    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
+    static void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
         createGameStateWithAphidLadybugAnt(aphid, ladybug, ant, "1K");
     }
 

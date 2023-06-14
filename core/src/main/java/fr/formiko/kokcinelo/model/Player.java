@@ -26,7 +26,7 @@ public class Player {
      */
     public Player(Creature c) {
         id = idCpt++;
-        playedCreature = c;
+        setPlayedCreature(c);
         if (c instanceof Ant || c instanceof Aphid) {
             score = 100;
         } else {
