@@ -452,6 +452,15 @@ public class Controller {
         if (getGameScreen().isStop()) {
             return;
         }
+
+        // If player is still alive, give him bonus score for time. (Ant and Ladybug may have bonus if there getCreaturesToHunt() is empty)
+        // TODO find a better way to do this.
+        if (getPlayerCreature().isAlive() && (getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Ladybug)
+                && !getPlayerCreature().haveCreatureToHunt()) {
+            getPlayerCreature().addScore((int) getGameScreen().getGameTime());
+            App.log(1, "Add player score for time: " + getGameScreen().getGameTime());
+        }
+
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
@@ -459,6 +468,7 @@ public class Controller {
         if ((getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Aphid)
                 && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
             gs.setScore(0);
+            App.log(1, "Remove all player score for stoping before the end.");
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);

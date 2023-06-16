@@ -85,6 +85,7 @@ public abstract class Creature extends MapItem {
             this.lifePoints = getMaxLifePoints();
         }
     }
+    public boolean isAlive() { return getLifePoints() > 0; }
     public float getMaxLifePoints() { return maxLifePoints; }
     public void setMaxLifePoints(float maxLifePoints) { this.maxLifePoints = maxLifePoints; }
     public float getHitPoints() { return hitPoints; }
@@ -102,6 +103,9 @@ public abstract class Creature extends MapItem {
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
     public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(getClass()); }
+    public boolean haveCreatureToHunt() {
+        return Controller.getController().allCreatures().stream().anyMatch(c -> c.isInstanceOf(getCreaturesToHunt()));
+    }
     public @Null String getSpaceActionName() { return null; }
     /**
      * @return progress of the creature action that can be done with space key.
@@ -457,7 +461,7 @@ public abstract class Creature extends MapItem {
         // App.log(1,this + " hit " + c + " with " + getHitPoints() + " hit points. Creature still have " + c.getLifePoints() + " life
         // points.");
         getActor().animate("hit", 5);
-        if (c.getLifePoints() <= 0) {
+        if (!c.isAlive()) {
             c.die();
         }
     }
@@ -465,6 +469,7 @@ public abstract class Creature extends MapItem {
      * {@summary Die, remove from controller &#38; play diing animation.}
      */
     public void die() {
+        App.log(1, getId() + " die.");
         getActor().animate("die", 6);
         Controller.getController().addToRemove(this);
         if (!isAI()) { // TODO find another way to do this in multiplayer

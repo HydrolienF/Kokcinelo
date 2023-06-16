@@ -24,6 +24,8 @@ public class Ladybug extends Creature {
         movingSpeed = 5f;
         maxLifePoints = 100;
         lifePoints = maxLifePoints;
+        hitPoints = 1;
+        hitFrequency = 0;
     }
     public Ladybug() { this("ladybug"); }
 

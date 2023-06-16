@@ -35,6 +35,8 @@ public class Aphid extends Creature {
         movingSpeed = 1.5f;
         hearRadius = 200;
         defaultMoveFrontSpeed = 0.3f;
+        maxLifePoints = 1;
+        lifePoints = maxLifePoints;
         colorSkeleton();
         collectedFrequency = 20000;
         runFrequency = 5000;

@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.InputCore;
 import fr.formiko.kokcinelo.model.Creature;
-import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import java.util.HashMap;
@@ -118,7 +117,7 @@ public class GameScreen extends KScreen implements Screen {
     public Stage getStage() { return stage; }
     public void addProcessor(InputProcessor ip) { inputMultiplexer.addProcessor(ip); }
     public void removeProcessor(InputProcessor ip) { inputMultiplexer.removeProcessor(ip); }
-
+    public float getGameTime() { return hud.getGameTime(); }
 
     // FUNCTIONS -----------------------------------------------------------------
     /**
@@ -186,10 +185,6 @@ public class GameScreen extends KScreen implements Screen {
             getController().gameOver();
         }
         if (getController().isAllLadybugGone()) {
-            // if player is an ant or an aphid give it bonus score for time.
-            if (!(getController().getPlayerCreature() instanceof Ladybug)) {
-                getController().getPlayerCreature().addScore((int) hud.getGameTime());
-            }
             getController().gameOver();
         }
     }

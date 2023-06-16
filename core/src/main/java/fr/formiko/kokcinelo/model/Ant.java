@@ -26,6 +26,8 @@ public class Ant extends Creature {
         movingSpeed = 4.5f;
         maxLifePoints = 0;
         hitFrequency = 1000;
+        maxLifePoints = 1;
+        lifePoints = maxLifePoints;
 
         if (getActor() != null && getActor().getSkeleton() != null) {
             Slot colorSlot = getActor().getSkeleton().findSlot("thorax color");
