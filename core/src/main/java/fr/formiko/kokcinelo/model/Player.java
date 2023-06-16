@@ -29,6 +29,9 @@ public class Player {
         playedCreature = c;
         if (c instanceof Ant || c instanceof Aphid) {
             score = 100;
+            if (c instanceof Aphid) {
+                c.setLastCollectedTime(0);
+            }
         } else {
             score = 0;
         }

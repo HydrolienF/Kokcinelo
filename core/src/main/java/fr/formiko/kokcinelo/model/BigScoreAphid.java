@@ -9,5 +9,5 @@ public class BigScoreAphid extends ScoreAphid {
     @Override
     public int getGivenPoints() { return 50; }
     @Override
-    public void bonusWhenCollectHoneydew(Creature collector) { collector.addScore(10); }
+    public void bonusWhenCollectHoneydew(Creature collector) { collector.addScore(20); }
 }
