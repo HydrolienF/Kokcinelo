@@ -94,9 +94,9 @@ class LevelButton extends Button {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!isDisabled()) {
-                    ms.updateSelectedLevel(getId());
                     setChecked(true);
                     App.playSound("clicOff");
+                    ms.updateSelectedLevel(getId());
                 }
             }
             @Override

@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -289,23 +288,8 @@ public class GameState {
             // initialize default game
             addMapBackground();
             addCreatures();
-            Player p;
-            switch (level.getLetter()) {
-                case "K":
-                    p = new Player(gs.ladybugs.get(0));
-                    break;
-                case "F":
-                    p = new Player(gs.ants.get(0));
-                    break;
-                case "A":
-                    p = new Player(gs.aphids.stream().max((a1, a2) -> a1.getGivenPoints() - a2.getGivenPoints())
-                            .orElseThrow(NoSuchElementException::new));
-                    break;
-                default:
-                    App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
-                    p = new Player(gs.ladybugs.get(0));
-                    break;
-            }
+            Player p = new Player(
+                    gs.allCreatures().stream().filter(c -> c.getClass().equals(level.getPlayerCreatureClass())).findFirst().orElseThrow());
             if (Controller.isDebug()) {
                 p.getPlayedCreature().setVisionRadius(mapWidth);
             }

@@ -196,7 +196,7 @@ public class MapItemActor extends SkeletonActor {
     private void drawLifePoint(Batch batch) {
         Creature c = (Creature) mapItem;
         float mlp = c.getMaxLifePoints();
-        if (mlp > 1) { // if is a Creature witch life point matter
+        if (mlp > 1) { // if is a Creature witch life point matter (1 = minimum life point, no need to display it, creature will be 1 shot)
             float lp = c.getLifePoints();
             if (progressBar == null) {
                 progressBar = new KProgressBar((int) (mlp * 1.5f), -1, Color.GREEN, new Color(1, 0, 0, 0.5f), Color.BLACK);

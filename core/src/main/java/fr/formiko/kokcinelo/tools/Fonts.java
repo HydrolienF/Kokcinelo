@@ -42,7 +42,7 @@ public class Fonts extends BitmapFont {
      * @param fontSize size of the font.
      * @return the default font.
      */
-    public static BitmapFont getDefaultFont(float fontSize, boolean withEmoji) {
+    public static BitmapFont getDefaultFont(float fontSize, final boolean withEmoji) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         if (withEmoji) {

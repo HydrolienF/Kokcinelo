@@ -20,7 +20,6 @@ import fr.formiko.kokcinelo.view.OptionsTable.OptionsTablesTypes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -37,7 +36,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -73,6 +74,7 @@ public class MenuScreen extends KScreen implements Screen {
     private Actor playButton;
     private List<OptionsTable> optionsTables = new ArrayList<>();
     private boolean isPause;
+    private SelectBox<String> playerCreatureSelectBox;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -135,10 +137,9 @@ public class MenuScreen extends KScreen implements Screen {
             backgroundStage.draw();
 
             batch.setProjectionMatrix(camera.combined);
-            for (Actor creature : creatureImages) { // Only show the creature of the current level.
-                creature.setVisible(creature.getName() != null
-                        && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
-                                && creature.getName().contains("" + getLevel().getNumber()))));
+            for (Actor creatureImage : creatureImages) { // Only show the creature of the current level.
+                // We use startsWith instead of equals because the class of the ladybug is LadybugSideView.
+                creatureImage.setVisible(creatureImage.getName().startsWith(getLevel().getPlayerCreatureClass().getName()));
             }
 
             if (playingVideo) {
@@ -206,7 +207,7 @@ public class MenuScreen extends KScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        playButton = getPlayButton(centerTable.getHeight(), centerTable.getHeight());
+        playButton = initPlayButton(centerTable.getHeight(), centerTable.getHeight());
         centerTable.add(playButton).expand();
 
         if (App.isWithCloseButton()) {
@@ -248,8 +249,6 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private static void createCreatureImages(int w, int h, int topSpace) {
         // final Map<Class<? extends Creature>, Vector2> imageSize = Map.of(Ant.class, new Vector2(3600, 4800));
-        final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
-                LadybugSideView.class, "K", BigScoreAphid.class, "A");
         creatureImages = new ArrayList<>();
         for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class, BigScoreAphid.class)) {
             Creature c = null;
@@ -261,7 +260,7 @@ public class MenuScreen extends KScreen implements Screen {
                 continue;
             }
             MapItemActor cActor = c.getActor();
-            cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
+            cActor.setName(creatureClass.getName());
             int imageWidth;
             int imageHeight;
             if (c instanceof Ant) {
@@ -319,7 +318,7 @@ public class MenuScreen extends KScreen implements Screen {
      * @param pbHeight Play button height.
      * @return a play button.
      */
-    private Actor getPlayButton(float pbWidth, float pbHeight) {
+    private Actor initPlayButton(float pbWidth, float pbHeight) {
         final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(pbWidth, pbHeight);
         playButton.setColor(Color.GREEN);
@@ -474,6 +473,15 @@ public class MenuScreen extends KScreen implements Screen {
      * @param levelId the selected level
      */
     public void updateSelectedLevel(String levelId) {
+        updateOveredLevel(levelId);
+        displayPlayerCreatureClassList(getLevel().getPlayerCreatureClasses().size() > 1);
+    }
+    /**
+     * Update the labels that depend of overed level.
+     * 
+     * @param levelId the selected level
+     */
+    public void updateOveredLevel(String levelId) {
         levelNameLabel.setText(getLevelNameText(levelId));
         if (App.isPlayableLevel(levelId)) {
             levelNameLabel.setText(levelNameLabel.getText() + "\n" + getCreatureList(levelId));
@@ -482,13 +490,27 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
     }
-    /**
-     * Update the labels that depend of overed level.
-     * Currently, do the same as updateSelectedLevel.
-     * 
-     * @param levelId the selected level
-     */
-    public void updateOveredLevel(String levelId) { updateSelectedLevel(levelId); }
+
+    private void displayPlayerCreatureClassList(boolean visible) {
+        getLevel().setPlayerCreatureClassIndex(0);
+        if (playerCreatureSelectBox == null) {
+            playerCreatureSelectBox = new SelectBox<>(skin, "emoji");
+            stage.addActor(playerCreatureSelectBox);
+        }
+        playerCreatureSelectBox.setVisible(visible);
+        if (visible) {
+            playerCreatureSelectBox.setItems(getLevel().getPlayerCreatureClasses().stream().map(Fonts::getIcon).toArray(String[]::new));
+            playerCreatureSelectBox.pack();
+            playerCreatureSelectBox.setPosition(levelDescription.getX() - playerCreatureSelectBox.getWidth(),
+                    levelDescription.getY() + playerCreatureSelectBox.getHeight());
+            playerCreatureSelectBox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    getLevel().setPlayerCreatureClassIndex(playerCreatureSelectBox.getSelectedIndex());
+                }
+            });
+        }
+    }
 
     public void startPlayingVideo() {
         playingVideo = true;

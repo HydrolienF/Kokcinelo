@@ -116,8 +116,25 @@ class CreatureTest extends Assertions {
     }
 
     static void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant, String levelId) {
-        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000)
-                .setLevel(Level.newTestLevel(levelId, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
+        List<Class<? extends Creature>> playerCreature;
+        switch (levelId.charAt(1)) {
+            case 'A': {
+                playerCreature = List.of(Aphid.class);
+                break;
+            }
+            case 'K': {
+                playerCreature = List.of(Ladybug.class);
+                break;
+            }
+            case 'F': {
+                playerCreature = List.of(RedAnt.class);
+                break;
+            }
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + levelId.charAt(1));
+        }
+        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(
+                Level.newTestLevel(levelId, playerCreature, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
                 .build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
