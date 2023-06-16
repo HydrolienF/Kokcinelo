@@ -10,7 +10,7 @@ public class BigScoreAphidTest extends Assertions {
     @Test
     public void testGetGivenPoints() { assertTrue(new BigScoreAphid().getGivenPoints() > new Aphid().getGivenPoints()); }
     @ParameterizedTest
-    @CsvSource({"100, 1, 0, 50, 60, ", "100, 1, 1, 50, 40"})
+    @CsvSource({"100, 1, 0, 50, 70, ", "100, 1, 1, 50, 30"})
     public void testBonusWhenCollectHoneydew(int aphid, int ladybug, int ant, int defaultScore, int scoreExepted) {
         CreatureTest.createGameStateWithAphidLadybugAnt(aphid, ladybug, ant, "1K");
         BigScoreAphid a = new BigScoreAphid();
