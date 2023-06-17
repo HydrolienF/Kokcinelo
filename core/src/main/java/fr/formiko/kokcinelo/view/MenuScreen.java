@@ -324,16 +324,17 @@ public class MenuScreen extends KScreen implements Screen {
         playButton.setColor(Color.GREEN);
         playButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (playingVideo) {
-                    getController().endMenuScreen();
-                } else {
-                    startPlayingVideo();
-                }
-            }
+            public void clicked(InputEvent event, float x, float y) { playButtonClick(); }
         });
         playButton.setScaling(Scaling.fillY);
         return playButton;
+    }
+    public void playButtonClick() {
+        if (playingVideo) {
+            getController().endMenuScreen();
+        } else {
+            startPlayingVideo();
+        }
     }
 
     @Override
@@ -369,19 +370,7 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
-                    if (playingVideo) { // skip video
-                        getController().endMenuScreen();
-                    } else if (optionsTables.stream().anyMatch(Actor::isVisible)) { // hide options
-                        if (optionsTables.stream().anyMatch(OptionsTable::isRequireRestart)) { // ask for restart Kokcinelo
-                            optionsTables.stream().forEach(ot -> ot.setRequireRestart(false));
-                            setCenterActorVisible(optionsTables.stream().filter(ot -> ot.getType() == OptionsTablesTypes.RESTART)
-                                    .findFirst().orElse(null));
-                        } else {
-                            setCenterActorVisible();
-                        }
-                    } else { // launch a new game
-                        startPlayingVideo();
-                    }
+                    keyPressedEscapeSpaceEnter();
                 }
                 return true;
             }
@@ -412,6 +401,27 @@ public class MenuScreen extends KScreen implements Screen {
             public boolean scrolled(float amountX, float amountY) { return false; }
 
         };
+    }
+    /**
+     * {@summary React to key pressed once when it's Escape or Space or Enter.}
+     */
+    private void keyPressedEscapeSpaceEnter() {
+        if (playingVideo) { // skip video
+            getController().endMenuScreen();
+        } else if (optionsTables.stream().anyMatch(Actor::isVisible)) {
+            // restart game
+            if (optionsTables.stream().filter(OptionsTable::isVisible).anyMatch(ot -> ot.getType() == OptionsTablesTypes.RESTART)) {
+                Controller.getController().restartFullGame();
+            } else if (optionsTables.stream().anyMatch(OptionsTable::isRequireRestart)) { // ask for restart Kokcinelo
+                optionsTables.stream().forEach(ot -> ot.setRequireRestart(false));
+                setCenterActorVisible(
+                        optionsTables.stream().filter(ot -> ot.getType() == OptionsTablesTypes.RESTART).findFirst().orElse(null));
+            } else { // hide options
+                setCenterActorVisible();
+            }
+        } else { // launch a new game
+            startPlayingVideo();
+        }
     }
 
     // private ------------------------------------------------------------------------------------

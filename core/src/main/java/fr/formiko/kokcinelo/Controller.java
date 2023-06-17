@@ -75,6 +75,7 @@ public class Controller {
     public GameScreen getGameScreen() { return (GameScreen) getScreen(); }
     public Screen getScreen() { return app.getScreen(); }
     public void setScreen(Screen screen) { app.setScreen(screen); }
+    public @Null MenuScreen getMenuScreen() { return getScreen() instanceof MenuScreen ? (MenuScreen) getScreen() : null; }
     public int getLocalPlayerId() { return gs.getLocalPlayerId(); }
     public boolean isSpectatorMode() { return spectatorMode; }
     public void setSpectatorMode(boolean spectatorMode) { this.spectatorMode = spectatorMode; }
