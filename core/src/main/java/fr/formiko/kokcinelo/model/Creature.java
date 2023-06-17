@@ -106,6 +106,9 @@ public abstract class Creature extends MapItem {
     public boolean haveCreatureToHunt() {
         return Controller.getController().allCreatures().stream().anyMatch(c -> c.isInstanceOf(getCreaturesToHunt()));
     }
+    public boolean haveCreatureHuntedBy() {
+        return Controller.getController().allCreatures().stream().anyMatch(c -> c.isInstanceOf(getCreaturesHuntedBy()));
+    }
     public @Null String getSpaceActionName() { return null; }
     /**
      * @return progress of the creature action that can be done with space key.

@@ -453,10 +453,9 @@ public class Controller {
             return;
         }
 
-        // If player is still alive, give him bonus score for time. (Ant and Ladybug may have bonus if there getCreaturesToHunt() is empty)
-        // TODO find a better way to do this.
-        if (getPlayerCreature().isAlive() && (getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Ladybug)
-                && !getPlayerCreature().haveCreatureToHunt()) {
+        // If player is still alive & have kill all his target & is not the target of anything, give him bonus score for time.
+        if (getPlayerCreature().isAlive() && !getPlayerCreature().haveCreatureToHunt()
+                && (!getPlayerCreature().haveCreatureHuntedBy() || !(getPlayerCreature() instanceof Aphid))) {
             getPlayerCreature().addScore((int) getGameScreen().getGameTime());
             App.log(1, "Add player score for time: " + getGameScreen().getGameTime());
         }
