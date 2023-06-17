@@ -222,7 +222,7 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setSize(w / 3f, topSpace);
         updateSelectedLevel(getLevelId());
 
-        Label versionLabel = new Label(App.getCurrentVersion(), skinSmall);
+        Label versionLabel = new Label(Fonts.DEFAULT_COLOR + App.getCurrentVersion(), skinSmall);
         versionLabel.setPosition(w - versionLabel.getWidth(), 0);
 
         Table btable = getLinkButtonsTable(bottomLinksSpace);
