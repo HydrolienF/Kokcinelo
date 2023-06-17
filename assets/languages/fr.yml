@@ -13,8 +13,8 @@ descriptionLevel2K: Les 🕷 feront tout leur possible pour vous en empêcher. M
 descriptionLevel2F: Les 🐞 tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de vos mandibules. Plus vite vous arrêterez les 🐞 plus vous aurez de points bonus.
 descriptionLevel3K: Les 🦂 feront tout leur possible pour vous en empêcher. Méfiez-vous de leurs jets d'acide !
 descriptionLevel3F: Les 🐞 tenteront d'en dévorer autant que possible. Pour les en empêcher, vous pouvez faire usage de votre acide formique (espace). Plus vite vous arrêterez les 🐞 plus vous aurez de points bonus.
-descriptionLevel4K: Chaque 🦗 dévoré vous accordera un bonus de vie, de vitesse ou de point.
-descriptionLevel4F: Vos amis les 🦗 sécrètent du miellat dont vous raffolez. En fonction de l'espèce de 🦗, le miellat vous rendra plus rapide ou rendra vos attaques plus efficaces.
+descriptionLevel4K: "Dévorer certains 🦗 accorde un bonus :\n🟥 restore 10% de votre vie\n🟦 augmente votre vitesse de 3%\n🟧 donne 10 points"
+descriptionLevel4F: "Vos amis les 🦗 sécrètent du miellat dont vous raffolez. En fonction de l'espèce de 🦗, collecter le miellat vous accorde un bonus :\n🟥 augmente vos dégats de 3%\n🟦 augmente votre vitesse de 3%\n🟧 donne 2 points"
 descriptionLevel4A: Vous êtes le plus beau des 🦗. L'avenir de la colonie dépend de votre survie ! Servez-vous des 🐜 pour vous protéger & si nécessaire laisser les autres se faire dévorer à votre place. Vous pouvez accélérer un cours instant (espace) pour vous échapper.
 descriptionLevel5K: Certains 🦗 volent. Pour les attraper vous devez voler aussi (espace). En vol vous n'attrapez plus les 🦗 au sol.
 descriptionLevel5F: Les 🐞 volent ! Lorsqu'elles volent vous ne pouvez compter que sur votre acide pour les arrêter.
@@ -41,3 +41,7 @@ windowed: fenêtré
 language: langue
 restartFullGame: redémarrer
 restartFullGameMessage: Redémarrer le jeu pour appliquer les changements.
+#In Game
+acidShootAction: tirer
+runAction: accélérer
+flyAction: voler
