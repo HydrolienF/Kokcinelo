@@ -228,7 +228,7 @@ public class Controller {
         GameStateBuilder gsb = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         if (isGraphicsTest()) {
             int antNumber = 50;
-            gsb.setLevel(Level.newTestLevel("1K", null, Map.of(Ladybug.class, 2, RedAnt.class, antNumber, Aphid.class, 10), false));
+            gsb.setLevel(Level.newTestLevel("1K", null, Map.of(Ladybug.class, 2, RedAnt.class, antNumber, Aphid.class, 10)));
         }
         gs = gsb.build();
         gs.moveAIAwayFromPlayers();
