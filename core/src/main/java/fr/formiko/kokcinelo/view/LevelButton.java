@@ -46,6 +46,7 @@ class LevelButton extends Button {
     private final Level level;
     private final int radius;
     private final int bestScore;
+    private boolean checked;
 
     /**
      * {@summary Main constructor.}
@@ -87,6 +88,7 @@ class LevelButton extends Button {
         }
 
         levelButtonList.add(this);
+        final LevelButton lb = this;
         addListener(new ClickListener() {
             /**
              * React to user click by set selected to true if button can be selected.
@@ -94,9 +96,14 @@ class LevelButton extends Button {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!isDisabled()) {
-                    setChecked(true);
+                    if (isChecked()) {
+                        App.log(0, "LevelButton", "Launch game from 2nd click on level button " + getId());
+                        ms.playButtonClick();
+                    } else {
+                        setChecked(true);
+                        ms.updateSelectedLevel(getId());
+                    }
                     App.playSound("clicOff");
-                    ms.updateSelectedLevel(getId());
                 }
             }
             @Override
@@ -155,8 +162,11 @@ class LevelButton extends Button {
         } else {
             App.log(0, "Unchecked " + getId());
         }
-        super.setChecked(checked);
+        // super.setChecked(checked);
+        this.checked = checked;
     }
+    @Override
+    public boolean isChecked() { return checked; }
     /**
      * @return the only checked button
      */
@@ -175,7 +185,7 @@ class LevelButton extends Button {
      * @return the only overed button or the only checked button if no button is overed.
      */
     public static LevelButton getOveredButton() {
-        return levelButtonList.stream().filter(lb -> lb.isOver()).findFirst().orElse(getCheckedButton());
+        return levelButtonList.stream().filter(Button::isOver).findFirst().orElse(getCheckedButton());
     }
     public static Set<LevelButton> getList() { return levelButtonList; }
     /**
