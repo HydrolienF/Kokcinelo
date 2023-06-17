@@ -115,17 +115,15 @@ public class KScreen {
         skin.add(DEFAULT_STYLE, buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont(DEFAULT_STYLE), null);
-        // set background
         labelStyle.background = Shapes.getWhiteBackground();
-        // labelStyle.fontColor = Color.BLACK;
 
         skin.add(DEFAULT_STYLE, labelStyle);
         // skin.add(DEFAULT_STYLE, new LabelStyle(skin.getFont(DEFAULT_STYLE), null)); //Use to set color label by label
 
         skin.add("default-horizontal", getSliderStyle(fontSize));
         skin.add(DEFAULT_STYLE, getScrollPaneStyle());
-        skin.add(DEFAULT_STYLE, getListStyle(skin, DEFAULT_STYLE));
-        skin.add(DEFAULT_STYLE, getSelectBoxStyle(skin, DEFAULT_STYLE));
+        skin.add(DEFAULT_STYLE, getListStyle(skin));
+        skin.add(DEFAULT_STYLE, getSelectBoxStyle(skin));
         skin.add(DEFAULT_STYLE, getTextFieldStyle(skin));
 
         return skin;
@@ -148,12 +146,12 @@ public class KScreen {
     private static ScrollPaneStyle getScrollPaneStyle() {
         return new ScrollPaneStyle(Shapes.getRectangle(1, 1, new Color(1f, 1f, 1f, 0.8f)), null, null, null, null);
     }
-    private static ListStyle getListStyle(Skin skin, String fontName) {
-        return new ListStyle(skin.getFont(fontName), Color.BLACK, Color.BLACK, Shapes.getRectangle(1, 1, Color.ORANGE));
+    private static ListStyle getListStyle(Skin skin) {
+        return new ListStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Color.BLACK, Shapes.getRectangle(1, 1, Color.ORANGE));
     }
-    private static SelectBoxStyle getSelectBoxStyle(Skin skin, String fontName) {
-        return new SelectBoxStyle(skin.getFont(fontName), Color.BLACK, Shapes.getRectangle(1, 1, Color.WHITE),
-                skin.get(ScrollPaneStyle.class), skin.get(fontName, ListStyle.class));
+    private static SelectBoxStyle getSelectBoxStyle(Skin skin) {
+        return new SelectBoxStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.WHITE),
+                skin.get(ScrollPaneStyle.class), skin.get(DEFAULT_STYLE, ListStyle.class));
     }
     private static TextFieldStyle getTextFieldStyle(Skin skin) {
         return new TextFieldStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.BLACK),

@@ -494,7 +494,7 @@ public class MenuScreen extends KScreen implements Screen {
     private void displayPlayerCreatureClassList(boolean visible) {
         getLevel().setPlayerCreatureClassIndex(0);
         if (playerCreatureSelectBox == null) {
-            playerCreatureSelectBox = new SelectBox<>(skin);
+            playerCreatureSelectBox = new SelectBox<>(skinTitle);
             stage.addActor(playerCreatureSelectBox);
         }
         playerCreatureSelectBox.setVisible(visible);

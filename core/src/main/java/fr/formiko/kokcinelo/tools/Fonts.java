@@ -66,7 +66,6 @@ public class Fonts extends BitmapFont {
         return bmf;
     }
 
-    // public static String filterEmojis(String s) { return s; }
     public static String filterEmojis(String s) { return emojiSupport.filterEmojis(s, DEFAULT_COLOR); }
     public static String filterEmojis(String s, String color) { return emojiSupport.filterEmojis(s, color); }
     public static String getTranslation(String key) { return filterEmojis(g.get(key)); }
