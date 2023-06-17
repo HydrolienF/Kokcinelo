@@ -4,7 +4,6 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
-import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -105,7 +104,7 @@ public class Hud extends KScreen implements Disposable {
         String spaceActionName = Controller.getController().getPlayerCreature().getSpaceActionName();
         if (spaceActionName != null) {
             creatureActionProgressBar = new CreatureActionProgressBar(width, height, new Color(0.5f, 0.5f, 0.5f, 1f),
-                    new Color(0.5f, 0.5f, 0.5f, 0.2f), Color.BLACK, Color.GREEN, g.get(spaceActionName), skin);
+                    new Color(0.5f, 0.5f, 0.5f, 0.2f), Color.BLACK, Color.GREEN, Fonts.getTranslation(spaceActionName), skin);
             float capbWidth = width / 5f;
             creatureActionProgressBar.setSize(capbWidth, capbWidth / 7f);
             bottomTable.add(creatureActionProgressBar);

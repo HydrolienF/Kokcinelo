@@ -2,8 +2,8 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.KScreen;
-import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
@@ -59,18 +58,14 @@ public class EndGameMenu extends KScreen implements Disposable {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartGame(); }
         });
-        mainMenuButton = new Label(g.get("MainMenu"), skin);
+        mainMenuButton = new Label(Fonts.getTranslation("MainMenu"), skin);
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().createNewMenuScreen(); }
         });
 
         int percent = score * 100 / maxScore;
-        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
-        LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
-        style.background = ls.background;
-        skin.add("s" + percent, style);
-        scoreLabel = new Label(score * 100 / maxScore + "%", skin, "s" + percent);
+        scoreLabel = new Label("[#" + App.getColorFromPercent(percent).toString() + "]" + percent + "%", skin);
 
 
         Table table = new Table();

@@ -2,11 +2,11 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Fonts;
 import fr.formiko.kokcinelo.tools.IntTextField;
 import fr.formiko.kokcinelo.tools.KScreen;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.tools.Shapes;
-import fr.formiko.usual.g;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -127,7 +127,7 @@ public class OptionsTable extends Table {
 
     /** Create languages options table */
     private void initLanguages() {
-        Label.LabelStyle ls = skin.get(Label.LabelStyle.class);
+        skin.add("withoutBackground", new LabelStyle(skin.get(Label.LabelStyle.class).font, null));
         int perRow = 1;
         if (App.SUPPORTED_LANGUAGES.size() > 10) {
             perRow = 4;
@@ -145,10 +145,9 @@ public class OptionsTable extends Table {
             if (percent != 100) {
                 languageName += " (" + percent + "%)";
             }
-            LabelStyle style = new LabelStyle(ls.font, App.getColorFromPercent(percent));
             // style.background = ls.background;
-            skin.add("s" + percent, style);
-            Label languageLabel = new Label(languageName, skin, "s" + percent);
+            Label languageLabel = new Label("[#" + App.getColorFromPercent(percent).toString() + "]" + languageName, skin,
+                    "withoutBackground");
             languageLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -222,7 +221,7 @@ public class OptionsTable extends Table {
         LabelStyle style = new LabelStyle(ls.font, Color.BLACK);
         style.background = Shapes.getRectangle(1, 1, new Color(0.85f, 0.85f, 0.85f, 1));
         skin.add("restart", style);
-        Label restartButton = new Label(g.get("RestartFullGame").toUpperCase(), skin, "restart");
+        Label restartButton = new Label(Fonts.getTranslation("RestartFullGame").toUpperCase(), skin, "restart");
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) { Controller.getController().restartFullGame(); }
@@ -239,10 +238,6 @@ public class OptionsTable extends Table {
         if (visible && !initialized) {
             init();
         }
-        // if (requireRestart) {
-        // requireRestart = false;
-        // // TODO ask to restart app to apply changes
-        // }
     }
     public OptionsTablesTypes getType() { return type; }
     public boolean isRequireRestart() { return requireRestart; }
@@ -255,7 +250,7 @@ public class OptionsTable extends Table {
     }
 
 
-    private Cell<Label> addTitleLable(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE_TITLE)); }
-    private Cell<Label> addLabel(String text) { return addLabel(new Label(g.get(text), skin, OPTIONS_STYLE)); }
+    private Cell<Label> addTitleLable(String text) { return addLabel(new Label(Fonts.getTranslation(text), skin, OPTIONS_STYLE_TITLE)); }
+    private Cell<Label> addLabel(String text) { return addLabel(new Label(Fonts.getTranslation(text), skin, OPTIONS_STYLE)); }
     private Cell<Label> addLabel(Label label) { return add(label).pad(0, padSize, 0, padSize); }
 }
