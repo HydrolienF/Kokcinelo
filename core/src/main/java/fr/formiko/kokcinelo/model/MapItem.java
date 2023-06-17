@@ -26,7 +26,7 @@ public abstract class MapItem {
      * 
      * @param textureName name of the texture to use from assets/images/
      */
-    public MapItem(String textureName) {
+    protected MapItem(String textureName) {
         id = idCpt++;
         actor = new MapItemActor(textureName, this);
     }
@@ -62,7 +62,10 @@ public abstract class MapItem {
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override
-    public String toString() { return String.valueOf(id); }
+    public String toString() {
+        return String.valueOf(id) + "hitRadius : " + hitRadius + "\n" + "center : " + getCenter() + "\n" + "rotation : " + getRotation()
+                + "\n" + "zoom : " + getZoom() + "\n" + "actor : " + getActor() + "\n";
+    }
     @Override
     public int hashCode() { return id; }
     /**
@@ -100,4 +103,14 @@ public abstract class MapItem {
      * {@summary Return the distance between center point of this &#38; stage coordinate.}
      */
     public float distanceTo(Vector2 mi2) { return (float) Math.getDistanceBetweenPoints(getCenterX(), getCenterY(), mi2.x, mi2.y); }
+
+    /**
+     * {@summary Add time to values that need it.}
+     * It is used when the game is resume to avoid that creature can hit &#38; shoot again even if game time have'nt run.
+     * 
+     * @param timePaused time that have run bewteen pause &#38; resume
+     */
+    public void addTime(long timePaused) {
+        // Nothing to do here.
+    }
 }

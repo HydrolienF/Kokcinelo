@@ -2,12 +2,17 @@ package fr.formiko.kokcinelo.view;
 
 import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GreenAnt;
+import fr.formiko.kokcinelo.model.HealthAphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.RedAnt;
+import fr.formiko.kokcinelo.model.ScoreAphid;
+import fr.formiko.kokcinelo.model.SpeedAphid;
 import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashSet;
 import java.util.Set;
@@ -89,9 +94,9 @@ class LevelButton extends Button {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!isDisabled()) {
-                    ms.updateSelectedLevel(getId());
                     setChecked(true);
                     App.playSound("clicOff");
+                    ms.updateSelectedLevel(getId());
                 }
             }
             @Override
@@ -246,8 +251,9 @@ class LevelButton extends Button {
      * @return the texture of the level button depending of the level id.
      */
     private Sprite getSprite() {
-        Creature c, c2;
-        final float aphidSize = 0.35f;
+        Creature c, c2, c3, c4;
+        final float aphidSize = 0.07f;
+        final float smallAphidSize = 0.04f;
         final float antSize = 0.075f;
         final float ladybugSize = 0.33f;
         if (sprite == null) {
@@ -255,6 +261,7 @@ class LevelButton extends Button {
                 case "1K": {
                     c = new Aphid();
                     c.setZoom(aphidSize);
+                    c.setCollectedFrequency(-1); // to make sure it's not with honeydew
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c);
                     break;
                 }
@@ -274,6 +281,18 @@ class LevelButton extends Button {
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
                     break;
                 }
+                case "4K": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new SpeedAphid();
+                    c2.setZoom(smallAphidSize);
+                    c3 = new HealthAphid();
+                    c3.setZoom(smallAphidSize);
+                    c4 = new ScoreAphid();
+                    c4.setZoom(smallAphidSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
+                    break;
+                }
                 case "2F": {
                     c = new Ladybug();
                     c.setZoom(ladybugSize);
@@ -288,6 +307,26 @@ class LevelButton extends Button {
                     c2 = new GreenAnt();
                     c2.setZoom(antSize);
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c2, c);
+                    break;
+                }
+                case "4F": {
+                    c = new Ant();
+                    c.setZoom(antSize);
+                    c2 = new SpeedAphid();
+                    c2.setZoom(smallAphidSize);
+                    c3 = new HealthAphid();
+                    c3.setZoom(smallAphidSize);
+                    c4 = new ScoreAphid();
+                    c4.setZoom(smallAphidSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
+                    break;
+                }
+                case "4A": {
+                    c = new BigScoreAphid();
+                    c.setZoom(aphidSize);
+                    c2 = new Ladybug();
+                    c2.setZoom(ladybugSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
                     break;
                 }
                 default: {

@@ -13,6 +13,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 /**
@@ -74,8 +75,45 @@ public class DesktopLauncher {
         config.useVsync(true);
         config.setTitle("Kokcinelo");
         config.setWindowIcon("images/icons/appIcon.png");
+        // config.setWindowListener(getWindowListenerThatPauseOnFucusLost());
         App game = new App(args, new DesktopNative());
         new Lwjgl3Application(game, config);
+    }
+
+    /**
+     * {@summary Provide a Lwjgl3WindowListener that pause the game when focus is lost.}
+     * 
+     * @return a Lwjgl3WindowListener
+     */
+    public static Lwjgl3WindowListener getWindowListenerThatPauseOnFucusLost() {
+        return new Lwjgl3WindowListener() {
+            @Override
+            public void focusLost() {
+                App.log(1, "focusLost");
+                Controller.getController().getScreen().pause();
+            }
+            @Override
+            public void focusGained() {
+                App.log(1, "focusGained");
+                Controller.getController().getScreen().resume();
+            }
+            @Override
+            public void filesDropped(String[] files) { App.log(1, "filesDropped : " + files); }
+            @Override
+            public boolean closeRequested() {
+                App.log(1, "closeRequested");
+                return true;
+            }
+            @Override
+            public void iconified(boolean isIconified) { App.log(1, "iconified : " + isIconified); }
+            @Override
+            public void maximized(boolean isMaximized) { App.log(1, "maximized : " + isMaximized); }
+            @Override
+            public void created(Lwjgl3Window window) { App.log(1, "created : " + window); }
+            @Override
+            public void refreshRequested() { App.log(1, "refreshRequested"); }
+
+        };
     }
 }
 

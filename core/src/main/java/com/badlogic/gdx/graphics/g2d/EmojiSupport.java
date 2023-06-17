@@ -134,7 +134,7 @@ public class EmojiSupport {
      * @param str string to filter.
      * @return filtered string.
      */
-    public String filterEmojis(String str) { // Translates str replacing emojis with its index
+    public String filterEmojis(String str, String baseColor) { // Translates str replacing emojis with its index
 
         if (str == null || str.length() == 0)
             return str;
@@ -142,16 +142,20 @@ public class EmojiSupport {
         int length = str.length();
         int i = 0;
         StringBuilder sb = new StringBuilder();
+        sb.append(baseColor);
         while (i < length) {
             char ch = str.charAt(i);
             boolean isCharSurrogate = (ch >= '\uD800' && ch <= '\uDFFF'); // Special 2-chars surrogates (uses two chars)
             boolean isCharVariations = (ch >= '\uFE00' && ch <= '\uFE0F'); // Special char for skin-variations (omit)
             int codePoint = str.codePointAt(i);
             EmojiRegionIndex eri = regions.get(codePoint);
-            if (eri != null)
+            if (eri != null) {
+                sb.append("[#FFFFFFFF]");
                 sb.append((char) (START_CHAR + eri.index)); // Add found emoji
-            else if (!isCharSurrogate && !isCharVariations)
+                sb.append(baseColor);
+            } else if (!isCharSurrogate && !isCharVariations) {
                 sb.append(ch); // Exclude special chars
+            }
             i += isCharSurrogate ? 2 : 1; // Surrogate chars use 2 characters
         }
         return sb.toString();

@@ -3,10 +3,15 @@ package fr.formiko.kokcinelo.model;
 import fr.formiko.kokcinelo.Controller;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import com.badlogic.gdx.math.Vector2;
 
 class CreatureTest extends Assertions {
@@ -38,62 +43,31 @@ class CreatureTest extends Assertions {
     @Test
     void testCreatureMove() {
         Creature c = new CreatureX();
-        // c.setMovingSpeed(1f);
         c.setCenter(0, 0);
         c.setRotation(0);
         c.getActor().moveFront(1f);
         almostEquals(0, c.getCenterX());
         almostEquals(1, c.getCenterY());
     }
-    @Test
-    void testCreatureMoveWithSpeed() {
+
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "1, 0, 0, 0, 1, 0, 1",
+        "1, 0, 0, 0, 0.2f, 0, 0.2f",
+        "4.5f, 0, 0, 0, 0.2f, 0, 0.9f",
+        "4.5f, 0, 0, 90, 0.2f, -0.9f, 0",
+        "5f, 0, 0, 45, 0.2f, -0.70711f, 0.70711f",
+    })
+    // @formatter:on
+    void testCreatureMoveWithSpeed(float movingSpeed, float x, float y, float rotation, float distance, float expectedX, float expectedY) {
         Creature c = new CreatureX();
-        c.setMovingSpeed(1f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(1f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(1, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeed2() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(1f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(0.2f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(0.2f, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeed3() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(4.5f);
-        c.setCenter(0, 0);
-        c.setRotation(0);
-        c.moveFront(0.2f);
-        almostEquals(0, c.getCenterX());
-        almostEquals(0.9f, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeedY() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(4.5f);
-        c.setCenter(0, 0);
-        c.setRotation(90);
-        c.moveFront(0.2f);
-        almostEquals(-0.9f, c.getCenterX());
-        almostEquals(0, c.getCenterY());
-    }
-    @Test
-    void testCreatureMoveWithSpeedXY() {
-        Creature c = new CreatureX();
-        c.setMovingSpeed(5f);
-        c.setCenter(0, 0);
-        c.setRotation(45);
-        c.moveFront(0.2f);
-        almostEquals(-0.70711f, c.getCenterX());
-        almostEquals(0.70711f, c.getCenterY());
+        c.setMovingSpeed(movingSpeed);
+        c.setCenter(x, y);
+        c.setRotation(rotation);
+        c.moveFront(distance);
+        almostEquals(expectedX, c.getCenterX());
+        almostEquals(expectedY, c.getCenterY());
     }
 
     @Test
@@ -126,18 +100,48 @@ class CreatureTest extends Assertions {
     }
 
     @Test
-    void testAnt() {
+    void testConstructor() {
         assertDoesNotThrow(() -> new Ant());
         assertDoesNotThrow(() -> new RedAnt());
+        assertDoesNotThrow(() -> new GreenAnt());
         assertDoesNotThrow(() -> new Ladybug());
+        assertDoesNotThrow(() -> new LadybugSideView());
+        assertDoesNotThrow(() -> new Aphid());
+        assertDoesNotThrow(() -> new VisibilityAphid());
+        assertDoesNotThrow(() -> new HealthAphid());
+        assertDoesNotThrow(() -> new SpeedAphid());
+        assertDoesNotThrow(() -> new ScoreAphid());
+        assertDoesNotThrow(() -> new BigScoreAphid());
+
     }
 
-    void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
-        GameState gs = GameState.builder().setAphidNumber(100).setMapHeight(2000).setMapWidth(2000).setLadybugNumber(ladybug)
-                .setAphidNumber(aphid).setRedAntNumber(ant).build();
+    static void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant, String levelId) {
+        List<Class<? extends Creature>> playerCreature;
+        switch (levelId.charAt(1)) {
+            case 'A': {
+                playerCreature = List.of(Aphid.class);
+                break;
+            }
+            case 'K': {
+                playerCreature = List.of(Ladybug.class);
+                break;
+            }
+            case 'F': {
+                playerCreature = List.of(RedAnt.class);
+                break;
+            }
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + levelId.charAt(1));
+        }
+        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(
+                Level.newTestLevel(levelId, playerCreature, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
+                .build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
         Controller.setDebug(false);
+    }
+    static void createGameStateWithAphidLadybugAnt(int aphid, int ladybug, int ant) {
+        createGameStateWithAphidLadybugAnt(aphid, ladybug, ant, "1K");
     }
 
     @Test
@@ -291,6 +295,68 @@ class CreatureTest extends Assertions {
             angleNumber++;
         }
         assertEquals(angleNumber, wallsAngles.size());
+    }
+    @ParameterizedTest
+    @MethodSource("creatureProvider")
+    void testToString(Creature c, Set<String> contains) {
+        String s = c.toString();
+        for (String str : contains) {
+            assertTrue(s.contains(str));
+        }
+    }
+
+    private static Stream<Arguments> creatureProvider() {
+        Creature ladybug = new Ladybug();
+        ladybug.setCenter(-7.356f, 8.2425f);
+        ladybug.setRotation(0.123456f);
+        ladybug.setMovingSpeed(0.2f);
+        return Stream.of(Arguments.of(new Ant(), Set.of("Ant")),
+                Arguments.of(ladybug, Set.of("Ladybug", "8.2425", "-7.356", "0.123456", "0.2")));
+    }
+
+    @ParameterizedTest
+    // @formatter:off
+    @CsvSource({
+        "1, 1, 0, 0K, K, 1, 0, 1",
+        "1, 1, 0, 0K, A, 1, 1, 0",
+        "1, 1, 0, 0K, A, 1, 0, 0", // can't go under 0
+        "1, 1, 0, 0K, A, -1, 0, 1",
+        "1, 1, 0, 0K, K, 17, 0, 17",
+        "1, 1, 1, 0K, K, 1, 0, 1",
+        "100, 3, 4, 0K, K, 1, 0, 1",
+        "1, 1, 1, 0K, F, 1, 2, 1",
+
+        "1, 1, 1, 0F, K, 1, 100, 99",
+        "1, 1, 1, 0F, F, 1, 50, 51",
+        "1, 1, 1, 1A, A, 1, 50, 51",
+        "1, 1, 1, 0A, K, 1, 99, 98",
+        "1, 1, 1, 0A, F, 1, 99, 100",
+        "1, 1, 1, 0F, A, 1, 99, 100",
+        "1, 1, 1, 0F, A, 1, 100, 100", // not more than max score
+    })
+    // @formatter:on
+    void testAddScore(int nbAphids, int nbLadybugs, int nbAnts, String levelId, String creatureToAddScore, int scoreToAdd, int defaultScore,
+            int expectedScore) {
+        createGameStateWithAphidLadybugAnt(nbAphids, nbLadybugs, nbAnts, levelId);
+        Creature c;
+        switch (creatureToAddScore) {
+            case "A":
+                c = Controller.getController().getGameState().getAphids().get(0);
+                break;
+            case "K":
+                c = Controller.getController().getGameState().getLadybugs().get(0);
+                break;
+            case "F":
+                c = Controller.getController().getGameState().getAnts().get(0);
+                break;
+            default:
+                c = null;
+                assertTrue(false);
+        }
+        Controller.getController().getGameState().setMaxScore(100);
+        Controller.getController().getLocalPlayer().setScore(defaultScore);
+        c.addScore(scoreToAdd);
+        assertEquals(expectedScore, Controller.getController().getLocalPlayer().getScore());
     }
 
 

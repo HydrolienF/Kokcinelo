@@ -4,6 +4,7 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.Ladybug;
@@ -19,7 +20,6 @@ import fr.formiko.kokcinelo.view.OptionsTable.OptionsTablesTypes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -36,7 +36,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -67,10 +69,12 @@ public class MenuScreen extends KScreen implements Screen {
     private boolean playingVideo = false;
     private long timePlayingVideo;
     private int fullVideoTime = 1000;
-    private static final float BACKGROUND_SPEED = 50;
+    private float backgroundSpeed = 50;
     private OrthographicCamera cameraBc;
     private Actor playButton;
     private List<OptionsTable> optionsTables = new ArrayList<>();
+    private boolean isPause;
+    private SelectBox<String> playerCreatureSelectBox;
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -109,40 +113,47 @@ public class MenuScreen extends KScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        long time = System.currentTimeMillis();
-        ScreenUtils.clear(Color.BLACK);
+        if (!isPause) {
+            long time = System.currentTimeMillis();
+            ScreenUtils.clear(Color.BLACK);
 
-        cameraBc.position.x += delta * BACKGROUND_SPEED;
-        if (getLevel().getLetter().equals("K")) {
-            Actor environement = backgroundStage.getRoot().findActor("environement");
-            cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
-            cameraBc.zoom = 1;
-        } else {
-            cameraBc.zoom = 0.3f;
-            cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
-        }
-        batch.setProjectionMatrix(cameraBc.combined);
-        backgroundStage.act(delta);
-        backgroundStage.draw();
-
-        batch.setProjectionMatrix(camera.combined);
-        for (Actor creature : creatureImages) { // Only show the creature of the current level.
-            creature.setVisible(creature.getName() != null
-                    && (creature.getName().equals(getLevel().getLetter()) || (creature.getName().startsWith(getLevel().getLetter())
-                            && creature.getName().contains("" + getLevel().getNumber()))));
-        }
-
-        if (playingVideo) {
-            hidingButtonAnimation(delta);
-            // TODO last visible actor need to act while video is playing.
-            if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
-                Controller.getController().endMenuScreen();
+            if (getLevel().getLetter().equals("K")) {
+                Actor environement = backgroundStage.getRoot().findActor("environement");
+                cameraBc.position.y = environement.getHeight() * environement.getScaleY() - Gdx.graphics.getHeight() / 2f;
+                cameraBc.zoom = 1;
+                backgroundSpeed = 50;
+            } else if (getLevel().getLetter().equals("F")) {
+                cameraBc.zoom = 0.3f;
+                cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
+                backgroundSpeed = 50;
+            } else if (getLevel().getLetter().equals("A")) {
+                cameraBc.zoom = 0.1f;
+                cameraBc.position.y = Gdx.graphics.getHeight() / 2f * cameraBc.zoom;
+                backgroundSpeed = 14;
             }
-        }
+            cameraBc.position.x += delta * backgroundSpeed;
+            batch.setProjectionMatrix(cameraBc.combined);
+            backgroundStage.act(delta);
+            backgroundStage.draw();
 
-        stage.act(delta);
-        stage.draw();
-        times.add((int) (System.currentTimeMillis() - time));
+            batch.setProjectionMatrix(camera.combined);
+            for (Actor creatureImage : creatureImages) { // Only show the creature of the current level.
+                // We use startsWith instead of equals because the class of the ladybug is LadybugSideView.
+                creatureImage.setVisible(creatureImage.getName().startsWith(getLevel().getPlayerCreatureClass().getName()));
+            }
+
+            if (playingVideo) {
+                hidingButtonAnimation(delta);
+                // TODO last visible actor need to act while video is playing.
+                if (timePlayingVideo < System.currentTimeMillis() - fullVideoTime) {
+                    Controller.getController().endMenuScreen();
+                }
+            }
+
+            stage.act(delta);
+            stage.draw();
+            times.add((int) (System.currentTimeMillis() - time));
+        }
     }
 
     /**
@@ -196,7 +207,7 @@ public class MenuScreen extends KScreen implements Screen {
         Table centerTable = new Table();
         centerTable.setBounds(0, bottomSpace, w, centerSpace);
 
-        playButton = getPlayButton(centerTable.getHeight(), centerTable.getHeight());
+        playButton = initPlayButton(centerTable.getHeight(), centerTable.getHeight());
         centerTable.add(playButton).expand();
 
         if (App.isWithCloseButton()) {
@@ -238,10 +249,8 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private static void createCreatureImages(int w, int h, int topSpace) {
         // final Map<Class<? extends Creature>, Vector2> imageSize = Map.of(Ant.class, new Vector2(3600, 4800));
-        final Map<Class<? extends Creature>, String> matchingLevels = Map.of(RedAnt.class, "F2", GreenAnt.class, "F3",
-                LadybugSideView.class, "K", Aphid.class, "A");
         creatureImages = new ArrayList<>();
-        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class)) {
+        for (Class<? extends Creature> creatureClass : List.of(RedAnt.class, GreenAnt.class, LadybugSideView.class, BigScoreAphid.class)) {
             Creature c = null;
             try {
                 c = creatureClass.getDeclaredConstructor().newInstance();
@@ -251,7 +260,7 @@ public class MenuScreen extends KScreen implements Screen {
                 continue;
             }
             MapItemActor cActor = c.getActor();
-            cActor.setName(matchingLevels.getOrDefault(creatureClass, ""));
+            cActor.setName(creatureClass.getName());
             int imageWidth;
             int imageHeight;
             if (c instanceof Ant) {
@@ -265,10 +274,9 @@ public class MenuScreen extends KScreen implements Screen {
                     imageWidth = 738;
                     imageHeight = 536;
                 }
-                // } else if (c instanceof Aphid) {
-                // // TODO set imageWidth & imageHeight
-                // imageWidth = 1000;
-                // imageHeight = 1000;
+            } else if (c instanceof Aphid) {
+                imageWidth = 2000;
+                imageHeight = 2000;
             } else {
                 imageWidth = 1000;
                 imageHeight = 1000;
@@ -280,8 +288,9 @@ public class MenuScreen extends KScreen implements Screen {
             }
             c.setZoom(Math.min(cActor.getWidth() / imageHeight, cActor.getHeight() / imageWidth));
 
-            c.setCurrentSpeed(c.getMovingSpeed());
+            c.setCurrentSpeed(c.getMovingSpeed() * c.getDefaultMoveFrontSpeed() / 0.6f);
             c.setMaxLifePoints(0); // Don't show life bar
+            c.setCollectedFrequency(-1); // to make sure it's not with honeydew
 
             creatureImages.add(cActor);
         }
@@ -291,13 +300,13 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create labels for the menu.}
      */
     private void createLabels() {
-        levelNameLabel = new Label("", skinTitle, "emoji");
+        levelNameLabel = new Label("", skinTitle);
         levelNameLabel.setAlignment(Align.center);
 
-        scoresLabel = new Label("", skin, "emoji");
+        scoresLabel = new Label("", skin);
         scoresLabel.setAlignment(Align.center);
 
-        levelDescription = new Label("", skin, "emoji");
+        levelDescription = new Label("", skin);
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
     }
@@ -309,7 +318,7 @@ public class MenuScreen extends KScreen implements Screen {
      * @param pbHeight Play button height.
      * @return a play button.
      */
-    private Actor getPlayButton(float pbWidth, float pbHeight) {
+    private Actor initPlayButton(float pbWidth, float pbHeight) {
         final Image playButton = new Image(new KTexture(Gdx.files.internal("images/icons/basic/play.png")));
         playButton.setSize(pbWidth, pbHeight);
         playButton.setColor(Color.GREEN);
@@ -328,10 +337,16 @@ public class MenuScreen extends KScreen implements Screen {
     }
 
     @Override
-    public void pause() { Musics.pause(); }
+    public void pause() {
+        Musics.pause();
+        isPause = true;
+    }
 
     @Override
-    public void resume() { Musics.resume(); }
+    public void resume() {
+        Musics.resume();
+        isPause = false;
+    }
 
     @Override
     public void hide() {
@@ -458,6 +473,15 @@ public class MenuScreen extends KScreen implements Screen {
      * @param levelId the selected level
      */
     public void updateSelectedLevel(String levelId) {
+        updateOveredLevel(levelId);
+        displayPlayerCreatureClassList(getLevel().getPlayerCreatureClasses().size() > 1);
+    }
+    /**
+     * Update the labels that depend of overed level.
+     * 
+     * @param levelId the selected level
+     */
+    public void updateOveredLevel(String levelId) {
         levelNameLabel.setText(getLevelNameText(levelId));
         if (App.isPlayableLevel(levelId)) {
             levelNameLabel.setText(levelNameLabel.getText() + "\n" + getCreatureList(levelId));
@@ -466,13 +490,27 @@ public class MenuScreen extends KScreen implements Screen {
         levelDescription.setText(getLevelDescription(levelId));
         updateLabels();
     }
-    /**
-     * Update the labels that depend of overed level.
-     * Currently, do the same as updateSelectedLevel.
-     * 
-     * @param levelId the selected level
-     */
-    public void updateOveredLevel(String levelId) { updateSelectedLevel(levelId); }
+
+    private void displayPlayerCreatureClassList(boolean visible) {
+        getLevel().setPlayerCreatureClassIndex(0);
+        if (playerCreatureSelectBox == null) {
+            playerCreatureSelectBox = new SelectBox<>(skinTitle);
+            stage.addActor(playerCreatureSelectBox);
+        }
+        playerCreatureSelectBox.setVisible(visible);
+        if (visible) {
+            playerCreatureSelectBox.setItems(getLevel().getPlayerCreatureClasses().stream().map(Fonts::getIcon).toArray(String[]::new));
+            playerCreatureSelectBox.pack();
+            playerCreatureSelectBox.setPosition(levelDescription.getX() - playerCreatureSelectBox.getWidth(),
+                    levelDescription.getY() + playerCreatureSelectBox.getHeight());
+            playerCreatureSelectBox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    getLevel().setPlayerCreatureClassIndex(playerCreatureSelectBox.getSelectedIndex());
+                }
+            });
+        }
+    }
 
     public void startPlayingVideo() {
         playingVideo = true;
@@ -621,15 +659,17 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private String getLevelNameText(String levelId) { return Fonts.getTranslation("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
-        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " "
-                + Fonts.getTranslation("DescriptionLevel" + levelId, "");
+        String desc = Fonts.getTranslationWidthDefault("DescriptionLevel" + levelId.substring(1, 2), "") + " "
+                + Fonts.getTranslationWidthDefault("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {
             return Fonts.getTranslation("ComingSoon") + "\n" + desc;
         }
     }
-    private String getCreatureList(String levelId) { return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn()); }
+    private String getCreatureList(String levelId) {
+        return Fonts.listOfCreatureToString(Level.getLevel(levelId).getCreaturesToSpawn(), 4);
+    }
     /**
      * @param levelId the level id
      * @return A String representing the level id.

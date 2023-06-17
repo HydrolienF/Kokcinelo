@@ -26,6 +26,8 @@ public class Ant extends Creature {
         movingSpeed = 4.5f;
         maxLifePoints = 0;
         hitFrequency = 1000;
+        maxLifePoints = 1;
+        lifePoints = maxLifePoints;
 
         if (getActor() != null && getActor().getSkeleton() != null) {
             Slot colorSlot = getActor().getSkeleton().findSlot("thorax color");
@@ -42,6 +44,10 @@ public class Ant extends Creature {
     public float getMaxRotationPerSecond() { return 200f; }
     @Override
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(Ladybug.class); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
+    @Override
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ant.class, VisibilityAphid.class); }
 
     // FUNCTIONS -----------------------------------------------------------------
 }

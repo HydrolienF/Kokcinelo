@@ -188,13 +188,13 @@ public class MapActor extends Actor {
             }
         }
     }
-    private static int MAX_STIK_LENGTH = 400;
-    private static int MIN_STIK_LENGTH = 80;
-    private static int MIN_STIK_WIDTH = 5;
-    private static int MAX_STIK_WIDTH = 25;
-    private static int MAX_STIK_SUBSEGMENT = 1;
-    private static int MAX_STIK_SEGMENT = 4;
-    private static int MIN_STIK_SEGMENT = 2;
+    private static final int MAX_STIK_LENGTH = 400;
+    private static final int MIN_STIK_LENGTH = 80;
+    private static final int MIN_STIK_WIDTH = 5;
+    private static final int MAX_STIK_WIDTH = 25;
+    private static final int MAX_STIK_SUBSEGMENT = 1;
+    private static final int MAX_STIK_SEGMENT = 4;
+    private static final int MIN_STIK_SEGMENT = 2;
     /**
      * {@summary Draw woods sticks on pixmap.}
      * 

@@ -4,8 +4,8 @@ import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.tools.KProgressBar;
 import fr.formiko.kokcinelo.tools.KTexture;
-import fr.formiko.kokcinelo.tools.Shapes;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
@@ -22,12 +22,13 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectFloatMap;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationState.AnimationStateListener;
 import com.esotericsoftware.spine.AnimationState.TrackEntry;
 import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.Event;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.SkeletonActor;
-import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * {@summary Actor that represent a MapItem.}
@@ -42,7 +43,7 @@ public class MapItemActor extends SkeletonActor {
     private MapItem mapItem;
     // private static boolean showZone = false;
     private ShapeRenderer shapeRenderer;
-    private ShapeDrawer shapeDrawer;
+    private KProgressBar progressBar;
     /**
      * {@summary Main constructor.}
      * 
@@ -87,17 +88,62 @@ public class MapItemActor extends SkeletonActor {
 
             AnimationState animationState = new AnimationState(stateData);
             // different track index = animation are play at the same time, same track index = animation are play one after the other
-            try {
-                animationState.addAnimation(0, "walk", true, 0);
-            } catch (IllegalArgumentException e) {
-                animationState.addAnimation(0, "fly", true, 0);
+            if (mapItem instanceof Creature) {
+                try {
+                    animationState.addAnimation(0, "walk", true, 0);
+                } catch (IllegalArgumentException e) {
+                    try {
+                        animationState.addAnimation(0, "fly", true, 0);
+                    } catch (IllegalArgumentException e2) {
+                        App.log(2, "No walk or fly animation found for " + textureName + " skeleton");
+                    }
+                }
+                animationState.addAnimation(1, "default", true, 0);
             }
-            animationState.addAnimation(1, "default", true, 0);
 
             setRenderer(skeletonRenderer);
             setSkeleton(skeleton);
             setAnimationState(animationState);
+
+            // addDelay();
         }
+    }
+
+    /**
+     * The first animation will be play from a random time.
+     * It is used so that all Creature of same type don't move at the same time.
+     */
+    private void addDelay() {
+        // TODO not working as espected
+        float delay = (float) Math.random() * getAnimationState().getCurrent(0).getAnimation().getDuration() / 4;
+        getAnimationState().getCurrent(0).setAnimationStart(delay);
+        getAnimationState().addListener(new AnimationStateListener() {
+            @Override
+            public void complete(TrackEntry entry) {
+                getAnimationState().getCurrent(0).setAnimationStart(0);
+                getAnimationState().removeListener(this);
+            }
+            @Override
+            public void start(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void interrupt(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void end(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void dispose(TrackEntry entry) {
+                // Nothing to do
+            }
+            @Override
+            public void event(TrackEntry entry, Event event) {
+                // Nothing to do
+            }
+        });
     }
     /**
      * {@summary Secondary constructor with a null texture but a fix size.}
@@ -150,22 +196,15 @@ public class MapItemActor extends SkeletonActor {
     private void drawLifePoint(Batch batch) {
         Creature c = (Creature) mapItem;
         float mlp = c.getMaxLifePoints();
-        if (mlp > 0) { // if is a Creature witch life point matter
+        if (mlp > 1) { // if is a Creature witch life point matter (1 = minimum life point, no need to display it, creature will be 1 shot)
             float lp = c.getLifePoints();
-            if (shapeDrawer == null) {
-                shapeDrawer = Shapes.createShapeDrawer(batch);
+            if (progressBar == null) {
+                progressBar = new KProgressBar((int) (mlp * 1.5f), -1, Color.GREEN, new Color(1, 0, 0, 0.5f), Color.BLACK);
             }
-            // Draw life bar
-            float len = mlp * 1.5f;
-            float height = len / 10;
-            float greenLen = len * lp / mlp;
-            float redLen = len - greenLen;
-            shapeDrawer.setColor(Color.RED);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2 + greenLen, getCenterY() + mapItem.getHitRadius() + height, redLen, height);
-            shapeDrawer.setColor(Color.GREEN);
-            shapeDrawer.filledRectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, greenLen, height);
-            shapeDrawer.setColor(Color.BLACK);
-            shapeDrawer.rectangle(getCenterX() - len / 2, getCenterY() + mapItem.getHitRadius() + height, len, height, 2);
+            progressBar.setProgress(lp / mlp);
+            progressBar.setPosition(getCenterX() - progressBar.getWidth() / 2,
+                    getCenterY() + mapItem.getHitRadius() + progressBar.getHeight());
+            progressBar.draw(batch, 1f);
         }
     }
 
@@ -235,9 +274,9 @@ public class MapItemActor extends SkeletonActor {
             getSkeleton().findBone("root").setRotation(getRotation());
             getSkeleton().setScale(getScaleX(), getScaleY());
             if (mapItem instanceof Creature c && getAnimationState() != null && getAnimationState().getCurrent(0) != null) {
-                getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f);
+                getAnimationState().getCurrent(0).setTimeScale((c).getCurrentSpeed() * 0.3f * c.getAnimationSpeedMultiplier());
             }
-            if (((Creature) mapItem).getCurrentSpeed() > 0) {
+            if (mapItem instanceof Creature && ((Creature) mapItem).getCurrentSpeed() > 0) {
                 super.act(delta);
             }
         }

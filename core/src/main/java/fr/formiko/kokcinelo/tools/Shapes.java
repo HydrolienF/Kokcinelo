@@ -235,7 +235,7 @@ public class Shapes {
      * @return a new Pixmap with a black border over the shapes
      */
     public static Pixmap outLine(Pixmap inPm) {
-        Set<Vector2> locationsToColor = new HashSet<Vector2>();
+        Set<Vector2> locationsToColor = new HashSet<>();
         for (int x = 0; x < inPm.getWidth(); x++) {
             for (int y = 0; y < inPm.getHeight(); y++) {
                 // If one of the 4 next pixels is colored, it save the location to be colored.
@@ -344,19 +344,45 @@ public class Shapes {
         Stage stage = new Stage(new ScreenViewport());
         FrameBuffer frameBuffer = new FrameBuffer(Format.RGBA8888, radius * 2, radius * 2, false);
 
+        App.log(0, "Create circled sprite with " + creatures.length + " creatures.");
         int k = 0;
         for (Creature creature : creatures) {
             stage.addActor(creature.getActor());
             creature.setMovingSpeed(0);
             if (creatures.length == 1) {
                 creature.setCenter(radius, radius);
-            } else {
+            } else if (creatures.length == 2) {
                 if (k == 0) {
                     creature.setRotation(-90);
                 } else {
                     creature.setRotation(90);
                 }
                 creature.setCenter(radius * 2 * k, radius);
+            } else {
+                switch (k) {
+                    case 0: {
+                        creature.setRotation(-90);
+                        creature.setCenter(radius * 2 * k, radius);
+                        break;
+                    }
+                    case 1: {
+                        creature.setRotation(90);
+                        creature.setCenter(radius * 2 * 0.9f, radius);
+                        break;
+                    }
+                    case 2: {
+                        creature.setRotation(100);
+                        creature.setCenter(radius * 2 * 0.85f, radius * 1.45f);
+                        break;
+                    }
+                    case 3: {
+                        creature.setRotation(80);
+                        creature.setCenter(radius * 2 * 0.85f, radius * 0.55f);
+                        break;
+                    }
+                    default:
+                        break;
+                }
             }
             creature.setZoom(creature.getZoom() * (radius / 100f));
             k++;

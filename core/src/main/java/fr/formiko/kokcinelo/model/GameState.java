@@ -7,9 +7,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Null;
 
@@ -21,6 +25,7 @@ import com.badlogic.gdx.utils.Null;
  * @since 0.1
  */
 public class GameState {
+    private final Map<Class<? extends MapItem>, List<? extends MapItem>> mapItems;
     private final List<Aphid> aphids;
     private final List<Ant> ants;
     private final List<Ladybug> ladybugs;
@@ -43,6 +48,8 @@ public class GameState {
         ladybugs = new ArrayList<>();
         players = new ArrayList<>();
         acidDrops = new LinkedList<>();
+        mapItems = new HashMap<>(10);
+        mapItems.put(BloodSpot.class, new ArrayList<BloodSpot>());
     }
 
     // GET SET -------------------------------------------------------------------
@@ -57,6 +64,8 @@ public class GameState {
     public List<Ant> getAnts() { return ants; }
     public List<Ladybug> getLadybugs() { return ladybugs; }
     public List<AcidDrop> getAcidDrops() { return acidDrops; }
+    @SuppressWarnings("unchecked")
+    public List<BloodSpot> getBloodSpots() { return (List<BloodSpot>) mapItems.get(BloodSpot.class); }
     public int getLocalPlayerId() { return localPlayerId; }
     public void setLocalPlayerId(int localPlayerId) { this.localPlayerId = localPlayerId; }
     public Level getLevel() { return level; }
@@ -124,6 +133,15 @@ public class GameState {
         return l;
     }
     /**
+     * Return all MapItems.
+     */
+    public Collection<MapItem> allMapItems() {
+        List<MapItem> l = new LinkedList<>();
+        l.addAll(getBloodSpots());
+        l.addAll(allCreatures());
+        return l;
+    }
+    /**
      * Return ants &#38; ladybugs
      * Removing item from this Iterable will have no impact on Collection where Creature are stored.
      * Use controller.toRemove.add(c) if you need to remove a creature
@@ -148,9 +166,9 @@ public class GameState {
             mapActorBg.setName("background");
             l.add(mapActorBg);
         }
-        for (Creature creature : allCreatures()) {
-            if (creature.getActor() != null) {
-                l.add(creature.getActor());
+        for (MapItem mapItem : allMapItems()) {
+            if (mapItem.getActor() != null) {
+                l.add(mapItem.getActor());
             }
         }
         if (mapActorFg != null) {
@@ -167,8 +185,8 @@ public class GameState {
     public void updateActorVisibility(int playerId, boolean spectatorMode) {
         Creature playedCreature = getPlayerCreature(playerId);
         if (playedCreature != null) {
-            for (Creature creature : allCreatures()) {
-                creature.getActor().setVisible(playedCreature.see(creature) || spectatorMode);
+            for (MapItem mapItem : allMapItems()) {
+                mapItem.getActor().setVisible(playedCreature.see(mapItem) || spectatorMode);
             }
         }
     }
@@ -247,10 +265,6 @@ public class GameState {
     public static class GameStateBuilder {
         private int mapWidth;
         private int mapHeight;
-        private int greenAntNumber;
-        private int redAntNumber;
-        private int aphidNumber;
-        private int ladybugNumber;
         private GameState gs;
         private Level level;
 
@@ -266,11 +280,6 @@ public class GameState {
         public GameState build() {
             gs = new GameState();
 
-            if (aphidNumber < 1) {
-                aphidNumber = 1;
-            }
-            gs.setMaxScore(aphidNumber);
-
             if (level == null) {
                 level = Level.getLevel("1K");
             }
@@ -278,23 +287,9 @@ public class GameState {
 
             // initialize default game
             addMapBackground();
-            addCreatures(aphidNumber, ladybugNumber, redAntNumber, greenAntNumber);
-            Player p;
-            switch (level.getLetter()) {
-                case "K":
-                    p = new Player(gs.ladybugs.get(0));
-                    break;
-                case "F":
-                    p = new Player(gs.ants.get(0));
-                    break;
-                case "A":
-                    p = new Player(gs.aphids.get(0));
-                    break;
-                default:
-                    App.log(3, "incorect level id, switch to default Creature : ladybug (K)");
-                    p = new Player(gs.ladybugs.get(0));
-                    break;
-            }
+            addCreatures();
+            Player p = new Player(
+                    gs.allCreatures().stream().filter(c -> c.getClass().equals(level.getPlayerCreatureClass())).findFirst().orElseThrow());
             if (Controller.isDebug()) {
                 p.getPlayedCreature().setVisionRadius(mapWidth);
             }
@@ -307,7 +302,8 @@ public class GameState {
             gs.setLocalPlayerId(p.getId());
             addMapForeground();
 
-            // System.out.println(gs);
+            gs.setMaxScore(gs.getAphids().stream().mapToInt(a -> a.getGivenPoints()).sum());
+
             return gs;
         }
         /**
@@ -333,50 +329,8 @@ public class GameState {
          * 
          * @return current GameStateBuilder
          */
-        public GameStateBuilder setRedAntNumber(int antNumber) {
-            this.redAntNumber = antNumber;
-            return this;
-        }
-        /**
-         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
-         * 
-         * @return current GameStateBuilder
-         */
-        public GameStateBuilder setGreenAntNumber(int antNumber) {
-            this.greenAntNumber = antNumber;
-            return this;
-        }
-        /**
-         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
-         * 
-         * @return current GameStateBuilder
-         */
-        public GameStateBuilder setAphidNumber(int aphidNumber) {
-            this.aphidNumber = aphidNumber;
-            return this;
-        }
-        /**
-         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
-         * 
-         * @return current GameStateBuilder
-         */
-        public GameStateBuilder setLadybugNumber(int ladybugNumber) {
-            this.ladybugNumber = ladybugNumber;
-            return this;
-        }
-        /**
-         * {@summary Setter that return same GameStateBuilder to alow chained setter.}
-         * 
-         * @return current GameStateBuilder
-         */
         public GameStateBuilder setLevel(Level level) {
             this.level = level;
-            if (level != null && !level.getCreaturesToSpawn().isEmpty()) {
-                this.aphidNumber = level.getCreaturesToSpawn().getOrDefault(Aphid.class, 0);
-                this.ladybugNumber = level.getCreaturesToSpawn().getOrDefault(Ladybug.class, 0);
-                this.redAntNumber = level.getCreaturesToSpawn().getOrDefault(RedAnt.class, 0);
-                this.greenAntNumber = level.getCreaturesToSpawn().getOrDefault(GreenAnt.class, 0);
-            }
             return this;
         }
 
@@ -390,11 +344,30 @@ public class GameState {
          * @param antsNumber     number of ants to play with
          */
         private void addCreatures(int aphidsNumber, int ladybugsNumber, int redAntNumber, int greenAntNumber) {
-            addC(aphidsNumber, 0.1f, 0.2f, true, true, Aphid.class);
+            addC(aphidsNumber, 0.02f, 0.04f, true, true, Aphid.class);
             addC(ladybugsNumber, 0.4f, 0.4f, true, true, Ladybug.class);
             float antSize = 0.05f;
             addC(redAntNumber, antSize, antSize, true, true, RedAnt.class);
             addC(greenAntNumber, antSize, antSize, true, true, GreenAnt.class);
+        }
+        /**
+         * {@summary Add all Creatures from level data.}
+         */
+        private void addCreatures() {
+            final Map<Class<? extends Creature>, Vector2> zoom = Map.of(Aphid.class, new Vector2(0.02f, 0.04f), Ladybug.class,
+                    new Vector2(0.4f, 0.4f), Ant.class, new Vector2(0.05f, 0.05f));
+            for (Entry<Class<? extends Creature>, Integer> entry : level.getCreaturesToSpawn().entrySet()) {
+                float min = 1f;
+                float max = 1f;
+                for (Entry<Class<? extends Creature>, Vector2> c : zoom.entrySet()) {
+                    if (c.getKey().isAssignableFrom(entry.getKey())) {
+                        min = c.getValue().x;
+                        max = c.getValue().y;
+                        break;
+                    }
+                }
+                addC(entry.getValue(), min, max, true, true, entry.getKey());
+            }
         }
 
         /**
@@ -411,16 +384,8 @@ public class GameState {
                 final boolean randomRotation, final Class<? extends Creature> creatureClass) {
             for (int i = 0; i < numberToAdd; i++) {
                 try {
-                    Creature c = creatureClass.getDeclaredConstructor().newInstance(); // HTML INCOMPATIBLE
-                    // version to replace last line that work in html
-                    // Creature c = null;
-                    // if (creatureClass.toString().endsWith("Aphid")) {
-                    // c = new Aphid();
-                    // } else if (creatureClass.toString().endsWith("Ant")) {
-                    // c = new Ant();
-                    // } else if (creatureClass.toString().endsWith("Ladybug")) {
-                    // c = new Ladybug();
-                    // }
+                    Creature c = creatureClass.getDeclaredConstructor().newInstance();
+
                     if (randomLocaction) {
                         c.setRandomLoaction(gs.getMapWidth(), gs.getMapHeight());
                     }
@@ -440,13 +405,15 @@ public class GameState {
                     // | NoSuchMethodException | SecurityException e) {
                 } catch (Exception e) {
                     // } catch (IllegalArgumentException | SecurityException | NullPointerException e) {
-                    PrintWriter pw = new PrintWriter(new StringWriter());
+                    StringWriter out = new StringWriter();
+                    PrintWriter pw = new PrintWriter(out);
                     e.printStackTrace(pw);
-                    App.log(3, "Fail to add a new Creature " + e + "\n" + pw.toString());
+                    App.log(3, "Fail to add a new Creature " + e + "\n" + out.toString());
                     pw.close();
                 }
             }
         }
+
         /**
          * {@summary Add the map background.}
          */

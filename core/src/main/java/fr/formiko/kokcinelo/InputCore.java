@@ -1,9 +1,7 @@
 package fr.formiko.kokcinelo;
 
-import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.view.GameScreen;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
@@ -57,8 +55,10 @@ public class InputCore implements InputProcessor {
             Controller.getController().createNewMenuScreen();
         } else if (keycode == Input.Keys.SPACE && !screen.isPause()) {
             Creature c = Controller.getController().getPlayerCreature();
-            if (c instanceof Ant ant) {
-                Controller.getController().antShoot(ant);
+            if (c.canShoot()) {
+                c.shoot();
+            } else if (c.canRun()) {
+                c.run();
             }
         }
 

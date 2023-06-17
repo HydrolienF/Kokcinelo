@@ -13,8 +13,8 @@ descriptionLevel2K: The 🕷 will do their best to stop you. Beware of their sha
 descriptionLevel2F: The 🐞 will try to devour as many 🦗 as possible. To prevent that, you can use your mandibles. The faster you stop the 🐞 the more bonus points you will have.
 descriptionLevel3K: The 🦂 will do their best to stop you. Beware of their acid jets!
 descriptionLevel3F: 🐞 will try to devour as many as possible. To prevent that, you can use your formic acid (space). The faster you stop the 🐞 the more bonus points you will have.
-descriptionLevel4K: Each devoured 🦗 will grant you a life, speed or bonus points.
-descriptionLevel4F: Your friends the 🦗 secrete honeydew that you love. Depending on the species of 🦗, the honeydew will either make you faster or make your attacks more effective.
+descriptionLevel4K: "Devour some 🦗 will grant you bonus:\n🟥 restor 10% of live\n🟦 increases your speed by 3%\n🟧 give 10 points"
+descriptionLevel4F: "Your friends the 🦗 secrete honeydew that you love. Depending on the species of 🦗, the honeydew will will grant you bonus:\n🟥 increases your damage by 3%\n🟦 increases your speed of 3%\n🟧 give 2 points"
 descriptionLevel4A: You are the most beautiful 🦗. The future of the colony depends on your survival! Use the 🐜 to protect yourself and if necessary let others be eaten for you. You can speed up a short time for escape (space).
 descriptionLevel5K: Some 🦗 fly. To catch them you must also fly (space). In flight you can no longer catch 🦗 on the ground.
 descriptionLevel5F: 🐞 fly! When they fly you must rely only on your acid to stop them.
@@ -41,3 +41,7 @@ windowed: windowed
 language: language
 restartFullGame: restart
 restartFullGameMessage: Restart Kokcinelo to apply changes.
+# In Game
+acidShootAction: shoot
+runAction: speed up
+flyAction: fly

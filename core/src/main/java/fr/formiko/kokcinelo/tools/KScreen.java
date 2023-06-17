@@ -101,11 +101,10 @@ public class KScreen {
 
         BitmapFont bmf = Fonts.getDefaultFont(fontSize);
 
-        // bmf.getData().markupEnabled = true; //Use to set color label by label
+        bmf.getData().markupEnabled = true; // Use to set color label by label
 
         // Store the default libGDX font under the name DEFAULT_STYLE.
         skin.add(DEFAULT_STYLE, bmf);
-        skin.add("emoji", Fonts.getDefaultFont(fontSize, true));
 
         // Configure a TextButtonStyle and name it DEFAULT_STYLE. Skin resources are stored by type, so this doesn't overwrite the font.
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -116,14 +115,9 @@ public class KScreen {
         skin.add(DEFAULT_STYLE, buttonStyle);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont(DEFAULT_STYLE), null);
-        LabelStyle labelStyleEmoji = new LabelStyle(skin.getFont("emoji"), null);
-        // set background
         labelStyle.background = Shapes.getWhiteBackground();
-        labelStyleEmoji.background = Shapes.getWhiteBackground();
-        labelStyle.fontColor = Color.BLACK;
 
         skin.add(DEFAULT_STYLE, labelStyle);
-        skin.add("emoji", labelStyleEmoji);
         // skin.add(DEFAULT_STYLE, new LabelStyle(skin.getFont(DEFAULT_STYLE), null)); //Use to set color label by label
 
         skin.add("default-horizontal", getSliderStyle(fontSize));
@@ -157,7 +151,7 @@ public class KScreen {
     }
     private static SelectBoxStyle getSelectBoxStyle(Skin skin) {
         return new SelectBoxStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.WHITE),
-                skin.get(ScrollPaneStyle.class), skin.get(ListStyle.class));
+                skin.get(ScrollPaneStyle.class), skin.get(DEFAULT_STYLE, ListStyle.class));
     }
     private static TextFieldStyle getTextFieldStyle(Skin skin) {
         return new TextFieldStyle(skin.getFont(DEFAULT_STYLE), Color.BLACK, Shapes.getRectangle(1, 1, Color.BLACK),

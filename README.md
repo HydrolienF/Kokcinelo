@@ -2,20 +2,20 @@
 
 [discord-shield]: https://img.shields.io/discord/728592434577014825?label=discord
 [discord-invite]: https://discord.gg/vqvfGzf
-[doc]: https://formiko.fr/Formiko/javadoc/index.html
+[doc]: https://formiko.fr/Kokcinelo/javadoc/index.html
 [doc-shield]: https://img.shields.io/endpoint?
 [lastStableVersion]: https://img.shields.io/github/v/release/HydrolienF/Kokcinelo
 [download]: https://img.shields.io/github/downloads/HydrolienF/Kokcinelo/total
+[downloadLink]: https://formiko.fr/kokcinelo
 [license]: https://github.com/HydrolienF/Formiko/blob/master/LICENSE.md
 [license-shield]: https://img.shields.io/badge/license-custom-49C2E3
-[codeQuality]: https://api.codiga.io/project/35786/score/svg
 
-[ ![lastStableVersion][] ][download]
-[ ![download][] ][download]
+[ ![lastStableVersion][] ][downloadLink]
+[ ![download][] ][downloadLink]
 [ ![discord-shield][] ][discord-invite]
-[ ![codeQuality][] ][download]
 [ ![license-shield][] ][license]
-<!-- [ ![doc-shield][] ][doc] -->
+<!-- Currently badge data for doc is not done by github action -->
+<!-- [ ![doc-shield][] ][doc] --> 
 
 Support & community channel on our [Discord](https://discord.gg/vqvfGzf)
 
@@ -42,7 +42,7 @@ You can find the javadoc [here](https://formiko.fr/Kokcinelo/javadoc/)
 Hydrolien
 
 ## Musicians :
-[Felknia](https://www.youtube.com/FelkniaMusic)
+[Felknia](https://www.youtube.com/FelkniaMusic), [Alexander Nakarada](https://www.serpentsoundstudios.com/official-releases) (CC BY 4.0)
 
 ## Noisemakers: 
 Hydrolien, [pikbest.com](https://fr.pikbest.com/)

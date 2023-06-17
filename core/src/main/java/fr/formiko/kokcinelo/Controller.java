@@ -3,6 +3,7 @@ package fr.formiko.kokcinelo;
 import fr.formiko.kokcinelo.model.AcidDrop;
 import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
+import fr.formiko.kokcinelo.model.BloodSpot;
 import fr.formiko.kokcinelo.model.Creature;
 import fr.formiko.kokcinelo.model.GameState;
 import fr.formiko.kokcinelo.model.GameState.GameStateBuilder;
@@ -10,6 +11,8 @@ import fr.formiko.kokcinelo.model.KOptionsMap;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.Level;
 import fr.formiko.kokcinelo.model.MapItem;
+import fr.formiko.kokcinelo.model.Player;
+import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.tools.Files;
 import fr.formiko.kokcinelo.tools.Musics;
 import fr.formiko.kokcinelo.view.Assets;
@@ -36,7 +39,7 @@ import com.badlogic.gdx.utils.Null;
  * Because of Seen2D Actor, there is some view item in the model.
  * 
  * @author Hydrolien
- * @version 1.3
+ * @version 2.5
  * @since 0.1
  */
 public class Controller {
@@ -78,8 +81,8 @@ public class Controller {
     public int getNumberOfAphids() { return gs.getAphids().size(); }
     public Level getLevel() { return level; }
     public String getLevelId() { return level.getId(); }
-    public void addScore(int bonusScore) { gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(-bonusScore); }
     public @Null Creature getPlayerCreature() { return gs.getPlayerCreature(getLocalPlayerId()); }
+    public Player getLocalPlayer() { return gs.getPlayer(getLocalPlayerId()); }
     public Assets getAssets() { return assets; }
     public void addToRemove(Creature c) { toRemove.add(c); }
     public void iniAssets() { assets = new Assets(); }
@@ -224,7 +227,7 @@ public class Controller {
         GameStateBuilder gsb = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(getLevel());
         if (isGraphicsTest()) {
             int antNumber = 50;
-            gsb.setLadybugNumber(2).setGreenAntNumber(0).setRedAntNumber(antNumber).setAphidNumber(10);
+            gsb.setLevel(Level.newTestLevel("1K", null, Map.of(Ladybug.class, 2, RedAnt.class, antNumber, Aphid.class, 10), false));
         }
         gs = gsb.build();
         gs.moveAIAwayFromPlayers();
@@ -242,7 +245,7 @@ public class Controller {
             for (Ant ant : gs.getAnts()) {
                 ant.setCenter(2000, 2000);
             }
-            for (Creature c : gs.allCreatures()) {
+            for (Creature c : allCreatures()) {
                 c.setMovingSpeed(0.05f);
             }
 
@@ -290,6 +293,8 @@ public class Controller {
     public void restartFullGame() { app.exit(100); }
     public void updateActorVisibility(int playerId) { gs.updateActorVisibility(playerId, spectatorMode); }
     public Collection<Creature> allCreatures() { return gs.allCreatures(); }
+    public Collection<MapItem> allMapItems() { return gs.allMapItems(); }
+
     public Iterable<Actor> allActors() { return gs.allActors(); }
     public boolean isAllAphidGone() { return gs.isAllAphidGone(); }
     public boolean isAllLadybugGone() { return gs.isAllLadybugGone(); }
@@ -297,15 +302,16 @@ public class Controller {
 
     /**
      * {@summary Let Creature interact with each other.}
-     * It let ladybugs eat aphids and if they do, update player score &#38; play matching sound.
+     * It let ladybugs eat aphids and if they do, update player score, play matching sound etc.
      */
     public void interact() {
-        if (ladybugsEat()) {
-            getGameScreen().setPlayerScore(gs.getScore());
-        }
+        ladybugsEat();
         antsHit();
         antsShoot();
+        aphidHonewdewUpdate();
+        antsCollectHoneydew();
         acidDropsHit();
+        getGameScreen().setPlayerScore(gs.getScore());
     }
 
     /**
@@ -321,12 +327,47 @@ public class Controller {
                     haveInteract = true;
                     playSound("crock", ladybug);
                     ladybug.hit(aphid);
-                    gs.getPlayer(getLocalPlayerId()).addScoreForLadybug(aphid.getGivenPoints());
+                    ladybug.addScore(aphid.getGivenPoints());
+                    aphid.bonusWhenEaten(ladybug);
+                    BloodSpot bloodSpot = new BloodSpot(aphid);
+                    gs.getBloodSpots().add(bloodSpot);
+                    getGameScreen().getStage().addActor(bloodSpot.getActor());
+                    bloodSpot.getActor().setZIndex(gs.getBloodSpots().size() - 1);
                 }
             }
         }
         return haveInteract;
     }
+
+    /**
+     * Update the visibility of the honeydew of the aphids.
+     */
+    public void aphidHonewdewUpdate() {
+        for (Aphid aphid : gs.getAphids()) {
+            aphid.updateHonewdewVisibility();
+        }
+    }
+
+    /**
+     * {@summary Let ants collect honeydew.}
+     * 
+     * @return true if an ant have interact with an aphid
+     */
+    public boolean antsCollectHoneydew() {
+        boolean haveInteract = false;
+        for (Ant ant : gs.getAnts()) {
+            for (Aphid aphid : gs.getAphids()) {
+                if (ant.hitBoxConnected(aphid) && aphid.isHoneydewReady()) {
+                    App.log(1, "Ant " + ant.getId() + " collect honeydew of " + aphid.getId());
+                    haveInteract = true;
+                    playSound("slurp", ant);
+                    aphid.collectHoneydew(ant);
+                }
+            }
+        }
+        return haveInteract;
+    }
+
     /**
      * {@summary Let ants hit ladybug.}
      * 
@@ -374,12 +415,6 @@ public class Controller {
             return;
         }
         ant.shoot();
-        playSound("shoot", ant);
-        // Create new acid drop
-        AcidDrop ad = new AcidDrop(ant.getCenterX(), ant.getCenterY(), ant.getRotation(), ant.getShootRadius(), ant.getShootPoints());
-        App.log(0, "New acid drop with distance before hit: " + ad.getDistanceBeforeHit());
-        gs.getAcidDrops().add(ad);
-        getGameScreen().getStage().addActor(ad.getActor());
     }
 
     /**
@@ -417,12 +452,23 @@ public class Controller {
         if (getGameScreen().isStop()) {
             return;
         }
+
+        // If player is still alive, give him bonus score for time. (Ant and Ladybug may have bonus if there getCreaturesToHunt() is empty)
+        // TODO find a better way to do this.
+        if (getPlayerCreature().isAlive() && (getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Ladybug)
+                && !getPlayerCreature().haveCreatureToHunt()) {
+            getPlayerCreature().addScore((int) getGameScreen().getGameTime());
+            App.log(1, "Add player score for time: " + getGameScreen().getGameTime());
+        }
+
         // Musics.dispose();
         setSpectatorMode(true);
         getGameScreen().stopAfterNextDraw();
-        // if player play as ant, his score is 0 if he stop game before time is up.
-        if (getPlayerCreature() instanceof Ant && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
+        // if player play as ant or aphid, his score is 0 if he stop game before time is up.
+        if ((getPlayerCreature() instanceof Ant || getPlayerCreature() instanceof Aphid)
+                && (!getGameScreen().isTimeUp() && !gs.getLadybugs().isEmpty())) {
             gs.setScore(0);
+            App.log(1, "Remove all player score for stoping before the end.");
         }
         boolean haveWin = gs.getScore() >= gs.getMaxScore() / 2;
         getGameScreen().createEndGameMenu(gs.getScore(), gs.getMaxScore(), haveWin);
@@ -444,8 +490,8 @@ public class Controller {
     public void pauseResume() {
         if (getGameScreen().isPause()) {
             removeEscapeMenu();
-            for (Creature creature : gs.allCreatures()) {
-                creature.addTime(System.currentTimeMillis() - timeStartPause);
+            for (MapItem mapItem : allMapItems()) {
+                mapItem.addTime(System.currentTimeMillis() - timeStartPause);
             }
             getGameScreen().resume();
         } else {
@@ -723,14 +769,16 @@ public class Controller {
         if (pc == null) {
             return List.of();
         } else {
-            return pc.getAllFriendlyCreature();
+            return Set.of(pc);
+            // TODO #158
+            // return pc.getAllFriendlyWithVisibilityCreature();
         }
     }
 
     /** Return a Map of, how much insect there is. */
     public Map<Class<? extends Creature>, Integer> getInsectList() {
-        return gs.allCreatures().stream().filter(c -> c instanceof Creature).filter(c -> !(c instanceof AcidDrop))
-                .collect(Collectors.groupingBy(c -> c.getClass(), Collectors.summingInt(c -> 1)));
+        return allCreatures().stream().filter(Creature.class::isInstance).filter(c -> !(c instanceof AcidDrop))
+                .collect(Collectors.groupingBy(Creature::getClass, Collectors.summingInt(c -> 1)));
     }
 
 }

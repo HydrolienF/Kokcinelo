@@ -1,5 +1,8 @@
 package fr.formiko.kokcinelo.model;
 
+import fr.formiko.kokcinelo.Controller;
+import fr.formiko.kokcinelo.tools.Math;
+
 /**
  * {@summary Player move a ladybug or an ant.}
  * Ant controling player figth ladybug controling player &#38; vis versa.
@@ -23,9 +26,12 @@ public class Player {
      */
     public Player(Creature c) {
         id = idCpt++;
-        playedCreature = c;
-        if (c instanceof Ant) {
+        setPlayedCreature(c);
+        if (c instanceof Ant || c instanceof Aphid) {
             score = 100;
+            if (c instanceof Aphid) {
+                c.setLastCollectedTime(0);
+            }
         } else {
             score = 0;
         }
@@ -33,14 +39,7 @@ public class Player {
 
     // GET SET -------------------------------------------------------------------
     public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
-    public void addScoreForLadybug(int score) {
-        if (playedCreature instanceof Ant) {
-            addScore(-score);
-        } else {
-            addScore(score);
-        }
-    }
+    public void setScore(int score) { this.score = Math.between(0, Controller.getController().getGameState().getMaxScore(), score); }
     public void addScore(int score) { setScore(getScore() + score); }
     public Creature getPlayedCreature() { return playedCreature; }
     public void setPlayedCreature(Creature playedCreature) { this.playedCreature = playedCreature; }

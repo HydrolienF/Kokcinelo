@@ -1,5 +1,6 @@
 package fr.formiko.kokcinelo.view;
 
+import fr.formiko.kokcinelo.App;
 import fr.formiko.kokcinelo.Controller;
 import fr.formiko.kokcinelo.tools.Shapes;
 import fr.formiko.usual.g;
@@ -136,6 +137,9 @@ public class EscapeGameMenu implements Disposable {
                         @Override
                         public void clicked(InputEvent event, float x, float y) { Controller.getController().pauseResume(); }
                     });
+                    break;
+                default:
+                    App.log(2, "No listener for " + string + " button.");
                     break;
             }
             table.add(itb).pad(0, pad, 0, pad);
