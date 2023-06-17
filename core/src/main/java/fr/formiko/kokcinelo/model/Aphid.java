@@ -1,7 +1,6 @@
 package fr.formiko.kokcinelo.model;
 
 import fr.formiko.kokcinelo.App;
-import fr.formiko.kokcinelo.Controller;
 import java.util.Map;
 import java.util.Set;
 import com.badlogic.gdx.graphics.Color;
@@ -38,7 +37,9 @@ public class Aphid extends Creature {
         maxLifePoints = 1;
         lifePoints = maxLifePoints;
         colorSkeleton();
-        collectedFrequency = 20000;
+        if (!getClass().equals(Aphid.class)) { // If is not a super class of Aphid
+            collectedFrequency = 20000;
+        }
         runFrequency = 5000;
         lastCollectedTime = System.currentTimeMillis() - (long) (Math.random() * collectedFrequency);
         setHoneydewVisibility(false);
@@ -64,7 +65,7 @@ public class Aphid extends Creature {
     // }
     // return color;
     // }
-    public boolean isHoneydewReady() { return canBeCollected() && Controller.getController().getLevel().isWidthHoneydew(); }
+    public boolean isHoneydewReady() { return canBeCollected(); }
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
     @Override

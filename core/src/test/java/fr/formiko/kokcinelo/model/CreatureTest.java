@@ -133,8 +133,9 @@ class CreatureTest extends Assertions {
             default:
                 throw new IllegalArgumentException("Unexpected value: " + levelId.charAt(1));
         }
-        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000).setLevel(
-                Level.newTestLevel(levelId, playerCreature, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant), false))
+        GameState gs = GameState.builder().setMapHeight(2000).setMapWidth(2000)
+                .setLevel(
+                        Level.newTestLevel(levelId, playerCreature, Map.of(Aphid.class, aphid, Ladybug.class, ladybug, RedAnt.class, ant)))
                 .build();
         Controller.setController(new Controller(null));
         Controller.getController().setGameState(gs);
