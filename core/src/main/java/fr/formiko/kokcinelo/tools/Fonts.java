@@ -49,7 +49,6 @@ public class Fonts extends BitmapFont {
             parameter.color = Color.BLACK;
         } else {
             parameter.color = Color.WHITE;
-
         }
         parameter.size = (int) fontSize;
         if (DEFAULT_CHARS == null) {
@@ -67,6 +66,7 @@ public class Fonts extends BitmapFont {
                         .collect(java.util.stream.Collectors.toMap(java.util.Map.Entry::getKey, e -> filterEmojis(e.getValue())));
             }
             emojiSupport.addEmojisToFont(bmf);
+            bmf.getData().markupEnabled = true;
         }
 
 

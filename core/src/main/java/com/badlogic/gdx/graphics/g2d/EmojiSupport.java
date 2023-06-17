@@ -148,10 +148,13 @@ public class EmojiSupport {
             boolean isCharVariations = (ch >= '\uFE00' && ch <= '\uFE0F'); // Special char for skin-variations (omit)
             int codePoint = str.codePointAt(i);
             EmojiRegionIndex eri = regions.get(codePoint);
-            if (eri != null)
+            if (eri != null) {
+                sb.append("[#FFFFFFFF]");
                 sb.append((char) (START_CHAR + eri.index)); // Add found emoji
-            else if (!isCharSurrogate && !isCharVariations)
+                sb.append("[]");
+            } else if (!isCharSurrogate && !isCharVariations) {
                 sb.append(ch); // Exclude special chars
+            }
             i += isCharSurrogate ? 2 : 1; // Surrogate chars use 2 characters
         }
         return sb.toString();
