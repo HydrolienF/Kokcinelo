@@ -300,13 +300,13 @@ public class MenuScreen extends KScreen implements Screen {
      * {@summary Create labels for the menu.}
      */
     private void createLabels() {
-        levelNameLabel = new Label("", skinTitle, "emoji");
+        levelNameLabel = new Label("", skinTitle);
         levelNameLabel.setAlignment(Align.center);
 
-        scoresLabel = new Label("", skin, "emoji");
+        scoresLabel = new Label("", skin);
         scoresLabel.setAlignment(Align.center);
 
-        levelDescription = new Label("", skin, "emoji");
+        levelDescription = new Label("", skin);
         levelDescription.setAlignment(Align.center);
         levelDescription.setWrap(true);
     }
@@ -494,7 +494,7 @@ public class MenuScreen extends KScreen implements Screen {
     private void displayPlayerCreatureClassList(boolean visible) {
         getLevel().setPlayerCreatureClassIndex(0);
         if (playerCreatureSelectBox == null) {
-            playerCreatureSelectBox = new SelectBox<>(skin, "emoji");
+            playerCreatureSelectBox = new SelectBox<>(skin);
             stage.addActor(playerCreatureSelectBox);
         }
         playerCreatureSelectBox.setVisible(visible);
@@ -659,8 +659,8 @@ public class MenuScreen extends KScreen implements Screen {
      */
     private String getLevelNameText(String levelId) { return Fonts.getTranslation("Level") + " " + levelIdToString(levelId); }
     private String getLevelDescription(String levelId) {
-        String desc = Fonts.getTranslation("DescriptionLevel" + levelId.substring(1, 2), "") + " "
-                + Fonts.getTranslation("DescriptionLevel" + levelId, "");
+        String desc = Fonts.getTranslationWidthDefault("DescriptionLevel" + levelId.substring(1, 2), "") + " "
+                + Fonts.getTranslationWidthDefault("DescriptionLevel" + levelId, "");
         if (App.isPlayableLevel(levelId)) {
             return desc;
         } else {

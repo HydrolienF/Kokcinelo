@@ -78,7 +78,7 @@ public class Hud extends KScreen implements Disposable {
     private Table createTopTable(float width) {
         countdownLabel = new Label("", skin);
         scoreLabel = new Label("", skin);
-        insectCountLabel = new Label("", skin, "emoji");
+        insectCountLabel = new Label("", skin);
 
         // define a table used to organize our hud's labels
         Table topTable = new Table();
@@ -115,7 +115,7 @@ public class Hud extends KScreen implements Disposable {
 
     // GET SET -------------------------------------------------------------------
     public Stage getStage() { return stage; }
-    public void setPlayerScore(int value) { scoreLabel.setText(value + "/" + maxValue); }
+    public void setPlayerScore(int value) { scoreLabel.setText(Fonts.DEFAULT_COLOR + value + "/" + maxValue); }
     public float getGameTime() { return gameTime; }
     /**
      * {@summary Set the game time.}
@@ -135,7 +135,7 @@ public class Hud extends KScreen implements Disposable {
      */
     public void update(float dt) {
         gameTime -= dt;
-        countdownLabel.setText("" + (int) (gameTime + 0.1));
+        countdownLabel.setText(Fonts.DEFAULT_COLOR + (int) (gameTime + 0.1));
         if (gameTime < 0) {
             timeUp = true;
         }

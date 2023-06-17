@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
  * @since 2.4
  */
 public class Fonts extends BitmapFont {
+    public static final String DEFAULT_COLOR = "[#000000]";
     private static String DEFAULT_CHARS;
     private static EmojiSupport emojiSupport;
     private static final Map<Class<? extends Creature>, String> icons = Map.of(Ant.class, "🐜", Ladybug.class, "🐞", Aphid.class, "🦗",
@@ -42,14 +43,10 @@ public class Fonts extends BitmapFont {
      * @param fontSize size of the font.
      * @return the default font.
      */
-    public static BitmapFont getDefaultFont(float fontSize, final boolean withEmoji) {
+    public static BitmapFont getDefaultFont(float fontSize) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Noto_Sans/NotoSans-Regular.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        if (withEmoji) {
-            parameter.color = Color.BLACK;
-        } else {
-            parameter.color = Color.WHITE;
-        }
+        parameter.color = Color.WHITE;
         parameter.size = (int) fontSize;
         if (DEFAULT_CHARS == null) {
             DEFAULT_CHARS = Files.loadUniqueCharFromTranslationFiles();
@@ -58,26 +55,27 @@ public class Fonts extends BitmapFont {
         BitmapFont bmf = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-        if (withEmoji) {
-            if (emojiSupport == null) {
-                emojiSupport = new EmojiSupport();
-                emojiSupport.load(Gdx.files.internal("fonts/icons.atlas"));
-                iconsTransformed = icons.entrySet().stream()
-                        .collect(java.util.stream.Collectors.toMap(java.util.Map.Entry::getKey, e -> filterEmojis(e.getValue())));
-            }
-            emojiSupport.addEmojisToFont(bmf);
-            bmf.getData().markupEnabled = true;
+        if (emojiSupport == null) {
+            emojiSupport = new EmojiSupport();
+            emojiSupport.load(Gdx.files.internal("fonts/icons.atlas"));
+            iconsTransformed = icons.entrySet().stream()
+                    .collect(java.util.stream.Collectors.toMap(java.util.Map.Entry::getKey, e -> filterEmojis(e.getValue())));
         }
-
+        emojiSupport.addEmojisToFont(bmf);
 
         return bmf;
     }
-    public static BitmapFont getDefaultFont(float size) { return getDefaultFont(size, false); }
 
     // public static String filterEmojis(String s) { return s; }
-    public static String filterEmojis(String s) { return emojiSupport.filterEmojis(s); }
+    public static String filterEmojis(String s) { return emojiSupport.filterEmojis(s, DEFAULT_COLOR); }
+    public static String filterEmojis(String s, String color) { return emojiSupport.filterEmojis(s, color); }
     public static String getTranslation(String key) { return filterEmojis(g.get(key)); }
-    public static String getTranslation(String key, String sDefault) { return filterEmojis(g.get(key, sDefault)); }
+    public static String getTranslation(String key, String color) { return filterEmojis(g.get(key), color); }
+    public static String getTranslationWidthDefault(String key, String sDefault) { return filterEmojis(g.get(key, sDefault)); }
+    public static String getTranslationWidthDefault(String key, String sDefault, String color) {
+        return filterEmojis(g.get(key, sDefault), color);
+    }
+
     public static String getIcon(Class<? extends Creature> c) { return iconsTransformed.get(c); }
 
 
@@ -94,6 +92,8 @@ public class Fonts extends BitmapFont {
                         } else {
                             sb.append("   ");
                         }
+                    } else {
+                        sb.append(DEFAULT_COLOR);
                     }
                     sb.append(e.getValue()).append(Fonts.getIcon(e.getKey()));
                 });
