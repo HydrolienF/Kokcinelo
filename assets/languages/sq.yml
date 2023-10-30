@@ -1,0 +1,47 @@
+test: fr
+#Global
+level: nivel
+mainMenu: menyja kryesore
+#Menu
+bestScore: rekordi i pikëve
+lastScore: pikët e fundit
+descriptionLevelK: Gllabëroni sa më shumë 🦗 brënda 1 minute !
+descriptionLevelF: Mbroni sa më shumë 🦗 brënda 1 minute !
+descriptionLevelA: Mbijetoni 1 minutë !
+descriptionLevel1K: Drejtoni 🐞 shigjetën e mausit & zmadhoni me rrotullën e mausit.
+descriptionLevel2K: 🕷 do të bëjnë te pa mundurën për tju penguar. Kini kujdes nga nofullat e tyre të mprehta!
+descriptionLevel2F: 🐞 do të tentojnë të gllabërojnë sa të jetë e mundur. Për ti parandaluar, mund të përdorni nofullat. Sa më shpjet i ndaloni 🐞 aq më shumë pikë bonus fitoni.
+descriptionLevel3K: 🦂 do të bëjnë të pa mundurën për tju parandaluar. Kini kujdes nga acidi i tyre !
+descriptionLevel3F: 🐞 do të tentojnë të gllabërojnë sa të jetë e mundur. Për ti parandaluar, mund të përdorni acidin formik (espace). Sa më shpejt ti ndaloni aq më shumë pikë fitoni.
+descriptionLevel4K: "Gllabërimi i disa 🦗 ju jep një bonus :\n🟥 rikthen 10% të jetës tuaj\n🟦 rrit shpejtësinë tuaj 3%\n🟧 ju jep 10 pikë"
+descriptionLevel4F: "Shokët tuaj 🦗 nxjerrin mjaltë pas të cilit ju cmëndeni. Sipas specjes së 🦗, mjalti ju jep një bonus :\n🟥 rrit dëmshmërinë tuaj 3%\n🟦 rrit shpejtësine tuaj 3%\n🟧 ju jep 2 pikë"
+descriptionLevel4A: Ju ini 🦗 më i bukur. E ardhmja e kolonisë varet nga mbijetesa juaj! Përfitoni nga 🐜 për tu vetmbrojtur & nëse është e nevojshme sakrifikoni të tjerët në vendin tuaj. Mund të rritni shpejtësinë tuaj për një kohë të shkurtër (hapsirë) për tu arratisur.
+descriptionLevel5K: Disa 🦗 fluturojnë. Për ti kapur ju duhet të fluturoni gjithashtu (hapsirë). Kur jeni duke fluturuar nuk mund të kapni 🦗 që janë ne tokë.
+descriptionLevel5F: 🐞 fluturojnë ! Kur fluturojnë ju mund ti sulmoni vetëm me acid.
+descriptionLevel5A: Ju ini 🦗 më i shijshëm. 🐞 do tju ndjekin der në vdekje ! Përdorni krahët & aleatët tuaj 🐜 për ti shfarrosur.
+comingSoon: Së shpejti
+#Escape Menu
+restart: rifilloni
+endPartie: mbaroni lojën
+backToMainMenu: kthehuni te mënyja kryesore
+leaveKokcinelo: dilni nga Kokcinelo
+resume: vazhdoj
+#Options
+audio: audio
+musicVolume: muzikë
+soundVolume: zë
+video: video
+screenWidth: gjërësia e ekranit
+screenHeight: lartësia e ekranit
+maxFps: fps maksimale
+displayMode: modë shfaqjeje
+fullScreen: eran i plotë
+windowedFullScreen: dritare ne ekran të plotë
+windowed: dritare
+language: gjuhë
+restartFullGame: rifilloni
+restartFullGameMessage: Rifilloni lojën për të aplikuar modifikimet.
+# In Game
+acidShootAction: gjuaj
+runAction: accélérer
+flyAction: fluturoj
