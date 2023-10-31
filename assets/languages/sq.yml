@@ -1,12 +1,12 @@
-test: fr
+test: sq
 #Global
 level: nivel
 mainMenu: menyja kryesore
 #Menu
 bestScore: rekordi i pikëve
 lastScore: pikët e fundit
-descriptionLevelK: Gllabëroni sa më shumë 🦗 brënda 1 minute !
-descriptionLevelF: Mbroni sa më shumë 🦗 brënda 1 minute !
+descriptionLevelK: Gllabëroni sa më shumë 🦗 brënda 1 minutë !
+descriptionLevelF: Mbroni sa më shumë 🦗 brënda 1 minutë !
 descriptionLevelA: Mbijetoni 1 minutë !
 descriptionLevel1K: Drejtoni 🐞 shigjetën e mausit & zmadhoni me rrotullën e mausit.
 descriptionLevel2K: 🕷 do të bëjnë te pa mundurën për tju penguar. Kini kujdes nga nofullat e tyre të mprehta!
