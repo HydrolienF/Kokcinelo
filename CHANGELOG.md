@@ -8,6 +8,7 @@ See [CHANGES.md](https://github.com/HydrolienF/Kokcinelo/blob/master/CHANGES.md)
 - Audio/Video options
 - Blood spot when aphid die
 - Creature action display by a reloading bar ingame
+- Albanian translation
 
 ## Changed
 - Display icons instead of insect names
