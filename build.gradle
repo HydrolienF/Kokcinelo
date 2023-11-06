@@ -192,9 +192,10 @@ project(":core") {
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
         reports {
-            xml.enabled true
-            csv.enabled false
-            html.enabled true
+            // Broken by java 21 & Gradle 8.4
+            // xml.enabled true
+            // csv.enabled false
+            // html.enabled true
             html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
     }
