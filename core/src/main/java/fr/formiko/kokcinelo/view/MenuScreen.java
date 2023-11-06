@@ -400,6 +400,9 @@ public class MenuScreen extends KScreen implements Screen {
             @Override
             public boolean scrolled(float amountX, float amountY) { return false; }
 
+            @Override
+            public boolean touchCancelled(int screenX, int screenY, int pointer, int button) { return false; }
+
         };
     }
     /**
