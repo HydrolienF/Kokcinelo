@@ -1,6 +1,47 @@
 test: es
-# Global
+#Global
 level: nivel
-mainMenu:
+mainMenu: menú principal
 #Menu
-bestScore:
+bestScore: mejor puntuación
+lastScore: última puntuación
+descriptionLevelK: Come tantos 🦗 como puedas en 1 minuto !
+descriptionLevelF: Protege tantos 🦗 como puedas en 1 minuto !
+descriptionLevelA: Sobrevive durante 1 minuto !
+descriptionLevel1K: Dirige tu 🐞 con el ratón & amplía con la ruleta de desplacamiento del ratón.
+descriptionLevel2K: Las 🕷 haran todo lo que puedan para impedírtelo. Ten cuidado de sus mandíbulas afiladas !
+descriptionLevel2F: Las 🐞 intentarán comer tantos como puedan. Para impedirlo, puedes usar tus mandíbulas. Cuanto antes pares las 🐞 más puntos tendrás.
+descriptionLevel3K: Las 🦂 harán todo lo que puedan para detenerte. Cuidado con sus chorros de ácido !
+descriptionLevel3F: Las 🐞 intentarán comer tantas como puedan. Para detenerlas, puedes lanzar un chorro de ácido fórmico (barra espacio). Cuanto antes detengas a las 🐞, más puntos tendrás.
+descriptionLevel4K: "Comer algunos 🦗 te da un bonus:\n🟥 recuperas 10% de tu vida\n🟦 aumenta tu velocidad de 3%\n🟧 ganas 10 puntos"
+descriptionLevel4F: "Tus amigos los 🦗 secretan un producto que te encanta. En función de la especie de 🦗, recuperar gotitas de ese producto te da un bonus:\n🟥 aumenta el daño que haces de 3%\n🟦 aumenta tu velocidad de 3%\n🟧 ganas 2 puntos"
+descriptionLevel4A: Eres el más bonito de los 🦗. El futuro de la colonia depende de tu supervivencia ! Sírvete de las 🐜 para protegerte & si es necesario sacrifica algunos de tus colegas. Puedes acelerar un corto instante (barra espacio) para escapar.
+descriptionLevel5K: Algunos 🦗 vuelan. Para atraparlos tienes que volar también (barra espacio). Mientras estés en vuelo no puedes atrapar a los 🦗 sobre tierra.
+descriptionLevel5F: Las 🐞 vuelan ! Cuando estén en vuelo sólo puedes contar con tus chorros de ácido.
+descriptionLevel5A: Eres el mas apetitoso de los 🦗. Las 🐞 te cazarán hasta la muerte ! Usa de tus alas & de tus aliados las 🐜 para librarte de ellas.
+comingSoon: Pronto disponible
+#Escape Menu
+restart: empezar de nuevo
+endPartie: acabar la partida
+backToMainMenu: volver al menú
+leaveKokcinelo: cerrar Kokcinelo
+resume: volver
+#Options
+audio: audio
+musicVolume: música
+soundVolume: sonido
+video: vídeo
+screenWidth: anchura de la pantalla
+screenHeight: altura de la pantalla
+maxFps: ips max
+displayMode: modo de visualización
+fullScreen: plena pantalla
+windowedFullScreen: plena ventana
+windowed: ventana
+language: lenguaje
+restartFullGame: volver a empezar
+restartFullGameMessage: Reiniciar el juego para aplicar los cambios
+# In Game
+acidShootAction: disparar
+runAction: acelerar
+flyAction: volar
