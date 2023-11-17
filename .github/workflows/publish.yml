@@ -6,9 +6,9 @@ on:
     types: [closed]
 
 env:
-  JAVA_VERSION: '18'
+  JAVA_VERSION: '21'
   JAVA_DISTRIBUTION: 'temurin'
-  JRE_VERSION: '18.0.8f'
+  JRE_VERSION: '21.0.1'
   GITHUB_TOKEN: ${{ github.token }}
   ARTIFACT_NAME: 'Kokcinelo'
   USER_NAME: 'HydrolienF'
