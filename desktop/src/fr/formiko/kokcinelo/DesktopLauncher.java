@@ -42,9 +42,9 @@ public class DesktopLauncher {
         App.log(1, "options : " + options);
         int displayMode = options.getDisplayMode();
 
-        if (Os.getOs().isLinux()) { // TODO to remove
-            displayMode = 0;
-        }
+        // if (Os.getOs().isLinux()) { // TODO to remove
+        //     displayMode = 0;
+        // }
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(options.getMaxFps()); // 0 = no limite
