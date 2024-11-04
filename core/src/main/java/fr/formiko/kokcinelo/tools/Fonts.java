@@ -4,13 +4,14 @@ import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.FlyingAphid;
+import fr.formiko.kokcinelo.model.FlyingBigScoreAphid;
 import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.HealthAphid;
 import fr.formiko.kokcinelo.model.Ladybug;
 import fr.formiko.kokcinelo.model.RedAnt;
 import fr.formiko.kokcinelo.model.ScoreAphid;
 import fr.formiko.kokcinelo.model.SpeedAphid;
-import fr.formiko.kokcinelo.model.VisibilityAphid;
 import fr.formiko.usual.g;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,10 +33,22 @@ public class Fonts extends BitmapFont {
     public static final String DEFAULT_COLOR = "[#000000]";
     private static String DEFAULT_CHARS;
     private static EmojiSupport emojiSupport;
-    private static final Map<Class<? extends Creature>, String> icons = Map.of(Ant.class, "🐜", Ladybug.class, "🐞", Aphid.class, "🦗",
-            RedAnt.class, "🕷", GreenAnt.class, "🦂", SpeedAphid.class, "🟦", HealthAphid.class, "🟥", ScoreAphid.class, "🟧",
-            BigScoreAphid.class, "🟧", VisibilityAphid.class, "🟩");
+    private static final Map<Class<? extends Creature>, String> icons;
     private static Map<Class<? extends Creature>, String> iconsTransformed;
+    static {
+        icons = new java.util.HashMap<>();
+        icons.put(Ant.class, "🐜");
+        icons.put(Ladybug.class, "🐞");
+        icons.put(Aphid.class, "🦗");
+        icons.put(RedAnt.class, "🕷");
+        icons.put(GreenAnt.class, "🦂");
+        icons.put(SpeedAphid.class, "🟦");
+        icons.put(HealthAphid.class, "🟥");
+        icons.put(ScoreAphid.class, "🟧");
+        icons.put(BigScoreAphid.class, "🟧");
+        icons.put(FlyingBigScoreAphid.class, "🔶");
+        icons.put(FlyingAphid.class, "🟪");
+    }
 
     /**
      * {@summary Load the default font.}

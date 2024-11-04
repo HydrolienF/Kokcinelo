@@ -14,10 +14,10 @@ import com.badlogic.gdx.graphics.Color;
  * @since 0.1
  */
 public class Aphid extends Creature {
-    // private Color color;
+    private static final Color orrange = new Color(0.86f, 0.50f, 0.1f, 1f);
     private static final Map<Class<? extends Aphid>, Color> typeColorMap = Map.of(Aphid.class, new Color(0.4f, 1f, 0f, 1f),
-            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, new Color(0.86f, 0.50f, 0.1f, 1f),
-            BigScoreAphid.class, new Color(0.86f, 0.50f, 0.1f, 1f), VisibilityAphid.class, new Color(0.05f, 0.25f, 0f, 1f));
+            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, orrange,
+            BigScoreAphid.class, orrange, FlyingAphid.class, orrange, FlyingBigScoreAphid.class, orrange);
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
@@ -69,7 +69,7 @@ public class Aphid extends Creature {
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ant.class, Aphid.class); }
     @Override
-    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ant.class, Aphid.class); }
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibilityWhenFlying() { return Set.of(Ant.class, Aphid.class); }
     @Override
     public String getSpaceActionName() {
         if (canFly) {

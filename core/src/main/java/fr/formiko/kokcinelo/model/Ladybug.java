@@ -41,7 +41,7 @@ public class Ladybug extends Creature {
     @Override
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(Ladybug.class); }
     @Override
-    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(Ladybug.class); }
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibilityWhenFlying() { return Set.of(Ladybug.class); }
     @Override
     public String getSpaceActionName() {
         if (canFly) {

@@ -107,11 +107,11 @@ class CreatureTest extends Assertions {
         assertDoesNotThrow(() -> new Ladybug());
         assertDoesNotThrow(() -> new LadybugSideView());
         assertDoesNotThrow(() -> new Aphid());
-        assertDoesNotThrow(() -> new VisibilityAphid());
         assertDoesNotThrow(() -> new HealthAphid());
         assertDoesNotThrow(() -> new SpeedAphid());
         assertDoesNotThrow(() -> new ScoreAphid());
         assertDoesNotThrow(() -> new BigScoreAphid());
+        assertDoesNotThrow(() -> new FlyingAphid());
 
     }
 

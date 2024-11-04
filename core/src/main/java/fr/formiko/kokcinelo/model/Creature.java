@@ -23,8 +23,8 @@ import com.badlogic.gdx.utils.Null;
  */
 public abstract class Creature extends MapItem {
     public static final List<Class<? extends Creature>> ORDER = List.of(Ladybug.class, Ant.class, RedAnt.class, GreenAnt.class, Aphid.class,
-            HealthAphid.class, SpeedAphid.class, ScoreAphid.class, BigScoreAphid.class, VisibilityAphid.class);
-    protected boolean fliing;
+            HealthAphid.class, SpeedAphid.class, ScoreAphid.class, BigScoreAphid.class, FlyingAphid.class, FlyingBigScoreAphid.class);
+    protected boolean flying;
     protected float maxLifePoints;
     protected float hitPoints;
     protected float shootPoints;
@@ -62,6 +62,10 @@ public abstract class Creature extends MapItem {
     }
 
     // GET SET -------------------------------------------------------------------
+    public boolean canFly() { return canFly; }
+    public boolean isFlying() { return flying; }
+    public boolean startFlying() { return flying = true; }
+    public boolean stopFlying() { return flying = false; }
     public int getGivenPoints() { return 0; }
     public float getVisionRadius() { return visionRadius; }
     public void setVisionRadius(float visionRadius) { this.visionRadius = visionRadius; }
@@ -102,7 +106,7 @@ public abstract class Creature extends MapItem {
     public Set<Class<? extends Creature>> getCreaturesToHunt() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesHuntedBy() { return Set.of(); }
     public Set<Class<? extends Creature>> getCreaturesFriendly() { return Set.of(getClass()); }
-    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibility() { return Set.of(getClass()); }
+    public Set<Class<? extends Creature>> getCreaturesFriendlyWithVisibilityWhenFlying() { return Set.of(getClass()); }
     public boolean haveCreatureToHunt() {
         return Controller.getController().allCreatures().stream().anyMatch(c -> c.isInstanceOf(getCreaturesToHunt()));
     }
@@ -170,7 +174,7 @@ public abstract class Creature extends MapItem {
                 Set::addAll);
     }
     public boolean isFriendly(Creature c) { return c.isInstanceOf(getCreaturesFriendly()); }
-    public boolean isFriendlyWithVisibility(Creature c) { return c.isInstanceOf(getCreaturesFriendlyWithVisibility()); }
+    public boolean isFriendlyWithVisibility(Creature c) { return c.isInstanceOf(getCreaturesFriendlyWithVisibilityWhenFlying()); }
 
     // FUNCTIONS -----------------------------------------------------------------
     @Override

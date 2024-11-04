@@ -6,6 +6,8 @@ import fr.formiko.kokcinelo.model.Ant;
 import fr.formiko.kokcinelo.model.Aphid;
 import fr.formiko.kokcinelo.model.BigScoreAphid;
 import fr.formiko.kokcinelo.model.Creature;
+import fr.formiko.kokcinelo.model.FlyingAphid;
+import fr.formiko.kokcinelo.model.FlyingBigScoreAphid;
 import fr.formiko.kokcinelo.model.GreenAnt;
 import fr.formiko.kokcinelo.model.HealthAphid;
 import fr.formiko.kokcinelo.model.Ladybug;
@@ -303,6 +305,18 @@ class LevelButton extends Button {
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
                     break;
                 }
+                case "5K": {
+                    c = new Ladybug();
+                    c.setZoom(ladybugSize);
+                    c2 = new SpeedAphid();
+                    c2.setZoom(smallAphidSize);
+                    c3 = new HealthAphid();
+                    c3.setZoom(smallAphidSize);
+                    c4 = new FlyingAphid();
+                    c4.setZoom(smallAphidSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
+                    break;
+                }
                 case "2F": {
                     c = new Ladybug();
                     c.setZoom(ladybugSize);
@@ -331,8 +345,28 @@ class LevelButton extends Button {
                     sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
                     break;
                 }
+                case "5F": {
+                    c = new Ant();
+                    c.setZoom(antSize);
+                    c2 = new SpeedAphid();
+                    c2.setZoom(smallAphidSize);
+                    c3 = new HealthAphid();
+                    c3.setZoom(smallAphidSize);
+                    c4 = new FlyingAphid();
+                    c4.setZoom(smallAphidSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2, c3, c4);
+                    break;
+                }
                 case "4A": {
                     c = new BigScoreAphid();
+                    c.setZoom(aphidSize);
+                    c2 = new Ladybug();
+                    c2.setZoom(ladybugSize);
+                    sprite = Shapes.getCircledSprite(radius, App.GREEN, c, c2);
+                    break;
+                }
+                case "5A": {
+                    c = new FlyingBigScoreAphid();
                     c.setZoom(aphidSize);
                     c2 = new Ladybug();
                     c2.setZoom(ladybugSize);

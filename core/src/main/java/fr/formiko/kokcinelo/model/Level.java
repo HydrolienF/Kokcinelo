@@ -27,14 +27,16 @@ public final class Level {
             newLevel("3K", Map.of(Aphid.class, 100, Ladybug.class, 1, GreenAnt.class, 3)),
             newLevel("4K", Map.of(Ladybug.class, 1, RedAnt.class, 2, GreenAnt.class, 2,
                     Aphid.class, 50, ScoreAphid.class, 3, SpeedAphid.class, 10, HealthAphid.class, 10)),
-            newLevel("5K"),
+            newLevel("5K", List.of(FlyingLadybug.class), Map.of(FlyingLadybug.class, 1, RedAnt.class, 2, GreenAnt.class, 2,
+                    Aphid.class, 50, FlyingAphid.class, 3, SpeedAphid.class, 10, HealthAphid.class, 10)),
             newLevel("2F", List.of(RedAnt.class), Map.of(Aphid.class, 100, Ladybug.class, 2, RedAnt.class, 1)),
             newLevel("3F", List.of(GreenAnt.class), Map.of(Aphid.class, 100, Ladybug.class, 2, GreenAnt.class, 1)),
             newLevel("4F", List.of(RedAnt.class, GreenAnt.class), Map.of(Ladybug.class, 3, RedAnt.class, 1, GreenAnt.class, 1,
                     Aphid.class, 50, ScoreAphid.class, 3, SpeedAphid.class, 10, HealthAphid.class, 10)),
-            newLevel("5F"),
+            newLevel("5F", List.of(RedAnt.class, GreenAnt.class), Map.of(FlyingLadybug.class, 3, RedAnt.class, 1, GreenAnt.class, 1,
+                    Aphid.class, 50, FlyingAphid.class, 3, SpeedAphid.class, 10, HealthAphid.class, 10)),
             newLevel("4A", List.of(BigScoreAphid.class), Map.of(Ladybug.class, 4, RedAnt.class, 2, Aphid.class, 50, BigScoreAphid.class, 1)),
-            newLevel("5A"));
+            newLevel("5A", List.of(FlyingBigScoreAphid.class), Map.of(FlyingLadybug.class, 4, RedAnt.class, 2, Aphid.class, 50, FlyingBigScoreAphid.class, 1)));
     // @formatter:on
     private static final Set<String> levelLetters = Set.of("K", "F", "A");
     private @Null List<Level> nextLevels; // Use getter with lazy initialization.

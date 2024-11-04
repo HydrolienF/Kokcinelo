@@ -24,10 +24,13 @@ public class Musics {
         Map.entry("2K", List.of("Sailors Of The Dvipa", 0.5f)),
         Map.entry("3K", List.of("Madness", 1f)),
         Map.entry("4K", List.of("Chase 1", 1f)),
+        Map.entry("5K", List.of("Chase 1", 1f)), // TODO: Change this music
         Map.entry("2F", List.of("Hako 1", 1f)),
         Map.entry("3F", List.of("Hako 2", 0.8f)),
         Map.entry("4F", List.of("Chase 2", 1f)),
-        Map.entry("4A", List.of("The great battle", 1f))
+        Map.entry("5F", List.of("Chase 2", 1f)), // TODO: Change this music
+        Map.entry("4A", List.of("The great battle", 1f)),
+        Map.entry("5A", List.of("The great battle", 1f)) // TODO: Change this music
     );
     // @formatter:on
 
