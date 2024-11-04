@@ -30,11 +30,18 @@ jobs:
 
     - name: Version-Tool
       uses: HydrolienF/Version-Tool@0.7.1
+      id: versiontool
+
+    - name: Update version if needed
       id: version
+      run: |
+        if [ -f version.md ]; then
+          echo ::set-output name=version::$(cat version.md)
+        else
+          echo ::set-output name=version::${{ steps.versiontool.outputs.version }}
+          echo ${{ steps.versiontool.outputs.version }} > version.md
+        fi
 
-
-    - name: update version.md
-      run: echo ${{ steps.version.outputs.version }} > version.md
 
     - name: create release
       run: |
