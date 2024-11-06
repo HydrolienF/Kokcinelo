@@ -14,10 +14,10 @@ import com.badlogic.gdx.graphics.Color;
  * @since 0.1
  */
 public class Aphid extends Creature {
-    private static final Color orrange = new Color(0.86f, 0.50f, 0.1f, 1f);
+    private static final Color orange = new Color(0.86f, 0.50f, 0.1f, 1f);
     private static final Map<Class<? extends Aphid>, Color> typeColorMap = Map.of(Aphid.class, new Color(0.4f, 1f, 0f, 1f),
-            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, orrange,
-            BigScoreAphid.class, orrange, FlyingAphid.class, orrange, FlyingBigScoreAphid.class, orrange);
+            SpeedAphid.class, Color.CYAN, HealthAphid.class, Color.RED, ScoreAphid.class, orange,
+            BigScoreAphid.class, orange, FlyingAphid.class, orange, FlyingBigScoreAphid.class, orange);
 
     // CONSTRUCTORS --------------------------------------------------------------
     /**
