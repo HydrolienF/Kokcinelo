@@ -44,17 +44,17 @@ allprojects {
 
     ext {
         appName = "Kokcinelo"
-        gdxVersion = '1.12.1'
+        gdxVersion = '1.13.0'
         roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
-        log4jVersion = '2.19.0'
-        junitVersion = '5.9.1'
+        log4jVersion = '2.24.1'
+        junitVersion = '5.11.3'
         usualVersion = '0.2.117'
-        shapedrawerVersion = '2.5.0'
-        spineVersion = '4.1.0'
+        shapedrawerVersion = '2.6.0'
+        spineVersion = '4.1.0' // 4.2.7 version does not have all the function we are using.
         // spotlessLibVersion = '2.35.0'
         // spotlessVersion = '6.15.0'
     }
@@ -186,7 +186,7 @@ project(":core") {
     }
 
     jacoco {
-        toolVersion = "0.8.8"
+        toolVersion = "0.8.12"
     }
 
     jacocoTestReport {
