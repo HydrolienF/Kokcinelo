@@ -20,16 +20,18 @@
 Support & community channel on our [Discord](https://discord.gg/vqvfGzf)
 
 # Principle of the game
-Kokcinelo is a small, multiplayer competitive/cooperative game where players enbody ladybugs (kokcineloj) or ants (formikoj).
-The aim of ladybugs is to eat as much aphid as possible when ant aim is to save as much aphid as possible.
+Kokcinelo is a small game where players enbody ladybugs (kokcineloj) or ants (formikoj) or even aphids (afidoj).
+The aim of ladybugs is to eat as much aphid as possible when ant aim is to save as much aphid as possible. Aphids just want to survive.
 
 Ladybugs can instant eat aphid while ants need to bite or shoot acid severals times a ladybug to get ride of it.
+
+Each level add a new gameplay mechanic which are explained ingame.
 
 # Dev
 Game is done with Java using GUI library [libgdx](https://github.com/libgdx/libgdx).
 
 To compile & run game, launch in command line ```./gradlew r```
-You need [Java 18 (or more)](https://adoptium.net/temurin/releases/?version=18) to run game.
+You need [Java 21 (or more)](https://adoptium.net/temurin/releases/?version=21) to run game.
 
 You can find the javadoc [here](https://formiko.fr/Kokcinelo/javadoc/)
 
